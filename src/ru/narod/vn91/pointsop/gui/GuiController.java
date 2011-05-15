@@ -59,7 +59,12 @@ public class GuiController {
 		receiveRawServerInfo(server, "disconnected...");
 	}
 
-	public synchronized void userJoinedLangRoom(ServerInterface server, String room, String user, boolean silent, int rank, String status) {
+	public synchronized void userJoinedLangRoom(ServerInterface server,
+			String room,
+			String user,
+			boolean silent,
+			int rank,
+			String status) {
 		LangRoom panel_Lang = langRooms.get(new ServerRoom(room, server));
 		if (panel_Lang != null) {
 			RoomPart_Userlist users = panel_Lang.getRoomPart_UserList();
@@ -74,7 +79,12 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void userJoinedGameRoom(ServerInterface server, String room, String user, boolean silent, int rank, String status) {
+	public synchronized void userJoinedGameRoom(ServerInterface server,
+			String room,
+			String user,
+			boolean silent,
+			int rank,
+			String status) {
 		GameRoom gameRoomPanel = gameRooms.get(new ServerRoom(room, server));
 		if (gameRoomPanel != null) {
 			RoomPart_Userlist users = gameRoomPanel.getRoomPart_UserList();
@@ -88,8 +98,11 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void userLeavedRoom(ServerInterface server, String room, String user) {
-		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room, server));
+	public synchronized void userLeavedRoom(ServerInterface server,
+			String room,
+			String user) {
+		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room,
+				server));
 		if (roomInterface == null) {
 		} else {
 			RoomPart_Userlist users = roomInterface.getRoomPart_UserList();
@@ -103,23 +116,29 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void userDisconnected(ServerInterface server, String user) {
-		PrivateChat privateChat = privateChatList.get(new ServerUserName(user, server));
+	public synchronized void userDisconnected(ServerInterface server,
+			String user) {
+		PrivateChat privateChat = privateChatList.get(new ServerUserName(user,
+				server));
 		if ((privateChat != null) && (tabbedPane.indexOfComponent(privateChat) >= 0)) {
 			privateChat.addChat("server", user + " вышел из игры...", true);
 		}
 	}
 
 	public synchronized void subscribedLangRoom(String roomNameOnServer,
-			ServerInterface serverInterface, String guiRoomName,
+			ServerInterface serverInterface,
+			String guiRoomName,
 			boolean isServersMainRoom) {
-		LangRoom langRoom = langRooms.get(new ServerRoom(roomNameOnServer, serverInterface));
+		LangRoom langRoom = langRooms.get(new ServerRoom(roomNameOnServer,
+				serverInterface));
 		if (langRoom != null) {
 			// nothing
 		} else {
 			langRoom = new LangRoom(serverInterface, roomNameOnServer, this);
-			langRooms.put(new ServerRoom(roomNameOnServer, serverInterface), langRoom);
-			roomInterfaces.put(new ServerRoom(roomNameOnServer, serverInterface), langRoom);
+			langRooms.put(new ServerRoom(roomNameOnServer, serverInterface),
+					langRoom);
+			roomInterfaces.put(new ServerRoom(roomNameOnServer, serverInterface),
+					langRoom);
 			tabbedPane.addTab(guiRoomName, langRoom, false);
 			tabbedPane.makeBold(langRoom);
 			if (isServersMainRoom) {
@@ -128,9 +147,12 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void subscribedGame(String roomNameOnServer, ServerInterface server,
-			String userFirst, String userSecond,
-			int rank1, int rank2,
+	public synchronized void subscribedGame(String roomNameOnServer,
+			ServerInterface server,
+			String userFirst,
+			String userSecond,
+			int rank1,
+			int rank2,
 			String timeLimits,
 			boolean isRated,
 			String startingPosition,
@@ -139,32 +161,47 @@ public class GuiController {
 		if (roomInterfaces.containsKey(new ServerRoom(roomNameOnServer, server))) {
 			return;
 		}
-		GameRoom containerRoom_Game = new GameRoom(server, roomNameOnServer, this,
-				userFirst, userSecond, rank1, rank2, timeLimits, isRated, startingPosition, chatReadOnly, amIPlaying);
-		gameRooms.put(new ServerRoom(roomNameOnServer, server), containerRoom_Game);
-		roomInterfaces.put(new ServerRoom(roomNameOnServer, server), containerRoom_Game);
-		tabbedPane.addTab("<html><font color=red>" + userFirst + "</font>-<font color=blue>" + userSecond + "</font></html>", containerRoom_Game, true);
+		GameRoom containerRoom_Game = new GameRoom(server, roomNameOnServer,
+				this,
+				userFirst, userSecond, rank1, rank2, timeLimits, isRated,
+				startingPosition, chatReadOnly, amIPlaying);
+		gameRooms.put(new ServerRoom(roomNameOnServer, server),
+				containerRoom_Game);
+		roomInterfaces.put(new ServerRoom(roomNameOnServer, server),
+				containerRoom_Game);
+		tabbedPane.addTab(
+				"<html><font color=red>" + userFirst + "</font>-<font color=blue>" + userSecond + "</font></html>",
+				containerRoom_Game, true);
 		tabbedPane.setSelectedComponent(containerRoom_Game);
 	}
 
-	public synchronized void unsubsribedRoom(ServerInterface server, String room) {
-		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room, server));
+	public synchronized void unsubsribedRoom(ServerInterface server,
+			String room) {
+//		System.out.println("gui.unsubscribedRoom " + room);
+		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room,
+				server));
 		if (roomInterface != null) {
-			tabbedPane.remove((Component) roomInterface);
+			tabbedPane.remove((Component)roomInterface);
 		}
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
-	public synchronized void unsubsribedGame(ServerInterface server, String room) {
-		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room, server));
+	public synchronized void unsubsribedGame(ServerInterface server,
+			String room) {
+		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room,
+				server));
 		if (roomInterface != null) {
-			tabbedPane.remove((Component) roomInterface);
+			tabbedPane.remove((Component)roomInterface);
 		}
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
-	public synchronized void chatReceived(ServerInterface server, String room, String user, String message) {
-		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room, server));
+	public synchronized void chatReceived(ServerInterface server,
+			String room,
+			String user,
+			String message) {
+		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room,
+				server));
 		if (roomInterface == null) {
 		} else {
 			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
@@ -175,8 +212,11 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void privateMessageReceived(ServerInterface server, String user, String message) {
-		PrivateChat privateChat = privateChatList.get(new ServerUserName(user, server));
+	public synchronized void privateMessageReceived(ServerInterface server,
+			String user,
+			String message) {
+		PrivateChat privateChat = privateChatList.get(new ServerUserName(user,
+				server));
 		if (privateChat == null) {
 			// creating new panel
 			privateChat = new PrivateChat(server, this, user);
@@ -195,8 +235,10 @@ public class GuiController {
 		privateChat.addChat(user, message, false);
 	}
 
-	public synchronized void createPrivateChatWindow(ServerInterface server, String user) {
-		PrivateChat privateChat = privateChatList.get(new ServerUserName(user, server));
+	public synchronized void createPrivateChatWindow(ServerInterface server,
+			String user) {
+		PrivateChat privateChat = privateChatList.get(new ServerUserName(user,
+				server));
 		if (privateChat == null) {
 			privateChat = new PrivateChat(server, this, user);
 			privateChatList.put(new ServerUserName(user, server), privateChat);
@@ -210,8 +252,11 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void serverNoticeReceived(ServerInterface server, String room, String message) {
-		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room, server));
+	public synchronized void serverNoticeReceived(ServerInterface server,
+			String room,
+			String message) {
+		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(room,
+				server));
 		if (roomInterface == null) {
 		} else {
 			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
@@ -221,19 +266,28 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void gameCreated(ServerInterface server, String masterRoom, String newRoom,
-			String user1, String user2, String settings) {
-		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(masterRoom, server));
+	public synchronized void gameCreated(ServerInterface server,
+			String masterRoom,
+			String newRoom,
+			String user1,
+			String user2,
+			String settings) {
+		RoomInterface roomInterface = roomInterfaces.get(new ServerRoom(
+				masterRoom, server));
 		if (roomInterface == null) {
-			throw new UnsupportedOperationException("creating a game with an incorrect MasterRoom");
+			throw new UnsupportedOperationException(
+					"creating a game with an incorrect MasterRoom");
 		} else {
 			roomInterface.getRoomPart_GameList().
 					gameCreated(newRoom, user1, user2, settings);
 		}
 	}
 
-	public synchronized void gameVacancyCreated(ServerInterface server, String masterRoom, String newRoom,
-			String user, String settings) {
+	public synchronized void gameVacancyCreated(ServerInterface server,
+			String masterRoom,
+			String newRoom,
+			String user,
+			String settings) {
 		LangRoom langRoom = langRooms.get(new ServerRoom(masterRoom, server));
 		if (langRoom == null) {
 		} else {
@@ -242,7 +296,9 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void gameDestroyed(ServerInterface server, String masterRoom, String oldRoom) {
+	public synchronized void gameDestroyed(ServerInterface server,
+			String masterRoom,
+			String oldRoom) {
 		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
 		if (room == null) {
 		} else {
@@ -250,7 +306,9 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void gameVacancyDestroyed(ServerInterface server, String masterRoom, String oldRoom) {
+	public synchronized void gameVacancyDestroyed(ServerInterface server,
+			String masterRoom,
+			String oldRoom) {
 		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
 //		room.getClass().getInterfaces();
 		if (room == null) {
@@ -259,7 +317,12 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void makedMove(ServerInterface server, String room, boolean silent, int x, int y, boolean isRed) {
+	public synchronized void makedMove(ServerInterface server,
+			String room,
+			boolean silent,
+			int x,
+			int y,
+			boolean isRed) {
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
 		if (gameRoom != null) {
 			gameRoom.makeMove(silent, x, y, isRed);
@@ -267,31 +330,41 @@ public class GuiController {
 		}
 	}
 
-	public synchronized void gameStop(ServerInterface server, String room, boolean isRedPlayer) {
+	public synchronized void gameStop(ServerInterface server,
+			String room,
+			boolean isRedPlayer) {
 		GameRoom room_Game = gameRooms.get(new ServerRoom(room, server));
 		if (room_Game != null) {
 			gameRooms.get(new ServerRoom(room, server)).stopGame(isRedPlayer);
 		}
 	}
 
-	public synchronized void gameLost(ServerInterface server, String room, boolean isRedLooser, boolean wantToSave) {
+	public synchronized void gameLost(ServerInterface server,
+			String room,
+			boolean isRedLooser,
+			boolean wantToSave) {
 		GameRoom room_Game = gameRooms.get(new ServerRoom(room, server));
 		if (room_Game != null) {
-			gameRooms.get(new ServerRoom(room, server)).gameLost(isRedLooser, wantToSave);
+			gameRooms.get(new ServerRoom(room, server)).gameLost(isRedLooser,
+					wantToSave);
 		}
 	}
 
-	public synchronized void receiveRawServerInfo(ServerInterface server, String info) {
+	public synchronized void receiveRawServerInfo(ServerInterface server,
+			String info) {
 //		System.out.println(info);
 		String oldText = serverOutput.getText();
-		serverOutput.setText(oldText + server.getServerName() + ": " + info + "\n");
+		serverOutput.setText(
+				oldText + server.getServerName() + ": " + info + "\n");
 //		JOptionPane.showMessageDialog(tabbedPane, info);
 //		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public synchronized void activateGameRoom(ServerInterface server, String roomName) {
+	public synchronized void activateGameRoom(ServerInterface server,
+			String roomName) {
 		try {
-			tabbedPane.setSelectedComponent(gameRooms.get(new ServerRoom(roomName, server)));
+			tabbedPane.setSelectedComponent(gameRooms.get(new ServerRoom(
+					roomName, server)));
 		} catch (Exception e) {
 		}
 	}
@@ -302,7 +375,8 @@ class ServerRoom {
 	String roomName;
 	ServerInterface serverInterface;
 
-	public ServerRoom(String roomName, ServerInterface serverInterface) {
+	public ServerRoom(String roomName,
+			ServerInterface serverInterface) {
 		this.roomName = roomName;
 		this.serverInterface = serverInterface;
 	}
@@ -341,7 +415,8 @@ class ServerUserName {
 	String userName;
 	ServerInterface serverInterface;
 
-	public ServerUserName(String userName, ServerInterface serverInterface) {
+	public ServerUserName(String userName,
+			ServerInterface serverInterface) {
 		this.userName = userName;
 		this.serverInterface = serverInterface;
 	}
@@ -385,10 +460,13 @@ class JTabbedPaneMod extends JTabbedPane {
 	 * @param component
 	 * @param isCloseable if yes, generates an icon for closing the tab.
 	 */
-	public void addTab(String title, Component component, boolean isCloseable) {
+	public void addTab(String title,
+			Component component,
+			boolean isCloseable) {
 		super.addTab(title, component);
 		if (isCloseable) {
-			TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(this, title);
+			TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
+					this, title);
 			this.setTabComponentAt(getTabCount() - 1, buttonTabComponent);
 		} else {
 			this.setTabComponentAt(getTabCount() - 1, new JLabel(title));
@@ -421,11 +499,14 @@ class JTabbedPaneMod extends JTabbedPane {
 		}
 		int tabIndex = super.indexOfComponent(component);
 		String oldTitle = super.getTitleAt(tabIndex);
-		String newTitle = deleteBoldness(oldTitle).replaceAll("<html>", "").replaceAll("</html>", "");
+		String newTitle = deleteBoldness(oldTitle).replaceAll("<html>", "").replaceAll(
+				"</html>", "");
 		newTitle = "<html><font size=+1>*" + newTitle + "</font></html>";
 		if (newTitle.equals(oldTitle) == false) {
-			if (TabComponent_Closeable.class.isInstance(getTabComponentAt(tabIndex))) {
-				TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(JTabbedPaneMod.this, newTitle);
+			if (TabComponent_Closeable.class.isInstance(getTabComponentAt(
+					tabIndex))) {
+				TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
+						JTabbedPaneMod.this, newTitle);
 				super.setTabComponentAt(tabIndex, buttonTabComponent);
 				super.setTitleAt(tabIndex, newTitle);
 			} else {
@@ -443,8 +524,10 @@ class JTabbedPaneMod extends JTabbedPane {
 				String oldTitle = getTitleAt(selectedIndex);
 				String newTitle = deleteBoldness(oldTitle);
 				if (newTitle.equals(oldTitle) == false) {
-					if (TabComponent_Closeable.class.isInstance(getTabComponentAt(selectedIndex))) {
-						TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(JTabbedPaneMod.this, newTitle);
+					if (TabComponent_Closeable.class.isInstance(getTabComponentAt(
+							selectedIndex))) {
+						TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
+								JTabbedPaneMod.this, newTitle);
 						setTabComponentAt(selectedIndex, buttonTabComponent);
 						setTitleAt(selectedIndex, newTitle);
 					} else {
