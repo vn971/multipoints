@@ -279,7 +279,7 @@ public class GuiController {
 					"creating a game with an incorrect MasterRoom");
 		} else {
 			roomInterface.getRoomPart_GameList().
-					gameCreated(newRoom, user1, user2, settings);
+					gameCreated(newRoom, user1, user2, settings, false);
 		}
 	}
 
@@ -291,8 +291,11 @@ public class GuiController {
 		LangRoom langRoom = langRooms.get(new ServerRoom(masterRoom, server));
 		if (langRoom == null) {
 		} else {
-			langRoom.getRoomPart_GameList().gameCreated(newRoom,
-					"<html><b>" + user + "</b></html>", "", settings);
+			langRoom.getRoomPart_GameList().gameCreated(
+					newRoom,
+					"<html><b>" + user + "</b></html>", "",
+					"<html><b>" + settings + "</b></html>",
+					true);
 		}
 	}
 

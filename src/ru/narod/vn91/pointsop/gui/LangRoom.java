@@ -5,6 +5,7 @@
  */
 package ru.narod.vn91.pointsop.gui;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -132,12 +133,18 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void jButton_SearchOpponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SearchOpponentActionPerformed
-		// TODO add your handling code here:
+		JOptionPane.showMessageDialog(this,
+				"В связи дурацкой особенностью сервера, "
+				+ "эта кнопка не работает если жать её слишком часто.\n "
+				+ "Постарайтесь жать только когда необходимо..");
 		server.searchOpponent();
 	}//GEN-LAST:event_jButton_SearchOpponentActionPerformed
 
 	private void jButton_StopSearchingOpponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_StopSearchingOpponentActionPerformed
-		// TODO add your handling code here:
+		JOptionPane.showMessageDialog(this,
+				"В связи дурацкой особенностью сервера, "
+				+ "эта кнопка не работает если жать её слишком часто.\n "
+				+ "Постарайтесь жать только когда необходимо..");
 		server.stopSearchingOpponent();
 	}//GEN-LAST:event_jButton_StopSearchingOpponentActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

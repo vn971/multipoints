@@ -19,41 +19,57 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 	GuiController guiController;
 	private ArrayList<GameRoomData> gameList = new ArrayList<GameRoomData>();
 
-	void gameCreated(String roomName, String user1, String user2, String settings) {
+	void gameCreated(String roomName,
+			String user1,
+			String user2,
+			String settings,
+			boolean placeOnTop) {
 		int rowNumb = 0;
-		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(roomName) == false)) {
+		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(
+				roomName) == false)) {
 			++rowNumb;
 		}
 		if (rowNumb < gameList.size()) {
 			// equal found
-			gameList.set(rowNumb, new GameRoomData(roomName, user1, user2, gameList.size()));
-			DefaultTableModel tableModel = ((DefaultTableModel) jTable1.getModel());
+			gameList.remove(rowNumb);
+//			gameList.set(rowNumb, new GameRoomData(roomName, user1, user2, gameList.size()));
+			DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
 			tableModel.removeRow(rowNumb);
-			String[] row = {user1, user2, settings};
-			tableModel.insertRow(rowNumb, row);
+//			String[] row = {user1, user2, settings};
+//			tableModel.insertRow(rowNumb, row);
 		} else {
 			// creating a new one
-			gameList.add(new GameRoomData(roomName, user1, user2, gameList.size()));
-			DefaultTableModel tableModel = ((DefaultTableModel) jTable1.getModel());
-			String[] row = {user1, user2, settings};
-			tableModel.addRow(row);
+//			gameList.add(new GameRoomData(roomName, user1, user2, gameList.size()));
+//			DefaultTableModel tableModel = ((DefaultTableModel) jTable1.getModel());
+//			String[] row = {user1, user2, settings};
+//			tableModel.addRow(row);
 		}
-
+		if (placeOnTop) {
+			rowNumb = 0;
+		}
+		gameList.add(
+				rowNumb,
+				new GameRoomData(roomName, user1, user2, rowNumb));
+		DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
+		String[] row = {user1, user2, settings};
+		tableModel.insertRow(rowNumb, row);
 	}
 
 	void gameDestroyed(String roomName) {
 		int rowNumb = 0;
-		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(roomName) == false)) {
+		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(
+				roomName) == false)) {
 			++rowNumb;
 		}
 		if (rowNumb < gameList.size()) {
-			DefaultTableModel tableModel = ((DefaultTableModel) jTable1.getModel());
+			DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
 			tableModel.removeRow(rowNumb);
 			gameList.remove(rowNumb);
 		}
 	}
 
-	public void initRoomPart(RoomInterface containerRoom, GuiController guiController) {
+	public void initRoomPart(RoomInterface containerRoom,
+			GuiController guiController) {
 		this.guiController = guiController;
 		this.containerRoom = containerRoom;
 	}
@@ -126,12 +142,16 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 			int row = jTable1.getSelectedRow();
 			if (row >= 0) {
 				String roomName = gameList.get(row).roomName;
-				if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(row).user2))
-						&& (!containerRoom.getServer().getMyName().equals(gameList.get(row).user1))
-						&& (!containerRoom.getServer().getMyName().equals(gameList.get(row).user2))) {
+				if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
+						row).user2))
+						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
+						row).user1))
+						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
+						row).user2))) {
 					containerRoom.getServer().requestJoinGame(roomName);
 				} else {
-					guiController.activateGameRoom(containerRoom.getServer(), roomName);
+					guiController.activateGameRoom(containerRoom.getServer(),
+							roomName);
 					containerRoom.getServer().subscribeRoom(roomName);
 				}
 			}
@@ -148,7 +168,10 @@ class GameRoomData {
 	String roomName, user1, user2;
 	int rowNumber;
 
-	public GameRoomData(String roomName, String user1, String user2, int rowNumber) {
+	public GameRoomData(String roomName,
+			String user1,
+			String user2,
+			int rowNumber) {
 		this.roomName = roomName;
 		this.user1 = user1;
 		this.user2 = user2;
