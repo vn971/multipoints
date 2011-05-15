@@ -187,6 +187,16 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 					4)));
 			gui.subscribedGame(roomName, this, getMyName(), name, 0, 0,
 					"999мин/ход", false, "", true, true/*i am the player*/);
+			for (User user : super.getUsers(roomName)) {
+				String ircNick = user.getNick();
+				gui.userJoinedGameRoom(
+						this,
+						roomName,
+						nicknameManager.getOrCreateShortNick(ircNick),
+						true,
+						getPlayerRank(ircNick),
+						extractUserStatus(ircNick));
+			}
 		}
 	}
 
@@ -247,7 +257,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	public void unsubscribeRoom(String roomName) {
-		if ((new Date()).getTime() - lastSpectrTime.getTime() > 0) {
+		if ((new Date()).getTime() - lastSpectrTime.getTime() >= 0) {
 			// limit the users from joining-leaving too fast
 			// because it causes a bug in pointsxt
 			lastSpectrTime = new Date();
@@ -317,6 +327,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			String hostname) {
 		userDisconnected_PointsxtStyle(channel, sender);
 		if (sender.equals(mainGameOpponent) && channel.equals(mainGameRoomName)) {
+			System.out.println("opponent exited channel " + channel.replaceAll(
+					"#pxt", ""));
 			clearMainGameVariables();
 			super.partChannel(mainGameRoomName);
 //			gui.chatReceived(this, channel, sender, "Ваш оппонент закрыл игру.");
@@ -384,6 +396,16 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				mainGameRoomName = channel;
 				gui.subscribedGame(channel, this, nick, getMyName(), 0, 0,
 						"999мин/ход", false, "", true, true/*i am the player*/);
+				for (User user : super.getUsers(channel)) {
+					String ircNick = user.getNick();
+					gui.userJoinedGameRoom(
+							this,
+							channel,
+							nicknameManager.getOrCreateShortNick(ircNick),
+							true,
+							getPlayerRank(ircNick),
+							extractUserStatus(ircNick));
+				}
 			}
 			return; /* "if I won't take it - no one will."
 			if we had a pointsOp message and failed to handle it - do nothing.
@@ -663,16 +685,20 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		}
 	}
 
+//room leaving - fix.  Исправил очистку списка в случае одновременной игры и просмотров через Op
 	public void userDisconnected_PointsxtStyle(String room,
 			String user) {
 //		shortNick2FullNick.remove(user);
-		nicknameManager.removeIrcNick(user);
-		gui.userLeavedRoom(this, room,
-				nicknameManager.getOrCreateShortNick(user));
-		clearCreatedGames_PointsxtStyle(user);
+		if (room.equals(defaultChannel)) {
+			nicknameManager.removeIrcNick(user);
+			gui.userLeavedRoom(this, room,
+					nicknameManager.getOrCreateShortNick(user));
+			clearCreatedGames_PointsxtStyle(user);
+		}
 	}
 
 	public void clearCreatedGames_PointsxtStyle(String user) {
+//		System.out.println("serv.clearCreatedGames, user=" + user);
 		if (getPlayerRoom(user).length() > 0) {
 			gui.gameDestroyed(this, defaultChannel, getPlayerRoom(user));
 		}
