@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -61,17 +62,15 @@ public class SelfishGuiStarter {
 			public void paperMouseMove(int x, int y, MouseEvent evt) {
 			}
 		};
-		paper.initPaper(10, 10);
+		paper.initPaper(39, 32);
 		try {
-			if (InetAddress.getLocalHost().getHostName().equals("vn91-vasya")) {
+			//if (InetAddress.getLocalHost().getHostName().equals("vn91-vasya")) {
 				tabbedPane.addTab("game", paper);
-			}
+			//}
 		} catch (Exception e) {
 		}
 
-
 		{
-
 			JMenuBar jMenuBar = new JMenuBar();
 
 			{
@@ -102,16 +101,21 @@ public class SelfishGuiStarter {
 				jMenuBar.add(jMenu);
 			}
 			{
-				JMenu jMenu = new JMenu("Help");
-				JMenuItem jMenuItem = new JMenuItem("about&help");
+				JMenu jMenu = new JMenu("Помощь");
+				JMenuItem jMenuItem = new JMenuItem("online помощь");
 				jMenu.add(jMenuItem);
 				jMenuItem.addActionListener(new ActionListener() {
-
 					public void actionPerformed(ActionEvent e) {
-						JOptionPane.showMessageDialog(null,
-								"все вопросы и вся инфа здесь: \n"
-								+ "http://vkontakte.ru/club21455903 \n"
-								+ "(Мне так на порядок удобней пока-что, извиняйте..:)");
+						try{java.awt.Desktop.getDesktop().browse(new URI("http://vkontakte.ru/club21455903"));
+						}catch(Exception e1){}
+					}
+				});
+				JMenuItem jMenuItem1 = new JMenuItem("полезные ссылки");
+				jMenu.add(jMenuItem1);
+				jMenuItem1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try{java.awt.Desktop.getDesktop().browse(new URI("http://sites.google.com/site/oscarpoints/links"));
+						}catch(Exception e1){}
 					}
 				});
 				jMenuBar.add(jMenu);

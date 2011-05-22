@@ -37,25 +37,25 @@ public abstract class Paper extends JPanel {
 	private double borderYcoeffecient = 0.7;
 	private int offsetX;
 	private int offsetY;
-	private Color colorRedPoint = new Color(200, 0, 0, 255);
-	private Color colorBluPoint = new Color(0, 0, 200, 255);
-	private Color colorBackground = new Color(223, 223, 223, 255);
-	private Color colorGrid = Color.GRAY;
-	private Color colorPaperBorders = Color.GRAY;
-	private Color colorBluTired = colorBluPoint;
-	private Color colorRedTired = colorRedPoint;
+	private Color colorRedPoint = new Color(255, 0, 0, 255);
+	private Color colorBluPoint = new Color(21, 96, 189, 255);
+	private Color colorBackground = new Color(254,254,254, 255);
+	private Color colorGrid = new Color(225,225,225);
+	private Color colorPaperBorders = new Color(225,225,225);
+	private Color colorBluTired = new Color(0, 0, 255, 128);
+	private Color colorRedTired = new Color(255, 0, 0, 128);
 	private Color colorRedEatedBlu = colorBluPoint;
 	private Color colorBluEatedRed = colorRedPoint;
-	private Color colorRedSurr = getAlphaModifiedColor(colorRedPoint, 90);
-	private Color colorBluSurr = getAlphaModifiedColor(colorBluPoint, 90);
-	private Color colorRedCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
-	private Color colorBluCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
+	private Color colorRedSurr = new Color(255, 0, 0, 90);
+	private Color colorBluSurr = new Color(21, 96, 189, 90);
+	private Color colorRedCtrlSurr = new Color(255, 0, 0, 20);
+	private Color colorBluCtrlSurr = new Color(21, 96, 189, 185);
 
 	public void setColors(Color p1, Color p2, Color background) {
 		colorRedPoint = p1;
 		colorBluPoint = p2;
 		colorBackground = background;
-		colorGrid = getMiddleColor(getContrastColor(background), background);
+		//colorGrid = getMiddleColor(getContrastColor(background), background);
 		colorPaperBorders = colorGrid;
 		colorBluTired = colorBluPoint;
 		colorRedTired = colorRedPoint;
@@ -316,8 +316,8 @@ public abstract class Paper extends JPanel {
 				return;
 			}
 			DotType dotType = engine.getDotType(x, y);
-			Point p = getPixel(x, y);
-			int pointRadius = (int) (squareSize * dotWidth / 3);
+			//Point p = getPixel(x, y);
+			int pointRadius = (int) (squareSize  / 4);
 			int poindDiameter = pointRadius * 2;
 
 //			if (dotType == DotType.BLUE || dotType == DotType.RED_EATED_BLUE) {
@@ -325,11 +325,19 @@ public abstract class Paper extends JPanel {
 //			} else if (dotType == DotType.RED || dotType == DotType.BLUE_EATED_RED) {
 //				graphics.setColor(getContrastColor(colorRedPoint));
 //			}
-			graphics.setColor(Color.WHITE);
+			//graphics.setColor(Color.WHITE);
 
-			graphics.fillOval(p.x - pointRadius, p.y - pointRadius,
-					poindDiameter,
-					poindDiameter);
+			//graphics.fillOval(p.x - pointRadius, p.y - pointRadius,	poindDiameter,poindDiameter);
+			
+			if(dotType == DotType.RED)graphics.setColor(new Color(255, 0, 0, 100));
+			else graphics.setColor(new Color(21, 96, 189, 100));//синий
+			int pixelX = getPixel(x, y).x;
+			int pixelY = getPixel(x, y).y;
+			int drawX = pixelX - poindDiameter/2;
+			int drawY = pixelY - poindDiameter/2;
+			graphics.drawOval(drawX-1, drawY-1, poindDiameter+2, poindDiameter+2);//нарисовать последний ход
+			graphics.drawOval(drawX-2, drawY-2, poindDiameter+4, poindDiameter+4);//нарисовать последний ход
+			
 		}
 
 	}

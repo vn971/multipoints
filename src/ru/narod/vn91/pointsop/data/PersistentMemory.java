@@ -64,17 +64,17 @@ public class PersistentMemory {
 	}
 
 	public static Color getPlayer1Color() {
-		int r = memory.getInt("1Red", 200);
+		int r = memory.getInt("1Red", 255);
 		int g = memory.getInt("1Green", 0);
 		int b = memory.getInt("1Blue", 0);
 		return new Color(r, g, b);
 	}
 
 	public static Color getPlayer2Color() {
-		int r = memory.getInt("2Red", 0);
-		int g = memory.getInt("2Green", 0);
-		int b = memory.getInt("2Blue", 200);
-		return new Color(r, g, b);
+		int r = memory.getInt("2Red", 21);
+		int g = memory.getInt("2Green", 96);
+		int b = memory.getInt("2Blue", 189);
+		return new Color(r, g, b, 255);
 	}
 
 	public static Color getBackgroundColor() {
@@ -105,7 +105,7 @@ public class PersistentMemory {
 	public static void resetColors() {
 		setPlayer1Color(new Color(200, 0, 0, 255));
 		setPlayer2Color(new Color(0, 0, 200, 255));
-		setBackgroundColor(new Color(223, 223, 223, 255));
+		setBackgroundColor(new Color(254, 254, 254, 255));
 	}
 
 	public enum ClickAudibility {
