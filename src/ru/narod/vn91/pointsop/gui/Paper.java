@@ -297,7 +297,7 @@ public abstract class Paper extends JPanel {
 		}
 
 		graphics.setColor(colorBackground);
-		int pointRadius = (int)(squareSize * dotWidth / 3);
+		int pointRadius = (int)(squareSize * dotWidth / 2);
 		graphics.drawOval(
 				getPixel(x, y).x - pointRadius,
 				getPixel(x, y).y - pointRadius,
@@ -338,7 +338,7 @@ public abstract class Paper extends JPanel {
 			graphics.setColor(colorRedPoint);
 		}
 
-		int ovalRadius = (int)(squareSize * dotWidth / 3);
+		int ovalRadius = (int)(squareSize * dotWidth / 2);
 		graphics.drawOval(
 				getPixel(x, y).x - ovalRadius,
 				getPixel(x, y).y - ovalRadius,

@@ -1,8 +1,9 @@
 syntax: glob
 *.class
 *.jar
-\bin\*
-\dist\*
+bin\*
+dist\*
+*built-jar.properties
 
 syntax: regexp
 

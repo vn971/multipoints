@@ -23,11 +23,10 @@ import ru.narod.vn91.pointsop.data.PersistentMemory;
 public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
-//		JFrame.setDefaultLookAndFeelDecorated(true);
-		if (PersistentMemory.getPlayer1Color().equals(
-				new Color(200, 0, 0))) {
+		if (PersistentMemory.getVersion() <= 0) {
 			PersistentMemory.resetColors();
 		}
+		PersistentMemory.setVersion(1);
 		JFrame frame = new JFrame("Точки");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/data/vp.jpg");

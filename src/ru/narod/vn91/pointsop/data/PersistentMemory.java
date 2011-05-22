@@ -12,6 +12,14 @@ public class PersistentMemory {
 	static Preferences memory = Preferences.userRoot().node(
 			"ru.narod.ru.pointsop.userdata");
 
+	public static int getVersion() {
+		return memory.getInt("version", 0);
+	}
+
+	public static void setVersion(int ver) {
+		memory.putInt("version", ver);
+	}
+
 	public static void setUserName(String newName) {
 		memory.put("username", newName);
 	}
