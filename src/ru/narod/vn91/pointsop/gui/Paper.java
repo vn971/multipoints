@@ -46,16 +46,20 @@ public abstract class Paper extends JPanel {
 	private Color colorRedTired = new Color(255, 0, 0, 128);
 	private Color colorRedEatedBlu = colorBluPoint;
 	private Color colorBluEatedRed = colorRedPoint;
-	private Color colorRedSurr = new Color(255, 0, 0, 90);
-	private Color colorBluSurr = new Color(21, 96, 189, 90);
+	//private Color colorRedSurr = new Color(255, 0, 0, 90);
+	//private Color colorBluSurr = new Color(21, 96, 189, 90);
+	
+	private Color colorRedSurr = getAlphaModifiedColor(colorRedPoint, 90); 	
+	private Color colorBluSurr = getAlphaModifiedColor(colorBluPoint, 90);
+	
 	private Color colorRedCtrlSurr = new Color(255, 0, 0, 20);
 	private Color colorBluCtrlSurr = new Color(21, 96, 189, 185);
 
 	public void setColors(Color p1, Color p2, Color background) {
-		colorRedPoint = p1;
+		/*colorRedPoint = p1;
 		colorBluPoint = p2;
 		colorBackground = background;
-		//colorGrid = getMiddleColor(getContrastColor(background), background);
+		colorGrid = getMiddleColor(getContrastColor(background), background);
 		colorPaperBorders = colorGrid;
 		colorBluTired = colorBluPoint;
 		colorRedTired = colorRedPoint;
@@ -64,7 +68,7 @@ public abstract class Paper extends JPanel {
 		colorRedSurr = getAlphaModifiedColor(colorRedPoint, 90);
 		colorBluSurr = getAlphaModifiedColor(colorBluPoint, 90);
 		colorRedCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
-		colorBluCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
+		colorBluCtrlSurr = getAlphaModifiedColor(colorBackground, 0);*/
 	}
 
 	private Color getContrastColor(Color source) {
@@ -253,12 +257,17 @@ public abstract class Paper extends JPanel {
 				}
 			}
 		}
-		BasicStroke basicStroke =
+		/*BasicStroke basicStroke =
 				new BasicStroke((float) (squareSize * dotWidth * 0.25),
 				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-		((Graphics2D) graphics).setStroke(basicStroke);
+		((Graphics2D) graphics).setStroke(basicStroke);*/
+		
 		graphics.setColor(colorBackground);
-		int dx = (int) (squareSize * dotWidth * Math.sqrt(2) / 3);
+		graphics.drawOval(getPixel(x, y).x-2, getPixel(x, y).y-2, 6, 6);
+		graphics.setColor(colorGrid);
+		graphics.drawLine(getPixel(x, y).x-2, getPixel(x, y).y, getPixel(x, y).x+4, getPixel(x, y).y);
+		graphics.drawLine(getPixel(x, y).x, getPixel(x, y).y-2, getPixel(x, y).x, getPixel(x, y).y+4);
+		/*int dx = (int) (squareSize * dotWidth * Math.sqrt(2) / 3);
 		Point pixel = getPixel(x, y);
 		graphics.drawLine(pixel.x - dx, pixel.y - dx,
 				pixel.x + dx + 1, pixel.y + dx + 1);
@@ -270,7 +279,7 @@ public abstract class Paper extends JPanel {
 		graphics.drawLine(pixel.x, pixel.y - dx,
 				pixel.x, pixel.y + dx + 1);
 		graphics.drawLine(pixel.x - dx, pixel.y,
-				pixel.x + dx + 1, pixel.y);
+				pixel.x + dx + 1, pixel.y);*/
 	}
 
 	void drawCursor() {
@@ -282,10 +291,10 @@ public abstract class Paper extends JPanel {
 			return;
 		}
 		Graphics graphics = super.getGraphics();
-		BasicStroke basicStroke =
-				new BasicStroke((float) (squareSize * dotWidth * 0.25),
-				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-		((Graphics2D) graphics).setStroke(basicStroke);
+		//BasicStroke basicStroke =
+		//		new BasicStroke((float) (squareSize * dotWidth * 0.25),
+		//		BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+		//((Graphics2D) graphics).setStroke(basicStroke);
 		if (engine.getLastDot() == null) {
 			graphics.setColor(getContrastColor(colorBackground));
 		} else if (engine.getLastDotColor() == true) {
@@ -293,13 +302,16 @@ public abstract class Paper extends JPanel {
 		} else if (engine.getLastDotColor() == false) {
 			graphics.setColor(colorRedPoint);
 		}
-		int dx = (int) (squareSize * dotWidth * Math.sqrt(2) / 3);
-		Point pixel = getPixel(x, y);
-		graphics.drawLine(pixel.x - dx, pixel.y - dx,
+		//int dx = (int) (squareSize * dotWidth * Math.sqrt(2) / 3);
+		//Point pixel = getPixel(x, y);
+		/*graphics.drawLine(pixel.x - dx, pixel.y - dx,
 				pixel.x + dx + 1, pixel.y + dx + 1);
 		graphics.drawLine(pixel.x - dx, pixel.y + dx + 1,
 				pixel.x + dx + 1, pixel.y - dx);
-		((Graphics2D) graphics).setStroke(new BasicStroke());
+		((Graphics2D) graphics).setStroke(new BasicStroke());*/
+		
+		graphics.drawOval(getPixel(x, y).x-2, getPixel(x, y).y-2, 6, 6);
+		
 	}
 
 	void drawLastDotHint(Graphics graphics) {
@@ -317,7 +329,7 @@ public abstract class Paper extends JPanel {
 			}
 			DotType dotType = engine.getDotType(x, y);
 			//Point p = getPixel(x, y);
-			int pointRadius = (int) (squareSize  / 4);
+			int pointRadius = (int) (squareSize * dotWidth / 2);
 			int poindDiameter = pointRadius * 2;
 
 //			if (dotType == DotType.BLUE || dotType == DotType.RED_EATED_BLUE) {
@@ -491,8 +503,8 @@ public abstract class Paper extends JPanel {
 				graphics.setColor(colorBackground);
 				graphics.fillOval(drawX, drawY, pointDiameter, pointDiameter);
 				graphics.setColor(colorGrid);
-				graphics.drawLine(pixelX, pixelY - pointRadius, pixelX, pixelY + pointRadius);
-				graphics.drawLine(pixelX - pointRadius, pixelY, pixelX + pointRadius, pixelY);
+				graphics.drawLine(pixelX, pixelY - pointRadius+1, pixelX, pixelY + pointRadius-1);
+				graphics.drawLine(pixelX - pointRadius+1, pixelY, pixelX + pointRadius-1, pixelY);
 			}
 		}
 	}
@@ -503,6 +515,7 @@ public abstract class Paper extends JPanel {
 
 	@Override
 	public void paint(Graphics graphics) {
+		//System.out.println(PersistentMemory.getDotWidth());
 		dotWidth = PersistentMemory.getDotWidth();
 		drawConnections = PersistentMemory.getDrawConnections();
 		setColors(
@@ -592,7 +605,7 @@ public abstract class Paper extends JPanel {
 			// drawing paper borders
 			Graphics2D graphics2d = (Graphics2D) graphics;
 			BasicStroke basicStroke =
-					new BasicStroke((float) (squareSize * dotWidth * 0.20),
+					new BasicStroke((float) (squareSize * dotWidth * 0.10),
 					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 			graphics2d.setStroke(basicStroke);
 			graphics.setColor(colorPaperBorders);
