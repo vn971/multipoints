@@ -5,7 +5,23 @@
  */
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
+import javax.swing.ImageIcon;
+
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.ServerPointsop;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
@@ -42,12 +58,14 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	/** Creates new form WelcomePanel */
 	public WelcomePanel(GuiController actionDistributor) {
+		
+		
 		this.guiController = actionDistributor;
 		initComponents();
 		jPanel_Invisible.setVisible(false);
 		jTextField_Username.setText(PersistentMemory.getUserName());
 		jTextField_Username.select(jTextField_Username.getText().length(), jTextField_Username.getText().length());
-
+		
 //		System.out.println("" + (null instanceof String));
 	}
 
@@ -67,8 +85,7 @@ public class WelcomePanel extends javax.swing.JPanel {
         jTextField_Email = new javax.swing.JTextField();
         jTextField_Icq = new javax.swing.JTextField();
         jTextField_City = new javax.swing.JTextField();
-        jScrollPane_ServerInfo = new javax.swing.JScrollPane();
-        jTextPane_ServerOutput = new javax.swing.JTextPane();
+        jScrollPane_ServerInfo = new javax.swing.JScrollPane();        
         jPanel_Invisible = new javax.swing.JPanel();
         jPanel_Tochkiorg = new javax.swing.JPanel();
         jButton_ConnectTochkiorg = new javax.swing.JButton();
@@ -121,10 +138,73 @@ public class WelcomePanel extends javax.swing.JPanel {
         jTextField_City.setNextFocusableComponent(jTextField_Icq);
         jTextField_City.setRequestFocusEnabled(false);
 
+        
+        //========================================================================================
+        
+        jPanel_Test = new javax.swing.JPanel();
+        jScrollPane_ServerInfo.setViewportView(jPanel_Test);
+        jPanel_Test.setLayout(new LayoutManager(){//класс
+        	public void addLayoutComponent(String name, Component comp) {  }
+        	public void removeLayoutComponent(Component comp) { }
+        	public Dimension preferredLayoutSize(Container parent) {
+                return new Dimension(jPanel_Test.getWidth(), jPanel_Test.getHeight());        }
+        	public Dimension minimumLayoutSize(Container parent) {
+            	return new Dimension(jPanel_Test.getWidth(), jPanel_Test.getHeight());        }
+        	public void layoutContainer(Container parent) {  }
+        }
+        );
+        
+    	javax.swing.JLabel jLabel_main=new javax.swing.JLabel(
+    			"<html><font size=7>Игра Точки<br><font size=2>PointsOnPaper");
+        jPanel_Test.add(jLabel_main);
+        jLabel_main.setBounds(5, 5, 670, 185);
+        try {
+			jLabel_main.setIcon(new ImageIcon(new URL("http://sites.google.com/site/priymakpoints/logotypes/PointsOP.png")));
+		} catch (MalformedURLException e2) {}
+                
+        final String [][] labels=new String[][]{//массив содержит ссылки и подписи к ним
+        		{"Группа ВКонтакте","http://vkontakte.ru/club21455903"},
+        		{"Вопросы по PointsOP","http://vkontakte.ru/topic-21455903_24260448"},
+        		{"Пожелания по игровой части: вид поля, формат игры","http://vkontakte.ru/topic-21455903_24387150"},
+         		{"Пожелания по списку игроков, чату, дизайну","http://vkontakte.ru/topic-21455903_24407841"},
+         		{"Полезные ссылки","http://sites.google.com/site/oscarpoints/links"},
+        };
+                  
+        for(int i=0;i<labels.length;i++){//метки для ссылок
+        	final int j=i;
+        	javax.swing.JLabel jLabel=new javax.swing.JLabel("<html><font color=blue><u>"+labels[j][0]);
+        	jLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        	jLabel.addMouseListener(new MouseListener() {
+    			public void mouseReleased(MouseEvent e) {}
+    			public void mousePressed(MouseEvent e) {}
+    			public void mouseExited(MouseEvent e) {}
+    			public void mouseEntered(MouseEvent e) {}
+    			public void mouseClicked(MouseEvent e) {
+    				try {java.awt.Desktop.getDesktop().browse(new URI(labels[j][1]));
+    				} catch (Exception e1) {}
+    			}
+    		});	
+            jPanel_Test.add(jLabel);
+            jLabel.setBounds(10, 200+30*i, 400, 15); 
+        }
+        
+        javax.swing.JScrollPane jScroll_ServerOutput=new javax.swing.JScrollPane();
+        jTextPane_ServerOutput = new javax.swing.JTextPane();
+        
+        jPanel_Test.add(jScroll_ServerOutput); 
+        jScroll_ServerOutput.setBounds(10, 350, 660, 200);
+                
+        jScroll_ServerOutput.setViewportView(jTextPane_ServerOutput);
         jTextPane_ServerOutput.setEditable(false);
-        jTextPane_ServerOutput.setText("* 3 апреля\nсделаны регулируемые цвет и размеры точек, переделан внешний вид проги, добавлена возможность соединения соседних точек палочками.\n\n* 22 марта\nпоявилась возможность полноценно играть Op-шникам между собой! Ура:)\n\n* 13 марта\nпояснение:) Прогу не обязательно обновлять \"вручную\", она делает это сама. Если интересно подробней: http://vkontakte.ru/topic-21455903_24499649\n\n* Комментарии, замечания или предложения пишите сюда:\nhttp://vkontakte.ru/club21455903\nИ вступайте:)\n\n\n--------------------------------------------------------------\n");
-        jScrollPane_ServerInfo.setViewportView(jTextPane_ServerOutput);
+        jTextPane_ServerOutput.setText("Cоединение:\n--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+       // jTextPane_ServerOutput.setText("* 3 апреля\nсделаны регулируемые цвет и размеры точек, переделан внешний вид проги, добавлена возможность соединения соседних точек палочками.\n\n* 22 марта\nпоявилась возможность полноценно играть Op-шникам между собой! Ура:)\n\n* 13 марта\nпояснение:) Прогу не обязательно обновлять \"вручную\", она делает это сама. Если интересно подробней: http://vkontakte.ru/topic-21455903_24499649\n\n* Комментарии, замечания или предложения пишите сюда:\nhttp://vkontakte.ru/club21455903\nИ вступайте:)\n\n\n--------------------------------------------------------------\n");
 
+        
+        //========================================================================================
+
+        
+        
+        
         jPanel_Tochkiorg.setBorder(javax.swing.BorderFactory.createTitledBorder("tochki.org"));
         jPanel_Tochkiorg.setEnabled(false);
 
@@ -368,5 +448,6 @@ public class WelcomePanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField_Icq;
     javax.swing.JTextField jTextField_Username;
     javax.swing.JTextPane jTextPane_ServerOutput;
+    javax.swing.JPanel jPanel_Test;
     // End of variables declaration//GEN-END:variables
 }

@@ -32,7 +32,7 @@ public class SelfishGuiStarter {
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/data/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
-		frame.setSize(870, 670);
+		frame.setSize(925, 670);
 		frame.setLocationRelativeTo(frame.getRootPane());
 		{
 			int x = frame.getBounds().x, y = frame.getBounds().y;
@@ -74,7 +74,7 @@ public class SelfishGuiStarter {
 		paper.initPaper(39, 32);
 		try {
 			//if (InetAddress.getLocalHost().getHostName().equals("vn91-vasya")) {
-			tabbedPane.addTab("game", paper);
+			//tabbedPane.addTab("game", paper);
 			//}
 		} catch (Exception e) {
 		}
