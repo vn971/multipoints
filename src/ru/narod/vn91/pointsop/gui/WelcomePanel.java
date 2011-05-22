@@ -197,14 +197,9 @@ public class WelcomePanel extends javax.swing.JPanel {
         jScroll_ServerOutput.setViewportView(jTextPane_ServerOutput);
         jTextPane_ServerOutput.setEditable(false);
         jTextPane_ServerOutput.setText("Cоединение:\n--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-       // jTextPane_ServerOutput.setText("* 3 апреля\nсделаны регулируемые цвет и размеры точек, переделан внешний вид проги, добавлена возможность соединения соседних точек палочками.\n\n* 22 марта\nпоявилась возможность полноценно играть Op-шникам между собой! Ура:)\n\n* 13 марта\nпояснение:) Прогу не обязательно обновлять \"вручную\", она делает это сама. Если интересно подробней: http://vkontakte.ru/topic-21455903_24499649\n\n* Комментарии, замечания или предложения пишите сюда:\nhttp://vkontakte.ru/club21455903\nИ вступайте:)\n\n\n--------------------------------------------------------------\n");
-
         
         //========================================================================================
-
-        
-        
-        
+       
         jPanel_Tochkiorg.setBorder(javax.swing.BorderFactory.createTitledBorder("tochki.org"));
         jPanel_Tochkiorg.setEnabled(false);
 
