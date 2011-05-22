@@ -327,8 +327,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			String hostname) {
 		userDisconnected_PointsxtStyle(channel, sender);
 		if (sender.equals(mainGameOpponent) && channel.equals(mainGameRoomName)) {
-			System.out.println("opponent exited channel " + channel.replaceAll(
-					"#pxt", ""));
+//			System.out.println("opponent exited channel " + channel.replaceAll(
+//					"#pxt", ""));
 			clearMainGameVariables();
 			super.partChannel(mainGameRoomName);
 //			gui.chatReceived(this, channel, sender, "Ваш оппонент закрыл игру.");

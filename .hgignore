@@ -1,6 +1,8 @@
 syntax: glob
 *.class
 *.jar
+\bin\*
+\dist\*
 
 syntax: regexp
 

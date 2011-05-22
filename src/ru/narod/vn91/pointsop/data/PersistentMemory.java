@@ -9,7 +9,8 @@ import java.util.prefs.Preferences;
  */
 public class PersistentMemory {
 
-	static Preferences memory = Preferences.userRoot().node("ru.narod.ru.pointsop.userdata");
+	static Preferences memory = Preferences.userRoot().node(
+			"ru.narod.ru.pointsop.userdata");
 
 	public static void setUserName(String newName) {
 		memory.put("username", newName);
@@ -20,7 +21,8 @@ public class PersistentMemory {
 	}
 
 	public static ClickAudibility getClickAudibility() {
-		return ClickAudibility.valueOf_Failsafe(memory.get("ClickAudibility", ""));
+		return ClickAudibility.valueOf_Failsafe(
+				memory.get("ClickAudibility", ""));
 	}
 
 	public static void setClickAudibility(ClickAudibility clickAudibility) {
@@ -74,7 +76,7 @@ public class PersistentMemory {
 		int r = memory.getInt("2Red", 21);
 		int g = memory.getInt("2Green", 96);
 		int b = memory.getInt("2Blue", 189);
-		return new Color(r, g, b, 255);
+		return new Color(r, g, b);
 	}
 
 	public static Color getBackgroundColor() {
@@ -103,8 +105,8 @@ public class PersistentMemory {
 	}
 
 	public static void resetColors() {
-		setPlayer1Color(new Color(200, 0, 0, 255));
-		setPlayer2Color(new Color(0, 0, 200, 255));
+		setPlayer1Color(new Color(255, 0, 0, 255));
+		setPlayer2Color(new Color(21, 96, 189, 255));
 		setBackgroundColor(new Color(254, 254, 254, 255));
 	}
 

@@ -73,6 +73,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 				abstractButton.addActionListener(pointsClickListener);
 			}
 		}
+		initPhase = false;
 	}
 
 	/** This method is called from within the constructor to
@@ -139,7 +140,7 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addComponent(jRadioButton_PointsClick_Nowhere)
                 .addGap(18, 18, 18)
                 .addComponent(jButton_PointClick)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(256, Short.MAX_VALUE))
         );
         jPanel_ClickLayout.setVerticalGroup(
             jPanel_ClickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,7 +157,7 @@ public class SettingsPanel extends javax.swing.JPanel {
         // jPanel_Dots.setVisible(false);
 
         jSlider1.setMajorTickSpacing(3);
-        jSlider1.setMaximum(7);
+        jSlider1.setMaximum(17);
         jSlider1.setMinimum(1);
         jSlider1.setMinorTickSpacing(1);
         jSlider1.setPaintTicks(true);
@@ -273,7 +274,9 @@ public class SettingsPanel extends javax.swing.JPanel {
 
 	private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
 		if (initPhase == false) {
-			PersistentMemory.setDotWidth(((double)jSlider1.getValue()) / 7);
+			PersistentMemory.setDotWidth(
+					((double)jSlider1.getValue())
+					/ jSlider1.getMaximum());
 		}
 	}//GEN-LAST:event_jSlider1StateChanged
 

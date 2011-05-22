@@ -1,11 +1,11 @@
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -14,6 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import ru.narod.vn91.pointsop.data.PersistentMemory;
 
 /**
  *
@@ -23,6 +24,10 @@ public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
 //		JFrame.setDefaultLookAndFeelDecorated(true);
+		if (PersistentMemory.getPlayer1Color().equals(
+				new Color(200, 0, 0))) {
+			PersistentMemory.resetColors();
+		}
 		JFrame frame = new JFrame("Точки");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/data/vp.jpg");
@@ -54,18 +59,22 @@ public class SelfishGuiStarter {
 		Paper paper = new Paper() {
 
 			@Override
-			public void paperClick(int x, int y, MouseEvent evt) {
+			public void paperClick(int x,
+					int y,
+					MouseEvent evt) {
 				makeMove(false, x, y, evt.isControlDown());
 			}
 
 			@Override
-			public void paperMouseMove(int x, int y, MouseEvent evt) {
+			public void paperMouseMove(int x,
+					int y,
+					MouseEvent evt) {
 			}
 		};
 		paper.initPaper(39, 32);
 		try {
 			//if (InetAddress.getLocalHost().getHostName().equals("vn91-vasya")) {
-				tabbedPane.addTab("game", paper);
+			tabbedPane.addTab("game", paper);
 			//}
 		} catch (Exception e) {
 		}
@@ -105,17 +114,26 @@ public class SelfishGuiStarter {
 				JMenuItem jMenuItem = new JMenuItem("online помощь");
 				jMenu.add(jMenuItem);
 				jMenuItem.addActionListener(new ActionListener() {
+
 					public void actionPerformed(ActionEvent e) {
-						try{java.awt.Desktop.getDesktop().browse(new URI("http://vkontakte.ru/club21455903"));
-						}catch(Exception e1){}
+						try {
+							java.awt.Desktop.getDesktop().browse(new URI(
+									"http://vkontakte.ru/club21455903"));
+						} catch (Exception e1) {
+						}
 					}
 				});
 				JMenuItem jMenuItem1 = new JMenuItem("полезные ссылки");
 				jMenu.add(jMenuItem1);
 				jMenuItem1.addActionListener(new ActionListener() {
+
 					public void actionPerformed(ActionEvent e) {
-						try{java.awt.Desktop.getDesktop().browse(new URI("http://sites.google.com/site/oscarpoints/links"));
-						}catch(Exception e1){}
+						try {
+							java.awt.Desktop.getDesktop().browse(
+									new URI(
+									"http://sites.google.com/site/oscarpoints/links"));
+						} catch (Exception e1) {
+						}
 					}
 				});
 				jMenuBar.add(jMenu);
