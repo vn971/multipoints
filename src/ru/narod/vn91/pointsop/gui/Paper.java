@@ -297,12 +297,23 @@ public abstract class Paper extends JPanel {
 		}
 
 		graphics.setColor(colorBackground);
-		graphics.drawOval(getPixel(x, y).x - 2, getPixel(x, y).y - 2, 6, 6);
+		int pointRadius = (int)(squareSize * dotWidth / 3);
+		graphics.drawOval(
+				getPixel(x, y).x - pointRadius,
+				getPixel(x, y).y - pointRadius,
+				2 * pointRadius,
+				2 * pointRadius);
 		graphics.setColor(colorGrid);
-		graphics.drawLine(getPixel(x, y).x - 2, getPixel(x, y).y,
-				getPixel(x, y).x + 4, getPixel(x, y).y);
-		graphics.drawLine(getPixel(x, y).x, getPixel(x, y).y - 2,
-				getPixel(x, y).x, getPixel(x, y).y + 4);
+		graphics.drawLine(
+				getPixel(x, y).x - pointRadius - 1,
+				getPixel(x, y).y,
+				getPixel(x, y).x + 2 * pointRadius + 1,
+				getPixel(x, y).y);
+		graphics.drawLine(
+				getPixel(x, y).x,
+				getPixel(x, y).y - pointRadius - 1,
+				getPixel(x, y).x,
+				getPixel(x, y).y + 2 * pointRadius + 1);
 	}
 
 	void drawCursor() {
@@ -327,8 +338,12 @@ public abstract class Paper extends JPanel {
 			graphics.setColor(colorRedPoint);
 		}
 
-		graphics.drawOval(getPixel(x, y).x - 2, getPixel(x, y).y - 2, 6, 6);
-
+		int ovalRadius = (int)(squareSize * dotWidth / 3);
+		graphics.drawOval(
+				getPixel(x, y).x - ovalRadius,
+				getPixel(x, y).y - ovalRadius,
+				2 * ovalRadius,
+				2 * ovalRadius);
 	}
 
 	void drawLastDotHint(Graphics graphics) {
