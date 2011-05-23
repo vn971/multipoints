@@ -33,11 +33,11 @@
                           <Component id="jButton_Connect" alignment="1" min="-2" pref="200" max="-2" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel1" pref="725" max="32767" attributes="0"/>
+                      <Component id="jPanel_Right" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-                      <Component id="jPanel_Invisible" min="0" max="32767" attributes="1"/>
+                      <Component id="jPanel_Invisible" min="0" pref="583" max="32767" attributes="1"/>
                       <EmptySpace min="-2" pref="309" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -50,7 +50,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jPanel_Right" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jTextField_Username" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -167,7 +167,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="622" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="583" max="32767" attributes="0"/>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -179,7 +179,7 @@
                           </Group>
                           <Component id="jPanel_Ircworld" alignment="1" min="-2" max="-2" attributes="1"/>
                       </Group>
-                      <EmptySpace pref="44" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -390,7 +390,7 @@
         </Container>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="jPanel_Right">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
@@ -410,10 +410,10 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel_IncontactGroup" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel_Qestions" alignment="0" min="-2" max="-2" attributes="1"/>
-                              <Component id="jLabel_Talks" alignment="0" min="-2" max="-2" attributes="1"/>
-                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" alignment="0" min="-2" pref="622" max="-2" attributes="2"/>
+                              <Component id="jLabel_GameWishes" alignment="0" min="-2" max="-2" attributes="1"/>
+                              <Component id="jLabel_ChatWishes" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel_Links" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane_ServerOutput" alignment="0" min="-2" pref="622" max="-2" attributes="2"/>
                           </Group>
                       </Group>
                       <Component id="jLabel_Logo" alignment="0" min="-2" pref="658" max="-2" attributes="0"/>
@@ -432,13 +432,13 @@
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel_Qestions" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel_Talks" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel_GameWishes" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel_ChatWishes" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel_Links" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="120" max="32767" attributes="0"/>
+                  <Component id="jScrollPane_ServerOutput" pref="120" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -470,7 +470,7 @@
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel_Talks">
+        <Component class="javax.swing.JLabel" name="jLabel_GameWishes">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x436;&#x435;&#x43b;&#x430;&#x43d;&#x438;&#x44f; &#x43f;&#x43e; &#x438;&#x433;&#x440;&#x43e;&#x432;&#x43e;&#x439; &#x447;&#x430;&#x441;&#x442;&#x438;: &#x432;&#x438;&#x434; &#x43f;&#x43e;&#x43b;&#x44f;, &#x444;&#x43e;&#x440;&#x43c;&#x430;&#x442; &#x438;&#x433;&#x440;&#x44b;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24387150"/>
@@ -479,7 +479,7 @@
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="jLabel_ChatWishes">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x436;&#x435;&#x43b;&#x430;&#x43d;&#x438;&#x44f; &#x43f;&#x43e; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x443; &#x438;&#x433;&#x440;&#x43e;&#x43a;&#x43e;&#x432;, &#x447;&#x430;&#x442;&#x443;, &#x434;&#x438;&#x437;&#x430;&#x439;&#x43d;&#x443;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24407841"/>
@@ -488,7 +488,7 @@
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="jLabel_Links">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43b;&#x435;&#x437;&#x43d;&#x44b;&#x435; &#x441;&#x441;&#x44b;&#x43b;&#x43a;&#x438;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://sites.google.com/site/oscarpoints/links"/>
@@ -497,7 +497,7 @@
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
           </AuxValues>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+        <Container class="javax.swing.JScrollPane" name="jScrollPane_ServerOutput">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>

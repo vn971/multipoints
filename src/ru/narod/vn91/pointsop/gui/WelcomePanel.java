@@ -54,8 +54,6 @@ public class WelcomePanel extends javax.swing.JPanel {
 		jTextField_Username.setText(PersistentMemory.getUserName());
 		jTextField_Username.select(jTextField_Username.getText().length(),
 				jTextField_Username.getText().length());
-
-//		System.out.println("" + (null instanceof String));
 	}
 
 	/** This method is called from within the constructor to
@@ -87,14 +85,14 @@ public class WelcomePanel extends javax.swing.JPanel {
         jButton_ConnectAllServers = new javax.swing.JButton();
         jButton_GuestConnectAllServers = new javax.swing.JButton();
         jButton_DisconnectAllServers = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel_Right = new javax.swing.JPanel();
         jLabel_Logo = new javax.swing.JLabel();
         jLabel_IncontactGroup = new LinkedLabel();
         jLabel_Qestions = new LinkedLabel();
-        jLabel_Talks = new LinkedLabel();
-        jLabel1 = new LinkedLabel();
-        jLabel2 = new LinkedLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jLabel_GameWishes = new LinkedLabel();
+        jLabel_ChatWishes = new LinkedLabel();
+        jLabel_Links = new LinkedLabel();
+        jScrollPane_ServerOutput = new javax.swing.JScrollPane();
         jTextPane_ServerOutput = new javax.swing.JTextPane();
 
         jTextField_Username.setBorder(javax.swing.BorderFactory.createTitledBorder("введите имя"));
@@ -259,7 +257,7 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_Invisible.setLayout(jPanel_InvisibleLayout);
         jPanel_InvisibleLayout.setHorizontalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 622, Short.MAX_VALUE)
+            .addGap(0, 583, Short.MAX_VALUE)
             .addGroup(jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel_InvisibleLayout.createSequentialGroup()
                     .addContainerGap()
@@ -269,7 +267,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jPanel_Tochkiorg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jPanel_Ircworld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(44, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel_InvisibleLayout.setVerticalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,7 +284,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel_Right.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel_Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/pointsOP.png"))); // NOI18N
 
@@ -296,40 +294,40 @@ public class WelcomePanel extends javax.swing.JPanel {
         jLabel_Qestions.setText("Вопросы по PointsOP");
         jLabel_Qestions.setToolTipText("http://vkontakte.ru/topic-21455903_24260448");
 
-        jLabel_Talks.setText("Пожелания по игровой части: вид поля, формат игры");
-        jLabel_Talks.setToolTipText("http://vkontakte.ru/topic-21455903_24387150");
+        jLabel_GameWishes.setText("Пожелания по игровой части: вид поля, формат игры");
+        jLabel_GameWishes.setToolTipText("http://vkontakte.ru/topic-21455903_24387150");
 
-        jLabel1.setText("Пожелания по списку игроков, чату, дизайну");
-        jLabel1.setToolTipText("http://vkontakte.ru/topic-21455903_24407841");
+        jLabel_ChatWishes.setText("Пожелания по списку игроков, чату, дизайну");
+        jLabel_ChatWishes.setToolTipText("http://vkontakte.ru/topic-21455903_24407841");
 
-        jLabel2.setText("Полезные ссылки");
-        jLabel2.setToolTipText("http://sites.google.com/site/oscarpoints/links");
+        jLabel_Links.setText("Полезные ссылки");
+        jLabel_Links.setToolTipText("http://sites.google.com/site/oscarpoints/links");
 
         jTextPane_ServerOutput.setText("Cоединение:\n----------------------------------------------------------------------------\n");
-        jScrollPane1.setViewportView(jTextPane_ServerOutput);
+        jScrollPane_ServerOutput.setViewportView(jTextPane_ServerOutput);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel_RightLayout = new javax.swing.GroupLayout(jPanel_Right);
+        jPanel_Right.setLayout(jPanel_RightLayout);
+        jPanel_RightLayout.setHorizontalGroup(
+            jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_RightLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel_RightLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel_IncontactGroup)
                             .addComponent(jLabel_Qestions)
-                            .addComponent(jLabel_Talks)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel_GameWishes)
+                            .addComponent(jLabel_ChatWishes)
+                            .addComponent(jLabel_Links)
+                            .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel_Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel_RightLayout.setVerticalGroup(
+            jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_RightLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel_Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -337,13 +335,13 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel_Qestions)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_Talks)
+                .addComponent(jLabel_GameWishes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
+                .addComponent(jLabel_ChatWishes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
+                .addComponent(jLabel_Links)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -363,10 +361,10 @@ public class WelcomePanel extends javax.swing.JPanel {
                             .addComponent(jTextField_Icq, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                             .addComponent(jButton_Connect, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE))
+                        .addComponent(jPanel_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(jPanel_Invisible, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel_Invisible, 0, 583, Short.MAX_VALUE)
                         .addGap(309, 309, 309)))
                 .addContainerGap())
         );
@@ -375,7 +373,7 @@ public class WelcomePanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -430,19 +428,19 @@ public class WelcomePanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton_GuestConnectAllServers;
     private javax.swing.JButton jButton_GuestConnectIrcworld;
     private javax.swing.JButton jButton_GuestConnectTochkiorg;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel_ChatWishes;
+    private javax.swing.JLabel jLabel_GameWishes;
     private javax.swing.JLabel jLabel_IncontactGroup;
+    private javax.swing.JLabel jLabel_Links;
     private javax.swing.JLabel jLabel_Logo;
     private javax.swing.JLabel jLabel_Qestions;
-    private javax.swing.JLabel jLabel_Talks;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel_AllServers;
     private javax.swing.JPanel jPanel_Invisible;
     private javax.swing.JPanel jPanel_Ircworld;
+    private javax.swing.JPanel jPanel_Right;
     private javax.swing.JPanel jPanel_Tochkiorg;
     private javax.swing.JPasswordField jPasswordField;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane_ServerOutput;
     private javax.swing.JTextField jTextField_City;
     private javax.swing.JTextField jTextField_Email;
     private javax.swing.JTextField jTextField_Icq;
