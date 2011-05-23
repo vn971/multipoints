@@ -5,23 +5,11 @@
  */
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-
-import javax.swing.ImageIcon;
-
+import javax.swing.JLabel;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.ServerPointsop;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
@@ -46,11 +34,13 @@ public class WelcomePanel extends javax.swing.JPanel {
 				return; // do not connect to tochki.org and ircworld.ru
 			}
 			if (guiController.pointsxt_tochkiorg_server == null) {
-				guiController.pointsxt_tochkiorg_server = new ServerPointsxt("tochki.org", guiController, nick, "");
+				guiController.pointsxt_tochkiorg_server = new ServerPointsxt(
+						"tochki.org", guiController, nick, "");
 				guiController.pointsxt_tochkiorg_server.connect();
 			}
 			if (guiController.pointsxt_ircworldru_server == null) {
-				guiController.pointsxt_ircworldru_server = new ServerPointsxt("ircworld.ru", guiController, nick, "");
+				guiController.pointsxt_ircworldru_server = new ServerPointsxt(
+						"ircworld.ru", guiController, nick, "");
 				guiController.pointsxt_ircworldru_server.connect();
 			}
 		}
@@ -58,14 +48,13 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	/** Creates new form WelcomePanel */
 	public WelcomePanel(GuiController actionDistributor) {
-		
-		
 		this.guiController = actionDistributor;
 		initComponents();
 		jPanel_Invisible.setVisible(false);
 		jTextField_Username.setText(PersistentMemory.getUserName());
-		jTextField_Username.select(jTextField_Username.getText().length(), jTextField_Username.getText().length());
-		
+		jTextField_Username.select(jTextField_Username.getText().length(),
+				jTextField_Username.getText().length());
+
 //		System.out.println("" + (null instanceof String));
 	}
 
@@ -85,7 +74,6 @@ public class WelcomePanel extends javax.swing.JPanel {
         jTextField_Email = new javax.swing.JTextField();
         jTextField_Icq = new javax.swing.JTextField();
         jTextField_City = new javax.swing.JTextField();
-        jScrollPane_ServerInfo = new javax.swing.JScrollPane();        
         jPanel_Invisible = new javax.swing.JPanel();
         jPanel_Tochkiorg = new javax.swing.JPanel();
         jButton_ConnectTochkiorg = new javax.swing.JButton();
@@ -99,6 +87,15 @@ public class WelcomePanel extends javax.swing.JPanel {
         jButton_ConnectAllServers = new javax.swing.JButton();
         jButton_GuestConnectAllServers = new javax.swing.JButton();
         jButton_DisconnectAllServers = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel_Logo = new javax.swing.JLabel();
+        jLabel_IncontactGroup = new LinkedLabel();
+        jLabel_Qestions = new LinkedLabel();
+        jLabel_Talks = new LinkedLabel();
+        jLabel1 = new LinkedLabel();
+        jLabel2 = new LinkedLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane_ServerOutput = new javax.swing.JTextPane();
 
         jTextField_Username.setBorder(javax.swing.BorderFactory.createTitledBorder("введите имя"));
         jTextField_Username.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -138,68 +135,6 @@ public class WelcomePanel extends javax.swing.JPanel {
         jTextField_City.setNextFocusableComponent(jTextField_Icq);
         jTextField_City.setRequestFocusEnabled(false);
 
-        
-        //========================================================================================
-        
-        jPanel_Test = new javax.swing.JPanel();
-        jScrollPane_ServerInfo.setViewportView(jPanel_Test);
-        jPanel_Test.setLayout(new LayoutManager(){//класс
-        	public void addLayoutComponent(String name, Component comp) {  }
-        	public void removeLayoutComponent(Component comp) { }
-        	public Dimension preferredLayoutSize(Container parent) {
-                return new Dimension(jPanel_Test.getWidth(), jPanel_Test.getHeight());        }
-        	public Dimension minimumLayoutSize(Container parent) {
-            	return new Dimension(jPanel_Test.getWidth(), jPanel_Test.getHeight());        }
-        	public void layoutContainer(Container parent) {  }
-        }
-        );
-        
-    	javax.swing.JLabel jLabel_main=new javax.swing.JLabel(
-    			"<html><font size=7>Игра Точки<br><font size=2>PointsOnPaper");
-        jPanel_Test.add(jLabel_main);
-        jLabel_main.setBounds(5, 5, 670, 185);
-        try {
-			jLabel_main.setIcon(new ImageIcon(new URL("http://sites.google.com/site/priymakpoints/logotypes/PointsOP.png")));
-		} catch (MalformedURLException e2) {}
-                
-        final String [][] labels=new String[][]{//массив содержит ссылки и подписи к ним
-        		{"Группа ВКонтакте","http://vkontakte.ru/club21455903"},
-        		{"Вопросы по PointsOP","http://vkontakte.ru/topic-21455903_24260448"},
-        		{"Пожелания по игровой части: вид поля, формат игры","http://vkontakte.ru/topic-21455903_24387150"},
-         		{"Пожелания по списку игроков, чату, дизайну","http://vkontakte.ru/topic-21455903_24407841"},
-         		{"Полезные ссылки","http://sites.google.com/site/oscarpoints/links"},
-        };
-                  
-        for(int i=0;i<labels.length;i++){//метки для ссылок
-        	final int j=i;
-        	javax.swing.JLabel jLabel=new javax.swing.JLabel("<html><font color=blue><u>"+labels[j][0]);
-        	jLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        	jLabel.addMouseListener(new MouseListener() {
-    			public void mouseReleased(MouseEvent e) {}
-    			public void mousePressed(MouseEvent e) {}
-    			public void mouseExited(MouseEvent e) {}
-    			public void mouseEntered(MouseEvent e) {}
-    			public void mouseClicked(MouseEvent e) {
-    				try {java.awt.Desktop.getDesktop().browse(new URI(labels[j][1]));
-    				} catch (Exception e1) {}
-    			}
-    		});	
-            jPanel_Test.add(jLabel);
-            jLabel.setBounds(10, 200+30*i, 400, 15); 
-        }
-        
-        javax.swing.JScrollPane jScroll_ServerOutput=new javax.swing.JScrollPane();
-        jTextPane_ServerOutput = new javax.swing.JTextPane();
-        
-        jPanel_Test.add(jScroll_ServerOutput); 
-        jScroll_ServerOutput.setBounds(10, 350, 660, 200);
-                
-        jScroll_ServerOutput.setViewportView(jTextPane_ServerOutput);
-        jTextPane_ServerOutput.setEditable(false);
-        jTextPane_ServerOutput.setText("Cоединение:\n--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        
-        //========================================================================================
-       
         jPanel_Tochkiorg.setBorder(javax.swing.BorderFactory.createTitledBorder("tochki.org"));
         jPanel_Tochkiorg.setEnabled(false);
 
@@ -324,7 +259,7 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_Invisible.setLayout(jPanel_InvisibleLayout);
         jPanel_InvisibleLayout.setHorizontalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 197, Short.MAX_VALUE)
+            .addGap(0, 622, Short.MAX_VALUE)
             .addGroup(jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel_InvisibleLayout.createSequentialGroup()
                     .addContainerGap()
@@ -334,7 +269,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jPanel_Tochkiorg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jPanel_Ircworld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(44, Short.MAX_VALUE)))
         );
         jPanel_InvisibleLayout.setVerticalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,33 +286,96 @@ public class WelcomePanel extends javax.swing.JPanel {
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel_Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/pointsOP.png"))); // NOI18N
+
+        jLabel_IncontactGroup.setText("Группа ВКонтакте");
+        jLabel_IncontactGroup.setToolTipText("http://vkontakte.ru/club21455903");
+
+        jLabel_Qestions.setText("Вопросы по PointsOP");
+        jLabel_Qestions.setToolTipText("http://vkontakte.ru/topic-21455903_24260448");
+
+        jLabel_Talks.setText("Пожелания по игровой части: вид поля, формат игры");
+        jLabel_Talks.setToolTipText("http://vkontakte.ru/topic-21455903_24387150");
+
+        jLabel1.setText("Пожелания по списку игроков, чату, дизайну");
+        jLabel1.setToolTipText("http://vkontakte.ru/topic-21455903_24407841");
+
+        jLabel2.setText("Полезные ссылки");
+        jLabel2.setToolTipText("http://sites.google.com/site/oscarpoints/links");
+
+        jTextPane_ServerOutput.setText("Cоединение:\n----------------------------------------------------------------------------\n");
+        jScrollPane1.setViewportView(jTextPane_ServerOutput);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel_IncontactGroup)
+                            .addComponent(jLabel_Qestions)
+                            .addComponent(jLabel_Talks)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel_Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel_Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel_IncontactGroup)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel_Qestions)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel_Talks)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField_Username, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(jPasswordField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(jTextField_Email, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(jTextField_City, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(jTextField_Icq, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(jButton_Connect, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane_ServerInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField_Username, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jPasswordField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jTextField_Email, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jTextField_City, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jTextField_Icq, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jButton_Connect, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jPanel_Invisible, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(309, 309, 309)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jPanel_Invisible, 0, 197, Short.MAX_VALUE)
-                .addGap(710, 710, 710))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane_ServerInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -432,17 +430,75 @@ public class WelcomePanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton_GuestConnectAllServers;
     private javax.swing.JButton jButton_GuestConnectIrcworld;
     private javax.swing.JButton jButton_GuestConnectTochkiorg;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel_IncontactGroup;
+    private javax.swing.JLabel jLabel_Logo;
+    private javax.swing.JLabel jLabel_Qestions;
+    private javax.swing.JLabel jLabel_Talks;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel_AllServers;
     private javax.swing.JPanel jPanel_Invisible;
     private javax.swing.JPanel jPanel_Ircworld;
     private javax.swing.JPanel jPanel_Tochkiorg;
     private javax.swing.JPasswordField jPasswordField;
-    private javax.swing.JScrollPane jScrollPane_ServerInfo;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField_City;
     private javax.swing.JTextField jTextField_Email;
     private javax.swing.JTextField jTextField_Icq;
     javax.swing.JTextField jTextField_Username;
-    javax.swing.JTextPane jTextPane_ServerOutput;
-    javax.swing.JPanel jPanel_Test;
+    public javax.swing.JTextPane jTextPane_ServerOutput;
     // End of variables declaration//GEN-END:variables
+}
+
+class LinkedLabel extends JLabel {
+
+	public LinkedLabel() {
+		super();
+	}
+
+//	public LinkedLabel(
+//			String text,
+//			final String link) {
+//		super();
+//		super.setText("<html><a href=\"" + link + "\">"
+//				+ text + "</a></html>");
+//		super.setToolTipText(link);
+//	}
+	@Override
+	public void setToolTipText(final String link) {
+		super.setToolTipText(link);
+		super.addMouseListener(new MouseListener() {
+
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			public void mousePressed(MouseEvent e) {
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
+
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					try {
+						java.awt.Desktop.getDesktop().browse(new URI(link));
+					} catch (Exception e1) {
+					}
+				} else {
+				}
+			}
+		});
+	}
+
+	@Override
+	public void setText(String text) {
+		super.setText("<html><a href=\"\""
+				+ ">"
+				+ text + "</a></html>");
+//				+ " href=\"" + super.getToolTipText() + "\""
+	}
 }

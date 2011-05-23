@@ -372,15 +372,6 @@ public abstract class Paper extends JPanel {
 			}
 			int pixelX = getPixel(x, y).x;
 			int pixelY = getPixel(x, y).y;
-<<<<<<< local
-			int drawX = pixelX - poindDiameter / 2;
-			int drawY = pixelY - poindDiameter / 2;
-			graphics.drawOval(drawX - 2, drawY - 2, poindDiameter + 4,
-					poindDiameter + 4);//нарисовать последний ход
-			graphics.drawOval(drawX - 1, drawY - 1, poindDiameter + 2,
-					poindDiameter + 2);//нарисовать последний ход
-
-=======
 			//нарисовать последний ход
 			{
 				int innerRadius = pointRadius + 1;
@@ -398,7 +389,6 @@ public abstract class Paper extends JPanel {
 						innerRadius * 2,
 						innerRadius * 2);
 			}
->>>>>>> other
 		}
 
 	}
