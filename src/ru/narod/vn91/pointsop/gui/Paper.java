@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -371,6 +372,15 @@ public abstract class Paper extends JPanel {
 			}
 			int pixelX = getPixel(x, y).x;
 			int pixelY = getPixel(x, y).y;
+<<<<<<< local
+			int drawX = pixelX - poindDiameter / 2;
+			int drawY = pixelY - poindDiameter / 2;
+			graphics.drawOval(drawX - 2, drawY - 2, poindDiameter + 4,
+					poindDiameter + 4);//нарисовать последний ход
+			graphics.drawOval(drawX - 1, drawY - 1, poindDiameter + 2,
+					poindDiameter + 2);//нарисовать последний ход
+
+=======
 			//нарисовать последний ход
 			{
 				int innerRadius = pointRadius + 1;
@@ -388,6 +398,7 @@ public abstract class Paper extends JPanel {
 						innerRadius * 2,
 						innerRadius * 2);
 			}
+>>>>>>> other
 		}
 
 	}
@@ -513,14 +524,17 @@ public abstract class Paper extends JPanel {
 				graphics.getClipBounds()) == false) {
 			return;
 		}
+		
+		((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	
 		DotType dotType = engine.getDotType(x, y);
 		{
 			int pixelX = getPixel(x, y).x;
 			int pixelY = getPixel(x, y).y;
 			int pointRadius = (int)(squareSize * dotWidth / 2);
-			int pointDiameter = 2 * pointRadius;
-			int drawX = pixelX - pointRadius;
-			int drawY = pixelY - pointRadius;
+			int pointDiameter = 2 * pointRadius-1;
+			int drawX = pixelX - pointRadius+1;
+			int drawY = pixelY - pointRadius+1;
 			switch (dotType) {
 				case BLUE:
 					graphics.setColor(colorBluPoint);
@@ -549,6 +563,9 @@ public abstract class Paper extends JPanel {
 				default:
 					break;
 			}
+			
+			((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			
 			if (paintEmpty && dotType.isIn(DotType.EMPTY, DotType.RED_CTRL,
 					DotType.BLUE_CTRL)) {
 				graphics.setColor(colorBackground);
