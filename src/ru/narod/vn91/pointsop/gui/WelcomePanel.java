@@ -1,8 +1,3 @@
-/*
- * WelcomePanel.java
- *
- * Created on Jan 28, 2011, 1:02:06 AM
- */
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.event.KeyEvent;
@@ -14,10 +9,6 @@ import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.ServerPointsop;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
 
-/**
- *
- * @author vasya
- */
 public class WelcomePanel extends javax.swing.JPanel {
 
 	public GuiController guiController;
@@ -257,7 +248,7 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_Invisible.setLayout(jPanel_InvisibleLayout);
         jPanel_InvisibleLayout.setHorizontalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 583, Short.MAX_VALUE)
+            .addGap(0, 595, Short.MAX_VALUE)
             .addGroup(jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel_InvisibleLayout.createSequentialGroup()
                     .addContainerGap()
@@ -267,7 +258,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jPanel_Tochkiorg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jPanel_Ircworld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(17, Short.MAX_VALUE)))
         );
         jPanel_InvisibleLayout.setVerticalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,18 +281,23 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jLabel_IncontactGroup.setText("Группа ВКонтакте");
         jLabel_IncontactGroup.setToolTipText("http://vkontakte.ru/club21455903");
+        jLabel_IncontactGroup.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel_Qestions.setText("Вопросы по PointsOP");
         jLabel_Qestions.setToolTipText("http://vkontakte.ru/topic-21455903_24260448");
+        jLabel_Qestions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel_GameWishes.setText("Пожелания по игровой части: вид поля, формат игры");
         jLabel_GameWishes.setToolTipText("http://vkontakte.ru/topic-21455903_24387150");
+        jLabel_GameWishes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel_ChatWishes.setText("Пожелания по списку игроков, чату, дизайну");
         jLabel_ChatWishes.setToolTipText("http://vkontakte.ru/topic-21455903_24407841");
+        jLabel_ChatWishes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel_Links.setText("Полезные ссылки");
         jLabel_Links.setToolTipText("http://sites.google.com/site/oscarpoints/links");
+        jLabel_Links.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jTextPane_ServerOutput.setText("Cоединение:\n----------------------------------------------------------------------------\n");
         jScrollPane_ServerOutput.setViewportView(jTextPane_ServerOutput);
@@ -311,10 +307,9 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_RightLayout.setHorizontalGroup(
             jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_RightLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel_RightLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addGap(24, 24, 24)
                         .addGroup(jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel_IncontactGroup)
                             .addComponent(jLabel_Qestions)
@@ -322,8 +317,10 @@ public class WelcomePanel extends javax.swing.JPanel {
                             .addComponent(jLabel_ChatWishes)
                             .addComponent(jLabel_Links)
                             .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel_Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addGroup(jPanel_RightLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel_Logo)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel_RightLayout.setVerticalGroup(
             jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -364,7 +361,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                         .addComponent(jPanel_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(jPanel_Invisible, 0, 583, Short.MAX_VALUE)
+                        .addComponent(jPanel_Invisible, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(309, 309, 309)))
                 .addContainerGap())
         );
@@ -403,18 +400,15 @@ public class WelcomePanel extends javax.swing.JPanel {
 	}//GEN-LAST:event_jTextField_UsernameKeyPressed
 
 	private void jButton_GuestConnectTochkiorgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuestConnectTochkiorgActionPerformed
-		// TODO add your handling code here:
 		jButton_ConnectTochkiorg.setEnabled(false);
 		jButton_GuestConnectTochkiorg.setEnabled(false);
 		jButton_DisconnectTochkiorg.setEnabled(true);
 	}//GEN-LAST:event_jButton_GuestConnectTochkiorgActionPerformed
 
 	private void jButton_GuestConnectIrcworldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuestConnectIrcworldActionPerformed
-		// TODO add your handling code here:
 	}//GEN-LAST:event_jButton_GuestConnectIrcworldActionPerformed
 
 	private void jButton_GuestConnectAllServersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuestConnectAllServersActionPerformed
-		// TODO add your handling code here:
 	}//GEN-LAST:event_jButton_GuestConnectAllServersActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -455,14 +449,6 @@ class LinkedLabel extends JLabel {
 		super();
 	}
 
-//	public LinkedLabel(
-//			String text,
-//			final String link) {
-//		super();
-//		super.setText("<html><a href=\"" + link + "\">"
-//				+ text + "</a></html>");
-//		super.setToolTipText(link);
-//	}
 	@Override
 	public void setToolTipText(final String link) {
 		super.setToolTipText(link);
@@ -494,9 +480,9 @@ class LinkedLabel extends JLabel {
 
 	@Override
 	public void setText(String text) {
+		// blue color and underlining
 		super.setText("<html><a href=\"\""
 				+ ">"
 				+ text + "</a></html>");
-//				+ " href=\"" + super.getToolTipText() + "\""
 	}
 }

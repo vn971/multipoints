@@ -4,6 +4,7 @@ syntax: glob
 bin\*
 dist\*
 *built-jar.properties
+nbproject\private*
 
 syntax: regexp
 

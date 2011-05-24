@@ -37,7 +37,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-                      <Component id="jPanel_Invisible" min="0" pref="583" max="32767" attributes="1"/>
+                      <Component id="jPanel_Invisible" min="0" max="32767" attributes="1"/>
                       <EmptySpace min="-2" pref="309" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -167,7 +167,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="583" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="595" max="32767" attributes="0"/>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -179,7 +179,7 @@
                           </Group>
                           <Component id="jPanel_Ircworld" alignment="1" min="-2" max="-2" attributes="1"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -402,11 +402,10 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel_IncontactGroup" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel_Qestions" alignment="0" min="-2" max="-2" attributes="1"/>
@@ -416,16 +415,19 @@
                               <Component id="jScrollPane_ServerOutput" alignment="0" min="-2" pref="622" max="-2" attributes="2"/>
                           </Group>
                       </Group>
-                      <Component id="jLabel_Logo" alignment="0" min="-2" pref="658" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel_Logo" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel_Logo" min="-2" pref="180" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel_IncontactGroup" min="-2" max="-2" attributes="0"/>
@@ -456,6 +458,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x413;&#x440;&#x443;&#x43f;&#x43f;&#x430; &#x412;&#x41a;&#x43e;&#x43d;&#x442;&#x430;&#x43a;&#x442;&#x435;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/club21455903"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
@@ -465,6 +470,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x412;&#x43e;&#x43f;&#x440;&#x43e;&#x441;&#x44b; &#x43f;&#x43e; PointsOP"/>
             <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24260448"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
@@ -474,6 +482,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x436;&#x435;&#x43b;&#x430;&#x43d;&#x438;&#x44f; &#x43f;&#x43e; &#x438;&#x433;&#x440;&#x43e;&#x432;&#x43e;&#x439; &#x447;&#x430;&#x441;&#x442;&#x438;: &#x432;&#x438;&#x434; &#x43f;&#x43e;&#x43b;&#x44f;, &#x444;&#x43e;&#x440;&#x43c;&#x430;&#x442; &#x438;&#x433;&#x440;&#x44b;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24387150"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
@@ -483,6 +494,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x436;&#x435;&#x43b;&#x430;&#x43d;&#x438;&#x44f; &#x43f;&#x43e; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x443; &#x438;&#x433;&#x440;&#x43e;&#x43a;&#x43e;&#x432;, &#x447;&#x430;&#x442;&#x443;, &#x434;&#x438;&#x437;&#x430;&#x439;&#x43d;&#x443;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24407841"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
@@ -492,6 +506,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43b;&#x435;&#x437;&#x43d;&#x44b;&#x435; &#x441;&#x441;&#x44b;&#x43b;&#x43a;&#x438;"/>
             <Property name="toolTipText" type="java.lang.String" value="http://sites.google.com/site/oscarpoints/links"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkedLabel();"/>
