@@ -504,7 +504,7 @@ class JTabbedPaneMod extends JTabbedPane {
 		String oldTitle = super.getTitleAt(tabIndex);
 		String newTitle = deleteBoldness(oldTitle).replaceAll("<html>", "").replaceAll(
 				"</html>", "");
-		newTitle = "<html><font size=+1>*" + newTitle + "</font></html>";
+		newTitle = "<html>***" + newTitle + "</html>";
 		if (newTitle.equals(oldTitle) == false) {
 			if (TabComponent_Closeable.class.isInstance(getTabComponentAt(
 					tabIndex))) {

@@ -248,7 +248,7 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_Invisible.setLayout(jPanel_InvisibleLayout);
         jPanel_InvisibleLayout.setHorizontalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 595, Short.MAX_VALUE)
+            .addGap(0, 698, Short.MAX_VALUE)
             .addGroup(jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel_InvisibleLayout.createSequentialGroup()
                     .addContainerGap()
@@ -258,11 +258,11 @@ public class WelcomePanel extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jPanel_Tochkiorg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jPanel_Ircworld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(17, Short.MAX_VALUE)))
+                    .addContainerGap(120, Short.MAX_VALUE)))
         );
         jPanel_InvisibleLayout.setVerticalGroup(
             jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 168, Short.MAX_VALUE)
+            .addGap(0, 180, Short.MAX_VALUE)
             .addGroup(jPanel_InvisibleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel_InvisibleLayout.createSequentialGroup()
                     .addContainerGap()
@@ -382,7 +382,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jButton_Connect)
                         .addGap(33, 33, 33)
-                        .addComponent(jPanel_Invisible, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel_Invisible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
