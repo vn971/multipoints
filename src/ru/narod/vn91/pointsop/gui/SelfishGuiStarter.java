@@ -2,6 +2,8 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -26,12 +28,28 @@ public class SelfishGuiStarter {
 			PersistentMemory.resetColors();
 		}
 		PersistentMemory.setVersion(1);
-		JFrame frame = new JFrame("Точки");
+		final JFrame frame = new JFrame("Точки");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/data/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
 		frame.setSize(925, 670);
 		frame.setLocationRelativeTo(frame.getRootPane());
+		
+		//<new code - componentResized & PersistentMemory>
+		if(PersistentMemory.getFrameWidth()<=0&PersistentMemory.getFrameHeight()<=0){
+			frame.setSize(PersistentMemory.getFrameWidth(), PersistentMemory.getFrameHeight());
+		}
+		frame.addComponentListener(new ComponentListener() {
+			public void componentShown(ComponentEvent e) {}
+			public void componentResized(ComponentEvent e) {
+				PersistentMemory.setFrameWidth(frame.getWidth());
+				PersistentMemory.setFrameHeight(frame.getHeight());
+			}
+			public void componentMoved(ComponentEvent e) {}
+			public void componentHidden(ComponentEvent e) {}
+		});
+		//</new code - componentResized & PersistentMemory>
+		
 		{
 			int x = frame.getBounds().x, y = frame.getBounds().y;
 			x = Math.max(x, 0);
