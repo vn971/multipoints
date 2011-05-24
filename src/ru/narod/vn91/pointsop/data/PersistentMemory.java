@@ -23,7 +23,23 @@ public class PersistentMemory {
 	public static void setUserName(String newName) {
 		memory.put("username", newName);
 	}
+	
+	public static void setFrameWidth(int frameWidth) {
+		memory.putInt("frameWidth", frameWidth);
+	}
+	
+	public static void setFrameHeight(int frameHeight) {
+		memory.putInt("frameHeight", frameHeight);
+	}
 
+	public static int getFrameWidth() {
+		return memory.getInt("frameWidth", 0);
+	}
+	
+	public static int getFrameHeight() {
+		return memory.getInt("frameHeight", 0);
+	}
+	
 	public static String getUserName() {
 		return memory.get("username", "");
 	}
