@@ -264,13 +264,13 @@ public abstract class Paper extends JPanel {
 		graphics.drawLine(
 				getPixel(x, y).x - pointRadius - 1,
 				getPixel(x, y).y,
-				getPixel(x, y).x + 2 * pointRadius + 1,
+				getPixel(x, y).x + pointRadius + 1,
 				getPixel(x, y).y);
 		graphics.drawLine(
 				getPixel(x, y).x,
 				getPixel(x, y).y - pointRadius - 1,
 				getPixel(x, y).x,
-				getPixel(x, y).y + 2 * pointRadius + 1);
+				getPixel(x, y).y + pointRadius + 1);
 	}
 
 	void drawCursor() {
