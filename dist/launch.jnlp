@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<jnlp codebase="http://vn91.narod.ru/points/pop/" href="launch.jnlp" spec="1.0+">
+<jnlp codebase="https://sourceforge.net/projects/pointsop/files/jws/" href="launch.jnlp" spec="1.0+">
     <information>
         <title>PointsOnPaper</title>
         <vendor>Vasya Novikov</vendor>
@@ -12,7 +12,7 @@
 </security>
     <resources>
 <j2se version="1.5+"/>
-<jar href="PointsOnPaper.jar" main="true"/>
+<jar href="https://sourceforge.net/projects/pointsop/files/jws/PointsOnPaper.jar" main="true"/>
     </resources>
     <application-desc main-class="ru.narod.vn91.pointsop.gui.SelfishGuiStarter">
     </application-desc>

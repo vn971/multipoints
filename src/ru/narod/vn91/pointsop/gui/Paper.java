@@ -17,6 +17,7 @@ import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import ru.narod.vn91.pointsop.data.CustomColors;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 
@@ -40,19 +41,25 @@ public abstract class Paper extends JPanel {
 	private Color colorRedPoint = new Color(255, 0, 0, 255);
 	private Color colorBluPoint = new Color(21, 96, 189, 255);
 	private Color colorBackground = new Color(254, 254, 254, 255);
-	private Color colorGrid = getMixedColor(
+	private Color colorGrid = CustomColors.getMixedColor(
 			colorBackground,
-			getContrastColor(colorBackground),
+			CustomColors.getContrastColor(colorBackground),
 			0.75f);
 	private Color colorPaperBorders = colorGrid;
-	private Color colorRedTired = getAlphaModifiedColor(colorRedPoint, 128);
-	private Color colorBluTired = getAlphaModifiedColor(colorBluPoint, 128);
+	private Color colorRedTired =
+			CustomColors.getAlphaModifiedColor(colorRedPoint, 128);
+	private Color colorBluTired =
+			CustomColors.getAlphaModifiedColor(colorBluPoint, 128);
 	private Color colorRedEatedBlu = colorBluPoint;
 	private Color colorBluEatedRed = colorRedPoint;
-	private Color colorRedSurr = getAlphaModifiedColor(colorRedPoint, 90);
-	private Color colorBluSurr = getAlphaModifiedColor(colorBluPoint, 90);
-	private Color colorRedCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
-	private Color colorBluCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
+	private Color colorRedSurr =
+			CustomColors.getAlphaModifiedColor(colorRedPoint, 90);
+	private Color colorBluSurr =
+			CustomColors.getAlphaModifiedColor(colorBluPoint, 90);
+	private Color colorRedCtrlSurr =
+			CustomColors.getAlphaModifiedColor(colorBackground, 0);
+	private Color colorBluCtrlSurr =
+			CustomColors.getAlphaModifiedColor(colorBackground, 0);
 
 	public void setColors(Color p1,
 			Color p2,
@@ -60,50 +67,19 @@ public abstract class Paper extends JPanel {
 		colorRedPoint = p1;
 		colorBluPoint = p2;
 		colorBackground = background;
-		colorGrid = getMixedColor(
+		colorGrid = CustomColors.getMixedColor(
 				colorBackground,
-				getContrastColor(colorBackground),
+				CustomColors.getContrastColor(colorBackground),
 				0.75f);
 		colorPaperBorders = colorGrid;
-		colorRedTired = getAlphaModifiedColor(colorRedPoint, 128);
-		colorBluTired = getAlphaModifiedColor(colorBluPoint, 128);
+		colorRedTired = CustomColors.getAlphaModifiedColor(colorRedPoint, 128);
+		colorBluTired = CustomColors.getAlphaModifiedColor(colorBluPoint, 128);
 		colorRedEatedBlu = colorBluPoint;
 		colorBluEatedRed = colorRedPoint;
-		colorRedSurr = getAlphaModifiedColor(colorRedPoint, 90);
-		colorBluSurr = getAlphaModifiedColor(colorBluPoint, 90);
-		colorRedCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
-		colorBluCtrlSurr = getAlphaModifiedColor(colorBackground, 0);
-	}
-
-	private Color getContrastColor(Color source) {
-		return new Color((source.getRed() + 128) % 256,
-				(source.getGreen() + 128) % 256,
-				(source.getBlue() + 128) % 256,
-				source.getAlpha());
-	}
-
-	private Color getAlphaModifiedColor(Color source,
-			int newAlpha) {
-		return new Color(source.getRed(), source.getGreen(), source.getBlue(),
-				newAlpha);
-	}
-
-	protected Color getMixedColor(
-			Color c1,
-			Color c2,
-			float color1Share) {
-		float p = color1Share;
-		float q = 1 - p;
-		return new Color(
-				(int)(c1.getRed() * p + c2.getRed() * q),
-				(int)(c1.getGreen() * p + c2.getGreen() * q),
-				(int)(c1.getBlue() * p + c2.getBlue() * q),
-				(int)(c1.getAlpha() * p + c2.getAlpha() * q));
-	}
-
-	private Color getMiddleColor(Color c1,
-			Color c2) {
-		return getMixedColor(c1, c2, 0.5f);
+		colorRedSurr = CustomColors.getAlphaModifiedColor(colorRedPoint, 90);
+		colorBluSurr = CustomColors.getAlphaModifiedColor(colorBluPoint, 90);
+		colorRedCtrlSurr = CustomColors.getAlphaModifiedColor(colorBackground, 0);
+		colorBluCtrlSurr = CustomColors.getAlphaModifiedColor(colorBackground, 0);
 	}
 
 	public MoveResult makeMove(
@@ -312,7 +288,7 @@ public abstract class Paper extends JPanel {
 		//		BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 		//((Graphics2D) graphics).setStroke(basicStroke);
 		if (engine.getLastDot() == null) {
-			graphics.setColor(getContrastColor(colorBackground));
+			graphics.setColor(CustomColors.getContrastColor(colorBackground));
 		} else if (engine.getLastDotColor() == true) {
 			graphics.setColor(colorBluPoint);
 		} else if (engine.getLastDotColor() == false) {

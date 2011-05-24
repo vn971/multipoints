@@ -9,18 +9,37 @@ import java.awt.Color;
 public class CustomColors {
 
 	public static Color getContrastColor(Color source) {
-		return new Color(255 - source.getRed(), 255 - source.getGreen(), 255 - source.getBlue(), source.getAlpha());
+		return new Color((source.getRed() + 128) % 256,
+				(source.getGreen() + 128) % 256,
+				(source.getBlue() + 128) % 256,
+				source.getAlpha());
 	}
 
-	public static Color getAlphaModifiedColor(Color source, int newAlpha) {
-		return new Color(source.getRed(), source.getGreen(), source.getBlue(), newAlpha);
-	}
-
-	public static Color getMiddleColor(Color c1, Color c2) {
+	public static Color getAlphaModifiedColor(
+			Color source,
+			int newAlpha) {
 		return new Color(
-				(c1.getRed() + c2.getRed()) / 2,
-				(c1.getGreen() + c2.getGreen()) / 2,
-				(c1.getBlue() + c2.getBlue()) / 2,
-				(c1.getAlpha() + c2.getAlpha()) / 2);
+				source.getRed(),
+				source.getGreen(),
+				source.getBlue(),
+				newAlpha);
+	}
+
+	public static Color getMixedColor(
+			Color c1,
+			Color c2,
+			float color1Share) {
+		float p = color1Share;
+		float q = 1 - p;
+		return new Color(
+				(int)(c1.getRed() * p + c2.getRed() * q),
+				(int)(c1.getGreen() * p + c2.getGreen() * q),
+				(int)(c1.getBlue() * p + c2.getBlue() * q),
+				(int)(c1.getAlpha() * p + c2.getAlpha() * q));
+	}
+
+	public static Color getMiddleColor(Color c1,
+			Color c2) {
+		return CustomColors.getMixedColor(c1, c2, 0.5f);
 	}
 }

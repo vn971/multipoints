@@ -403,24 +403,17 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel_IncontactGroup" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel_Qestions" alignment="0" min="-2" max="-2" attributes="1"/>
-                              <Component id="jLabel_GameWishes" alignment="0" min="-2" max="-2" attributes="1"/>
-                              <Component id="jLabel_Links" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane_ServerOutput" alignment="0" min="-2" pref="622" max="-2" attributes="2"/>
-                              <Component id="jLabel_ChatWishes" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel_Logo" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jLabel_Logo" alignment="0" pref="773" max="32767" attributes="0"/>
+                      <Component id="jLabel_IncontactGroup" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel_Qestions" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="jLabel_GameWishes" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="jLabel_Links" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel_ChatWishes" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jScrollPane_ServerOutput" alignment="0" pref="773" max="32767" attributes="2"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -439,7 +432,7 @@
                   <Component id="jLabel_ChatWishes" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel_Links" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Component id="jScrollPane_ServerOutput" pref="120" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -449,6 +442,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel_Logo">
           <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/ru/narod/vn91/pointsop/gui/pointsOP.png"/>
             </Property>
