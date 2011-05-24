@@ -33,11 +33,11 @@ public class PersistentMemory {
 	}
 
 	public static int getFrameWidth() {
-		return memory.getInt("frameWidth", 0);
+		return memory.getInt("frameWidth", -1);
 	}
 	
 	public static int getFrameHeight() {
-		return memory.getInt("frameHeight", 0);
+		return memory.getInt("frameHeight", -1);
 	}
 	
 	public static String getUserName() {

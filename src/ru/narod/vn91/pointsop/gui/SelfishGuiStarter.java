@@ -33,23 +33,33 @@ public class SelfishGuiStarter {
 				getResource("ru/narod/vn91/pointsop/data/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
 		frame.setSize(925, 670);
-		frame.setLocationRelativeTo(frame.getRootPane());
-		
+
 		//<new code - componentResized & PersistentMemory>
-		if(PersistentMemory.getFrameWidth()<=0&PersistentMemory.getFrameHeight()<=0){
-			frame.setSize(PersistentMemory.getFrameWidth(), PersistentMemory.getFrameHeight());
+		if (PersistentMemory.getFrameWidth() > 0
+				&& PersistentMemory.getFrameHeight() > 0) {
+			frame.setSize(PersistentMemory.getFrameWidth(),
+					PersistentMemory.getFrameHeight());
 		}
+		frame.setLocationRelativeTo(frame.getRootPane());
+
 		frame.addComponentListener(new ComponentListener() {
-			public void componentShown(ComponentEvent e) {}
+
+			public void componentShown(ComponentEvent e) {
+			}
+
 			public void componentResized(ComponentEvent e) {
 				PersistentMemory.setFrameWidth(frame.getWidth());
 				PersistentMemory.setFrameHeight(frame.getHeight());
 			}
-			public void componentMoved(ComponentEvent e) {}
-			public void componentHidden(ComponentEvent e) {}
+
+			public void componentMoved(ComponentEvent e) {
+			}
+
+			public void componentHidden(ComponentEvent e) {
+			}
 		});
 		//</new code - componentResized & PersistentMemory>
-		
+
 		{
 			int x = frame.getBounds().x, y = frame.getBounds().y;
 			x = Math.max(x, 0);
