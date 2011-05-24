@@ -212,6 +212,17 @@ public class RoomPart_Chat extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem_FontIncrease);
 
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
+
         jTextPane_Chat.setEditable(false);
         jTextPane_Chat.setComponentPopupMenu(jPopupMenu1);
         jScrollPane_Chat.setViewportView(jTextPane_Chat);
@@ -305,6 +316,15 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		prevFont = prevFont.deriveFont(prevSize + 10);
 		jTextPane_Chat.setFont(prevFont);
 	}//GEN-LAST:event_jMenuItem_FontIncreaseActionPerformed
+
+	private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+		jTextField_Chat.requestFocusInWindow();
+	}//GEN-LAST:event_formComponentShown
+
+	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+		jTextField_Chat.requestFocusInWindow();
+	}//GEN-LAST:event_formFocusGained
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_Autoscroll;

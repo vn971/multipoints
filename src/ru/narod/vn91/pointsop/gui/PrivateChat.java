@@ -38,13 +38,18 @@ public class PrivateChat extends javax.swing.JPanel {
 		return true;
 	}
 
-	void addChat(String user, String message, boolean silent) {
+	void addChat(String user,
+			String message,
+			boolean silent) {
 		if (message.equals("/Pong")) {
-			int ping = (int) ((new Date()).getTime() - lastPingSent.getTime());
-			addChat("***", "Пинг до пользователя " + companionNick + " = " + ping + " миллисекунд.", false);
+			int ping = (int)((new Date()).getTime() - lastPingSent.getTime());
+			addChat("***",
+					"Пинг до пользователя " + companionNick + " = " + ping + " миллисекунд.",
+					false);
 		} else if (message.startsWith(prefixPointsop + prefixMakeMove)) {
 			if (lastMoveWasMine) {
-				boolean OpponentColor = server.getMyName().compareTo(companionNick) > 0;
+				boolean OpponentColor = server.getMyName().compareTo(
+						companionNick) > 0;
 				message = message.replaceAll(prefixPointsop + prefixMakeMove, "");
 				int x = -1, y = -1;
 				try {
@@ -53,7 +58,8 @@ public class PrivateChat extends javax.swing.JPanel {
 					y = Integer.parseInt(coordinatesAsString[1]);
 				} catch (Exception e) {
 				}
-				MoveResult moveResult = paper.makeMove(false, x, y, OpponentColor);
+				MoveResult moveResult = paper.makeMove(false, x, y,
+						OpponentColor);
 				if (moveResult != MoveResult.ERROR) {
 					lastMoveWasMine = false;
 				}
@@ -71,7 +77,8 @@ public class PrivateChat extends javax.swing.JPanel {
 			}
 			if ((x > 0) && (y > 0) && (x < 50) && (y < 50)) {
 				paper.initPaper(x, y);
-				addChat("", "Началась новая игра, размеры поля: " + x + ":" + y, false);
+				addChat("", "Началась новая игра, размеры поля: " + x + ":" + y,
+						false);
 				lastMoveWasMine = server.getMyName().compareTo(companionNick) > 0;
 			}
 			// ignore unknown pointsOp messages
@@ -81,7 +88,8 @@ public class PrivateChat extends javax.swing.JPanel {
 			try {
 				if (user.equals(server.getMyName())) {
 					document.insertString(document.getLength(),
-							"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+							"" + GlobalGuiSettings.myTimeFormat.format(
+							new Date()) + " ",
 							GlobalGuiSettings.chatOutgoing);
 					document.insertString(document.getLength(), user
 							+ ":", GlobalGuiSettings.playerNameOutgoing);
@@ -89,7 +97,8 @@ public class PrivateChat extends javax.swing.JPanel {
 							+ "\n", GlobalGuiSettings.chatOutgoing);
 				} else {
 					document.insertString(document.getLength(),
-							"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+							"" + GlobalGuiSettings.myTimeFormat.format(
+							new Date()) + " ",
 							GlobalGuiSettings.chatIncoming);
 					document.insertString(document.getLength(), user
 							+ ":", GlobalGuiSettings.playerNameIncoming);
@@ -107,7 +116,9 @@ public class PrivateChat extends javax.swing.JPanel {
 	}
 
 	/** Creates new form PrivateChat */
-	public PrivateChat(final ServerInterface server, GuiController guiController, final String companionNick) {
+	public PrivateChat(final ServerInterface server,
+			GuiController guiController,
+			final String companionNick) {
 		this.server = server;
 		this.companionNick = companionNick;
 		if (server != null) {
@@ -119,25 +130,34 @@ public class PrivateChat extends javax.swing.JPanel {
 		paper = new Paper() {
 
 			@Override
-			public void paperClick(int x, int y, MouseEvent evt) {
+			public void paperClick(int x,
+					int y,
+					MouseEvent evt) {
 				if (companionNick.startsWith("^")) {
 					if (lastMoveWasMine) {
 						addChat("", "сейчас ход оппонента.", true);
 					} else {
-						boolean myColor = !(server.getMyName().compareTo(companionNick) > 0);
-						MoveResult moveResult = paper.makeMove(false, x, y, myColor);
+						boolean myColor = !(server.getMyName().compareTo(
+								companionNick) > 0);
+						MoveResult moveResult = paper.makeMove(false, x, y,
+								myColor);
 						if (moveResult != MoveResult.ERROR) {
-							server.sendPrivateMsg(companionNick, prefixPointsop + prefixMakeMove + x + " " + y);
+							server.sendPrivateMsg(companionNick,
+									prefixPointsop + prefixMakeMove + x + " " + y);
 							lastMoveWasMine = true;
 						}
 					}
 				} else {
-					addChat("server", "Играть пока-что можно только с другими игроками зашедшими через Op.", false);
+					addChat("server",
+							"Играть пока-что можно только с другими игроками зашедшими через Op.",
+							false);
 				}
 			}
 
 			@Override
-			public void paperMouseMove(int x, int y, MouseEvent evt) {
+			public void paperMouseMove(int x,
+					int y,
+					MouseEvent evt) {
 			}
 		};
 		paper.initPaper(30, 30);
@@ -167,6 +187,22 @@ public class PrivateChat extends javax.swing.JPanel {
         jButton_Ping = new javax.swing.JButton();
         jPanel_Paper = paper;//(companionNick.startsWith("^")) : new JPanel();
         jButton_StartNewGame = new javax.swing.JButton();
+
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
+        addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                formComponentAdded(evt);
+            }
+        });
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
 
         jTextPane_Chat.setEditable(false);
         jScrollPane_Chat.setViewportView(jTextPane_Chat);
@@ -278,7 +314,8 @@ public class PrivateChat extends javax.swing.JPanel {
 
 	private void jButton_UserinfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_UserinfoActionPerformed
 		// TODO add your handling code here:
-		server.sendPrivateMsg("Podbot", "!info " + companionNick.replaceAll("\\(.*\\)", ""));
+		server.sendPrivateMsg("Podbot", "!info " + companionNick.replaceAll(
+				"\\(.*\\)", ""));
 		addChat("", "ответ (информацию юзеринфо) Вы получите от имени 'PodBot' "
 				+ "-- так уж всё устроено тут на канале...:)", false);
 	}//GEN-LAST:event_jButton_UserinfoActionPerformed
@@ -298,11 +335,26 @@ public class PrivateChat extends javax.swing.JPanel {
 		}
 		if ((x > 0) && (y > 0) && (x < 50) && (y < 50)) {
 			paper.initPaper(x, y);
-			addChat("", "Началась новая игра, размеры поля: " + x + ":" + y, true);
+			addChat("", "Началась новая игра, размеры поля: " + x + ":" + y,
+					true);
 			lastMoveWasMine = server.getMyName().compareTo(companionNick) > 0;
-			server.sendPrivateMsg(companionNick, prefixPointsop + prefixNewGame + x + " " + y);
+			server.sendPrivateMsg(companionNick,
+					prefixPointsop + prefixNewGame + x + " " + y);
 		}
 	}//GEN-LAST:event_jButton_StartNewGameActionPerformed
+
+	private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+		jTextField_Chat.requestFocusInWindow();
+	}//GEN-LAST:event_formComponentShown
+
+	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+		jTextField_Chat.requestFocusInWindow();
+	}//GEN-LAST:event_formFocusGained
+
+	private void formComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_formComponentAdded
+		jTextField_Chat.requestFocusInWindow();
+	}//GEN-LAST:event_formComponentAdded
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Ping;
     private javax.swing.JButton jButton_Sound;

@@ -89,6 +89,17 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
         jButton_SearchOpponent = new javax.swing.JButton();
         jButton_StopSearchingOpponent = new javax.swing.JButton();
 
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
+
         jButton_SearchOpponent.setText("оставить заявку на игру");
         jButton_SearchOpponent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +158,14 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 				+ "Постарайтесь жать только когда необходимо..");
 		server.stopSearchingOpponent();
 	}//GEN-LAST:event_jButton_StopSearchingOpponentActionPerformed
+
+	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+		roomPart_Chat1.requestFocusInWindow();
+	}//GEN-LAST:event_formFocusGained
+
+	private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+		roomPart_Chat1.requestFocusInWindow();
+	}//GEN-LAST:event_formComponentShown
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_SearchOpponent;
     private javax.swing.JButton jButton_StopSearchingOpponent;

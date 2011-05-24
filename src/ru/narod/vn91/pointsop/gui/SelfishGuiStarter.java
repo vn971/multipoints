@@ -80,9 +80,7 @@ public class SelfishGuiStarter {
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
 //		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
-//		tabbedPane.addTab("settings", new ContainerRoom_Settings());
 //		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""), false);
-//
 
 		{
 			JMenuBar jMenuBar = new JMenuBar();
@@ -100,7 +98,7 @@ public class SelfishGuiStarter {
 					jMenu.add(jMenuItem);
 				}
 				{
-					JMenuItem jMenuItem = new JMenuItem("создать поле для игры");
+					JMenuItem jMenuItem = new JMenuItem("создать тестовую игру");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
@@ -149,7 +147,7 @@ public class SelfishGuiStarter {
 			{
 				JMenu jMenu = new JMenu("Помощь");
 				{
-					JMenuItem jMenuItem = new JMenuItem("online помощь");
+					JMenuItem jMenuItem = new JMenuItem("<html><a href=\"\">online помощь</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
@@ -163,7 +161,7 @@ public class SelfishGuiStarter {
 					jMenu.add(jMenuItem);
 				}
 				{
-					JMenuItem jMenuItem = new JMenuItem("полезные ссылки");
+					JMenuItem jMenuItem = new JMenuItem("<html><a href=\"\">полезные ссылки</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
