@@ -279,26 +279,27 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jLabel_Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/pointsOP.png"))); // NOI18N
 
-        jLabel_IncontactGroup.setText("Группа ВКонтакте");
+        jLabel_IncontactGroup.setText("<html>Группа ВКонтакте</html>");
         jLabel_IncontactGroup.setToolTipText("http://vkontakte.ru/club21455903");
         jLabel_IncontactGroup.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel_Qestions.setText("Вопросы по PointsOP");
+        jLabel_Qestions.setText("<html>Вопросы по PointsOP</html>");
         jLabel_Qestions.setToolTipText("http://vkontakte.ru/topic-21455903_24260448");
         jLabel_Qestions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel_GameWishes.setText("Пожелания по игровой части: вид поля, формат игры");
+        jLabel_GameWishes.setText("<html>Пожелания по игровой части: вид поля, формат игры</html>");
         jLabel_GameWishes.setToolTipText("http://vkontakte.ru/topic-21455903_24387150");
         jLabel_GameWishes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel_ChatWishes.setText("Пожелания по списку игроков, чату, дизайну");
+        jLabel_ChatWishes.setText("<html>Пожелания по списку игроков, чату, дизайну</html>");
         jLabel_ChatWishes.setToolTipText("http://vkontakte.ru/topic-21455903_24407841");
         jLabel_ChatWishes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel_Links.setText("Полезные ссылки");
+        jLabel_Links.setText("<html>Полезные ссылки</html>");
         jLabel_Links.setToolTipText("http://sites.google.com/site/oscarpoints/links");
         jLabel_Links.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        jTextPane_ServerOutput.setEditable(false);
         jTextPane_ServerOutput.setText("Cоединение:\n----------------------------------------------------------------------------\n");
         jScrollPane_ServerOutput.setViewportView(jTextPane_ServerOutput);
 
@@ -311,12 +312,12 @@ public class WelcomePanel extends javax.swing.JPanel {
                     .addGroup(jPanel_RightLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel_IncontactGroup)
-                            .addComponent(jLabel_Qestions)
-                            .addComponent(jLabel_GameWishes)
-                            .addComponent(jLabel_ChatWishes)
-                            .addComponent(jLabel_Links)
-                            .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel_IncontactGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel_Qestions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel_GameWishes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel_Links, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel_ChatWishes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel_RightLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel_Logo)))
@@ -328,15 +329,15 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel_Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_IncontactGroup)
+                .addComponent(jLabel_IncontactGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_Qestions)
+                .addComponent(jLabel_Qestions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_GameWishes)
+                .addComponent(jLabel_GameWishes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_ChatWishes)
+                .addComponent(jLabel_ChatWishes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_Links)
+                .addComponent(jLabel_Links, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                 .addContainerGap())
@@ -481,6 +482,7 @@ class LinkedLabel extends JLabel {
 	@Override
 	public void setText(String text) {
 		// blue color and underlining
+		text = text.replaceAll("<html>|<a href=.*>|</a>|</html>", "");
 		super.setText("<html><a href=\"\""
 				+ ">"
 				+ text + "</a></html>");
