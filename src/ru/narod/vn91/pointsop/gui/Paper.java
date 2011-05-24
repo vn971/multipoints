@@ -104,11 +104,12 @@ public abstract class Paper extends JPanel {
 	private Color getMiddleColor(Color c1,
 			Color c2) {
 		return getMixedColor(c1, c2, 0.5f);
-//		return new Color(
-//				(c1.getRed() + c2.getRed()) / 2,
-//				(c1.getGreen() + c2.getGreen()) / 2,
-//				(c1.getBlue() + c2.getBlue()) / 2,
-//				(c1.getAlpha() + c2.getAlpha()) / 2);
+	}
+
+	public MoveResult makeMove(
+			int x,
+			int y) {
+		return makeMove(false, x, y, !engine.getLastDotColor());
 	}
 
 	/**
@@ -153,7 +154,6 @@ public abstract class Paper extends JPanel {
 ////				drawPoint(null, x, y);
 ////				drawLastDotHint(null);
 //				repaint();
-
 		}
 		return moveResult;
 	}
@@ -170,28 +170,12 @@ public abstract class Paper extends JPanel {
 		super();
 //		super.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		{
-//			URL url = Paper.class.getResource("ru/narod/vn91/pointsop/data/cursor-sight.png");
-			URL url = SelfishGuiStarter.class.getResource("cursor-sight.png");
-//			System.out.println(url);
+			URL url = SelfishGuiStarter.class.getResource("cursor-sight2.png");
 			Image image = new ImageIcon(url).getImage();
 			Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(
 					16, 16), "cursor-sight");
 			super.setCursor(cursor);
 		}
-//		super.setCursor(new CustomCursor(null, cursorDot, TOOL_TIP_TEXT_KEY) {
-//
-//			@Override
-//			protected void createNativeCursor(Image image, int[] ints, int i, int i1, int i2, int i3) {
-//				throw new UnsupportedOperationException("Not supported yet.");
-//			}
-//		});
-//		super.setCursor(new CustomCursor(, new Point(16,16), "sight") {
-//
-//			@Override
-//			protected void createNativeCursor(Image image, int[] ints, int i, int i1, int i2, int i3) {
-//				throw new UnsupportedOperationException("Not supported yet.");
-//			}
-//		});
 		super.addMouseListener(new java.awt.event.MouseAdapter() {
 
 			@Override
@@ -273,16 +257,12 @@ public abstract class Paper extends JPanel {
 				graphics.setColor(Color.BLACK);
 				super.setBackground(Color.ORANGE);
 				((Graphics2D)graphics).setBackground(Color.black);
-//				GStyle t;
-//				((Graphics2D)graphics).setColor(Color.CYAN);
 				{
 					String string = "" + (x);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
 							string);
 					Point pixel = getPixel(x, -0.1);
 					pixel.translate(-stringWidth / 2, 0);
-//					graphics.draw
-//					graphics.draw
 					graphics.drawString(string, pixel.x, pixel.y);
 				}
 				{
@@ -514,17 +494,18 @@ public abstract class Paper extends JPanel {
 				graphics.getClipBounds()) == false) {
 			return;
 		}
-		
-		((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	
+
+		((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
 		DotType dotType = engine.getDotType(x, y);
 		{
 			int pixelX = getPixel(x, y).x;
 			int pixelY = getPixel(x, y).y;
 			int pointRadius = (int)(squareSize * dotWidth / 2);
-			int pointDiameter = 2 * pointRadius-1;
-			int drawX = pixelX - pointRadius+1;
-			int drawY = pixelY - pointRadius+1;
+			int pointDiameter = 2 * pointRadius - 1;
+			int drawX = pixelX - pointRadius + 1;
+			int drawY = pixelY - pointRadius + 1;
 			switch (dotType) {
 				case BLUE:
 					graphics.setColor(colorBluPoint);
@@ -553,9 +534,11 @@ public abstract class Paper extends JPanel {
 				default:
 					break;
 			}
-			
-			((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			
+
+			((Graphics2D)graphics).setRenderingHint(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_OFF);
+
 			if (paintEmpty && dotType.isIn(DotType.EMPTY, DotType.RED_CTRL,
 					DotType.BLUE_CTRL)) {
 				graphics.setColor(colorBackground);
