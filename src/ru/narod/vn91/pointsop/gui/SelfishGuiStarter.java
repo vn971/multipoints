@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -13,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 
 /**
@@ -41,6 +40,7 @@ public class SelfishGuiStarter {
 		}
 
 		final JTabbedPaneMod tabbedPane = new JTabbedPaneMod();
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		frame.add(tabbedPane);
 		tabbedPane.setFocusable(false);
 
