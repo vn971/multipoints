@@ -63,11 +63,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	Date lastSpectrTime = new Date(0);
 	HashMap<String, String> spectrGameData = new HashMap<String, String>();
 	IrcNicknameManager nicknameManager = new IrcNicknameManager();
-	String mainGameRoomName = "";
-	String mainGameOpponent = "";
-	boolean mainGameAmIRed;
-	SingleGameEngineInterface mainGameEngine;
-	ArrayList<SimpleMove> mainGameMoveList = new ArrayList<SimpleMove>();
+	MyGame myGame = new MyGame();
 
 	public void connect() {
 		Thread thread = new Thread(new Runnable() {
@@ -138,10 +134,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	public synchronized void searchOpponent() {
-		if (mainGameRoomName != null) {
-			clearMainGameVariables();
-			super.partChannel(mainGameRoomName);
-		}
+
+		myGame.leaveGame();
 		int roomNumber;
 		String roomAsString;
 		boolean unoccupiedFound = false;
@@ -158,31 +152,30 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				}
 			}
 		} while (unoccupiedFound == false);
-		mainGameRoomName = roomAsString;
+		myGame.mainGameRoomName = roomAsString;
 
-		mainGameEngine = new SingleGameEngine(39, 32);
-		mainGameOpponent = "";
+		myGame.mainGameEngine = new SingleGameEngine(39, 32);
+		myGame.mainGameOpponent = "";
 		super.joinChannel(roomAsString);
 		super.changeNick(String.format("%s_X0910000%05d[g100]", getMyName(),
 				roomNumber));
-//		super.changeNick(String.format("%s_X0910000%05d[free]", getMyName(), roomNumber));
 	}
 
 	public void acceptOpponent(String roomName,
 			String name) {
-		if (!roomName.equals(mainGameRoomName)) {
+		if (!roomName.equals(myGame.mainGameRoomName)) {
 			return;
 		}
 //		if (mainGameOpponent.equals("") == false) {
 //			return;
 //		} this protection is already done earlier
-		mainGameOpponent = nicknameManager.getIrcNick(name);
-		if (mainGameOpponent == null) {
-			mainGameOpponent = "";
+		myGame.mainGameOpponent = nicknameManager.getIrcNick(name);
+		if (myGame.mainGameOpponent == null) {
+			myGame.mainGameOpponent = "";
 		} else {
-			mainGameAmIRed = true;
+			myGame.mainGameAmIRed = true;
 			super.sendMessage(roomName,
-					commandCommonPrefix + commandAcceptOpponent + mainGameOpponent);
+					commandCommonPrefix + commandAcceptOpponent + myGame.mainGameOpponent);
 			super.changeNick(String.format("%s_X0910000%s[g100]", getMyName(), roomName.substring(
 					4)));
 			gui.subscribedGame(roomName, this, getMyName(), name, 0, 0,
@@ -200,17 +193,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		}
 	}
 
-	private void clearMainGameVariables() {
-		mainGameRoomName = "";
-		mainGameMoveList.clear();
-		mainGameOpponent = "";
-		mainGameEngine = null;
-		super.changeNick(String.format("%s_X091000000000[free]", getMyName()));
-	}
-
 	public void stopSearchingOpponent() {
-		super.partChannel(mainGameRoomName);
-		clearMainGameVariables();
+		myGame.leaveGame();
 	}
 
 	public void requestJoinGame(String gameRoomName) {
@@ -261,8 +245,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			// limit the users from joining-leaving too fast
 			// because it causes a bug in pointsxt
 			lastSpectrTime = new Date();
-			if (roomName.equals(mainGameRoomName)) {
-				clearMainGameVariables();
+			if (roomName.equals(myGame.mainGameRoomName)) {
+				myGame.clearMainGameVariables();
 			}
 			super.partChannel(roomName);
 			gui.unsubsribedRoom(this, roomName);
@@ -279,7 +263,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			gui.receiveRawServerInfo(this,
 					"Успешно подключился к основной комнате.");
 		}
-		if (channel.equals(mainGameRoomName) && mainGameAmIRed) {
+		if (channel.equals(myGame.mainGameRoomName) && myGame.mainGameAmIRed) {
 			super.sendMessage(sender, getSpectrGame_PointsxtStyle());
 		}
 	}
@@ -326,11 +310,9 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			String login,
 			String hostname) {
 		userDisconnected_PointsxtStyle(channel, sender);
-		if (sender.equals(mainGameOpponent) && channel.equals(mainGameRoomName)) {
-//			System.out.println("opponent exited channel " + channel.replaceAll(
-//					"#pxt", ""));
-			clearMainGameVariables();
-			super.partChannel(mainGameRoomName);
+		if (sender.equals(myGame.mainGameOpponent)
+				&& channel.equals(myGame.mainGameRoomName)) {
+			myGame.leaveGame();
 //			gui.chatReceived(this, channel, sender, "Ваш оппонент закрыл игру.");
 		}
 	}
@@ -380,8 +362,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		int playerNumb = getPlayerIngameNumber(sender);
 		if (message.startsWith(commandCommonPrefix)) {
 			if ((message.startsWith(commandCommonPrefix + commandIWantJoinGame))
-					&& (channel.equals(mainGameRoomName))
-					&& (mainGameOpponent.equals(""))) {
+					&& (channel.equals(myGame.mainGameRoomName))
+					&& (myGame.mainGameOpponent.equals(""))) {
 				String opponentNick = nicknameManager.getOrCreateShortNick(
 						sender);
 				this.acceptOpponent(channel, opponentNick);
@@ -389,11 +371,11 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 					commandCommonPrefix + commandAcceptOpponent + myNickOnServ)) {
 				super.changeNick(String.format("%s_X0910000%s[g200]",
 						getMyName(), channel.substring(4)));
-				mainGameAmIRed = false;
-				mainGameEngine = new SingleGameEngine(39, 32);
-				mainGameMoveList = new ArrayList<SimpleMove>();
-				mainGameOpponent = nick;
-				mainGameRoomName = channel;
+				myGame.mainGameAmIRed = false;
+				myGame.mainGameEngine = new SingleGameEngine(39, 32);
+				myGame.mainGameMoveList = new ArrayList<SimpleMove>();
+				myGame.mainGameOpponent = nick;
+				myGame.mainGameRoomName = channel;
 				gui.subscribedGame(channel, this, nick, getMyName(), 0, 0,
 						"999мин/ход", false, "", true, true/*i am the player*/);
 				for (User user : super.getUsers(channel)) {
@@ -688,17 +670,18 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 //room leaving - fix.  Исправил очистку списка в случае одновременной игры и просмотров через Op
 	public void userDisconnected_PointsxtStyle(String room,
 			String user) {
-//		shortNick2FullNick.remove(user);
 		if (room.equals(defaultChannel)) {
 			nicknameManager.removeIrcNick(user);
 			gui.userLeavedRoom(this, room,
 					nicknameManager.getOrCreateShortNick(user));
 			clearCreatedGames_PointsxtStyle(user);
+		} else {
+			gui.userLeavedRoom(this, room,
+					nicknameManager.getOrCreateShortNick(user));
 		}
 	}
 
 	public void clearCreatedGames_PointsxtStyle(String user) {
-//		System.out.println("serv.clearCreatedGames, user=" + user);
 		if (getPlayerRoom(user).length() > 0) {
 			gui.gameDestroyed(this, defaultChannel, getPlayerRoom(user));
 		}
@@ -709,40 +692,43 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			int x,
 			int y,
 			boolean isRed) {
-		if (room.equals(mainGameRoomName)) {
-			MoveResult moveResult = mainGameEngine.makeMove(x, y, isRed);
+		if (room.equals(myGame.mainGameRoomName)) {
+			MoveResult moveResult = myGame.mainGameEngine.makeMove(x, y, isRed);
 			if (moveResult != MoveResult.ERROR) {
-				mainGameMoveList.add(new SimpleMove(x, y, isRed));
+				myGame.mainGameMoveList.add(new SimpleMove(x, y, isRed));
 			}
 		}
 		gui.makedMove(this, room, silent, x, y, isRed);
 	}
 
 	boolean isMainGameMyMoveNow() {
-		boolean firstMove = mainGameAmIRed && mainGameMoveList.isEmpty();
-		boolean myTurnNow = (mainGameMoveList.isEmpty() == false)
-				&& (mainGameMoveList.get(mainGameMoveList.size() - 1).isRed
-				^ mainGameAmIRed);
+		boolean firstMove = myGame.mainGameAmIRed && myGame.mainGameMoveList.isEmpty();
+		boolean myTurnNow = (myGame.mainGameMoveList.isEmpty() == false)
+				&& (myGame.mainGameMoveList.get(
+				myGame.mainGameMoveList.size() - 1).isRed
+				^ myGame.mainGameAmIRed);
 		return firstMove || myTurnNow;
 	}
 
 	boolean isMainGameRedMoveNow() {
-		boolean firstMove = mainGameAmIRed && mainGameMoveList.isEmpty();
-		boolean previousWasBlue = (mainGameMoveList.isEmpty() == false)
-				&& (mainGameMoveList.get(mainGameMoveList.size() - 1).isRed == false);
+		boolean firstMove = myGame.mainGameAmIRed && myGame.mainGameMoveList.isEmpty();
+		boolean previousWasBlue = (myGame.mainGameMoveList.isEmpty() == false)
+				&& (myGame.mainGameMoveList.get(
+				myGame.mainGameMoveList.size() - 1).isRed == false);
 		return firstMove || previousWasBlue;
 	}
 
 	public void makeMove(String roomName,
 			int x,
 			int y) {
-		if (roomName.equals(mainGameRoomName)) {
+		if (roomName.equals(myGame.mainGameRoomName)) {
 			boolean myMoveNow = isMainGameMyMoveNow();
-			boolean isFirstMoveAllowed = (mainGameMoveList.size() >= 2)
+			boolean isFirstMoveAllowed = (myGame.mainGameMoveList.size() >= 2)
 					|| ((x - 1 >= 12) && (x - 1 <= 19)
 					&& (32 - y >= 12) && (32 - y <= 26)); // 12<=x<=19, 12<=y<=26
 			if (myMoveNow && isFirstMoveAllowed) {
-				makedMove_PointsxtStyle(roomName, false, x, y, mainGameAmIRed);
+				makedMove_PointsxtStyle(roomName, false, x, y,
+						myGame.mainGameAmIRed);
 				super.sendMessage(roomName,
 						"" + (char)('0' + x - 1)
 						+ (char)('0' + 32 - y)
@@ -752,7 +738,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	public void surrender(String roomName) {
-		if (roomName.equals(mainGameRoomName) && isMainGameMyMoveNow()) {
+		if (roomName.equals(myGame.mainGameRoomName) && isMainGameMyMoveNow()) {
 			super.sendMessage(roomName, "/ImLost");
 		}
 	}
@@ -799,15 +785,15 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		StringBuilder result = new StringBuilder();
 		result.append("/SpectrGame ");
 		String numberOfTurnsAsString =
-				mainGameMoveList.isEmpty() ? "-001"
-				: String.format("%03d", mainGameMoveList.size() - 1);
+				myGame.mainGameMoveList.isEmpty() ? "-001"
+				: String.format("%03d", myGame.mainGameMoveList.size() - 1);
 		result.append(numberOfTurnsAsString);
 		result.append(String.format("%03d",
-				mainGameEngine.getSurroundings().size()));
+				myGame.mainGameEngine.getSurroundings().size()));
 		result.append(isMainGameRedMoveNow() ? "2" : "1");
 		result.append("00000000");
-		for (int moveIndex = 0; moveIndex < mainGameMoveList.size(); moveIndex++) {
-			SimpleMove simpleMove = mainGameMoveList.get(moveIndex);
+		for (int moveIndex = 0; moveIndex < myGame.mainGameMoveList.size(); moveIndex++) {
+			SimpleMove simpleMove = myGame.mainGameMoveList.get(moveIndex);
 			int x = simpleMove.x - 1;
 			int y = 32 - simpleMove.y;
 			if (simpleMove.isRed) {
@@ -818,14 +804,14 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			result.append(int2SpectrGameCharacter(y));
 		}
 		result.append(" ");
-		List<SurroundingAbstract> surroundingsList = mainGameEngine.getSurroundings();
+		List<SurroundingAbstract> surroundingsList = myGame.mainGameEngine.getSurroundings();
 		for (int surrIndex = 0; surrIndex < surroundingsList.size(); surrIndex++) {
 			SurroundingAbstract surrounding = surroundingsList.get(surrIndex);
 			int x = surrounding.firstCapturedEnemy.x - 1;
 			int y = 32 - surrounding.firstCapturedEnemy.y;
-			if ((mainGameEngine.getDotType(x, y)
+			if ((myGame.mainGameEngine.getDotType(x, y)
 					== SingleGameEngineInterface.DotType.RED_EATED_BLUE)
-					|| (mainGameEngine.getDotType(x, y)
+					|| (myGame.mainGameEngine.getDotType(x, y)
 					== SingleGameEngineInterface.DotType.RED_TIRED)) {
 				// damn this pointsxt!!!!!!!!!!!
 				result.append(int2SpectrGameCharacter(x + 40));
@@ -836,6 +822,33 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		}
 		result.append("-");
 		return result.toString();
+	}
+
+	class MyGame {
+
+		String mainGameRoomName = "";
+		String mainGameOpponent = "";
+		boolean mainGameAmIRed;
+		SingleGameEngineInterface mainGameEngine;
+		ArrayList<SimpleMove> mainGameMoveList = new ArrayList<SimpleMove>();
+
+		private void clearMainGameVariables() {
+			mainGameRoomName = "";
+			mainGameMoveList.clear();
+			mainGameOpponent = "";
+			mainGameEngine = null;
+			ServerPointsxt.this.changeNick(
+					String.format(
+					"%s_X091000000000[free]",
+					ServerPointsxt.this.getMyName()));
+		}
+
+		void leaveGame() {
+			if (mainGameOpponent != null) {
+				clearMainGameVariables();
+				ServerPointsxt.this.partChannel(mainGameRoomName);
+			}
+		}
 	}
 }
 
@@ -905,42 +918,3 @@ class SimpleMove {
 		this.isRed = isRed;
 	}
 }
-//	full: /SpectrGame 046000200000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9 -
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9
-//	full: /SpectrGame 076000200000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8 -
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8
-//	full: /SpectrGame 129001100000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKE H;-
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKE
-//	full: /SpectrGame 154001200000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d> H;-
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>
-//	full: /SpectrGame 185001100000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	full: /SpectrGame 000000000000000BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9< H;-
-//	suff: BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<
-//	full: /SpectrGame 273005100000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	full: /SpectrGame 000000000000000BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<dF:C`A8C_<8;b;;<b>7:pHGEqEIDpDHEqFJDpCFFkFCElEDFlDBFmFDGmGEHnHFIoIDIqGHLnJDLmIBKlHBInLFMqLIMoMGNmMFNmLCNkMDMkLDKkKDJkHCJjHAHiIENhHAJiG@JcH>HdD?FgD9GcJ9LaI8IdM;LdL<KcK=KbL;MbM;N H;FBFIEHAH-
-//	suff: BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<dF:C`A8C_<8;b;;<b>7:pHGEqEIDpDHEqFJDpCFFkFCElEDFlDBFmFDGmGEHnHFIoIDIqGHLnJDLmIBKlHBInLFMqLIMoMGNmMFNmLCNkMDMkLDKkKDJkHCJjHAHiIENhHAJiG@JcH>HdD?FgD9GcJ9LaI8IdM;LdL<KcK=KbL;MbM;N
-//	full: /SpectrGame 426013200000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	full: /SpectrGame 000000000000000BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<dF:C`A8C_<8;b;;<b>7:pHGEqEIDpDHEqFJDpCFFkFCElEDFlDBFmFDGmGEHnHFIoIDIqGHLnJDLmIBKlHBInLFMqLIMoMGNmMFNmLCNkMDMkLDKkKDJkHCJjHAHiIENhHAJiG@JcH>HdD?FgD9GcJ9LaI8IdM;LdL<KcK=KbL;MbM;NbN<GcG;FcE:FeG<HdI=HgI2J[J=FdE>IfJ<JeJ:KaK:JaJ;IbH8KgL>KgK?JfN<N`L9M`M9N`N:O`J7K_J6J^K7L^I5J]I4J^L7M\I3K[I4KZI7I_H8H`E9EaD
-//	suff: BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<dF:C`A8C_<8;b;;<b>7:pHGEqEIDpDHEqFJDpCFFkFCElEDFlDBFmFDGmGEHnHFIoIDIqGHLnJDLmIBKlHBInLFMqLIMoMGNmMFNmLCNkMDMkLDKkKDJkHCJjHAHiIENhHAJiG@JcH>HdD?FgD9GcJ9LaI8IdM;LdL<KcK=KbL;MbM;NbN<GcG;FcE:FeG<HdI=HgI2J[J=FdE>IfJ<JeJ:KaK:JaJ;IbH8KgL>KgK?JfN<N`L9M`M9N`N:O`J7K_J6J^K7L^I5J]I4J^L7M\I3K[I4KZI7I_H8H`E9EaD
-//	full: /SpectrGame 0000000000000008FbE7FaC7EbB8D^A4D\A2A[B2CZB1B[C2D[D3EZE3A\E3F]D4C\B4FZF2G[G1HZH1GYI1E\=2=Z?1@Y>3?[>2>[@1?\?3<];4;]:4:]948\939]847`B0F_C5E^D6E^655_475^564\656]463]745[638\<3;]334_362`286_795c5:4c487d6 H;FBFIEHAH<G;J:L:C8E3?2E4E-
-//	suff: 8FbE7FaC7EbB8D^A4D\A2A[B2CZB1B[C2D[D3EZE3A\E3F]D4C\B4FZF2G[G1HZH1GYI1E\=2=Z?1@Y>3?[>2>[@1?\?3<];4;]:4:]948\939]847`B0F_C5E^D6E^655_475^564\656]463]745[638\<3;]334_362`286_795c5:4c487d6
-//	full: /SpectrGame 486020200000000F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	suff: F?o?G@n@o>F>o;G=p=G<p<H;n;E=m<F=l<D?m@D>lBC@i<GAlAH>p?I>q@I<pBB<j;FBoBC<k;A;l:A:k8B6i8@8i7A9j9@7i6@5h6?6i5@4i4A3j3A2k2C1l1B2l3B4k3C5m6C7j8D8l9D7m8E7n8F7o8G7p8H7q8I7r8I4r7H5m4L5u7L7t8K7s8M8u9N8t:N9v:O:v;O<v<O=u>N?u?M@t@L?v@MAv>O?w>P>x?O@x=Q>w;P:x<Q;s?L>r@LBqAKEh<?9g;>;g:@9f9>8e8>:e9>6f<=;e<<;iA<<jBBGcA=@d===d>=>i><?j==BhEACkCBDgB?CfC@
-//	full: /SpectrGame 000000000000000BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<dF:C`A8C_<8;b;;<b>7:pHGEqEIDpDHEqFJDpCFFkFCElEDFlDBFmFDGmGEHnHFIoIDIqGHLnJDLmIBKlHBInLFMqLIMoMGNmMFNmLCNkMDMkLDKkKDJkHCJjHAHiIENhHAJiG@JcH>HdD?FgD9GcJ9LaI8IdM;LdL<KcK=KbL;MbM;NbN<GcG;FcE:FeG<HdI=HgI2J[J=FdE>IfJ<JeJ:KaK:JaJ;IbH8KgL>KgK?JfN<N`L9M`M9N`N:O`J7K_J6J^K7L^I5J]I4J^L7M\I3K[I4KZI7I_H8H`E9EaD
-//	suff: BhA>BgABEf@=?c?<AeC;Bc@<Bd@=Ac::<b=9<dF:C`A8C_<8;b;;<b>7:pHGEqEIDpDHEqFJDpCFFkFCElEDFlDBFmFDGmGEHnHFIoIDIqGHLnJDLmIBKlHBInLFMqLIMoMGNmMFNmLCNkMDMkLDKkKDJkHCJjHAHiIENhHAJiG@JcH>HdD?FgD9GcJ9LaI8IdM;LdL<KcK=KbL;MbM;NbN<GcG;FcE:FeG<HdI=HgI2J[J=FdE>IfJ<JeJ:KaK:JaJ;IbH8KgL>KgK?JfN<N`L9M`M9N`N:O`J7K_J6J^K7L^I5J]I4J^L7M\I3K[I4KZI7I_H8H`E9EaD
-//	full: /SpectrGame 0000000000000008FbE7FaC7EbB8D^A4D\A2A[B2CZB1B[C2D[D3EZE3A\E3F]D4C\B4FZF2G[G1HZH1GYI1E\=2=Z?1@Y>3?[>2>[@1?\?3<];4;]:4:]948\939]847`B0F_C5E^D6E^655_475^564\656]463]745[638\<3;]334_362`286_795c5:4c487d678^789e75<g5>5g4>4h3;3t4M6s6N7s5I2r4H3h2@1f3=3e2<2z=Q=y<R<z;S<w9P9w8P8w7P6x7Q7u5O6t6?1xILHf2=1q6H6s2JJnKIKZK3M]C6;YJLF_N H;FBFIEHAH<G;J:L:C8E3?2E4E@4M7
-//	suff: 8FbE7FaC7EbB8D^A4D\A2A[B2CZB1B[C2D[D3EZE3A\E3F]D4C\B4FZF2G[G1HZH1GYI1E\=2=Z?1@Y>3?[>2>[@1?\?3<];4;]:4:]948\939]847`B0F_C5E^D6E^655_475^564\656]463]745[638\<3;]334_362`286_795c5:4c487d678^789e75<g5>5g4>4h3;3t4M6s6N7s5I2r4H3h2@1f3=3e2<2z=Q=y<R<z;S<w9P9w8P8w7P6x7Q7u5O6t6?1xILHf2=1q6H6s2JJnKIKZK3M]C6;YJLF_N
-//	full: /SpectrGame 000000000000000:;O7L5492J-
-//	suff: :;O7L5492J-
-//	full: /SpectrGame -001000100000000 -
-//	suff:
-//	full: /SpectrGame 000000000000000:;O7L5492J-
-//	suff: :;O7L5492J-
-//	full: /SpectrGame -001000100000000 -
-//	suff:
-//	full: /SpectrGame 005000100000000j>ABl?HAX0=@ -
-//	suff: j>ABl?HAX0=@
-
