@@ -190,7 +190,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jCheckBoxMenuItem_Autoscroll);
 
-        jMenuItem_EraseChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.gif"))); // NOI18N
+        jMenuItem_EraseChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
         jMenuItem_EraseChat.setText("очистить окно чата");
         jMenuItem_EraseChat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
