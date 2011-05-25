@@ -1,0 +1,44 @@
+		URL url;
+		URLConnection urlConn;
+		DataOutputStream output;
+		BufferedReader input;
+		String error = "";
+		String result = "";
+
+		try {
+			url = new URL("http://p875.h1.ru/op.php");
+
+			urlConn = url.openConnection();
+			urlConn.setDoInput(true);
+			urlConn.setDoOutput(true);
+			urlConn.setUseCaches(false);
+			urlConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+			output = new DataOutputStream(urlConn.getOutputStream());
+			String content = "pointsop_game=1&\n"
+					+ "ver=1&\n"
+					+ "nick1=User&\n"
+					+ "nick2=Player&\n"
+					+ "blits=0&\n"
+					+ "time=2010-02-12 12:00:00&\n"
+					+ "win=1&\n"
+					+ "nmoves=1&\n"
+					+ "game_seq=x1 y1";
+			output.writeBytes(content);
+			output.flush();
+			output.close();
+
+			DataInputStream in = new DataInputStream(urlConn.getInputStream());
+			input = new BufferedReader(new InputStreamReader(in));
+			String str;
+			while ((str = input.readLine()) != null) {
+				result = result + str + "\n";
+			}
+			System.out.print(result+":)");
+			input.close();
+		} catch (MalformedURLException e) {
+			error += e + "\n";
+		} catch (IOException e) {
+			error += e + "\n";
+		}
+

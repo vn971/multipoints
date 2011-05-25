@@ -1,0 +1,16 @@
+syntax: glob
+*.class
+*.jar
+bin\*
+dist\*
+*built-jar.properties
+nbproject\private*
+
+syntax: regexp
+
+\.orig$
+\.orig\..*$
+\.chg\..*$
+\.rej$
+\.conflict\~$
+
