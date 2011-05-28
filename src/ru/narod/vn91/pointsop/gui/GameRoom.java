@@ -24,6 +24,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	String startingPosition;
 	int mousePosX, mousePosY, redScore, blueScore;
 	boolean amIPlaying, redStopped = false, blueStopped = false;
+	boolean isRedTurnNow = true;
 	Sgf.GameResult gameResult = Sgf.GameResult.UNFINISHED;
 	Paper paper;
 
@@ -60,15 +61,19 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public boolean close() {
-		getServer().unsubscribeRoom(nameOnServer);
-		return false;
+		if (server != null) {
+			server.unsubscribeRoom(nameOnServer);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public void makeMove(boolean silent,
 			int x,
 			int y,
 			boolean isRed) {
-		MoveResult moveResult = getRoomPart_Paper().makeMove(silent, x, y, isRed);
+		MoveResult moveResult = paper.makeMove(silent, x, y, isRed);
 		if (moveResult != MoveResult.ERROR) {
 			MoveInfoAbstract moveInfoAbstract = new MoveInfoAbstract();
 			moveInfoAbstract.coordX = x;
@@ -157,10 +162,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int y,
 			MouseEvent evt) {
 		if (amIPlaying && evt.getButton() == MouseEvent.BUTTON1) {
-			server.makeMove(nameOnServer, x, y);
-		} else {
-//			roomPart_Chat1.addServerNotice("ты кликнул "
-//					+ "[" + x + ":" + y + "]");
+			if (server != null) {
+				server.makeMove(nameOnServer, x, y);
+			} else {
+				makeMove(false, x, y, isRedTurnNow);
+				isRedTurnNow = !isRedTurnNow;
+			}
 		}
 	}
 
@@ -377,7 +384,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 //			System.err.println("Error: " + e.getMessage());
 //		}
 	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_AdditionalActions;
     private javax.swing.JButton jButton_TurnsBackwards;

@@ -61,7 +61,7 @@ public abstract class Paper extends JPanel {
 	private Color colorBluCtrlSurr =
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
 
-	public void setColors(Color p1,
+	protected void setColors(Color p1,
 			Color p2,
 			Color background) {
 		colorRedPoint = p1;
