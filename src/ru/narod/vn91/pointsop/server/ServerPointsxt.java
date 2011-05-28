@@ -326,7 +326,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		if (sender.equals(myGame.opponentName)
 				&& channel.equals(myGame.roomName)) {
 			myGame.leaveGame();
-//			gui.chatReceived(this, channel, sender, "Ваш оппонент закрыл игру.");
+			gui.chatReceived(this, channel, sender, "Ваш оппонент закрыл игру.");
 		}
 	}
 
@@ -683,7 +683,6 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		}
 	}
 
-//room leaving - fix.  Исправил очистку списка в случае одновременной игры и просмотров через Op
 	public void userDisconnected_PointsxtStyle(String room,
 			String user) {
 		if (room.equals(defaultChannel)) {
@@ -694,6 +693,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		} else {
 			gui.userLeavedRoom(this, room,
 					nicknameManager.getOrCreateShortNick(user));
+			if (user.equals(myGame.opponentName)
+					&&room.equals(myGame.roomName)) {
+				gui.chatReceived(this, room, "", "Оппонент покинул игру");
+			}
 		}
 	}
 
