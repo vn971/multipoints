@@ -162,7 +162,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		myGame.engine = new SingleGameEngine(39, 32);
 		myGame.opponentName = "";
 		super.joinChannel(roomAsString);
-		super.changeNick(String.format("%s_X0910000%05d[g100]", getMyName(),
+		super.changeNick(String.format("%s_X0910000%05d[g101]", getMyName(),
 				roomNumber));
 	}
 
@@ -181,7 +181,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			myGame.amIRed = true;
 			super.sendMessage(roomName,
 					commandCommonPrefix + commandAcceptOpponent + myGame.opponentName);
-			super.changeNick(String.format("%s_X0910000%s[g100]", getMyName(), roomName.substring(
+			super.changeNick(String.format("%s_X0910000%s[g101]", getMyName(), roomName.substring(
 					4)));
 			gui.subscribedGame(roomName, this, getMyName(), name, 0, 0,
 					"999мин/ход", false, "", true, true/*i am the player*/);
@@ -382,7 +382,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				this.acceptOpponent(channel, opponentNick);
 			} else if (message.startsWith(
 					commandCommonPrefix + commandAcceptOpponent + myNickOnServ)) {
-				super.changeNick(String.format("%s_X0910000%s[g200]",
+				super.changeNick(String.format("%s_X0910000%s[g201]",
 						getMyName(), channel.substring(4)));
 				myGame.amIRed = false;
 				myGame.engine = new SingleGameEngine(39, 32);
