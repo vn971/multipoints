@@ -234,14 +234,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
 //		if (amIPlaying == false) {
-		jButton_EndGame.setVisible(false);
-		jButton_Pass.setVisible(false);
-		jButton_Surrender.setVisible(false);
 		jButton_TurnsBackwards.setVisible(false);
 		jButton_TurnsForward.setVisible(false);
 		jButton_AdditionalActions.setVisible(false);
 //		}
-		roomPart_UserList.initRoomPart(this, centralGuiController);
+		{
+			// netbeans debug
+			GameRoom this_copy = this;
+			roomPart_UserList.initRoomPart(this_copy, centralGuiController);
+		}
 	}
 
 	/** This method is called from within the constructor to
@@ -264,9 +265,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_ForGame = new javax.swing.JPanel();
         jPanel_Paper = paper;
         jLabel_MouseCoords = new javax.swing.JLabel();
-        jButton_Surrender = new javax.swing.JButton();
-        jButton_EndGame = new javax.swing.JButton();
-        jButton_Pass = new javax.swing.JButton();
 
         jMenuItem_SaveGame.setText("jMenuItem1");
         jMenuItem_SaveGame.addActionListener(new java.awt.event.ActionListener() {
@@ -291,7 +289,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
                 .addComponent(jButton_TurnsBackwards)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_TurnsForward)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jButton_AdditionalActions))
             .addComponent(roomPart_UserList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
             .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
@@ -313,51 +311,30 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_Paper.setLayout(jPanel_PaperLayout);
         jPanel_PaperLayout.setHorizontalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 608, Short.MAX_VALUE)
+            .addGap(0, 762, Short.MAX_VALUE)
         );
         jPanel_PaperLayout.setVerticalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 404, Short.MAX_VALUE)
+            .addGap(0, 440, Short.MAX_VALUE)
         );
 
         jLabel_MouseCoords.setFont(jLabel_MouseCoords.getFont().deriveFont(jLabel_MouseCoords.getFont().getSize()+3f));
         jLabel_MouseCoords.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel_MouseCoords.setText("  .  ");
 
-        jButton_Surrender.setText("сдаться");
-        jButton_Surrender.setEnabled(false);
-
-        jButton_EndGame.setText("предложить ничью");
-        jButton_EndGame.setEnabled(false);
-
-        jButton_Pass.setText("пасс");
-        jButton_Pass.setEnabled(false);
-
         javax.swing.GroupLayout jPanel_ForGameLayout = new javax.swing.GroupLayout(jPanel_ForGame);
         jPanel_ForGame.setLayout(jPanel_ForGameLayout);
         jPanel_ForGameLayout.setHorizontalGroup(
             jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE)
             .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
-            .addGroup(jPanel_ForGameLayout.createSequentialGroup()
-                .addComponent(jButton_Pass)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_EndGame)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton_Surrender)
-                .addContainerGap())
         );
         jPanel_ForGameLayout.setVerticalGroup(
             jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_ForGameLayout.createSequentialGroup()
                 .addComponent(jLabel_MouseCoords)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_Surrender)
-                    .addComponent(jButton_EndGame)
-                    .addComponent(jButton_Pass)))
+                .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -400,11 +377,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 //			System.err.println("Error: " + e.getMessage());
 //		}
 	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_AdditionalActions;
-    private javax.swing.JButton jButton_EndGame;
-    private javax.swing.JButton jButton_Pass;
-    private javax.swing.JButton jButton_Surrender;
     private javax.swing.JButton jButton_TurnsBackwards;
     private javax.swing.JButton jButton_TurnsForward;
     private javax.swing.JLabel jLabel_MouseCoords;

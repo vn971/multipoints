@@ -16,11 +16,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
+import ru.narod.vn91.pointsop.server.ServerPointsop;
 
-/**
- *
- * @author vasya
- */
 public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
@@ -34,31 +31,31 @@ public class SelfishGuiStarter {
 		frame.setIconImage(new ImageIcon(url).getImage());
 		frame.setSize(925, 670);
 
-		//<new code - componentResized & PersistentMemory>
-		if (PersistentMemory.getFrameWidth() > 0
-				&& PersistentMemory.getFrameHeight() > 0) {
-			frame.setSize(PersistentMemory.getFrameWidth(),
-					PersistentMemory.getFrameHeight());
+		{
+			if (PersistentMemory.getFrameWidth() > 0
+					&& PersistentMemory.getFrameHeight() > 0) {
+				frame.setSize(PersistentMemory.getFrameWidth(),
+						PersistentMemory.getFrameHeight());
+			}
+			frame.setLocationRelativeTo(frame.getRootPane());
+
+			frame.addComponentListener(new ComponentListener() {
+
+				public void componentShown(ComponentEvent e) {
+				}
+
+				public void componentResized(ComponentEvent e) {
+					PersistentMemory.setFrameWidth(frame.getWidth());
+					PersistentMemory.setFrameHeight(frame.getHeight());
+				}
+
+				public void componentMoved(ComponentEvent e) {
+				}
+
+				public void componentHidden(ComponentEvent e) {
+				}
+			});
 		}
-		frame.setLocationRelativeTo(frame.getRootPane());
-
-		frame.addComponentListener(new ComponentListener() {
-
-			public void componentShown(ComponentEvent e) {
-			}
-
-			public void componentResized(ComponentEvent e) {
-				PersistentMemory.setFrameWidth(frame.getWidth());
-				PersistentMemory.setFrameHeight(frame.getHeight());
-			}
-
-			public void componentMoved(ComponentEvent e) {
-			}
-
-			public void componentHidden(ComponentEvent e) {
-			}
-		});
-		//</new code - componentResized & PersistentMemory>
 
 		{
 			int x = frame.getBounds().x, y = frame.getBounds().y;
@@ -79,7 +76,7 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
-//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
+		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
 //		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""), false);
 
 		{
@@ -147,7 +144,8 @@ public class SelfishGuiStarter {
 			{
 				JMenu jMenu = new JMenu("Помощь");
 				{
-					JMenuItem jMenuItem = new JMenuItem("<html><a href=\"\">online помощь</a></html>");
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">online помощь</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
@@ -161,7 +159,8 @@ public class SelfishGuiStarter {
 					jMenu.add(jMenuItem);
 				}
 				{
-					JMenuItem jMenuItem = new JMenuItem("<html><a href=\"\">полезные ссылки</a></html>");
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">полезные ссылки</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {

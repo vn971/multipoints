@@ -3,6 +3,7 @@ package ru.narod.vn91.pointsop.gui;
 import java.awt.Component;
 import java.util.HashMap;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
@@ -23,28 +24,12 @@ public class GuiController {
 
 	GuiController(final JTabbedPaneMod tabbedPane) {
 		this.tabbedPane = tabbedPane;
-//		new Thread() {
-//
-//			@Override
-//			public void run() {
-//				Component nu = null;
-//				while (true) {
-//					try {
-//						Object o = new Object();
-//						synchronized (o) {
-//							o.wait(1000);
-//						}
-//					} catch (InterruptedException ex) {
-//					}
-//					if (nu == null) {
-//						nu = tabbedPane.getComponentAt(1);
-//					}
-//					tabbedPane.makeBold(nu);
-//				}
-//			}
-//		}; //.start();
 	}
 
+	/**
+	 * Server implementations should execute this method if they get disconnected from a physical server
+	 * @param server always return <b>this</b>
+	 */
 	public synchronized void serverClosed(ServerInterface server) {
 		if (server == pointsxt_ircworldru_server) {
 			pointsxt_ircworldru_server.disconnecttt();
@@ -56,7 +41,12 @@ public class GuiController {
 			pointsopServer.disconnecttt();
 			pointsopServer = null;
 		}
-		receiveRawServerInfo(server, "disconnected...");
+		receiveRawServerInfo(server,
+				"Отключился от сервера... \n"
+				+ "К сожалению, автоматически подключиться назад "
+				+ "пока-что невозможно. \n"
+				+ "Чтобы подключиться, закройте приложение и откройте его заново.",
+				MessageType.ERROR);
 	}
 
 	public synchronized void userJoinedLangRoom(ServerInterface server,
@@ -354,13 +344,18 @@ public class GuiController {
 	}
 
 	public synchronized void receiveRawServerInfo(ServerInterface server,
-			String info) {
-//		System.out.println(info);
+			String info,
+			MessageType type) {
 		String oldText = serverOutput.getText();
 		serverOutput.setText(
 				oldText + server.getServerName() + ": " + info + "\n");
-//		JOptionPane.showMessageDialog(tabbedPane, info);
-//		throw new UnsupportedOperationException("Not supported yet.");
+		if (type == MessageType.ERROR) {
+			JOptionPane.showMessageDialog(
+					tabbedPane,
+					info,
+					"Error: " + info,
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public synchronized void activateGameRoom(ServerInterface server,
@@ -370,6 +365,11 @@ public class GuiController {
 					roomName, server)));
 		} catch (Exception e) {
 		}
+	}
+
+	public enum MessageType {
+
+		INFO, ERROR,
 	}
 }
 
@@ -501,6 +501,9 @@ class JTabbedPaneMod extends JTabbedPane {
 			return;
 		}
 		int tabIndex = super.indexOfComponent(component);
+		if (tabIndex < 0) {
+			return;
+		}
 		String oldTitle = super.getTitleAt(tabIndex);
 		String newTitle = deleteBoldness(oldTitle).replaceAll("<html>", "").replaceAll(
 				"</html>", "");
