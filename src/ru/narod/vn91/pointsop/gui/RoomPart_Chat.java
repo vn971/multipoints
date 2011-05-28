@@ -94,8 +94,8 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	}
 
 	void setReadOnly(boolean isReadOnly) {
-		jButton1.setEnabled(!isReadOnly);
-		jTextField_Chat.setEnabled(!isReadOnly);
+		jButton1.setVisible(!isReadOnly);
+		jTextField_Chat.setVisible(!isReadOnly);
 	}
 
 	/** Creates new form RoomPart_Chat */

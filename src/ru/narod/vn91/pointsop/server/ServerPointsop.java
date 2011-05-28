@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.narod.vn91.pointsop.server;
 
 import java.io.BufferedReader;
@@ -13,10 +9,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import ru.narod.vn91.pointsop.gui.GuiController;
 
-/**
- *
- * @author vasya
- */
 public class ServerPointsop implements ServerInterface {
 
 	Socket socket = null;
@@ -43,7 +35,8 @@ public class ServerPointsop implements ServerInterface {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void acceptOpponent(String roomName, String name) {
+	public void acceptOpponent(String roomName,
+			String name) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -51,7 +44,9 @@ public class ServerPointsop implements ServerInterface {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void makeMove(String roomName, int x, int y) {
+	public void makeMove(String roomName,
+			int x,
+			int y) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -63,11 +58,13 @@ public class ServerPointsop implements ServerInterface {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void sendChat(String room, String message) {
+	public void sendChat(String room,
+			String message) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void sendPrivateMsg(String target, String message) {
+	public void sendPrivateMsg(String target,
+			String message) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -93,7 +90,8 @@ public class ServerPointsop implements ServerInterface {
 		try {
 			URL url = new URL(link);
 			URLConnection urlConn = url.openConnection();
-			InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
+			InputStreamReader inStream = new InputStreamReader(
+					urlConn.getInputStream());
 			BufferedReader buff = null;
 			buff = new BufferedReader(inStream);
 			while (true) {
@@ -107,10 +105,11 @@ public class ServerPointsop implements ServerInterface {
 			}
 			return result;
 		} catch (MalformedURLException e) {
-			gui.receiveRawServerInfo(this, "Please check the URL:" + e);
+			gui.receiveRawServerInfo(this, "Please check the URL:" + e, GuiController.MessageType.INFO);
 			return null;
 		} catch (IOException e1) {
-			gui.receiveRawServerInfo(this, "Can't read  from the Internet: " + e1);
+			gui.receiveRawServerInfo(this,
+					"Can't read  from the Internet: " + e1, GuiController.MessageType.INFO);
 			return null;
 		}
 	}
@@ -122,14 +121,17 @@ public class ServerPointsop implements ServerInterface {
 			try {
 				String ipAsString = "";
 				//					String servToConnect = null;
-				ipAsString = getLinkContent("http://vn91.narod.ru/pop/myserv.txt");
+				ipAsString = getLinkContent(
+						"http://vn91.narod.ru/pop/myserv.txt");
 				if (ipAsString == null || ipAsString.equals("")) {
 					ipAsString = "127.0.0.1"; // "188.123.232.164";
 				}
 				serverName = "pointsOp " + ipAsString;
 				ServerPointsop.this.socket = new Socket(ipAsString, 4444);
-				BufferedReader in = new BufferedReader(new InputStreamReader(ServerPointsop.this.socket.getInputStream()));
-				gui.receiveRawServerInfo(ServerPointsop.this, in.readLine());
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						ServerPointsop.this.socket.getInputStream()));
+				gui.receiveRawServerInfo(ServerPointsop.this, in.readLine(),
+						GuiController.MessageType.INFO);
 				ServerPointsop.this.socket.close();
 			} catch (Exception e) {
 			}
