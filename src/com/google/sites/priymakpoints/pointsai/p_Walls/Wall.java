@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsai.p_Walls;
+package com.google.sites.priymakpoints.pointsai.p_Walls;
 
 public class Wall {
 

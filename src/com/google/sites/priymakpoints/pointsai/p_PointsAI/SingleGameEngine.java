@@ -1,8 +1,8 @@
-package ru.narod.vn91.pointsai.p_PointsAI;
+package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
 import java.util.ArrayList;
 import java.util.List;
-import ru.narod.vn91.pointsai.p_PointsAI.SingleGameEngineInterface.SurroundingAbstract.SurroundingType;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngineInterface.SurroundingAbstract.SurroundingType;
 
 public class SingleGameEngine implements SingleGameEngineInterface {
 

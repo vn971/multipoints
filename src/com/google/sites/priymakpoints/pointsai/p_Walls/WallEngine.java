@@ -1,6 +1,6 @@
-package ru.narod.vn91.pointsai.p_Walls;
+package com.google.sites.priymakpoints.pointsai.p_Walls;
 
-import ru.narod.vn91.pointsai.p_PointsAI.PointsAI;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAI;
 
 public class WallEngine {
 	

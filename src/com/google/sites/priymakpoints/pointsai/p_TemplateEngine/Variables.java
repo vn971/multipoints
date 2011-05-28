@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsai.p_TemplateEngine;
+package com.google.sites.priymakpoints.pointsai.p_TemplateEngine;
 
 import java.awt.Color;
 import java.awt.Font;

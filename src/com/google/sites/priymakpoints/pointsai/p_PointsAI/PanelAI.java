@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsai.p_PointsAI;
+package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
 import java.awt.Cursor;
 import java.awt.Font;
@@ -152,7 +152,7 @@ public PanelAI(final int width,final int height){
 				g.drawString("Подождите около 10 секунд ...", 100, 100);
 				
 				try{
-					pointsAI=new ru.narod.vn91.pointsai.p_PointsAI.PointsAI();
+					pointsAI=new com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAI();
 					init(width,height);
 					activate();
 				}catch(Exception e1){

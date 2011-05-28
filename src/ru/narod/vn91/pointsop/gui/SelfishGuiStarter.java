@@ -16,7 +16,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
-import ru.narod.vn91.pointsai.p_PointsAI.PanelAI;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.PanelAI;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.ServerPointsop;
 

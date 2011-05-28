@@ -1,8 +1,8 @@
-package ru.narod.vn91.pointsai.p_PointsAI;
+package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
-import ru.narod.vn91.pointsai.p_PointsAI.SingleGameEngineInterface.DotType;
-import ru.narod.vn91.pointsai.p_PointsAI.SingleGameEngine;
-import ru.narod.vn91.pointsai.p_PointsAI.SingleGameEngineInterface.MoveType;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngineInterface.DotType;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngine;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngineInterface.MoveType;
 
 public class PointsAIGame extends Variables{
 

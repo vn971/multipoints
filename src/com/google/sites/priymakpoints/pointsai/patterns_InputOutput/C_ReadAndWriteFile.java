@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsai.patterns_InputOutput;
+package com.google.sites.priymakpoints.pointsai.patterns_InputOutput;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -1,8 +1,8 @@
-package ru.narod.vn91.pointsai.p_TemplateEngine;
+package com.google.sites.priymakpoints.pointsai.p_TemplateEngine;
 
 import java.io.File;
-import ru.narod.vn91.pointsai.patterns_InputOutput.C_DataEncryption;
-import ru.narod.vn91.pointsai.patterns_InputOutput.C_ReadAndWriteFile;
+import com.google.sites.priymakpoints.pointsai.patterns_InputOutput.C_DataEncryption;
+import com.google.sites.priymakpoints.pointsai.patterns_InputOutput.C_ReadAndWriteFile;
 
 public class TemplateIO extends Variables{
 	

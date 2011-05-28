@@ -1,8 +1,8 @@
-package ru.narod.vn91.pointsai.p_PointsAI;
+package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
 import java.awt.Point;
-import ru.narod.vn91.pointsai.p_PointsAI.SingleGameEngineInterface.MoveType;
-import ru.narod.vn91.pointsai.p_TemplateEngine.TemplateEngine;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngineInterface.MoveType;
+import com.google.sites.priymakpoints.pointsai.p_TemplateEngine.TemplateEngine;
 import ru.narod.vn91.pointsop.gui.Paper;
 
 public class PointsAI{

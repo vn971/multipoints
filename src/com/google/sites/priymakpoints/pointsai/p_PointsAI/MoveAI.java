@@ -1,13 +1,13 @@
-package ru.narod.vn91.pointsai.p_PointsAI;
+package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 import javax.swing.JFrame;
-import ru.narod.vn91.pointsai.p_Walls.MoveByWall;
+import com.google.sites.priymakpoints.pointsai.p_Walls.MoveByWall;
 
-public class MoveAI extends ru.narod.vn91.pointsai.p_TemplateEngine.Variables{
+public class MoveAI extends com.google.sites.priymakpoints.pointsai.p_TemplateEngine.Variables{
 	
 	int countCorner=0,countSquareSide=0,countSquare=0,countLongSide=0,countShortSide=0,countRandom=0,
 		countWall=0,countLong=0,countGround=0;

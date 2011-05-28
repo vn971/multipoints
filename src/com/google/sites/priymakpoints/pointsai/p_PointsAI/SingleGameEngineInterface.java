@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsai.p_PointsAI;
+package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
 import java.util.ArrayList;
 import java.util.List;
