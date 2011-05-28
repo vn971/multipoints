@@ -15,6 +15,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
+
+import ru.narod.vn91.pointsai.p_PointsAI.PanelAI;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 
 /**
@@ -79,6 +81,8 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
+		tabbedPane.addTab("Играть с ИИ", new PanelAI(frame.getWidth(),frame.getHeight()).getAIPanel(), false);
+		
 //		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
 //		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""), false);
 
@@ -100,8 +104,8 @@ public class SelfishGuiStarter {
 				{
 					JMenuItem jMenuItem = new JMenuItem("создать тестовую игру");
 					jMenuItem.addActionListener(new ActionListener() {
-
 						public void actionPerformed(ActionEvent e) {
+
 							Paper paper = new Paper() {
 
 								@Override
@@ -151,13 +155,30 @@ public class SelfishGuiStarter {
 							panel.add(roomPart_Chat);							
 							
 							tabbedPane.addTab("test game", panel, true);
-							tabbedPane.setSelectedComponent(panel);
+							tabbedPane.setSelectedComponent(panel);				
 						}
 					});
 					jMenu.add(jMenuItem);
 				}
 				jMenuBar.add(jMenu);
 			}
+			
+			{
+				JMenu jMenu = new JMenu("Играть с ИИ");
+				{
+					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.056");
+					jMenuItem.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							tabbedPane.addTab("PointsAI 1.056",new PanelAI(frame.getWidth(),frame.getHeight()).getAIPanel(), false);
+							//tabbedPane.setSelectedComponent(panel_PointsAI_1_056.getAIPanel());
+						}
+					});
+					jMenu.add(jMenuItem);
+					jMenuItem.setEnabled(false);
+				}
+				jMenuBar.add(jMenu);
+			}
+			
 			{
 				JMenu jMenu = new JMenu("Настройки");
 				{

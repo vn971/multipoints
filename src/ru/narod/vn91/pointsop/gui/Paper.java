@@ -87,7 +87,10 @@ public abstract class Paper extends JPanel {
 			int y) {
 		return makeMove(false, x, y, !engine.getLastDotColor());
 	}
-
+	
+	public MoveResult makeMove(int x,int y,boolean isRed) {
+		return makeMove(false, x, y, isRed);
+	}
 	/**
 	 * 
 	 * @param silent true if redrawing is needed
