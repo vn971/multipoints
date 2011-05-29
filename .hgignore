@@ -3,7 +3,6 @@ syntax: glob
 *.jar
 bin\*
 dist\*
-*built-jar.properties
 build\nb-jws.ks
 
 
