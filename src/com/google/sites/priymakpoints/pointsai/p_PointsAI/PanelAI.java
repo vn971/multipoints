@@ -1,34 +1,35 @@
 package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
 import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import ru.narod.vn91.pointsop.gui.Paper;
 
 public class PanelAI extends JPanel{
 	
 	PointsAI pointsAI=null;
-	JPanel infoPanel;
 	Variables var=new Variables();
 	Paper paper;
+	JLabel label0,label1,label2;
+	JButton b;
+	Rectangle r=null;
 	
 void init(final int width,final int height){	
-	JLabel lFon=new JLabel(new ImageIcon(PointsAI.class.getResource("fon.png")));
-	infoPanel=getInfoPanel();
-	
-	this.setSize(width-12,height-57);
-	this.setLayout(new java.awt.LayoutManager() {								
+	label0=new JLabel(new ImageIcon(PointsAI.class.getResource("pointsAI.png")));
+	setSize(width-12,height-57);
+	setLayout(new java.awt.LayoutManager() {								
 		public void removeLayoutComponent(java.awt.Component comp) {
 		}
 		public java.awt.Dimension preferredLayoutSize(java.awt.Container parent) {
@@ -43,11 +44,38 @@ void init(final int width,final int height){
 		}
 	});
 	
-	lFon.setBounds(this.getWidth()-252, 0, 250, 260);
-	infoPanel.setBounds(this.getWidth()-252,270,infoPanel.getWidth(),infoPanel.getHeight());
+	label0.setBounds(getWidth()-240, 30, 216, 223);
+	add(label0);
 
-	this.add(lFon);
-	this.add(infoPanel);
+	label1=new JLabel(var.text);
+	label1.setBounds(getWidth()-240,260,230,90);
+	add(label1);
+	
+	label2=new LinkedLabel();
+	label2.setText("<html>Официальная страница</html>");
+	label2.setToolTipText(var.site);
+	label2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+	label2.setBounds(getWidth()-240,355,145,20);
+	add(label2);
+	
+	b=new JButton("Новая игра");
+	b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	b.setBounds(getWidth()-240,390,130,20);
+	add(b);
+	
+	b.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			newGame();
+		}
+	});
+}
+
+void onResize(final int width,final int height){
+	label0.setBounds(getWidth()-240, 30, 216, 223);
+	label1.setBounds(getWidth()-240,260,230,90);
+	label2.setBounds(getWidth()-240,355,145,20);
+	b.setBounds(getWidth()-240,390,130,20);
+	paper.setBounds(0, 30, getWidth()-252, getHeight()-38);
 }
 	
 void activate(){
@@ -86,92 +114,40 @@ void activate(){
 	}
 	pointsAI.makeMove(x,y,true);
 	
-	paper.setBounds(0, 30, this.getWidth()-252, this.getHeight()-68);
-	this.add(paper);
+	if(r!=null)paper.setBounds(r);else paper.setBounds(0, 30, getWidth()-252, getHeight()-68);
+	add(paper);
 }	
 	
-JPanel getInfoPanel(){
-	final JPanel panel=new JPanel();
-	//panel.setBackground(Color.red);
-	
-	panel.setSize(250,this.getHeight()-280);
-	panel.setLayout(new java.awt.LayoutManager() {								
-		public void removeLayoutComponent(java.awt.Component comp) {
-		}
-		public java.awt.Dimension preferredLayoutSize(java.awt.Container parent) {
-			 return new java.awt.Dimension(panel.getWidth(),panel.getHeight());
-		}
-		public java.awt.Dimension minimumLayoutSize(java.awt.Container parent) {
-			 return new java.awt.Dimension(panel.getWidth(),panel.getHeight());
-		}
-		public void layoutContainer(java.awt.Container parent) {
-		}
-		public void addLayoutComponent(String name, java.awt.Component comp) {
-		}
-	});
-	
-	JLabel label1=new JLabel(var.text+"<br><br>автор Алексей Приймак");
-	label1.setBounds(10,10,230,110);
-	panel.add(label1);
-	
-	JLabel label2=new LinkedLabel();
-	label2.setText("<html>Официальная страница</html>");
-	label2.setToolTipText("http://sites.google.com/site/priymakpoints/intelligence");
-	label2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-	label2.setBounds(10,130,150,20);
-	panel.add(label2);
-	
-	JButton b=new JButton("Новая игра");
-	b.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	b.setBounds(10,170,130,20);
-	panel.add(b);
-	
-	b.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			newGame();
-		}
-	});
-	
-	return panel;
-}
-
 void newGame(){	
-	this.remove(paper);
+	r=paper.getBounds();
+	remove(paper);
 	pointsAI.newGame();
 	activate();
-	this.repaint();
+	repaint();
 }
 
-public PanelAI(final int width,final int height){
-	this.addFocusListener(new FocusListener() {
-		public void focusLost(FocusEvent e) {}
-		public void focusGained(FocusEvent e) {
-			if(pointsAI==null){
-				Graphics g=PanelAI.this.getGraphics();
-				g.setFont(new Font("Tahoma",30,30));
-				g.drawString("Подождите около 10 секунд ...", 100, 100);
-				
-				try{
-					pointsAI=new com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAI();
-					init(width,height);
-					activate();
-				}catch(Exception e1){
-					g.clearRect(0, 0, PanelAI.this.getWidth(), PanelAI.this.getHeight());
-					g.drawString("Произошла ошибка ...", 100, 100);
-					g.setFont(new Font("Tahoma",20,20));
-					g.drawString("необходимо подключение к Интернету", 100, 130);
-				}
-				
-		}}
+public PanelAI(final JFrame frame){
+	
+	frame.addComponentListener(new ComponentListener() {
+		public void componentShown(ComponentEvent e) {}
+		public void componentResized(ComponentEvent e) {onResize(frame.getWidth(),frame.getHeight());}
+		public void componentMoved(ComponentEvent e) {}
+		public void componentHidden(ComponentEvent e) {}
 	});
+	
+	if(pointsAI==null){
+		try{
+			pointsAI=new com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAI();
+			init(frame.getWidth(),frame.getHeight());
+			activate();
+		}catch(Exception e1){
+			new JOptionPane().showMessageDialog(null, "Невозможно запустить ИИ!", "Ошибка", 0);
+		}		
+	}
 }
-
-public javax.swing.JPanel getAIPanel(){return this;}
 
 class LinkedLabel extends JLabel {
-
 	public LinkedLabel() {super();}
-
 	public void setToolTipText(final String link) {
 		super.setToolTipText(link);
 		super.addMouseListener(new MouseListener() {
@@ -187,7 +163,6 @@ class LinkedLabel extends JLabel {
 			}
 		});
 	}
-
 	public void setText(String text) {
 		text = text.replaceAll("<html>|<a href=.*>|</a>|</html>", "");
 		super.setText("<html><a href=\"\""+ ">"+ text + "</a></html>");

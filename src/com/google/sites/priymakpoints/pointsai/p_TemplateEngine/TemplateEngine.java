@@ -28,21 +28,7 @@ public TemplateEngine(boolean isOffline){//��������� ���
 	
 }
 
-public boolean saveResultIfNotFound(String content,String type){
-	for(int i=base.length-1;i>=0;i--){if(base[i].isEqualsWithoutTargets(content,type))return false;}
-	io.addTemplate(content+(maxIndex+1)+type);
-	base=io.getBase(true);
-	return true;
-}	
-
-public boolean resaveResultIfNotFound(String content,int index,String type){
-	for(int i=base.length-1;i>=0;i--){if(base[i].isEqualsWithoutTargets(content,type))return false;}
-	base[index]=new Template(content+base[index].getTemplateIndex()+type);
-	io.saveBase(base);return true;
-}
-
 public boolean isFoundArea(String content,TemplateType type){
-	//content=content.replaceAll("0", "N");
 	for(int i=base.length-1;i>=0;i--){
 		if(base[i].isEqualsLikeArea(content,type,Dot.RED_NORMAL)){
 			foundedNumber=i;moveAIx=base[i].getMoveAIx();moveAIy=base[i].getMoveAIy();return true;
@@ -52,22 +38,7 @@ public boolean isFoundArea(String content,TemplateType type){
 	return false;
 }
 
-public void sortBase(){
-	Template[] baseSort=new Template[base.length];
-	int i=0;
-	for(int j=sizeX*sizeY;j>=0;j--)
-		for(int k=0;k<base.length;k++)
-			if(base[k].getDotsCount(Dot.ANY)==j){baseSort[i]=base[k];i++;}
-	io.saveBase(baseSort);
-	base=io.getBase(true);
-}
-
-public void saveBase(){io.saveBase(base);}
-public void deleteResult(int index){base[index].setDelete(true);io.deleteResult(base);base=io.getBase(true);}
-public String getOfflineBaseAsFile(){return io.getOfflineBaseAsFile();}
-public void updateBase(){base=io.getBase(false);}
 public int getBaseSize(){return base.length;}//������ ����
-public String getUpdateInfo(){return io.getUpdateInfo();}//������ ����
 public int getFoundedNumber(){return foundedNumber;}
 public Template getTemplate(int index){return base[index];}
 public int getMoveAIx(){return moveAIx;}//��� �� �� �
