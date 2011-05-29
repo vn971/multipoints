@@ -677,7 +677,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				} else if (isPointsop(fullNickname)) {
 					// no opponent found of a pointsOp player
 					gui.gameVacancyCreated(this, defaultChannel, newRoom,
-							pointsxtNick, "999sec/ turn");
+							pointsxtNick, "5сек/ ход");
 				}
 			}
 		}

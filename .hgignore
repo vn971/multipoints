@@ -5,6 +5,8 @@ bin\*
 dist\*
 *built-jar.properties
 nbproject\private*
+build\nb-jws.ks
+
 
 syntax: regexp
 

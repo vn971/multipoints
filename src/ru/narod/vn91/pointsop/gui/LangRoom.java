@@ -1,18 +1,9 @@
-/*
- * ContainerRoom_Lang.java
- *
- * Created on Jan 28, 2011, 8:43:54 PM
- */
 package ru.narod.vn91.pointsop.gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
-/**
- *
- * @author vasya
- */
 public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 
 	ServerInterface server;
@@ -65,9 +56,6 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 		this.nameOnServer = nameOnServer;
 		this.centralGuiController = centralGuiController;
 		initComponents();
-
-//		jButton_SearchOpponent.setVisible(false);
-//		jButton_StopSearchingOpponent.setVisible(false);
 
 		roomPart_Chat1.initRoomPart(this);
 		roomPart_UserList1.initRoomPart(this, centralGuiController);
@@ -144,19 +132,19 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void jButton_SearchOpponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SearchOpponentActionPerformed
+		server.searchOpponent();
 		JOptionPane.showMessageDialog(this,
 				"В связи дурацкой особенностью сервера, "
 				+ "эта кнопка не работает если жать её слишком часто.\n "
 				+ "Постарайтесь жать только когда необходимо..");
-		server.searchOpponent();
 	}//GEN-LAST:event_jButton_SearchOpponentActionPerformed
 
 	private void jButton_StopSearchingOpponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_StopSearchingOpponentActionPerformed
+		server.stopSearchingOpponent();
 		JOptionPane.showMessageDialog(this,
 				"В связи дурацкой особенностью сервера, "
 				+ "эта кнопка не работает если жать её слишком часто.\n "
 				+ "Постарайтесь жать только когда необходимо..");
-		server.stopSearchingOpponent();
 	}//GEN-LAST:event_jButton_StopSearchingOpponentActionPerformed
 
 	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
