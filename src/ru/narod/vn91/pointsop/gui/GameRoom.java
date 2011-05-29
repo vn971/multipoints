@@ -237,14 +237,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			}
 		};
 		paper.initPaper(39, 32);
-		
-		if(amIPlaying){//стартовая позиция скрест 
-			paper.makeMove(19, 16, false);
-			paper.makeMove(19, 17, true);
-			paper.makeMove(20, 16, true);
-			paper.makeMove(20, 17, false);
-		}
-		
+
+//		if (amIPlaying) {
+//			стартовая позиция скрест
+//			paper.makeMove(19, 16, false);
+//			paper.makeMove(19, 17, true);
+//			paper.makeMove(20, 16, true);
+//			paper.makeMove(20, 17, false);
+//		}
+
 		initComponents();
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
