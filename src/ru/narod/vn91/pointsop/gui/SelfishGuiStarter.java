@@ -198,9 +198,26 @@ public class SelfishGuiStarter {
 			}
 			{
 				JMenu jMenu = new JMenu("Помощь");
+				
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">online помощь</a></html>");
+							"<html><a href=\"\">правила игры</a></html>");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							try {
+								java.awt.Desktop.getDesktop().browse(new URI(
+										"http://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D1%87%D0%BA%D0%B8"));
+							} catch (Exception e1) {
+							}
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">о программе</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
