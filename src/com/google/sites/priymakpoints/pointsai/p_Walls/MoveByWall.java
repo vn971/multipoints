@@ -8,6 +8,7 @@ public class MoveByWall extends WallEngine{
 int moveAIx=99,moveAIy=99;
 public boolean isCanGroung=false;
 
+public void deleteStatistics(PointsAI pointsAI){super.deleteStatistics(pointsAI);}
 public void wallCorrection(int moveX,int moveY){super.wallCorrection(moveX,moveY);}
 
 public boolean isMoveByWall(PointsAI pointsAI){

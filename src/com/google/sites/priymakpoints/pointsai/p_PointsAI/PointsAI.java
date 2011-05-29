@@ -8,11 +8,11 @@ import ru.narod.vn91.pointsop.gui.Paper;
 public class PointsAI{
 
 	public static TemplateEngine base;//=new TemplateEngine();
-	public static PointsAIGame game;//=new PointsAIGame();
+	public PointsAIGame game;//=new PointsAIGame();
 	public MoveAI moveAI;//=new MoveAI();
 	Paper paper;
 	
-public void newGame(){game.newGame();}
+public void newGame(){game.newGame();moveAI.deleteStatistics(PointsAI.this);}
 	
 public PointsAI(){
 	moveAI=new MoveAI();

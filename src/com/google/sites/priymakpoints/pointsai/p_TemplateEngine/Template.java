@@ -68,6 +68,7 @@ public TemplateType getTemplateType(){return type;}
 public int getTemplateIndex(){return index;}
 public void setDelete(boolean delete){isDeleted=delete;}
 public boolean isDelete(){return isDeleted;}
+@Override
 public String toString(){return strTemplate;}
 public String getTemplate(){return template;}
 public int getMoveAIx(){return moveAIx;}

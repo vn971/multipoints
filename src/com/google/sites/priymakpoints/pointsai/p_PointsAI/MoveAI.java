@@ -1,10 +1,9 @@
 package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 import javax.swing.JFrame;
+
 import com.google.sites.priymakpoints.pointsai.p_Walls.MoveByWall;
 
 public class MoveAI extends com.google.sites.priymakpoints.pointsai.p_TemplateEngine.Variables{
@@ -28,6 +27,8 @@ Point getAImove(PointsAI pointsAI){//��������� �����
 	}
 return new Point(moveAIx, moveAIy);
 }
+
+void deleteStatistics(PointsAI pointsAI){moveByWall.deleteStatistics(pointsAI);}	
 
 boolean isMoveByAI(PointsAI pointsAI){
 	if(isMoveByTemplate(pointsAI)){moveByWall.wallCorrection(moveAIx, moveAIy);return true;}

@@ -14,7 +14,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
-
 import com.google.sites.priymakpoints.pointsai.p_PointsAI.PanelAI;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 
@@ -76,11 +75,8 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
-//		tabbedPane.addTab("Играть с ИИ", new PanelAI(
-//				frame.getWidth(),
-//				frame.getHeight()),
-//				false);
-
+		//tabbedPane.addTab("Играть с ИИ", new PanelAI(frame.getWidth(),frame.getHeight()).getAIPanel(), false);
+		
 //		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
 //		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""), false);
 
@@ -174,15 +170,15 @@ public class SelfishGuiStarter {
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
-							tabbedPane.addTab("PointsAI 1.056",
-									new PanelAI(frame.getWidth(),
-									frame.getHeight()).getAIPanel(), false);
-							//tabbedPane.setSelectedComponent(panel_PointsAI_1_056.getAIPanel());
+							jMenuItem.setEnabled(false);
+							PanelAI panelAI=new PanelAI(frame);
+							tabbedPane.addTab("PointsAI 1.056",panelAI,false);
+							tabbedPane.setSelectedComponent(panelAI);
 						}
 					});
 					jMenu.add(jMenuItem);
-					jMenuItem.setEnabled(false);
 				}
+							
 				jMenuBar.add(jMenu);
 			}
 
@@ -204,9 +200,26 @@ public class SelfishGuiStarter {
 			}
 			{
 				JMenu jMenu = new JMenu("Помощь");
+				
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">online помощь</a></html>");
+							"<html><a href=\"\">правила игры</a></html>");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							try {
+								java.awt.Desktop.getDesktop().browse(new URI(
+										"http://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D1%87%D0%BA%D0%B8"));
+							} catch (Exception e1) {
+							}
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">о программе</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {

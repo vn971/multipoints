@@ -4,9 +4,9 @@ import com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAI;
 
 public class WallEngine {
 	
-Wall w1=new Wall(18,15),w2=new Wall(19,16),w3=new Wall(21,15);
+Wall w1=new Wall(18,16),w2=new Wall(19,17),w3=new Wall(21,16);
 	
-void deleteStatistics(PointsAI pointsAI){w1=new Wall(18,15);w2=new Wall(19,16);w3=new Wall(21,15);}	
+void deleteStatistics(PointsAI pointsAI){w1=new Wall(18,16);w2=new Wall(19,17);w3=new Wall(21,16);}	
 	
 int getSmallerWall(){
 	if(w1.isAtSide()&w2.isAtSide()&w3.isAtSide())return 0;

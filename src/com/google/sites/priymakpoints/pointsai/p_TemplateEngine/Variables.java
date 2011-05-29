@@ -32,6 +32,7 @@ public class Variables{
 	
 	public enum Dot {ANY,NULL,OUT,LAND,BLUE,RED,RED_EMPTY,BLUE_EMPTY,BLUE_TARGET,
 			RED_NORMAL,RED_ATTACK,RED_PROTECTION,RED_GROUND,RED_CAPTURE,RED_DEFENCE;
+		@Override
 		public String toString() {
 			switch (this) {
 			case ANY:return "A";
@@ -56,6 +57,7 @@ public class Variables{
 	
 	public enum TemplateType {
 		SQUARE_SIDE,SQUARE_CORNER,SQUARE,LONG,AREA,SHORT_SIDE,LONG_SIDE,WALL,ERROR;
+		@Override
 		public String toString() {
 			switch (this) {
 			case SQUARE_SIDE:	return "sst";

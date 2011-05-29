@@ -54,7 +54,7 @@ public String ReadURLTxtFile(String url){
 		int c=0;
 		while(true){c=r.read();	if(c!=-1)w.write(c);else break;	}
 		s.append(w.toCharArray());
-	}catch(Exception e){}
+	}catch(Exception e){return null;}
 	return s.substring(0, s.length());
 }
 
