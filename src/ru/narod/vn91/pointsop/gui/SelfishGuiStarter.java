@@ -26,7 +26,7 @@ public class SelfishGuiStarter {
 		PersistentMemory.setVersion(1);
 		final JFrame frame = new JFrame("Точки");
 		URL url = SelfishGuiStarter.class.getClassLoader().
-				getResource("ru/narod/vn91/pointsop/data/vp.jpg");
+				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
 		frame.setSize(925, 670);
 
