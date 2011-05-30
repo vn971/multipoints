@@ -27,7 +27,7 @@ public class PanelAI extends JPanel{
 	Rectangle r=null;
 	
 void init(final int width,final int height){	
-	label0=new JLabel(new ImageIcon(PointsAI.class.getResource("pointsAI.png")));
+	label0=new JLabel(new ImageIcon(PointsAI.class.getResource("pointsAI.jpeg")));
 	setSize(width-12,height-57);
 	setLayout(new java.awt.LayoutManager() {								
 		public void removeLayoutComponent(java.awt.Component comp) {
@@ -142,6 +142,7 @@ public PanelAI(final JFrame frame){
 			activate();
 		}catch(Exception e1){
 			new JOptionPane().showMessageDialog(null, "Невозможно запустить ИИ!", "Ошибка", 0);
+			//e1.printStackTrace();
 		}		
 	}
 }

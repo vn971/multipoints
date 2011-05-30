@@ -13,10 +13,7 @@ public class Variables{
 	public static int sizeX=13;//������ ���� ������ (f_s x f_s) max=13x9
 	public static int sizeY=9;
 	
-	public String templateFileName="PointsTEsaves//template.txt";
-	//public String templateFileInfo="PointsTEsaves//templateinfo.txt";
 	public String templateUrlName="http://sites.google.com/site/priymakpoints/templates/template.txt";
-	public String templateUrlInfo="http://sites.google.com/site/priymakpoints/templates/templateinfo.txt";
 	
 	public BufferedImage getIconImage(){
 		BufferedImage i=new BufferedImage(20, 20,BufferedImage.TYPE_INT_RGB);
