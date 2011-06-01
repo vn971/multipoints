@@ -694,7 +694,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			gui.userLeavedRoom(this, room,
 					nicknameManager.getOrCreateShortNick(user));
 			if (user.equals(myGame.opponentName)
-					&&room.equals(myGame.roomName)) {
+					&& room.equals(myGame.roomName)) {
 				gui.chatReceived(this, room, "", "Оппонент покинул игру");
 			}
 		}
@@ -731,41 +731,34 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				@Override
 				public void run() {
 					long timeEnd = new Date().getTime() + 5 * 1000;
-//					boolean isInterrupted = false;
 					long estimatedTime = timeEnd - new Date().getTime();
 					while (estimatedTime > 0) {
 						Object o = new Object();
 						synchronized (o) {
 							try {
 								o.wait(estimatedTime + 10);
-//								o.wait(100);
 							} catch (InterruptedException ex) {
-//								this.
-//								isInterrupted = true;
-//								break;
 							}
 						}
 						estimatedTime = timeEnd - new Date().getTime();
 					}
 					if (this.equals(myGame.lastTimeoutThread)) {
-						gui.serverNoticeReceived(
-								ServerPointsxt.this,
-								room,
-								"Время вышло и точка сама поставилась в случаиное место на поле");
-						makeMove(room,
-								(int)(Math.random() * 30) + 1,
-								(int)(Math.random() * 30) + 1);
+						MoveResult moveResult = MoveResult.ERROR;
+						int i = 0;
+						while ((i < 9999) && (moveResult == MoveResult.ERROR)) {
+							i += 1;
+							myGame.engine.tryRandomMove(myGame.amIRed);
+						}
+						if (moveResult != MoveResult.ERROR) {
+							makeMove(room,
+									myGame.engine.getLastDot().x,
+									myGame.engine.getLastDot().y);
+							gui.serverNoticeReceived(
+									ServerPointsxt.this,
+									room,
+									"Время вышло и точка сама поставилась в случаиное место на поле");
+						}
 					}
-//					if (isInterrupted == false) {
-//						myGame.timeOutThread = null;
-//						gui.serverNoticeReceived(
-//								ServerPointsxt.this,
-//								room,
-//								"Время вышло и точка сама поставилась в случаиное место на поле");
-//						makeMove(room,
-//								(int)(Math.random() * 30) + 1,
-//								(int)(Math.random() * 30) + 1);
-//					}
 				}
 			};
 			myGame.lastTimeoutThread = timeOutThread;

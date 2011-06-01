@@ -4,6 +4,20 @@ import ru.narod.vn91.pointsop.ai.Ai2Gui_Interface;
 import ru.narod.vn91.pointsop.ai.Gui2Ai_Interface;
 import ru.narod.vn91.pointsop.gui.GuiController;
 
+/**
+ * Чтобы присоединить свой ИИ к Op теперь можно:
+ * <br>
+ * <br>1) создать класс имплементирующий {@link Gui2Ai_Interface},
+ * то есть воспринимающий ходы от человека. (Метод {@link Gui2Ai_Interface#receiveMove(int, int, boolean, boolean, long)}.)
+ * <br>2) хранить в этом классе имплементацию {@link Ai2Gui_Interface}.
+ * Когда надо вернуть ответ пользователю - обращаемся к этой имплементации,
+ * вызываем её метод {@link Ai2Gui_Interface#makeMove(int, int, boolean, double, java.lang.String, long)}, тем самым отправляя информацию человеку
+ * <br>3) включить созданный ИИ в работу.
+ * Это делается через {@link AiWrapper}, надо просто посмотреть пример
+ * из SelfishGuiStarted и скопировать. Там 3 строчки.
+ * 
+ */
+
 public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 
 	GuiController gui;
