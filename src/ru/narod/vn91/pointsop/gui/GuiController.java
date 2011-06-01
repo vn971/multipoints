@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import ru.narod.vn91.pointsop.server.AiWrapper;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public class GuiController {
@@ -41,12 +42,14 @@ public class GuiController {
 			pointsopServer.disconnecttt();
 			pointsopServer = null;
 		}
-		receiveRawServerInfo(server,
-				"Отключился от сервера... \n"
-				+ "К сожалению, автоматически подключиться назад "
-				+ "пока-что невозможно. \n"
-				+ "Чтобы подключиться, закройте приложение и откройте его заново.",
-				MessageType.ERROR);
+		if (!(server instanceof AiWrapper)) {
+			receiveRawServerInfo(server,
+					"Отключился от сервера... \n"
+					+ "К сожалению, автоматически подключиться назад "
+					+ "пока-что невозможно. \n"
+					+ "Чтобы подключиться, закройте приложение и откройте его заново.",
+					MessageType.ERROR);
+		}
 	}
 
 	public synchronized void userJoinedLangRoom(ServerInterface server,

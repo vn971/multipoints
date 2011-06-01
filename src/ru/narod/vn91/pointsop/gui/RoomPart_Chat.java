@@ -62,6 +62,10 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		} catch (Exception e) {
 		}
 		scrollDown();
+
+//		System.err.println("roomInterface = " + roomInterface);
+//		System.err.println("roomInterface.getServer() = " + roomInterface.getServer());
+		
 		if (message.toLowerCase().contains(
 				roomInterface.getServer().getMyName().
 				replaceAll("\\^", "").toLowerCase())) {

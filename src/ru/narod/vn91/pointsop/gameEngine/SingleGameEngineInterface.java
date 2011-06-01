@@ -39,7 +39,7 @@ public interface SingleGameEngineInterface {
 		public int x, y;
 	}
 
-	public void tryRandomMove();
+	public MoveResult tryRandomMove(boolean isRed);
 
 	public enum DotType {
 

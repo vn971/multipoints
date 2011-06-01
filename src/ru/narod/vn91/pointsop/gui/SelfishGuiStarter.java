@@ -15,7 +15,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import com.google.sites.priymakpoints.pointsai.p_PointsAI.PanelAI;
+import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
+import ru.narod.vn91.pointsop.server.AiWrapper;
 
 public class SelfishGuiStarter {
 
@@ -68,7 +70,7 @@ public class SelfishGuiStarter {
 		frame.add(tabbedPane);
 		tabbedPane.setFocusable(false);
 
-		GuiController guiController = new GuiController(tabbedPane);
+		final GuiController guiController = new GuiController(tabbedPane);
 
 		WelcomePanel roomWelcome = new WelcomePanel(guiController);
 		tabbedPane.addTab("Привет!", roomWelcome, false);
@@ -76,7 +78,7 @@ public class SelfishGuiStarter {
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
 		//tabbedPane.addTab("Играть с ИИ", new PanelAI(frame.getWidth(),frame.getHeight()).getAIPanel(), false);
-		
+
 //		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
 //		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""), false);
 
@@ -171,14 +173,27 @@ public class SelfishGuiStarter {
 
 						public void actionPerformed(ActionEvent e) {
 							jMenuItem.setEnabled(false);
-							PanelAI panelAI=new PanelAI(frame);
-							tabbedPane.addTab("PointsAI 1.056",panelAI,false);
+							PanelAI panelAI = new PanelAI(frame);
+							tabbedPane.addTab("PointsAI 1.056", panelAI, false);
 							tabbedPane.setSelectedComponent(panelAI);
 						}
 					});
 					jMenu.add(jMenuItem);
 				}
-							
+				{
+					final JMenuItem jMenuItem = new JMenuItem("рандомный ИИ");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							// ai as server
+							AiWrapper aiWrapper = new AiWrapper(guiController);
+							aiWrapper.setAi(new RandomAi(aiWrapper, 39, 32));
+							aiWrapper.init();
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+
 				jMenuBar.add(jMenu);
 			}
 
@@ -200,7 +215,7 @@ public class SelfishGuiStarter {
 			}
 			{
 				JMenu jMenu = new JMenu("Помощь");
-				
+
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">правила игры</a></html>");
@@ -208,7 +223,8 @@ public class SelfishGuiStarter {
 
 						public void actionPerformed(ActionEvent e) {
 							try {
-								java.awt.Desktop.getDesktop().browse(new URI(
+								java.awt.Desktop.getDesktop().browse(
+										new URI(
 										"http://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D1%87%D0%BA%D0%B8"));
 							} catch (Exception e1) {
 							}
@@ -216,7 +232,7 @@ public class SelfishGuiStarter {
 					});
 					jMenu.add(jMenuItem);
 				}
-				
+
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">о программе</a></html>");
