@@ -249,7 +249,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		initComponents();
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
-		roomPart_Chat.initRoomPart(this);
+		roomPart_Chat.initChat(this, userFirst, userSecond);
 //		if (amIPlaying == false) {
 		jButton_TurnsBackwards.setVisible(false);
 		jButton_TurnsForward.setVisible(false);

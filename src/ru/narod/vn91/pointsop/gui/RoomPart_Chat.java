@@ -1,8 +1,3 @@
-/*
- * RoomPart_Chat.java
- *
- * Created on Jan 28, 2011, 5:53:01 PM
- */
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Font;
@@ -17,18 +12,17 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
-/**
- *
- * @author vasya
- */
 public class RoomPart_Chat extends javax.swing.JPanel {
 
+	String userFirst, userSecond;
 	RoomInterface roomInterface;
 	private StyledDocument document = new DefaultStyledDocument();
 	boolean lastMessageWasHighlighted = true;
@@ -40,9 +34,35 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		}
 	}
 
-	void addChat(String user, String message) {
+	void addChat(String user,
+			String message) {
 		try {
-			if (user.equals(roomInterface.getServer().getMyName())) {
+			if (user.equals(userFirst)) {
+				StyleConstants.setForeground(GlobalGuiSettings.playerNameRed,
+						PersistentMemory.getPlayer1Color());
+
+				document.insertString(document.getLength(),
+						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+						GlobalGuiSettings.chatIncoming);
+				document.insertString(document.getLength(), user
+						+ ":", GlobalGuiSettings.playerNameRed);
+				document.insertString(document.getLength(),
+						" " + message + "\n",
+						GlobalGuiSettings.chatIncoming);
+			} else if (user.equals(userSecond)) {
+				StyleConstants.setForeground(GlobalGuiSettings.playerNameBlue,
+						PersistentMemory.getPlayer2Color());
+
+				document.insertString(document.getLength(),
+						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+						GlobalGuiSettings.chatIncoming);
+				document.insertString(document.getLength(), user
+						+ ":", GlobalGuiSettings.playerNameBlue);
+				document.insertString(
+						document.getLength(),
+						" " + message + "\n",
+						GlobalGuiSettings.chatIncoming);
+			} else if (user.equals(roomInterface.getServer().getMyName())) {
 				document.insertString(document.getLength(),
 						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
 						GlobalGuiSettings.chatOutgoing);
@@ -65,7 +85,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 
 //		System.err.println("roomInterface = " + roomInterface);
 //		System.err.println("roomInterface.getServer() = " + roomInterface.getServer());
-		
+
 		if (message.toLowerCase().contains(
 				roomInterface.getServer().getMyName().
 				replaceAll("\\^", "").toLowerCase())) {
@@ -136,7 +156,8 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 			// Bind the undo action to ctl-Z
 			jTextField_Chat.getInputMap().put(
 					//					KeyStroke.getKeyStroke("control Z"),
-					KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
 					"Undo");
 
 			// Create a redo action and add it to the text component
@@ -155,12 +176,18 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 
 			// Bind the redo action to ctl-Y
 			jTextField_Chat.getInputMap().put(
-					KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+					KeyStroke.getKeyStroke(KeyEvent.VK_Y,
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
 					"Redo");
 		}
 	}
 
-	public void initRoomPart(RoomInterface roomInterface) {
+	public void initChat(
+			RoomInterface roomInterface,
+			String userFirst,
+			String userSecond) {
+		this.userFirst = userFirst;
+		this.userSecond = userSecond;
 		this.roomInterface = roomInterface;
 		RoomPart_Userlist userList = roomInterface.getRoomPart_UserList();
 	}
@@ -328,7 +355,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
 		jTextField_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formFocusGained
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_Autoscroll;

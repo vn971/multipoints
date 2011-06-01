@@ -19,19 +19,40 @@ public class GlobalGuiSettings {
 	static final SimpleAttributeSet playerNameOutgoing = new SimpleAttributeSet();
 	static final SimpleAttributeSet chatIncoming = new SimpleAttributeSet();
 	static final SimpleAttributeSet chatOutgoing = new SimpleAttributeSet();
+	static SimpleAttributeSet playerNameRed;
+	static SimpleAttributeSet playerNameBlue;
 	static final SimpleAttributeSet serverNotice = new SimpleAttributeSet();
 
 	static {
 		Color myColor = new Color(4, 135, 12);
-		playerNameIncoming.addAttribute(StyleConstants.CharacterConstants.Bold, true);
+		playerNameIncoming.addAttribute(StyleConstants.CharacterConstants.Bold,
+				true);
 		StyleConstants.setForeground(playerNameOutgoing, myColor);
-		playerNameOutgoing.addAttribute(StyleConstants.CharacterConstants.Bold, true);
+		playerNameOutgoing.addAttribute(StyleConstants.CharacterConstants.Bold,
+				true);
+		playerNameRed = new SimpleAttributeSet(playerNameIncoming);
+		playerNameBlue = new SimpleAttributeSet(playerNameIncoming);
 
 		StyleConstants.setForeground(serverNotice, Color.GRAY);
-
 		StyleConstants.setForeground(chatOutgoing, myColor);
 //		StyleConstants.setBackground(serverNotice, Color.BLACK);
 	}
 	static SimpleDateFormat myTimeFormat = new SimpleDateFormat("HH:mm:ss");
 	static SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+	private static String getHtmlColor(int inputByte) {
+		String hex = Integer.toHexString(inputByte);
+		if (hex.length() == 1) {
+			hex = '0' + hex;
+		}
+		return hex;
+	}
+
+	static String getHtmlColor(Color javaColor) {
+
+		return "#"
+				+ getHtmlColor(javaColor.getRed())
+				+ getHtmlColor(javaColor.getGreen())
+				+ getHtmlColor(javaColor.getBlue());
+	}
 }

@@ -326,7 +326,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		if (sender.equals(myGame.opponentName)
 				&& channel.equals(myGame.roomName)) {
 			myGame.leaveGame();
-			gui.chatReceived(this, channel, sender, "Ваш оппонент закрыл игру.");
+//			gui.chatReceived(
+//					this, channel,
+//					nicknameManager.getOrCreateShortNick(sender),
+//					"Ваш оппонент закрыл игру.");
 		}
 	}
 

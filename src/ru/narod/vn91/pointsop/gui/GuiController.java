@@ -1,5 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.HashMap;
 import javax.swing.JLabel;
@@ -8,6 +9,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.AiWrapper;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -162,8 +164,16 @@ public class GuiController {
 				containerRoom_Game);
 		roomInterfaces.put(new ServerRoom(roomNameOnServer, server),
 				containerRoom_Game);
+//		System.out.println(
+//				"PersistentMemory.getPlayer1Color().toString() = " + PersistentMemory.getPlayer1Color().toString());
 		tabbedPane.addTab(
-				"<html><font color=red>" + userFirst + "</font>-<font color=blue>" + userSecond + "</font></html>",
+				"<html><font color="
+				+ GlobalGuiSettings.getHtmlColor(
+				PersistentMemory.getPlayer1Color())
+				+ ">" + userFirst + "</font><font color=black> - </font><font color="
+				+ GlobalGuiSettings.getHtmlColor(
+				PersistentMemory.getPlayer2Color())
+				+ ">" + userSecond + "</font></html>",
 				containerRoom_Game, true);
 		tabbedPane.setSelectedComponent(containerRoom_Game);
 	}

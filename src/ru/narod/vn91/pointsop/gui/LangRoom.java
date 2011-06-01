@@ -57,7 +57,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 		this.centralGuiController = centralGuiController;
 		initComponents();
 
-		roomPart_Chat1.initRoomPart(this);
+		roomPart_Chat1.initChat(this, null, null);
 		roomPart_UserList1.initRoomPart(this, centralGuiController);
 		roomPart_GameList1.initRoomPart(this, centralGuiController);
 	}
