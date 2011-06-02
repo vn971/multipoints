@@ -34,7 +34,7 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void init() {
-		gui.subscribedGame("", this, userFirst, userSecond, 10, 10, null, false,
+		gui.subscribedGame("", this, userSecond, userFirst, 10, 10, null, false,
 				null, true, true);
 		ai.init();
 	}
@@ -115,7 +115,7 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public String getMyName() {
-		return userSecond;
+		return userFirst;
 	}
 
 	public String getMainRoom() {

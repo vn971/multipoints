@@ -20,12 +20,12 @@ public class RandomAi implements Gui2Ai_Interface {
 	public void init() {
 		{
 			// makeRandomMove
-			MoveResult moveResult = engine.tryRandomMove(aiColor);
+			MoveResult moveResult = engine.tryRandomMove(!aiColor);
 
 			if (moveResult != MoveResult.ERROR) {
 				int x = engine.getLastDot().x;
 				int y = engine.getLastDot().y;
-				gui.makeMove(x, y, aiColor, 0, null, 1);
+				gui.makeMove(x, y, !aiColor, 0, null, 1);
 			}
 		}
 	}
@@ -35,24 +35,24 @@ public class RandomAi implements Gui2Ai_Interface {
 			boolean isRed,
 			boolean toBeAnswered,
 			long timeExpected) {
-		MoveResult moveResult = engine.makeMove(x, y, isRed);
+		MoveResult moveResult = engine.makeMove(x, y, !isRed);
 		if (moveResult == MoveResult.GOOD) {
 			// ai accepted this move
-			gui.makeMove(x, y, isRed, 1,
+			gui.makeMove(x, y, !isRed, 1,
 					"чёёёрт, меня съели!! Ну ничего, я ещё отомщу!", 1);
 		} else if (moveResult != MoveResult.ERROR) {
 			// ai accepted this move
-			gui.makeMove(x, y, isRed, 1, null, 1);
+			gui.makeMove(x, y, !isRed, 1, null, 1);
 		}
 
 		if ((moveResult != MoveResult.ERROR)
 				&& (toBeAnswered)) {
 			// return random answer
-			MoveResult randomResult = engine.tryRandomMove(!isRed);
+			MoveResult randomResult = engine.tryRandomMove(isRed);
 			int answerX = engine.getLastDot().x;
 			int answerY = engine.getLastDot().y;
 			if (randomResult != MoveResult.ERROR) {
-				gui.makeMove(answerX, answerY, !isRed, 0, null, 1);
+				gui.makeMove(answerX, answerY, isRed, 0, null, 1);
 			} else {
 			}
 		}

@@ -1,8 +1,8 @@
 package com.google.sites.priymakpoints.pointsai.p_PointsAI;
 
-import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngineInterface.DotType;
-import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngine;
-import com.google.sites.priymakpoints.pointsai.p_PointsAI.SingleGameEngineInterface.MoveType;
+import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
+import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
+import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 
 public class PointsAIGame extends Variables{
 
@@ -133,7 +133,21 @@ public String[][] getFieldState(){
 	for (int x = 1; x <= f_s_x; x++) 
 		for (int y = 1; y <= f_s_y; y++) {
 			DotType dotType = singleGameEngine.getDotType(x, y);
-			fieldState[x-1][y-1]=dotType.toString();// <get field state>
+			String type="N";
+			switch (dotType) {
+				case EMPTY:	type="N";break;//empty
+				case BLUE:	type="B";break;//blue
+				case BLUE_CTRL: type="N";break;//blue домик
+				case BLUE_EATED_EMPTY: type="B";break;
+				case BLUE_EATED_RED: type="B";break;//my points
+				case BLUE_TIRED: type="B";break;//null blue
+				case RED: type="R";break;//red
+				case RED_CTRL: type="N";break;//red домик
+				case RED_EATED_BLUE: type="R";break;//
+				case RED_EATED_EMPTY: type="R";break;
+				case RED_TIRED: type="R";break;
+			}
+			fieldState[x-1][y-1]=type;// <get field state>
 	}
 	
 	return fieldState;
