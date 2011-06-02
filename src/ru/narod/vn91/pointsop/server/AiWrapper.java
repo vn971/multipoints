@@ -22,13 +22,19 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 
 	GuiController gui;
 	Gui2Ai_Interface ai;
-
-	public AiWrapper(GuiController gui) {
+	String userFirst;
+	String userSecond;
+	
+	public AiWrapper(GuiController gui, 
+			String userFirst, 
+			String userSecond) {
 		this.gui = gui;
+		this.userFirst = userFirst;
+		this.userSecond = userSecond;
 	}
 
 	public void init() {
-		gui.subscribedGame("", this, "you", "ai", 10, 10, null, false,
+		gui.subscribedGame("", this, userFirst, userSecond, 10, 10, null, false,
 				null, true, true);
 		ai.init();
 	}
@@ -49,7 +55,7 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 
 	public void receiveMessage(String message) {
 		if ((message != null) && (message.equals("") == false)) {
-			gui.chatReceived(this, "", "ai", message);
+			gui.chatReceived(this, "", userSecond, message);
 		}
 	}
 
@@ -109,7 +115,7 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public String getMyName() {
-		return "you";
+		return userSecond;
 	}
 
 	public String getMainRoom() {

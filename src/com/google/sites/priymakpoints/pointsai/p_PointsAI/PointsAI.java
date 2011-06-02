@@ -10,7 +10,6 @@ public class PointsAI{
 	public static TemplateEngine base;//=new TemplateEngine();
 	public PointsAIGame game;//=new PointsAIGame();
 	public MoveAI moveAI;//=new MoveAI();
-	Paper paper;
 	
 public void newGame(){game.newGame();moveAI.deleteStatistics(PointsAI.this);}
 	
@@ -19,12 +18,10 @@ public PointsAI(){
 	base=new TemplateEngine(false);
 	game=new PointsAIGame();
 }
-
-public void setPaper(Paper paper){this.paper=paper;}
 	
 public void makeMove(int x,int y,boolean isRed){
-	if(isRed){paper.makeMove(x,y, true);game.makeMove(x,y, MoveType.RED);}
-	else {paper.makeMove(x,y, false);game.makeMove(x,y, MoveType.BLUE);}
+	if(isRed){game.makeMove(x,y, MoveType.RED);}
+	else {game.makeMove(x,y, MoveType.BLUE);}
 	
 }
 

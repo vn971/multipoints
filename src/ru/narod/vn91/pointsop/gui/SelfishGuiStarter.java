@@ -14,7 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
-import com.google.sites.priymakpoints.pointsai.p_PointsAI.PanelAI;
+import com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAIEngine;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.AiWrapper;
@@ -167,26 +167,28 @@ public class SelfishGuiStarter {
 
 			{
 				JMenu jMenu = new JMenu("Играть с ИИ");
+				
 				{
 					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.056");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
-							jMenuItem.setEnabled(false);
-							PanelAI panelAI = new PanelAI(frame);
-							tabbedPane.addTab("PointsAI 1.056", panelAI, false);
-							tabbedPane.setSelectedComponent(panelAI);
+							//jMenuItem.setEnabled(false);
+							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","PointsAI 1.056");
+							aiWrapper.setAi(new PointsAIEngine(aiWrapper, 39, 32));
+							aiWrapper.init();
 						}
 					});
 					jMenu.add(jMenuItem);
 				}
+				
 				{
-					final JMenuItem jMenuItem = new JMenuItem("рандомный ИИ");
+					final JMenuItem jMenuItem = new JMenuItem("Рандомный ИИ");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
 							// ai as server
-							AiWrapper aiWrapper = new AiWrapper(guiController);
+							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","RandomAI");	
 							aiWrapper.setAi(new RandomAi(aiWrapper, 39, 32));
 							aiWrapper.init();
 						}
@@ -218,7 +220,7 @@ public class SelfishGuiStarter {
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">правила игры</a></html>");
+							"<html><a href=\"\">правила игры Точки</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
@@ -235,7 +237,7 @@ public class SelfishGuiStarter {
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">о программе</a></html>");
+							"<html><a href=\"\">о программе PointsOP</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
@@ -248,6 +250,23 @@ public class SelfishGuiStarter {
 					});
 					jMenu.add(jMenuItem);
 				}
+				
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">о программе PointsAI</a></html>");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							try {
+								java.awt.Desktop.getDesktop().browse(new URI(
+									"http://sites.google.com/site/priymakpoints/intelligence"));
+							} catch (Exception e1) {
+							}
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">полезные ссылки</a></html>");
