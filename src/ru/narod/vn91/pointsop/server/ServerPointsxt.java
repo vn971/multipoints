@@ -725,9 +725,6 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		boolean iHaveMoved = !myGame.isMyMoveNow();
 		if (iHaveMoved) {
 			myGame.lastTimeoutThread = null;
-//			if (myGame.timeOutThread != null) {
-//				myGame.timeOutThread.interrupt();
-//			}
 		} else {
 			Thread timeOutThread = new Thread() {
 

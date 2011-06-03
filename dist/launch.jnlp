@@ -13,7 +13,8 @@
     <resources>
 <j2se version="1.5+"/>
 <jar href="PointsOnPaper.jar" main="true"/>
-    </resources>
+    <jar href="lib/beansbinding-1.2.1.jar"/>
+</resources>
     <application-desc main-class="ru.narod.vn91.pointsop.gui.SelfishGuiStarter">
     </application-desc>
 </jnlp>
