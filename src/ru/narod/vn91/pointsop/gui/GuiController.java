@@ -1,6 +1,5 @@
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.util.HashMap;
 import javax.swing.JLabel;
