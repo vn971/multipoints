@@ -77,10 +77,10 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
-		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
-				"", 1, 1, "", false, "", true, true));
-		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""),
-				false);
+//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
+//				"", 1, 1, "", false, "", true, true));
+//		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""),
+//				false);
 
 		{
 			JMenuBar jMenuBar = new JMenuBar();

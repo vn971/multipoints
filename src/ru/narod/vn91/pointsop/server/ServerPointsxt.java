@@ -222,7 +222,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 
 	public void subscribeRoom(String roomName) {
 		if (roomName.equals(defaultChannel)) {
-			boolean isTochkiOrg = defaultServ.equals("tochki.org");
+			boolean isTochkiOrg = defaultServ.equals("77.232.28.15");
 			String guiName = isTochkiOrg ? "основная комната" : defaultServ;
 			gui.subscribedLangRoom(roomName, this, guiName, defaultChannel.equals(
 					roomName));
