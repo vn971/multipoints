@@ -55,6 +55,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	private String defaultServ;
 	private String defaultChannel;
 	private String defaultPass;
+	private String defaultServer_Visible;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
@@ -71,19 +72,19 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			@Override
 			public void run() {
 				try {
-					if (defaultServ.equals("ircworld.ru")) {
-						gui.receiveRawServerInfo(
-								ServerPointsxt.this,
-								"Cоединение с сервером " + defaultServ
-								+ ". Пожалуйста, подождите... (примерно 30 секунд)",
-								GuiController.MessageType.INFO);
-					} else {
-						gui.receiveRawServerInfo(
-								ServerPointsxt.this,
-								"Cоединение с сервером " + defaultServ
-								+ ". Пожалуйста, подождите...",
-								GuiController.MessageType.INFO);
-					}
+//					if (defaultServ.equals("ircworld.ru")) {
+					gui.receiveRawServerInfo(
+							ServerPointsxt.this,
+							"Cоединение с сервером " + defaultServ
+							+ ". Пожалуйста, подождите... (примерно 30 секунд)",
+							GuiController.MessageType.INFO);
+//					} else {
+//						gui.receiveRawServerInfo(
+//								ServerPointsxt.this,
+//								"Cоединение с сервером " + defaultServ
+//								+ ". Пожалуйста, подождите...",
+//								GuiController.MessageType.INFO);
+//					}
 					connect(defaultServ);
 					myNickOnServ = getNick();
 					ServerPointsxt.super.sendMessage("podbot",
@@ -114,6 +115,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 //		defaultPass = (defaultChannel.equals("#pointsxt")) ? "1ppass1" : "#nobot";
 		defaultChannel = "#pointsxt";
 		defaultPass = defaultServ.equals("ircworld.ru") ? "201120" : "1ppass1";
+		defaultServer_Visible = defaultServ.equals("77.232.28.15") ? "pointsgame.info" : defaultServ;
 
 		String login = "";
 		try {
@@ -222,10 +224,13 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 
 	public void subscribeRoom(String roomName) {
 		if (roomName.equals(defaultChannel)) {
-			boolean isTochkiOrg = defaultServ.equals("77.232.28.15");
-			String guiName = isTochkiOrg ? "основная комната" : defaultServ;
-			gui.subscribedLangRoom(roomName, this, guiName, defaultChannel.equals(
-					roomName));
+//			boolean isTochkiOrg = defaultServ.equals("77.232.28.15");
+//			String guiName = isTochkiOrg ? "основная комната" : defaultServ;
+			gui.subscribedLangRoom(
+					roomName,
+					this,
+					defaultServer_Visible,
+					defaultChannel.equals(roomName));
 		} else {
 			GameInfoAbstract gameInfoAbstract = getGameInfoFromRoomName(roomName);
 			if (gameInfoAbstract != null) {
@@ -804,7 +809,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	public String getServerName() {
-		return defaultServ;
+		return defaultServer_Visible;
 	}
 
 	public String int2characterString(int i) {

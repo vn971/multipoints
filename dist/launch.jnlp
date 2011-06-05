@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<jnlp codebase="http://pointsop.sourceforge.net/" href="game.jnlp" spec="1.0+">
+<jnlp codebase="http://vn91.narod.ru/points/pop/" href="launch.jnlp" spec="1.0+">
     <information>
         <title>PointsOnPaper</title>
-        <vendor>Vasya Novikov & Priymak Alexey</vendor>
-        <homepage href="http://pointsop.sourceforge.net"/>
+        <vendor>Vasya Novikov</vendor>
+        <homepage href="http://vn91.narod.ru"/>
         <description>a program for the game Points</description>
         <description kind="short">PointsOnPaper</description>
     </information>
@@ -12,8 +12,9 @@
 </security>
     <resources>
 <j2se version="1.5+"/>
-<jar eager="true" href="http://pointsop.sourceforge.net/PointsOnPaper.jar" main="true"/>
-    </resources>
+<jar href="PointsOnPaper.jar" main="true"/>
+    <jar href="lib/beansbinding-1.2.1.jar"/>
+</resources>
     <application-desc main-class="ru.narod.vn91.pointsop.gui.SelfishGuiStarter">
     </application-desc>
 </jnlp>
