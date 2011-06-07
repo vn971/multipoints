@@ -14,7 +14,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
-import com.google.sites.priymakpoints.pointsai.p_PointsAI.PointsAIEngine;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.server.AiWrapper;
@@ -169,13 +168,26 @@ public class SelfishGuiStarter {
 				JMenu jMenu = new JMenu("Играть с ИИ");
 				
 				{
+					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.07");
+					jMenuItem.addActionListener(new ActionListener() {
+						
+						public void actionPerformed(ActionEvent e) {
+							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","PointsAI 1.07");
+							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(aiWrapper, 39, 32));
+							aiWrapper.init();
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				
+				{
 					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.056");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
 							//jMenuItem.setEnabled(false);
 							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","PointsAI 1.056");
-							aiWrapper.setAi(new PointsAIEngine(aiWrapper, 39, 32));
+							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_056.PointsAIEngine(aiWrapper, 39, 32));
 							aiWrapper.init();
 						}
 					});

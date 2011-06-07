@@ -474,9 +474,6 @@ public abstract class Paper extends JPanel {
 			return;
 		}
 
-		((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-
 		DotType dotType = engine.getDotType(x, y);
 		{
 			int pixelX = getPixel(x, y).x;
@@ -513,10 +510,6 @@ public abstract class Paper extends JPanel {
 				default:
 					break;
 			}
-
-			((Graphics2D)graphics).setRenderingHint(
-					RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_OFF);
 
 			if (paintEmpty && dotType.isIn(DotType.EMPTY, DotType.RED_CTRL,
 					DotType.BLUE_CTRL)) {
@@ -595,7 +588,10 @@ public abstract class Paper extends JPanel {
 				}
 			}
 		}
-
+		
+		((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		
 		for (int x = 1; x <= engineSizeX; x++) {
 			for (int y = 1; y <= engineSizeY; y++) {
 				// draw DEAD points
@@ -634,7 +630,10 @@ public abstract class Paper extends JPanel {
 		}
 
 		drawLastDotHint(graphics);
-
+		
+		((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_OFF);
+		
 		{
 			// drawing paper borders
 			Graphics2D graphics2d = (Graphics2D)graphics;
