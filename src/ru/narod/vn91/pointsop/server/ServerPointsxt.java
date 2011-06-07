@@ -85,7 +85,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 //								+ ". Пожалуйста, подождите...",
 //								GuiController.MessageType.INFO);
 //					}
-					connect(defaultServ);
+					connect(defaultServ, 6667, "none");
 					myNickOnServ = getNick();
 					ServerPointsxt.super.sendMessage("podbot",
 							"!opConnect0423");
@@ -124,7 +124,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		} catch (Exception e) {
 		}
 		super.setLogin(login);
-//		setVerbose(true);
+
+		if (defaultServ.equals("77.232.28.15")) {
+			setVerbose(true);
+		}
 
 		myName = getAllowedNick(myName);
 		myNick_Originally = myName;
@@ -461,10 +464,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			new Sounds().playAlarmSignal();
 			gui.serverNoticeReceived(this, defaultChannel, nicknameManager.getOrCreateShortNick(
 					sender) + " sends you a sound");
-		} else if (message.startsWith("/PASSOK ")
-				&& (sender.toLowerCase().equals("podbot"))) {
+		} else if (message.startsWith("/PASSOK")
+				&& (sender.equalsIgnoreCase("podbot"))) {
 			subscribeRoom("#pointsxt");
-		} else if (message.startsWith("/PASSOK ")) {
+		} else if (message.startsWith("/PASSOK")) {
 			// someone else sent "passok"
 		} else if (message.startsWith("/SpectrGame")) {
 			String targetRoom = getPlayerRoom(sender);

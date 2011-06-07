@@ -24,11 +24,11 @@ public class WelcomePanel extends javax.swing.JPanel {
 				guiController.pointsopServer.connect();
 				return; // do not connect to tochki.org and ircworld.ru
 			}
-//			if (guiController.pointsxt_vn91_server == null) {
-//				guiController.pointsxt_vn91_server = new ServerPointsxt(
-//						"77.232.28.15", guiController, nick, "");
-//				guiController.pointsxt_vn91_server.connect();
-//			}
+			if (guiController.pointsxt_vn91_server == null) {
+				guiController.pointsxt_vn91_server = new ServerPointsxt(
+						"77.232.28.15", guiController, nick, "");
+				guiController.pointsxt_vn91_server.connect();
+			}
 			if (guiController.pointsxt_tochkiorg_server == null) {
 				guiController.pointsxt_tochkiorg_server = new ServerPointsxt(
 						"tochki.org", guiController, nick, "");

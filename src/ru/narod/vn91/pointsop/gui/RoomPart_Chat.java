@@ -129,9 +129,10 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	public RoomPart_Chat() {
 		initComponents();
 		jMenuItem_FontIncrease.setVisible(false);
-//		jButton_ClearChat.setIcon(
-//				new javax.swing.ImageIcon(getClass().getResource(
-//				"/ru/narod/vn91/pointsop/gui/eraser.png")));
+
+		jButton_ClearChat.setVisible(false);
+		jToggleButton_ScrollDown.setVisible(false);
+		jToggleButton_ShowJoinLeave.setVisible(false);
 
 		{
 			final UndoManager undo = new UndoManager();
