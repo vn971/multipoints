@@ -118,14 +118,21 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	}
 
 	void setReadOnly(boolean isReadOnly) {
-		jButton1.setVisible(!isReadOnly);
+		jButton_Help.setVisible(!isReadOnly);
 		jTextField_Chat.setVisible(!isReadOnly);
+		jButton_ClearChat.setVisible(false);
+		jToggleButton_ScrollDown.setVisible(false);
+		jToggleButton_ShowJoinLeave.setVisible(false);
 	}
 
 	/** Creates new form RoomPart_Chat */
 	public RoomPart_Chat() {
 		initComponents();
 		jMenuItem_FontIncrease.setVisible(false);
+
+		jButton_ClearChat.setVisible(false);
+		jToggleButton_ScrollDown.setVisible(false);
+		jToggleButton_ShowJoinLeave.setVisible(false);
 
 		{
 			final UndoManager undo = new UndoManager();
@@ -210,7 +217,10 @@ public class RoomPart_Chat extends javax.swing.JPanel {
         jTextPane_Chat = new javax.swing.JTextPane();
         jTextPane_Chat.setDocument(document);
         jTextField_Chat = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jButton_Help = new javax.swing.JButton();
+        jToggleButton_ScrollDown = new javax.swing.JToggleButton();
+        jToggleButton_ShowJoinLeave = new javax.swing.JToggleButton();
+        jButton_ClearChat = new javax.swing.JButton();
 
         jCheckBoxMenuItem_Autoscroll.setSelected(true);
         jCheckBoxMenuItem_Autoscroll.setText("↓ автопрокрутка чата вниз");
@@ -266,32 +276,52 @@ public class RoomPart_Chat extends javax.swing.JPanel {
             }
         });
 
-        jButton1.setText("?");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_Help.setText("?");
+        jButton_Help.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_HelpActionPerformed(evt);
             }
         });
+
+        jToggleButton_ScrollDown.setText("↓");
+
+        jToggleButton_ShowJoinLeave.setText("ᕤ");
+
+        jButton_ClearChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton_ClearChat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToggleButton_ShowJoinLeave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToggleButton_ScrollDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(2, 2, 2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Help)
+                        .addGap(2, 2, 2))
+                    .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField_Chat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)))
+                    .addComponent(jButton_Help)))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jToggleButton_ScrollDown)
+                .addGap(18, 18, 18)
+                .addComponent(jToggleButton_ShowJoinLeave)
+                .addGap(18, 18, 18)
+                .addComponent(jButton_ClearChat)
+                .addGap(225, 225, 225))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -336,10 +366,10 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		}
 	}//GEN-LAST:event_jMenuItem_EraseChatActionPerformed
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+	private void jButton_HelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_HelpActionPerformed
 		JOptionPane.showMessageDialog(null, "Для дополнительных действий с чатом щелкните по нему правой кнопкой мыши.\n"
 				+ "Для отправки сообщения надо нажать Enter :)");
-	}//GEN-LAST:event_jButton1ActionPerformed
+	}//GEN-LAST:event_jButton_HelpActionPerformed
 
 	private void jMenuItem_FontIncreaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_FontIncreaseActionPerformed
 		Font prevFont = jTextPane_Chat.getFont();
@@ -356,7 +386,8 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		jTextField_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formFocusGained
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton_ClearChat;
+    private javax.swing.JButton jButton_Help;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_Autoscroll;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_ShowUserJoin;
     private javax.swing.JMenuItem jMenuItem_EraseChat;
@@ -365,5 +396,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane_Chat;
     javax.swing.JTextField jTextField_Chat;
     private javax.swing.JTextPane jTextPane_Chat;
+    private javax.swing.JToggleButton jToggleButton_ScrollDown;
+    private javax.swing.JToggleButton jToggleButton_ShowJoinLeave;
     // End of variables declaration//GEN-END:variables
 }

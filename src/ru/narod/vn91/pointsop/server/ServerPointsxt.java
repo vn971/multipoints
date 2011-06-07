@@ -55,6 +55,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	private String defaultServ;
 	private String defaultChannel;
 	private String defaultPass;
+	private String defaultServer_Visible;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
@@ -71,20 +72,20 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			@Override
 			public void run() {
 				try {
-					if (defaultServ.equals("ircworld.ru")) {
-						gui.receiveRawServerInfo(
-								ServerPointsxt.this,
-								"Cоединение с сервером " + defaultServ
-								+ ". Пожалуйста, подождите... (примерно 30 секунд)",
-								GuiController.MessageType.INFO);
-					} else {
-						gui.receiveRawServerInfo(
-								ServerPointsxt.this,
-								"Cоединение с сервером " + defaultServ
-								+ ". Пожалуйста, подождите...",
-								GuiController.MessageType.INFO);
-					}
-					connect(defaultServ);
+//					if (defaultServ.equals("ircworld.ru")) {
+					gui.receiveRawServerInfo(
+							ServerPointsxt.this,
+							"Cоединение с сервером " + defaultServ
+							+ ". Пожалуйста, подождите... (примерно 30 секунд)",
+							GuiController.MessageType.INFO);
+//					} else {
+//						gui.receiveRawServerInfo(
+//								ServerPointsxt.this,
+//								"Cоединение с сервером " + defaultServ
+//								+ ". Пожалуйста, подождите...",
+//								GuiController.MessageType.INFO);
+//					}
+					connect(defaultServ, 6667, "none");
 					myNickOnServ = getNick();
 					ServerPointsxt.super.sendMessage("podbot",
 							"!opConnect0423");
@@ -114,6 +115,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 //		defaultPass = (defaultChannel.equals("#pointsxt")) ? "1ppass1" : "#nobot";
 		defaultChannel = "#pointsxt";
 		defaultPass = defaultServ.equals("ircworld.ru") ? "201120" : "1ppass1";
+		defaultServer_Visible = defaultServ.equals("77.232.28.15") ? "pointsgame.info" : defaultServ;
 
 		String login = "";
 		try {
@@ -122,7 +124,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		} catch (Exception e) {
 		}
 		super.setLogin(login);
-//		setVerbose(true);
+
+		if (defaultServ.equals("77.232.28.15")) {
+			setVerbose(true);
+		}
 
 		myName = getAllowedNick(myName);
 		myNick_Originally = myName;
@@ -222,10 +227,13 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 
 	public void subscribeRoom(String roomName) {
 		if (roomName.equals(defaultChannel)) {
-			boolean isTochkiOrg = defaultServ.equals("tochki.org");
-			String guiName = isTochkiOrg ? "основная комната" : defaultServ;
-			gui.subscribedLangRoom(roomName, this, guiName, defaultChannel.equals(
-					roomName));
+//			boolean isTochkiOrg = defaultServ.equals("77.232.28.15");
+//			String guiName = isTochkiOrg ? "основная комната" : defaultServ;
+			gui.subscribedLangRoom(
+					roomName,
+					this,
+					defaultServer_Visible,
+					defaultChannel.equals(roomName));
 		} else {
 			GameInfoAbstract gameInfoAbstract = getGameInfoFromRoomName(roomName);
 			if (gameInfoAbstract != null) {
@@ -456,10 +464,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			new Sounds().playAlarmSignal();
 			gui.serverNoticeReceived(this, defaultChannel, nicknameManager.getOrCreateShortNick(
 					sender) + " sends you a sound");
-		} else if (message.startsWith("/PASSOK ")
-				&& (sender.toLowerCase().equals("podbot"))) {
+		} else if (message.startsWith("/PASSOK")
+				&& (sender.equalsIgnoreCase("podbot"))) {
 			subscribeRoom("#pointsxt");
-		} else if (message.startsWith("/PASSOK ")) {
+		} else if (message.startsWith("/PASSOK")) {
 			// someone else sent "passok"
 		} else if (message.startsWith("/SpectrGame")) {
 			String targetRoom = getPlayerRoom(sender);
@@ -725,9 +733,6 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		boolean iHaveMoved = !myGame.isMyMoveNow();
 		if (iHaveMoved) {
 			myGame.lastTimeoutThread = null;
-//			if (myGame.timeOutThread != null) {
-//				myGame.timeOutThread.interrupt();
-//			}
 		} else {
 			Thread timeOutThread = new Thread() {
 
@@ -807,7 +812,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	public String getServerName() {
-		return defaultServ;
+		return defaultServer_Visible;
 	}
 
 	public String int2characterString(int i) {

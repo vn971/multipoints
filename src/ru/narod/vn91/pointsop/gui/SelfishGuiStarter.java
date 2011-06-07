@@ -76,10 +76,10 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
-		//tabbedPane.addTab("Играть с ИИ", new PanelAI(frame.getWidth(),frame.getHeight()).getAIPanel(), false);
-
-//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "", "", 1, 1, "", false, "", true, true));
-//		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""), false);
+//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
+//				"", 1, 1, "", false, "", true, true));
+//		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""),
+//				false);
 
 		{
 			JMenuBar jMenuBar = new JMenuBar();
@@ -96,71 +96,21 @@ public class SelfishGuiStarter {
 					jMenuItem.setEnabled(false);
 					jMenu.add(jMenuItem);
 				}
-				{
-					JMenuItem jMenuItem = new JMenuItem("создать тестовую игру");
-					jMenuItem.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent e) {
-
-//							Paper paper = new Paper() {
+//				{
+//					JMenuItem jMenuItem = new JMenuItem("создать тестовую игру");
+//					jMenuItem.addActionListener(new ActionListener() {
 //
-//								@Override
-//								public void paperClick(
-//										int x,
-//										int y,
-//										MouseEvent evt) {
-//									makeMove(x, y);
-//								}
+//						public void actionPerformed(ActionEvent e) {
 //
-//								@Override
-//								public void paperMouseMove(
-//										int x,
-//										int y,
-//										MouseEvent evt) {
-//								}
-//							};
-//							paper.initPaper(39, 32);
-//
-//							ru.narod.vn91.pointsop.gui.RoomPart_Userlist roomPart_UserList = new RoomPart_Userlist();
-//							ru.narod.vn91.pointsop.gui.RoomPart_Chat roomPart_Chat=new RoomPart_Chat();
-//							javax.swing.JPanel panel=new javax.swing.JPanel();
-//
-//							panel.setLayout(new java.awt.LayoutManager() {
-//								public void removeLayoutComponent(java.awt.Component comp) {
-//								}
-//								public java.awt.Dimension preferredLayoutSize(java.awt.Container parent) {
-//									 return new java.awt.Dimension(frame.getWidth()-12, frame.getHeight()-57);
-//								}
-//								public java.awt.Dimension minimumLayoutSize(java.awt.Container parent) {
-//									 return new java.awt.Dimension(frame.getWidth()-12, frame.getHeight()-57);
-//								}
-//								public void layoutContainer(java.awt.Container parent) {
-//								}
-//								public void addLayoutComponent(String name, java.awt.Component comp) {
-//								}
-//							});
-//
-//							panel.setSize(frame.getWidth()-12, frame.getHeight()-57);
-//
-//							paper.setBounds(0, 30, panel.getWidth()-252, panel.getHeight()-68);
-//							roomPart_UserList.setBounds(panel.getWidth()-252, 0, 245, (int)(panel.getHeight()*2/5)-20);
-//							roomPart_Chat.setBounds(panel.getWidth()-252,(int)(panel.getHeight()*2/5),245,(int)(panel.getHeight()*3/5)-40);
-//
-//							panel.add(paper);
-//							panel.add(roomPart_UserList);
-//							panel.add(roomPart_Chat);
-
-//							tabbedPane.addTab("test game", panel, true);
-//							tabbedPane.setSelectedComponent(panel);
-							GameRoom gameRoom = new GameRoom(null, null, null,
-									null, null, 0, 0, null, false, null,
-									true, true);
-							tabbedPane.addTab("тестовая игра", gameRoom, true);
-							tabbedPane.setSelectedComponent(gameRoom);
-						}
-					});
-					jMenu.add(jMenuItem);
-				}
+//							GameRoom gameRoom = new GameRoom(null, null, null,
+//									null, null, 0, 0, null, false, null,
+//									true, true);
+//							tabbedPane.addTab("тестовая игра", gameRoom, true);
+//							tabbedPane.setSelectedComponent(gameRoom);
+//						}
+//					});
+//					jMenu.add(jMenuItem);
+//				}
 				jMenuBar.add(jMenu);
 			}
 

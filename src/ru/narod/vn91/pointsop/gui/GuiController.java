@@ -1,6 +1,5 @@
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.util.HashMap;
 import javax.swing.JLabel;
@@ -19,6 +18,7 @@ public class GuiController {
 	JTextPane serverOutput;
 	ServerInterface pointsxt_tochkiorg_server;
 	ServerInterface pointsxt_ircworldru_server;
+	ServerInterface pointsxt_vn91_server;
 	ServerInterface pointsopServer;
 	HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
 	HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();
