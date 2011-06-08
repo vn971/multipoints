@@ -4,7 +4,7 @@ syntax: glob
 bin\*
 dist\*
 build\nb-jws.ks
-
+build/built-jar.properties
 
 syntax: regexp
 
