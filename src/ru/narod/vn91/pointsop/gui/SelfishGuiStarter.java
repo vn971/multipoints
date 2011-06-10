@@ -6,15 +6,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -195,12 +188,10 @@ public class SelfishGuiStarter {
 						public void actionPerformed(ActionEvent e) {
 							JOptionPane.showMessageDialog(
 									frame,
-									"Для работы с данным ИИ нужно, во-первых, "
-									+ "чтобы у вас был установлен ИИ от Keij&KvanTTT:\n"
-									+ "?ссылка?????????\n"
-									+ ""
-									+ "а во-вторых, путь к запускаемому файлу keijkvantttai.exe "
-									+ "находился в $PATH$. \n"
+									"Для запуска данного ИИ вам нужна "
+									+ "установленная консольная версия от Keij&KvanTTT"
+									+ ":\nhttp://dl.dropbox.com/u/15765203/keijkvantttai.exe"
+									+ "\n\n"
 									+ "Если у вас не получается запустить ИИ, "
 									+ "попросите помощи на канале или \n"
 									+ "дождитесь "
@@ -211,7 +202,7 @@ public class SelfishGuiStarter {
 									guiController,
 									"KeijKvantttAi");
 							String command = JOptionPane.showInputDialog(
-									"Введите название команды");
+									"введите имя файла - консольного клиента ИИ:");
 							aiWrapper.setAi(new KeijKvantttAi(aiWrapper, 39, 32,
 									command));
 							aiWrapper.init();

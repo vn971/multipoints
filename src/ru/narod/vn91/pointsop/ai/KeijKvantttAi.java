@@ -65,7 +65,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 		String message =
 				"" + (x - 1) + " " + (y - 1) + " "
 				+ (isRed ? "1" : "0") + " "
-				+ (toBeAnswered ? "1" : "0");
+				+ (toBeAnswered ? "1" : "0") + "\n";
 		try {
 			writer.write(message);
 			writer.flush();
@@ -80,7 +80,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 		try {
 			writer.write("-1\n");
 			writer.flush();
-			process.destroy();
+//			process.destroy();
 		} catch (IOException ex) {
 		}
 	}
@@ -92,7 +92,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 			while (isDisposed == false) {
 				try {
 					String aiMove_Raw = reader.readLine();
-					gui.receiveMessage(aiMove_Raw);
+//					gui.receiveMessage(aiMove_Raw);
 					try {
 						String[] aiMoveSplitted = aiMove_Raw.split(" ", 3);
 						int x = Integer.parseInt(aiMoveSplitted[0]) + 1;
