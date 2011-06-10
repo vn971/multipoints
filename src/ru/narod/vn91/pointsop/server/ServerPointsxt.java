@@ -126,7 +126,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		super.setLogin(login);
 
 		if (defaultServ.equals("77.232.28.15")) {
-			setVerbose(true);
+//			setVerbose(true);
 		}
 
 		myName = getAllowedNick(myName);
@@ -755,7 +755,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 						int i = 0;
 						while ((i < 9999) && (moveResult == MoveResult.ERROR)) {
 							i += 1;
-							myGame.engine.tryRandomMove(myGame.amIRed);
+							moveResult = myGame.engine.tryRandomMove(
+									myGame.amIRed);
 						}
 						if (moveResult != MoveResult.ERROR) {
 							makeMove(room,
@@ -915,11 +916,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				int x,
 				int y) {
 			if (roomName.equals(this.roomName)) {
-				boolean myMoveNow = isMyMoveNow();
 				boolean isFirstMoveAllowed = (moveList.size() >= 2)
 						|| ((x - 1 >= 12) && (x - 1 <= 19)
 						&& (32 - y >= 12) && (32 - y <= 26)); // 12<=x<=19, 12<=y<=26
-				if (myMoveNow && isFirstMoveAllowed) {
+				if (isMyMoveNow() && isFirstMoveAllowed) {
 					ServerPointsxt.this.makedMove_PointsxtStyle(
 							roomName, false, x, y,
 							amIRed);

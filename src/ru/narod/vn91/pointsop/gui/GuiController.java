@@ -9,7 +9,7 @@ import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
-import ru.narod.vn91.pointsop.server.AiWrapper;
+import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public class GuiController {
@@ -44,10 +44,10 @@ public class GuiController {
 			pointsopServer.disconnecttt();
 			pointsopServer = null;
 		}
-		if (!(server instanceof AiWrapper)) {
+		if (!(server instanceof AiVirtualServer)) {
 			receiveRawServerInfo(server,
 					"Отключился от сервера... \n"
-					+ "К сожалению, автоматически подключиться назад "
+					+ "К сожалению, переподключиться в \"тихом\" режиме "
 					+ "пока-что невозможно. \n"
 					+ "Чтобы подключиться, закройте приложение и откройте его заново.",
 					MessageType.ERROR);
@@ -302,6 +302,12 @@ public class GuiController {
 		}
 	}
 
+	/**
+	 * game is destroyed from list of games (NOT tabs of Lang-rooms!)
+	 * @param server
+	 * @param masterRoom
+	 * @param oldRoom
+	 */
 	public synchronized void gameDestroyed(ServerInterface server,
 			String masterRoom,
 			String oldRoom) {

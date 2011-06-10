@@ -158,7 +158,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	}
 
-	public void paperClick(int x,
+	public void paperClick(
+			int x,
 			int y,
 			MouseEvent evt) {
 		if (amIPlaying && evt.getButton() == MouseEvent.BUTTON1) {

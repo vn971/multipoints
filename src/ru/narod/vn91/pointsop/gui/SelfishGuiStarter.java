@@ -6,21 +6,54 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
-import ru.narod.vn91.pointsop.server.AiWrapper;
+import ru.narod.vn91.pointsop.server.AiVirtualServer;
 
 public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
+//		try {
+//			Process r = Runtime.getRuntime().exec("echo test");
+////			r.getInputStream();
+//			BufferedWriter writer =
+//					new BufferedWriter(
+//					new OutputStreamWriter(
+//					r.getOutputStream()));
+//			writer.append('t');
+//			writer.append('y');
+//			writer.newLine();
+//			BufferedReader reader =
+//					new BufferedReader(
+//					new InputStreamReader(
+//					r.getInputStream()));
+//			System.out.println(reader.readLine());
+//			System.out.println(reader.readLine());
+//			System.exit(0);
+//		} catch (IOException ex) {
+//			Logger.getLogger(SelfishGuiStarter.class.getName()).log(Level.SEVERE,
+//					null, ex);
+//		}
+//		System.exit(0);
+
 		if (PersistentMemory.getVersion() <= 0) {
 			PersistentMemory.resetColors();
 		}
@@ -116,41 +149,89 @@ public class SelfishGuiStarter {
 
 			{
 				JMenu jMenu = new JMenu("Играть с ИИ");
-				
+
 				{
 					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.07");
 					jMenuItem.addActionListener(new ActionListener() {
-						
+
 						public void actionPerformed(ActionEvent e) {
-							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","PointsAI 1.07");
-							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(aiWrapper, 39, 32));
+							AiVirtualServer aiWrapper =
+									new AiVirtualServer(
+									guiController,
+									"PointsAI 1.07");
+							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
+									aiWrapper, 39, 32));
 							aiWrapper.init();
 						}
 					});
 					jMenu.add(jMenuItem);
 				}
-				
+
 				{
 					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.056");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
 							//jMenuItem.setEnabled(false);
-							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","PointsAI 1.056");
-							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_056.PointsAIEngine(aiWrapper, 39, 32));
+							AiVirtualServer aiWrapper =
+									new AiVirtualServer(
+									guiController,
+									"PointsAI 1.056");
+							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_056.PointsAIEngine(
+									aiWrapper, 39, 32));
 							aiWrapper.init();
 						}
 					});
 					jMenu.add(jMenuItem);
 				}
-				
+
+				jMenu.add(new JSeparator());
+
+				{
+					final JMenuItem jMenuItem = new JMenuItem(
+							"Бетта-версия запуска Keij&Kvanttt AI");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							JOptionPane.showMessageDialog(
+									frame,
+									"Для работы с данным ИИ нужно, во-первых, "
+									+ "чтобы у вас был установлен ИИ от Keij&KvanTTT:\n"
+									+ "?ссылка?????????\n"
+									+ ""
+									+ "а во-вторых, путь к запускаемому файлу keijkvantttai.exe "
+									+ "находился в $PATH$. \n"
+									+ "Если у вас не получается запустить ИИ, "
+									+ "попросите помощи на канале или \n"
+									+ "дождитесь "
+									+ "более позднего (и думаю более удобного) релиза.");
+							// ai as server
+							AiVirtualServer aiWrapper =
+									new AiVirtualServer(
+									guiController,
+									"KeijKvantttAi");
+							String command = JOptionPane.showInputDialog(
+									"Введите название команды");
+							aiWrapper.setAi(new KeijKvantttAi(aiWrapper, 39, 32,
+									command));
+							aiWrapper.init();
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+
+				jMenu.add(new JSeparator());
+
 				{
 					final JMenuItem jMenuItem = new JMenuItem("Рандомный ИИ");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
 							// ai as server
-							AiWrapper aiWrapper = new AiWrapper(guiController,"Me","RandomAI");	
+							AiVirtualServer aiWrapper =
+									new AiVirtualServer(
+									guiController,
+									"RandomAI");
 							aiWrapper.setAi(new RandomAi(aiWrapper, 39, 32));
 							aiWrapper.init();
 						}
@@ -212,7 +293,7 @@ public class SelfishGuiStarter {
 					});
 					jMenu.add(jMenuItem);
 				}
-				
+
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">о программе PointsAI</a></html>");
@@ -220,15 +301,16 @@ public class SelfishGuiStarter {
 
 						public void actionPerformed(ActionEvent e) {
 							try {
-								java.awt.Desktop.getDesktop().browse(new URI(
-									"http://sites.google.com/site/priymakpoints/intelligence"));
+								java.awt.Desktop.getDesktop().browse(
+										new URI(
+										"http://sites.google.com/site/priymakpoints/intelligence"));
 							} catch (Exception e1) {
 							}
 						}
 					});
 					jMenu.add(jMenuItem);
 				}
-				
+
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">полезные ссылки</a></html>");

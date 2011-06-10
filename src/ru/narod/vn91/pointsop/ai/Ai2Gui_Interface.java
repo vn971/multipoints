@@ -11,4 +11,6 @@ public interface Ai2Gui_Interface {
 			long timeTook);
 
 	void receiveMessage(String message);
+
+	void endOfGame();
 }

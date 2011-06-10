@@ -13,28 +13,25 @@ import ru.narod.vn91.pointsop.gui.GuiController;
  * Когда надо вернуть ответ пользователю - обращаемся к этой имплементации,
  * вызываем её метод {@link Ai2Gui_Interface#makeMove(int, int, boolean, double, java.lang.String, long)}, тем самым отправляя информацию человеку
  * <br>3) включить созданный ИИ в работу.
- * Это делается через {@link AiWrapper}, надо просто посмотреть пример
+ * Это делается через {@link AiVirtualServer}, надо просто посмотреть пример
  * из SelfishGuiStarted и скопировать. Там 3 строчки.
  * 
  */
 
-public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
+public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	GuiController gui;
 	Gui2Ai_Interface ai;
-	String userFirst;
 	String userSecond;
 	
-	public AiWrapper(GuiController gui, 
-			String userFirst, 
+	public AiVirtualServer(GuiController gui,
 			String userSecond) {
 		this.gui = gui;
-		this.userFirst = userFirst;
 		this.userSecond = userSecond;
 	}
 
 	public void init() {
-		gui.subscribedGame("", this, userSecond, userFirst, 10, 10, null, false,
+		gui.subscribedGame("", this, userSecond, "Me", 10, 10, null, false,
 				null, true, true);
 		ai.init();
 	}
@@ -59,12 +56,17 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 		}
 	}
 
+	public void endOfGame() {
+		gui.unsubsribedGame(this, "");
+	}
+
 	public void connect() {
 	}
 
 	public void disconnecttt() {
-		gui.unsubsribedGame(this, "");
-		gui.serverClosed(this);
+		throw new UnsupportedOperationException();
+//		gui.unsubsribedGame(this, "");
+//		gui.serverClosed(this);
 	}
 
 	public void makeMove(String roomName,
@@ -99,9 +101,9 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void unsubscribeRoom(String name) {
-		ai.dispose();
 		gui.unsubsribedGame(this, "");
 		gui.serverClosed(this);
+		ai.dispose();
 	}
 
 	public void sendChat(String room,
@@ -115,7 +117,7 @@ public class AiWrapper implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public String getMyName() {
-		return userFirst;
+		return "Me";
 	}
 
 	public String getMainRoom() {

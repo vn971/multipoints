@@ -14,6 +14,7 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 	private List<Surrounding> allSurroundings = new ArrayList<Surrounding>();
 	private MoveInfo lastMoveInfo;
 	private DotAbstract lastDot = null;
+	RandomMovesProvider randomMovesProvider;
 
 	public SingleGameEngine(int sizeX,
 			int sizeY) {
@@ -330,10 +331,17 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 
 	@Override
 	public MoveResult tryRandomMove(boolean isRed) {
-		int newX = (int)(Math.random() * getSizeX() + 1);
-		int newY = (int)(Math.random() * getSizeY() + 1);
+		if (randomMovesProvider == null) {
+			randomMovesProvider = new RandomMovesProvider(sizeX, sizeY);
+		}
+		ru.narod.vn91.pointsop.data.DotAbstract dot = randomMovesProvider.getNextDot();
+		if (dot==null) {
+			return MoveResult.ERROR;
+		}
+//		int newX = (int)(Math.random() * getSizeX() + 1);
+//		int newY = (int)(Math.random() * getSizeY() + 1);
 //		int isRed = (int) (Math.random() * 2) < 1;
-		return makeMove(newX, newY, isRed ? MoveType.RED : MoveType.BLUE);
+		return makeMove(dot.x, dot.y, isRed ? MoveType.RED : MoveType.BLUE);
 	}
 
 	DotType getDotType(MoveType moveTypeFromUser) {
