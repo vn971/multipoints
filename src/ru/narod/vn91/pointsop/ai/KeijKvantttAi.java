@@ -76,7 +76,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 
 	public void dispose() {
 		isDisposed = true;
-		gui = null;
+//		gui = null;
 		try {
 			writer.write("-1\n");
 			writer.flush();
