@@ -755,25 +755,14 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 						estimatedTime = timeEnd - new Date().getTime();
 					}
 					if (this.equals(myGame.lastTimeoutThread)) {
-//						System.out.println("myGame.amIRed = " + myGame.amIRed);
-//						System.out.println("myGame.isMyMoveNow() = " + myGame.isMyMoveNow());
-//						MoveResult moveResult = myGame.engine.tryRandomMove(
-//								myGame.amIRed);
-//						System.out.println("moveResult = " + moveResult);
-//						}
 						DotAbstract dot = myGame.randomMovesProvider.findEmptyRandomPlace(
 								myGame.engine);
 						if (dot != null) {
-//							SingleGameEngineInterface.DotAbstract dot = myGame.engine.getLastDot();
-//							sendMoveToGui(room, false,
-//									dot.x, dot.y, myGame.amIRed);
 							gui.serverNoticeReceived(
 									ServerPointsxt.this,
 									room,
 									"Время вышло и точка сама поставилась в случаиное место на поле");
 							makeMove(room, dot.x, dot.y);
-//							myGame.moveList.add(new SimpleMove(
-//									dot.x, dot.y, myGame.amIRed));
 						}
 					}
 				}

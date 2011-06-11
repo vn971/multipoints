@@ -59,12 +59,19 @@ public class SelfishGuiStarter {
 
 		{
 			if (PersistentMemory.getFrameWidth() > 0
-					&& PersistentMemory.getFrameHeight() > 0) { //TODO
-				frame.setSize(
+					&& PersistentMemory.getFrameHeight() > 0
+					&& PersistentMemory.getFrameX() > 0
+					&& PersistentMemory.getFrameY() > 0) { //TODO
+				frame.setBounds(
+						PersistentMemory.getFrameX(),
+						PersistentMemory.getFrameY(),
 						PersistentMemory.getFrameWidth(),
 						PersistentMemory.getFrameHeight());
+//				frame.setSize(
+//						PersistentMemory.getFrameWidth(),
+//						PersistentMemory.getFrameHeight());
 			}
-			frame.setLocationRelativeTo(frame.getRootPane());
+//			frame.setLocationRelativeTo(frame.getRootPane());
 
 			frame.addComponentListener(new ComponentListener() {
 
@@ -74,9 +81,13 @@ public class SelfishGuiStarter {
 				public void componentResized(ComponentEvent e) {
 					PersistentMemory.setFrameWidth(frame.getWidth());
 					PersistentMemory.setFrameHeight(frame.getHeight());
+					PersistentMemory.setFrameX(frame.getX());
+					PersistentMemory.setFrameY(frame.getY());
 				}
 
 				public void componentMoved(ComponentEvent e) {
+					PersistentMemory.setFrameX(frame.getX());
+					PersistentMemory.setFrameY(frame.getY());
 				}
 
 				public void componentHidden(ComponentEvent e) {
@@ -85,7 +96,7 @@ public class SelfishGuiStarter {
 		}
 
 		{
-			int x = frame.getBounds().x, y = frame.getBounds().y;
+			int x = frame.getX(), y = frame.getY();
 			x = Math.max(x, 0);
 			y = Math.max(y, 0);
 			frame.setLocation(x, y);

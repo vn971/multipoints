@@ -24,7 +24,13 @@ public class RandomMovesProvider {
 		cursor = -1;
 		moves = new int[dimX * dimY];
 		for (int i = 0; i < dimX * dimY; i++) {
-			moves[i] = getRandom(i, dimX * dimY - 1);
+			moves[i] = i;
+		}
+		for (int i = 0; i < dimX * dimY; i++) {
+			int transposeIndex = getRandom(i, dimX * dimY - 1);
+			int backup = moves[i];
+			moves[i] = moves[transposeIndex];
+			moves[transposeIndex] = backup;
 		}
 	}
 
