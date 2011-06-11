@@ -6,8 +6,11 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -182,29 +185,59 @@ public class SelfishGuiStarter {
 
 				{
 					final JMenuItem jMenuItem = new JMenuItem(
-							"Бетта-версия запуска Keij&Kvanttt AI");
+							"<html><a href=>Keij&Kvanttt AI - инфо, обсуждения</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
-							JOptionPane.showMessageDialog(
-									frame,
-									"Для запуска данного ИИ вам нужна "
-									+ "установленная консольная версия от Keij&KvanTTT"
-									+ ":\nhttp://dl.dropbox.com/u/15765203/keijkvantttai.exe"
-									+ "\n\n"
-									+ "Если у вас не получается запустить ИИ, "
-									+ "попросите помощи на канале или \n"
-									+ "дождитесь "
-									+ "более позднего (и думаю более удобного) релиза.");
-							// ai as server
+							try {
+								java.awt.Desktop.getDesktop().browse(
+										new URI(
+										"http://vkontakte.ru/topic-21455903_24989187"));
+							} catch (Exception ex) {
+							}
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+
+				{
+					final JMenuItem jMenuItem = new JMenuItem(
+							"Keij&Kvanttt AI - настройки запуска.");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							String command = JOptionPane.showInputDialog(
+									"введите имя исполняемого файла - полный путь. \n"
+									+ "Например, если вы скачали keijkvantttai.exe в директорию "
+									+ "c:/Downloads/  \n"
+									+ "то введите c:/Downloads/keijkvantttai.exe",
+									PersistentMemory.getKeijKvantttAiPath());
+//							String command = JOptionPane.showInputDialog(
+//									frame,
+//									"введите имя исполняемого файла - полный путь. \n"
+//									+ "Например, если вы скачали keijkvantttai.exe в директорию "
+//									+ "c:/Downloads/  \n"
+//									+ "то введите c:/Downloads/keijkvantttai.exe");
+							PersistentMemory.setKeijKvantttAiPath(command);
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+
+				{
+					final JMenuItem jMenuItem = new JMenuItem(
+							"Keij&Kvanttt AI - запуск");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
 							AiVirtualServer aiWrapper =
 									new AiVirtualServer(
 									guiController,
 									"KeijKvantttAi");
-							String command = JOptionPane.showInputDialog(
-									"введите имя файла - консольного клиента ИИ:");
-							aiWrapper.setAi(new KeijKvantttAi(aiWrapper, 39, 32,
-									command));
+							aiWrapper.setAi(new KeijKvantttAi(
+									aiWrapper,
+									39, 32,
+									PersistentMemory.getKeijKvantttAiPath()));
 							aiWrapper.init();
 						}
 					});

@@ -57,6 +57,14 @@ public class PersistentMemory {
 		memory.put("ClickAudibility", ClickAudibility.valueOf_Failsafe(s).name());
 	}
 
+	public static void setKeijKvantttAiPath(String path) {
+		memory.put("keijkvantttai", path);
+	}
+
+	public static String getKeijKvantttAiPath() {
+		return memory.get("keijkvantttai", "keijkvantttai");
+	}
+
 	private static double limitDotWidth(double d) {
 		if (d > 1.0) {
 			return 1.0;

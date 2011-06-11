@@ -92,7 +92,6 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 			while (isDisposed == false) {
 				try {
 					String aiMove_Raw = reader.readLine();
-//					gui.receiveMessage(aiMove_Raw);
 					try {
 						String[] aiMoveSplitted = aiMove_Raw.split(" ", 3);
 						int x = Integer.parseInt(aiMoveSplitted[0]) + 1;
@@ -100,6 +99,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 						boolean isRed = aiMoveSplitted[2].equals("1");
 						gui.makeMove(x, y, isRed, 0.5, null, 0);
 					} catch (Exception e) {
+						gui.receiveMessage(aiMove_Raw);
 					}
 				} catch (IOException ex) {
 				}
