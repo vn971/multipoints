@@ -13,4 +13,17 @@ public class DotAbstract {
 		this.x = x;
 		this.y = y;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + x + ":" + y + "]";
+	}
+
+	public DotAbstract zero2one() {
+		return new DotAbstract(this.x + 1, this.y + 1);
+	}
+
+	public DotAbstract one2zero() {
+		return new DotAbstract(this.x - 1, this.y - 1);
+	}
 }

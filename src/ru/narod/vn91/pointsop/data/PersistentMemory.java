@@ -32,14 +32,30 @@ public class PersistentMemory {
 		memory.putInt("frameHeight", frameHeight);
 	}
 
+	public static void setFrameX(int x) {
+		memory.putInt("frameX", x);
+	}
+
+	public static void setFrameY(int y) {
+		memory.putInt("frameY", y);
+	}
+
 	public static int getFrameWidth() {
 		return memory.getInt("frameWidth", -1);
 	}
-	
+
 	public static int getFrameHeight() {
 		return memory.getInt("frameHeight", -1);
 	}
-	
+
+	public static int getFrameX() {
+		return memory.getInt("frameX", -1);
+	}
+
+	public static int getFrameY() {
+		return memory.getInt("frameY", -1);
+	}
+
 	public static String getUserName() {
 		return memory.get("username", "");
 	}

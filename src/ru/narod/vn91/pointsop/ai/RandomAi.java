@@ -61,4 +61,8 @@ public class RandomAi implements Gui2Ai_Interface {
 	public void dispose() {
 		// we didn't use any threads so we do nothing
 	}
+
+	public String getName() {
+		return "Random AI";
+	}
 }

@@ -38,7 +38,8 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 					new BufferedWriter(
 					new OutputStreamWriter(
 					process.getOutputStream()));
-		} catch (IOException ex) {
+		} catch (Exception ex) {
+//			gui.endOfGame();
 		}
 	}
 
@@ -49,7 +50,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 			listenThread = new ListenThread();
 			listenThread.setDaemon(true);
 			listenThread.start();
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			gui.endOfGame();
 		}
 //		if (process != null) {
@@ -69,7 +70,7 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 		try {
 			writer.write(message);
 			writer.flush();
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			gui.endOfGame();
 		}
 	}
@@ -81,8 +82,12 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 			writer.write("-1\n");
 			writer.flush();
 //			process.destroy();
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 		}
+	}
+
+	public String getName() {
+		return "Keij&Kvanttt AI";
 	}
 
 	class ListenThread extends Thread {

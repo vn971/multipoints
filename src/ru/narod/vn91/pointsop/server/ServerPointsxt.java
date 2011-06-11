@@ -41,6 +41,8 @@ import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
+import ru.narod.vn91.pointsop.data.DotAbstract;
+import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
@@ -259,10 +261,11 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			// because it causes a bug in pointsxt
 			lastSpectrTime = new Date();
 			if (roomName.equals(myGame.roomName)) {
-				myGame.clear();
+				myGame.leaveGame();
+			} else {
+				super.partChannel(roomName);
+				gui.unsubsribedRoom(this, roomName);
 			}
-			super.partChannel(roomName);
-			gui.unsubsribedRoom(this, roomName);
 		}
 	}
 
@@ -433,7 +436,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				int y = getCoordinate(message.charAt(1));
 				x = x + 1; // pointsOp version of coordinates
 				y = 31 - y + 1; // pointsOp version of coordinates
-				makedMove_PointsxtStyle(channel, false /*not silent*/,
+				sendMoveToGui(channel, false /*not silent*/,
 						x,
 						y,
 						(playerNumb == 1));
@@ -502,10 +505,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 
 					x = x + 1; // pointsOp version of coordinates
 					y = 31 - y + 1; // pointsOp version of coordinates
-					makedMove_PointsxtStyle(targetRoom, true /*silent*/, x, y,
+					sendMoveToGui(targetRoom, true /*silent*/, x, y,
 							isRed);
 				}
-				makedMove_PointsxtStyle(targetRoom, false, -2, -2, true); // update the paper of the user
+				sendMoveToGui(targetRoom, false, -2, -2, true); // update the paper of the user
 			}
 
 		} else if (message.equals("/Ping")) {
@@ -706,6 +709,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 					nicknameManager.getOrCreateShortNick(user));
 			if (user.equals(myGame.opponentName)
 					&& room.equals(myGame.roomName)) {
+				myGame.clear();
 				gui.chatReceived(this, room, "", "Оппонент покинул игру");
 			}
 		}
@@ -717,7 +721,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		}
 	}
 
-	public synchronized void makedMove_PointsxtStyle(
+	public synchronized void sendMoveToGui(
 			final String room,
 			boolean silent,
 			int x,
@@ -751,21 +755,25 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 						estimatedTime = timeEnd - new Date().getTime();
 					}
 					if (this.equals(myGame.lastTimeoutThread)) {
-						MoveResult moveResult = MoveResult.ERROR;
-						int i = 0;
-						while ((i < 9999) && (moveResult == MoveResult.ERROR)) {
-							i += 1;
-							moveResult = myGame.engine.tryRandomMove(
-									myGame.amIRed);
-						}
-						if (moveResult != MoveResult.ERROR) {
-							makeMove(room,
-									myGame.engine.getLastDot().x,
-									myGame.engine.getLastDot().y);
+//						System.out.println("myGame.amIRed = " + myGame.amIRed);
+//						System.out.println("myGame.isMyMoveNow() = " + myGame.isMyMoveNow());
+//						MoveResult moveResult = myGame.engine.tryRandomMove(
+//								myGame.amIRed);
+//						System.out.println("moveResult = " + moveResult);
+//						}
+						DotAbstract dot = myGame.randomMovesProvider.findEmptyRandomPlace(
+								myGame.engine);
+						if (dot != null) {
+//							SingleGameEngineInterface.DotAbstract dot = myGame.engine.getLastDot();
+//							sendMoveToGui(room, false,
+//									dot.x, dot.y, myGame.amIRed);
 							gui.serverNoticeReceived(
 									ServerPointsxt.this,
 									room,
 									"Время вышло и точка сама поставилась в случаиное место на поле");
+							makeMove(room, dot.x, dot.y);
+//							myGame.moveList.add(new SimpleMove(
+//									dot.x, dot.y, myGame.amIRed));
 						}
 					}
 				}
@@ -779,6 +787,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		myGame.surrender(roomName);
 	}
 
+	@Override
 	public void makeMove(
 			String roomName,
 			int x,
@@ -875,8 +884,10 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		SingleGameEngineInterface engine;
 		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
 		Thread lastTimeoutThread = null;
+		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
 
 		private void clear() {
+			randomMovesProvider = new RandomMovesProvider(39, 32);
 			roomName = "";
 			moveList.clear();
 			opponentName = "";
@@ -891,6 +902,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			if (opponentName != null) {
 				clear();
 				ServerPointsxt.this.partChannel(roomName);
+				ServerPointsxt.this.gui.unsubsribedGame(
+						ServerPointsxt.this, roomName);
 			}
 		}
 
@@ -916,11 +929,11 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				int x,
 				int y) {
 			if (roomName.equals(this.roomName)) {
-				boolean isFirstMoveAllowed = (moveList.size() >= 2)
+				boolean isFirstMoveAllowed = ((moveList.size() >= 2))
 						|| ((x - 1 >= 12) && (x - 1 <= 19)
 						&& (32 - y >= 12) && (32 - y <= 26)); // 12<=x<=19, 12<=y<=26
 				if (isMyMoveNow() && isFirstMoveAllowed) {
-					ServerPointsxt.this.makedMove_PointsxtStyle(
+					ServerPointsxt.this.sendMoveToGui(
 							roomName, false, x, y,
 							amIRed);
 					ServerPointsxt.this.sendMessage(roomName,

@@ -15,4 +15,6 @@ public interface Gui2Ai_Interface {
 	 * if AI used his own Thread - AI must free this thread.
 	 */
 	void dispose();
+
+	String getName();
 }

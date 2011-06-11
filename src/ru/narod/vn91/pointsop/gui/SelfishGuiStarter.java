@@ -6,11 +6,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -62,8 +59,9 @@ public class SelfishGuiStarter {
 
 		{
 			if (PersistentMemory.getFrameWidth() > 0
-					&& PersistentMemory.getFrameHeight() > 0) {
-				frame.setSize(PersistentMemory.getFrameWidth(),
+					&& PersistentMemory.getFrameHeight() > 0) { //TODO
+				frame.setSize(
+						PersistentMemory.getFrameWidth(),
 						PersistentMemory.getFrameHeight());
 			}
 			frame.setLocationRelativeTo(frame.getRootPane());
@@ -153,8 +151,7 @@ public class SelfishGuiStarter {
 						public void actionPerformed(ActionEvent e) {
 							AiVirtualServer aiWrapper =
 									new AiVirtualServer(
-									guiController,
-									"PointsAI 1.07");
+									guiController);
 							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
 									aiWrapper, 39, 32));
 							aiWrapper.init();
@@ -171,8 +168,7 @@ public class SelfishGuiStarter {
 							//jMenuItem.setEnabled(false);
 							AiVirtualServer aiWrapper =
 									new AiVirtualServer(
-									guiController,
-									"PointsAI 1.056");
+									guiController);
 							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_056.PointsAIEngine(
 									aiWrapper, 39, 32));
 							aiWrapper.init();
@@ -232,8 +228,7 @@ public class SelfishGuiStarter {
 						public void actionPerformed(ActionEvent e) {
 							AiVirtualServer aiWrapper =
 									new AiVirtualServer(
-									guiController,
-									"KeijKvantttAi");
+									guiController);
 							aiWrapper.setAi(new KeijKvantttAi(
 									aiWrapper,
 									39, 32,
@@ -254,8 +249,7 @@ public class SelfishGuiStarter {
 							// ai as server
 							AiVirtualServer aiWrapper =
 									new AiVirtualServer(
-									guiController,
-									"RandomAI");
+									guiController);
 							aiWrapper.setAi(new RandomAi(aiWrapper, 39, 32));
 							aiWrapper.init();
 						}

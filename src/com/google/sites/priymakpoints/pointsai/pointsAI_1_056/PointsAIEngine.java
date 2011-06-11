@@ -21,7 +21,7 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 		this.engine = new SingleGameEngine(sizeX, sizeY);
 		
 		try{pointsAI=new com.google.sites.priymakpoints.pointsai.pointsAI_1_056.PointsAI();
-		}catch(Exception e1){new JOptionPane().showMessageDialog(null, "Невозможно запустить ИИ!", "Ошибка", 0);}		
+		}catch(Exception e1){JOptionPane.showMessageDialog(null, "Невозможно запустить ИИ!", "Ошибка", 0);}
 	}
 	
 	public void init() {
@@ -98,5 +98,9 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 	}
 
 	public void dispose() {}
+
+	public String getName() {
+		return "PointsAI 1.06";
+	}
 
 }

@@ -17,22 +17,21 @@ import ru.narod.vn91.pointsop.gui.GuiController;
  * из SelfishGuiStarted и скопировать. Там 3 строчки.
  * 
  */
-
 public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	GuiController gui;
 	Gui2Ai_Interface ai;
-	String userSecond;
-	
-	public AiVirtualServer(GuiController gui,
-			String userSecond) {
+//	String userSecond;
+
+	public AiVirtualServer(GuiController gui) {
 		this.gui = gui;
-		this.userSecond = userSecond;
 	}
 
 	public void init() {
-		gui.subscribedGame("", this, userSecond, "Me", 10, 10, null, false,
-				null, true, true);
+		gui.subscribedGame("", this,
+				ai.getName(), "Me",
+				10, 10,
+				null, false, null, true, true);
 		ai.init();
 	}
 
@@ -52,12 +51,14 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	public void receiveMessage(String message) {
 		if ((message != null) && (message.equals("") == false)) {
-			gui.chatReceived(this, "", userSecond, message);
+			gui.chatReceived(this, "", ai.getName(), message);
 		}
 	}
 
 	public void endOfGame() {
 		gui.unsubsribedGame(this, "");
+		gui.receiveRawServerInfo(this, ai.getName() + "закончил игру.",
+				GuiController.MessageType.ERROR);
 	}
 
 	public void connect() {

@@ -10,13 +10,19 @@ public interface SingleGameEngineInterface {
 
 	public int getSizeY();
 
-	public DotType getDotType(int x, int y);
+	public DotType getDotType(int x,
+			int y);
 
-	public MoveResult makeMove(int x, int y, MoveType moveType);
+	public MoveResult makeMove(int x,
+			int y,
+			MoveType moveType);
 
-	public MoveResult makeMove(int x, int y, boolean isRed);
+	public MoveResult makeMove(int x,
+			int y,
+			boolean isRed);
 
-	public boolean canMakeMove(int x, int y);
+	public boolean canMakeMove(int x,
+			int y);
 
 	// public void setStopMode(MoveType moveType);
 	// public DotAbstract getStopMove();
@@ -77,7 +83,8 @@ public interface SingleGameEngineInterface {
 			}
 		}
 
-		static boolean dotTypeIsIn(DotType element, DotType... set) {
+		static boolean dotTypeIsIn(DotType element,
+				DotType... set) {
 			for (int i = 0; i < set.length; i++) {
 				if (set[i] == element) {
 					return true;
@@ -88,6 +95,10 @@ public interface SingleGameEngineInterface {
 
 		public boolean isIn(DotType... set) {
 			return dotTypeIsIn(this, set);
+		}
+
+		public boolean notIn(DotType... set) {
+			return !isIn(set);
 		}
 	}
 
@@ -117,7 +128,11 @@ public interface SingleGameEngineInterface {
 		public MoveInfoAbstract() {
 		}
 
-		public MoveInfoAbstract(int coordX, int coordY, MoveType moveType, MoveResult moveResult, List<SurroundingAbstract> newSurroundings) {
+		public MoveInfoAbstract(int coordX,
+				int coordY,
+				MoveType moveType,
+				MoveResult moveResult,
+				List<SurroundingAbstract> newSurroundings) {
 			this.coordX = coordX;
 			this.coordY = coordY;
 			this.moveType = moveType;
@@ -144,7 +159,8 @@ public interface SingleGameEngineInterface {
 			} else if (type == SurroundingType.BLUE) {
 				return false;
 			} else {
-				throw new UnsupportedOperationException("Error casting SurroundingType to boolean.");
+				throw new UnsupportedOperationException(
+						"Error casting SurroundingType to boolean.");
 			}
 		}
 	}
