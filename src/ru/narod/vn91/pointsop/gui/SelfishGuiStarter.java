@@ -59,9 +59,9 @@ public class SelfishGuiStarter {
 
 		{
 			if (PersistentMemory.getFrameWidth() > 0
-					&& PersistentMemory.getFrameHeight() > 0
-					&& PersistentMemory.getFrameX() > 0
-					&& PersistentMemory.getFrameY() > 0) { //TODO
+					&& PersistentMemory.getFrameHeight() > 0) {
+//					&& PersistentMemory.getFrameX() > 0
+//					&& PersistentMemory.getFrameY() > 0
 				frame.setBounds(
 						PersistentMemory.getFrameX(),
 						PersistentMemory.getFrameY(),

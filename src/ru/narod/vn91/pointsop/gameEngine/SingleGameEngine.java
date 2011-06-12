@@ -64,7 +64,8 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 			}
 		} else { // there was a Ctrl surrounding
 
-			if (ctrlSurrounding.isEnemyCtrlFor(moveType)) { // dot was placed
+			if (ctrlSurrounding.isEnemyCtrlFor(moveType)) {
+				// dot was placed
 				// into an enemy surrounding
 
 				// try to eat for the moving player
@@ -78,7 +79,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 
 				if (surroundedSomething == false) {
 					// eat back if the player didn't surround anything
-					// TODO
 					ctrlSurrounding.wasDestroyed = false;
 					ctrlSurrounding.type =
 							(moveType == MoveType.BLUE) ? SurroundingType.RED
@@ -526,8 +526,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 
 		void eat(Surrounding newSurrounding,
 				Surrounding outerCtrlSurrounding) {
-
-			// TODO Remove all code that works with Surroundings from here..
 
 			if (newSurrounding.isCtrl() == false) {
 				this.height += 1;
