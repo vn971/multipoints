@@ -107,6 +107,15 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 						gui.receiveMessage(aiMove_Raw);
 					}
 				} catch (IOException ex) {
+					boolean processFinished = true;
+					try {
+						process.exitValue();
+					} catch (Exception e) {
+						processFinished = false;
+					}
+					if (processFinished) {
+						gui.endOfGame();
+					}
 				}
 			}
 		}

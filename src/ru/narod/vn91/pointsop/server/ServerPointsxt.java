@@ -777,7 +777,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	public void makeMove(
+	synchronized public void makeMove(
 			String roomName,
 			int x,
 			int y) {
