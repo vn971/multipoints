@@ -16,7 +16,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	private void userWantsPointsxtConnection() {
 		String nick = jTextField_Username.getText();
-		nick = ServerPointsxt.getAllowedNick(nick);
+		nick = ServerPointsxt.getAllowedNick(nick, true);
 		jTextField_Username.setText(nick);
 		if (nick.equals("") == false) {
 			PersistentMemory.setUserName(nick);
@@ -27,17 +27,17 @@ public class WelcomePanel extends javax.swing.JPanel {
 			}
 			if (guiController.pointsxt_vn91_server == null) {
 				guiController.pointsxt_vn91_server = new ServerPointsxt(
-						"77.232.28.15", guiController, nick, "none", "201120");
+						"77.232.28.15", guiController, nick, "none", "201120", true);
 				guiController.pointsxt_vn91_server.connect();
 			}
 			if (guiController.pointsxt_tochkiorg_server == null) {
 				guiController.pointsxt_tochkiorg_server = new ServerPointsxt(
-						"tochki.org", guiController, nick, null, "1ppass1");
+						"tochki.org", guiController, nick, null, "1ppass1", true);
 				guiController.pointsxt_tochkiorg_server.connect();
 			}
 			if (guiController.pointsxt_ircworldru_server == null) {
 				guiController.pointsxt_ircworldru_server = new ServerPointsxt(
-						"wenet.su", guiController, nick, null, "201120");
+						"wenet.su", guiController, nick, null, "201120", false);
 				guiController.pointsxt_ircworldru_server.connect();
 			}
 		}
