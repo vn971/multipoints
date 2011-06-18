@@ -268,7 +268,6 @@ public class SettingsPanel extends javax.swing.JPanel {
 	}//GEN-LAST:event_jRadioButton_PointsClick_InAllGamesStateChanged
 
 	private void jButton_PointClickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PointClickActionPerformed
-		// TODO add your handling code here:
 		new Sounds().playMakeMove(true);
 	}//GEN-LAST:event_jButton_PointClickActionPerformed
 
@@ -286,7 +285,6 @@ public class SettingsPanel extends javax.swing.JPanel {
 	}//GEN-LAST:event_jCheckBox_DrawConnectionsStateChanged
 
 	private void jButton_P1ColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_P1ColorActionPerformed
-		// TODO add your handling code here:
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
 				PersistentMemory.getPlayer1Color());
 		if (c != null) {
@@ -305,7 +303,6 @@ public class SettingsPanel extends javax.swing.JPanel {
 	}//GEN-LAST:event_jButton_P2ColorActionPerformed
 
 	private void jButton_BackgroundColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BackgroundColorActionPerformed
-		// TODO add your handling code here:
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
 				PersistentMemory.getBackgroundColor());
 		if (c != null) {

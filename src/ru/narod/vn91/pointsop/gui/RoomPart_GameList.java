@@ -137,7 +137,6 @@ public class RoomPart_GameList extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-		// TODO add your handling code here:
 		if (evt.getClickCount() == 2) {
 			int row = jTable1.getSelectedRow();
 			if (row >= 0) {

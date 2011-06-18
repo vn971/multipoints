@@ -1,10 +1,12 @@
 syntax: glob
 *.class
 *.jar
-bin\*
-dist\*
+bin/*
+dist/*
 build\nb-jws.ks
 build/built-jar.properties
+*.iws
+.idea/workspace.xml
 
 syntax: regexp
 

@@ -302,18 +302,15 @@ public class PrivateChat extends javax.swing.JPanel {
 }//GEN-LAST:event_jTextField_ChatKeyPressed
 
 	private void jButton_SoundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SoundActionPerformed
-		// TODO add your handling code here:
 		server.sendChat(companionNick, "/SendSOUND");
 	}//GEN-LAST:event_jButton_SoundActionPerformed
 
 	private void jButton_PingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PingActionPerformed
-		// TODO add your handling code here:
 		lastPingSent = new Date();
 		server.sendPrivateMsg(companionNick, "/Ping");
 	}//GEN-LAST:event_jButton_PingActionPerformed
 
 	private void jButton_UserinfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_UserinfoActionPerformed
-		// TODO add your handling code here:
 		server.sendPrivateMsg("Podbot", "!info " + companionNick.replaceAll(
 				"\\(.*\\)", ""));
 		addChat("", "ответ (информацию юзеринфо) Вы получите от имени 'PodBot' "
@@ -321,7 +318,6 @@ public class PrivateChat extends javax.swing.JPanel {
 	}//GEN-LAST:event_jButton_UserinfoActionPerformed
 
 	private void jButton_StartNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_StartNewGameActionPerformed
-		// TODO add your handling code here:
 		String userOutput = JOptionPane.showInputDialog(
 				"введите размеры поля по X и по Y через пробел.\n"
 				+ "Размеры не должны быть больше 50-ти.\n"

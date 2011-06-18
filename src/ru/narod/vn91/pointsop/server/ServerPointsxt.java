@@ -58,6 +58,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	private String defaultChannel;
 	private String defaultPass;
 	private String defaultServer_Visible;
+	protected String ircPassword;
+	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
@@ -74,27 +76,19 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			@Override
 			public void run() {
 				try {
-//					if (defaultServ.equals("ircworld.ru")) {
 					gui.receiveRawServerInfo(
 							ServerPointsxt.this,
 							"Cоединение с сервером " + defaultServ
-							+ ". Пожалуйста, подождите... (примерно 30 секунд)",
+									+ ". Пожалуйста, подождите... (примерно 30 секунд)",
 							GuiController.MessageType.INFO);
-//					} else {
-//						gui.receiveRawServerInfo(
-//								ServerPointsxt.this,
-//								"Cоединение с сервером " + defaultServ
-//								+ ". Пожалуйста, подождите...",
-//								GuiController.MessageType.INFO);
-//					}
-					connect(defaultServ, 6667, "none");
+					connect(defaultServ, 6667, ircPassword);
 					myNickOnServ = getNick();
 					ServerPointsxt.super.sendMessage("podbot",
 							"!opConnect0423");
 //					subscribeRoom(defaultChannel);
-				} catch (NickAlreadyInUseException e) {
-				} catch (IOException e) {
-				} catch (IrcException e) {
+				} catch (NickAlreadyInUseException ignored) {
+				} catch (IOException ignored) {
+				} catch (IrcException ignored) {
 				}
 			}
 		});
@@ -106,32 +100,32 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		super.dispose();
 	}
 
-	public ServerPointsxt(String server,
+	public ServerPointsxt(
+			String server,
 			GuiController gui,
 			String myName,
-			String password) {
+			String ircPassword,
+			String roomPassword,
+			boolean ircAcceptsRussianNicks
+	) {
 		super();
 		this.gui = gui;
 		this.defaultServ = server;
-//		defaultChannel = (defaultServ.equals("tochki.org")) ? "#pointsxt" : "#nobot";
-//		defaultPass = (defaultChannel.equals("#pointsxt")) ? "1ppass1" : "#nobot";
+		this.ircPassword = ircPassword;
 		defaultChannel = "#pointsxt";
-		defaultPass = defaultServ.equals("ircworld.ru") ? "201120" : "1ppass1";
+		defaultPass = roomPassword;
+		this.ircAcceptsRussianNicks = ircAcceptsRussianNicks;
 		defaultServer_Visible = defaultServ.equals("77.232.28.15") ? "pointsgame.info" : defaultServ;
 
 		String login = "";
 		try {
 			login = InetAddress.getLocalHost().getHostName();
 			login = login.replaceAll("[^a-zA-Z0-9-]", "");
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		super.setLogin(login);
 
-		if (defaultServ.equals("77.232.28.15")) {
-//			setVerbose(true);
-		}
-
-		myName = getAllowedNick(myName);
+		myName = getAllowedNick(myName, ircAcceptsRussianNicks);
 		myNick_Originally = myName;
 		myName = "^" + myName;
 		myName = myName + "_X091000000000[free]";
@@ -141,7 +135,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		super.setVersion("PointsOp (a client from vn91)");
 		try {
 			super.setEncoding("CP1251");
-		} catch (UnsupportedEncodingException e1) {
+		} catch (UnsupportedEncodingException ignored) {
 		}
 	}
 
@@ -152,12 +146,12 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		String roomAsString;
 		boolean unoccupiedFound = false;
 		do {
-			roomNumber = (int)(Math.random() * 99999);
+			roomNumber = (int) (Math.random() * 99999);
 			roomAsString = gamePrefix + String.format("%05d", roomNumber);
 			unoccupiedFound = true;
 			User[] userList = getUsers(defaultChannel);
-			for (int i = 0; i < userList.length; i++) {
-				String user = userList[i].getNick();
+			for (User anUserList : userList) {
+				String user = anUserList.getNick();
 				if (roomAsString.equals(getPlayerRoom(user))) {
 					// equal found
 					unoccupiedFound = false;
@@ -173,7 +167,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				roomNumber));
 	}
 
-	public void acceptOpponent(String roomName,
+	public void acceptOpponent(
+			String roomName,
 			String name) {
 		if (!roomName.equals(myGame.roomName)) {
 			return;
@@ -215,11 +210,17 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 				commandCommonPrefix + commandIWantJoinGame);
 	}
 
-	public static String getAllowedNick(String inputNick) {
-		inputNick = inputNick.replaceAll("[^a-zA-Z0-9а-яА-Я]", "");
-		if (inputNick.matches(".*[a-zA-Z].*")) {
-			inputNick = inputNick.replaceAll("[а-яА-Я]", "");
-			// delete all russian letters in case of a mixed nickname
+//	public
+
+	public static String getAllowedNick(String inputNick, boolean acceptRussian) {
+		if (acceptRussian) {
+			inputNick = inputNick.replaceAll("[^a-zA-Z0-9а-яА-Я]", "");
+			if (inputNick.matches(".*[a-zA-Z].*")) {
+				inputNick = inputNick.replaceAll("[а-яА-Я]", "");
+				// delete all russian letters in case of a mixed nickname
+			}
+		} else {
+			inputNick = inputNick.replaceAll("[^a-zA-Z0-9]", "");
 		}
 		if (inputNick.length() > 9) {
 			inputNick = inputNick.substring(0, 9);
@@ -229,8 +230,6 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 
 	public void subscribeRoom(String roomName) {
 		if (roomName.equals(defaultChannel)) {
-//			boolean isTochkiOrg = defaultServ.equals("77.232.28.15");
-//			String guiName = isTochkiOrg ? "основная комната" : defaultServ;
 			gui.subscribedLangRoom(
 					roomName,
 					this,
@@ -270,7 +269,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onJoin(String channel,
+	protected void onJoin(
+			String channel,
 			String sender,
 			String login,
 			String hostname) {
@@ -290,7 +290,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		if (super.isConnected()) {
 			gui.receiveRawServerInfo(this,
 					"Удалось соединиться с " + defaultServ
-					+ ", пытаюсь подключиться к основной комнате...",
+							+ ", пытаюсь подключиться к основной комнате...",
 					GuiController.MessageType.INFO);
 		}
 	}
@@ -301,16 +301,17 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onUserList(String channel,
+	protected void onUserList(
+			String channel,
 			User[] users) {
-		for (int index = 0; index < users.length; index++) {
-			User user = users[index];
+		for (User user : users) {
 			userConnected_PointsxtStyle(channel, user.getNick(),/*silent*/ true);
 		}
 	}
 
 	@Override
-	protected void onTopic(String channel,
+	protected void onTopic(
+			String channel,
 			String topic,
 			String setBy,
 			long date,
@@ -319,7 +320,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onKick(String channel,
+	protected void onKick(
+			String channel,
 			String kickerNick,
 			String kickerLogin,
 			String kickerHostname,
@@ -329,7 +331,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onPart(String channel,
+	protected void onPart(
+			String channel,
 			String sender,
 			String login,
 			String hostname) {
@@ -345,13 +348,13 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onQuit(String sourceNick,
+	protected void onQuit(
+			String sourceNick,
 			String sourceLogin,
 			String sourceHostname,
 			String reason) {
 		String[] channels = getChannels();
-		for (int channelIndex = 0; channelIndex < channels.length; channelIndex++) {
-			String channelName = channels[channelIndex];
+		for (String channelName : channels) {
 			userDisconnected_PointsxtStyle(channelName, sourceNick);
 		}
 		gui.userDisconnected(this, nicknameManager.getOrCreateShortNick(
@@ -359,7 +362,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onNickChange(String oldNick,
+	protected void onNickChange(
+			String oldNick,
 			String login,
 			String hostname,
 			String newNick) {
@@ -375,12 +379,13 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		if ((rankNew != rankOld) && (rankOld != 0) && (rankNew != 0)) {
 			gui.serverNoticeReceived(this, defaultChannel,
 					"" + nicknameManager.getOrCreateShortNick(newNick)
-					+ " " + rankOld + " -> " + rankNew);
+							+ " " + rankOld + " -> " + rankNew);
 		}
 	}
 
 	@Override
-	protected void onMessage(String channel,
+	protected void onMessage(
+			String channel,
 			String sender,
 			String login,
 			String hostname,
@@ -443,8 +448,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			} else if (message.equalsIgnoreCase("/ImLost")) {
 				User[] users = getUsers(channel);
 				boolean biggerFishFound = false;
-				for (int userIndex = 0; userIndex < users.length; userIndex++) {
-					String user = users[userIndex].getNick();
+				for (User user1 : users) {
+					String user = user1.getNick();
 					if ((user.compareTo(getNick()) > 0) && (user.startsWith("^"))) {
 						biggerFishFound = true;
 					}
@@ -458,7 +463,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	protected void onPrivateMessage(String sender,
+	protected void onPrivateMessage(
+			String sender,
 			String login,
 			String hostname,
 			String message) {
@@ -512,8 +518,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			}
 
 		} else if (message.equals("/Ping")) {
-			super.sendMessage(sender, "/Pong");
 			// pointsxt-style ping-ing
+			super.sendMessage(sender, "/Pong");
 		} else {
 			String nick = nicknameManager.getOrCreateShortNick(sender);
 			gui.privateMessageReceived(this, nick, message.replaceAll(
@@ -554,8 +560,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	GameInfoAbstract getGameInfoFromRoomName(String roomName) {
 		GameInfoAbstract gameInfoAbstract = new GameInfoAbstract();
 		User[] users = super.getUsers(defaultChannel);
-		for (int userNumber = 0; userNumber < users.length; userNumber++) {
-			User user = users[userNumber];
+		for (User user : users) {
 			String userIrcName = user.getNick();
 			if (getPlayerRoom(userIrcName).equals(roomName)) {
 				String pxtGameInfo = userIrcName.substring(
@@ -647,7 +652,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		return ircNick.startsWith("^");
 	}
 
-	public void userConnected_PointsxtStyle(String room,
+	public void userConnected_PointsxtStyle(
+			String room,
 			String fullNickname,
 			boolean silent) {
 		String pointsxtNick = nicknameManager.getOrCreateShortNick(fullNickname);
@@ -665,8 +671,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			if (newRoom.length() > 0) {
 				User[] users = getUsers(defaultChannel);
 				String opponent = "";
-				for (int i = 0; i < users.length; i++) {
-					String possibleOpponent = users[i].getNick();
+				for (User user : users) {
+					String possibleOpponent = user.getNick();
 					if ((getPlayerRoom(possibleOpponent).equals(newRoom))
 							&& (!nicknameManager.getOrCreateShortNick(
 							possibleOpponent).
@@ -697,7 +703,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		}
 	}
 
-	public void userDisconnected_PointsxtStyle(String room,
+	public void userDisconnected_PointsxtStyle(
+			String room,
 			String user) {
 		if (room.equals(defaultChannel)) {
 			nicknameManager.removeIrcNick(user);
@@ -740,6 +747,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		} else {
 			Thread timeOutThread = new Thread() {
 
+				@SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
 				@Override
 				public void run() {
 					long timeEnd = new Date().getTime() + 5 * 1000;
@@ -749,7 +757,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 						synchronized (o) {
 							try {
 								o.wait(estimatedTime + 10);
-							} catch (InterruptedException ex) {
+							} catch (InterruptedException ignored) {
 							}
 						}
 						estimatedTime = timeEnd - new Date().getTime();
@@ -777,21 +785,23 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 	}
 
 	@Override
-	public void makeMove(
+	synchronized public void makeMove(
 			String roomName,
 			int x,
 			int y) {
 		myGame.makeMove(roomName, x, y);
 	}
 
-	public void sendChat(String room,
+	public void sendChat(
+			String room,
 			String message) {
 		super.sendMessage(room, message);
 		gui.chatReceived(this, room, getMyName(), message.replaceAll("ACTION",
 				"***"));
 	}
 
-	public void sendPrivateMsg(String target,
+	public void sendPrivateMsg(
+			String target,
 			String message) {
 		String fullTargetName = nicknameManager.getIrcNick(target);
 		if (fullTargetName != null) {
@@ -814,12 +824,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		return defaultServer_Visible;
 	}
 
-	public String int2characterString(int i) {
-		return Character.toString((char)(i));
-	}
-
 	public String int2SpectrGameCharacter(int i) {
-		return Character.toString((char)(i + '0'));
+		return Character.toString((char) (i + '0'));
 	}
 
 	public String getSpectrGame_PointsxtStyle() {
@@ -827,7 +833,7 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 		result.append("/SpectrGame ");
 		String numberOfTurnsAsString =
 				myGame.moveList.isEmpty() ? "-001"
-				: String.format("%03d", myGame.moveList.size() - 1);
+						: String.format("%03d", myGame.moveList.size() - 1);
 		result.append(numberOfTurnsAsString);
 		result.append(String.format("%03d",
 				myGame.engine.getSurroundings().size()));
@@ -883,8 +889,8 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 			engine = null;
 			ServerPointsxt.this.changeNick(
 					String.format(
-					"%s_X091000000000[free]",
-					ServerPointsxt.this.getMyName()));
+							"%s_X091000000000[free]",
+							ServerPointsxt.this.getMyName()));
 		}
 
 		void leaveGame() {
@@ -926,9 +932,9 @@ public class ServerPointsxt extends PircBot implements ServerInterface {
 							roomName, false, x, y,
 							amIRed);
 					ServerPointsxt.this.sendMessage(roomName,
-							"" + (char)('0' + x - 1)
-							+ (char)('0' + 32 - y)
-							+ "999");
+							"" + (char) ('0' + x - 1)
+									+ (char) ('0' + 32 - y)
+									+ "999");
 				}
 			}
 		}
@@ -976,7 +982,8 @@ class IrcNicknameManager {
 		return (result == null) ? "" : result;
 	}
 
-	void changeIrcNick(String oldIrcNick,
+	void changeIrcNick(
+			String oldIrcNick,
 			String newIrcNick) {
 		String shortNick = IrcNick2ShortNick.get(oldIrcNick);
 		IrcNick2ShortNick.put(newIrcNick, shortNick);
@@ -1001,8 +1008,8 @@ class SimpleMove {
 	}
 
 	public SimpleMove(int x,
-			int y,
-			boolean isRed) {
+										int y,
+										boolean isRed) {
 		this.x = x;
 		this.y = y;
 		this.isRed = isRed;
