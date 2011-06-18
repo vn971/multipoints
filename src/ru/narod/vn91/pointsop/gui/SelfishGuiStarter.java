@@ -153,8 +153,70 @@ public class SelfishGuiStarter {
 			}
 
 			{
-				JMenu jMenu = new JMenu("Играть с ИИ");
+				JMenu jMenu = new JMenu("Обучение");
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">правила игры Точки</a></html>");
+					jMenuItem.addActionListener(new ActionListener() {
 
+						public void actionPerformed(ActionEvent e) {
+							try {
+								java.awt.Desktop.getDesktop().browse(
+										new URI(
+										"http://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D1%87%D0%BA%D0%B8"));
+							} catch (Exception e1) {
+							}
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				{
+					JMenuItem jMenuItem = new JMenuItem("test");
+					jMenuItem.setEnabled(false);
+					jMenu.add(jMenuItem);
+				}
+
+				jMenuBar.add(jMenu);
+			}
+			
+			
+			
+			{
+				JMenu jMenu = new JMenu("Играть с ИИ");
+				
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">о программе PointsAI</a></html>");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							try {
+								java.awt.Desktop.getDesktop().browse(
+										new URI(
+										"http://sites.google.com/site/priymakpoints/intelligence"));
+							} catch (Exception e1) {
+							}
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				
+				{
+					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.08");
+					jMenuItem.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							AiVirtualServer aiWrapper =
+									new AiVirtualServer(
+									guiController);
+							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_08.PointsAIEngine(
+									aiWrapper, 39, 32));
+							aiWrapper.init();
+						}
+					});
+					jMenu.add(jMenuItem);
+				}
+				
 				{
 					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.07");
 					jMenuItem.addActionListener(new ActionListener() {
@@ -164,23 +226,6 @@ public class SelfishGuiStarter {
 									new AiVirtualServer(
 									guiController);
 							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
-									aiWrapper, 39, 32));
-							aiWrapper.init();
-						}
-					});
-					jMenu.add(jMenuItem);
-				}
-
-				{
-					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.056");
-					jMenuItem.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent e) {
-							//jMenuItem.setEnabled(false);
-							AiVirtualServer aiWrapper =
-									new AiVirtualServer(
-									guiController);
-							aiWrapper.setAi(new com.google.sites.priymakpoints.pointsai.pointsAI_1_056.PointsAIEngine(
 									aiWrapper, 39, 32));
 							aiWrapper.init();
 						}
@@ -292,23 +337,6 @@ public class SelfishGuiStarter {
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">правила игры Точки</a></html>");
-					jMenuItem.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent e) {
-							try {
-								java.awt.Desktop.getDesktop().browse(
-										new URI(
-										"http://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D1%87%D0%BA%D0%B8"));
-							} catch (Exception e1) {
-							}
-						}
-					});
-					jMenu.add(jMenuItem);
-				}
-
-				{
-					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">о программе PointsOP</a></html>");
 					jMenuItem.addActionListener(new ActionListener() {
 
@@ -316,23 +344,6 @@ public class SelfishGuiStarter {
 							try {
 								java.awt.Desktop.getDesktop().browse(new URI(
 										"http://vkontakte.ru/club21455903"));
-							} catch (Exception e1) {
-							}
-						}
-					});
-					jMenu.add(jMenuItem);
-				}
-
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">о программе PointsAI</a></html>");
-					jMenuItem.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent e) {
-							try {
-								java.awt.Desktop.getDesktop().browse(
-										new URI(
-										"http://sites.google.com/site/priymakpoints/intelligence"));
 							} catch (Exception e1) {
 							}
 						}
