@@ -37,7 +37,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 			}
 			if (guiController.pointsxt_ircworldru_server == null) {
 				guiController.pointsxt_ircworldru_server = new ServerPointsxt(
-						"wenet.su", guiController, nick, null, "201120", false);
+						"wenet.su", guiController, nick, null, "201120", true);
 				guiController.pointsxt_ircworldru_server.connect();
 			}
 		}
