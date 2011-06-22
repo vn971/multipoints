@@ -1,8 +1,5 @@
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import javax.swing.JPanel;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
@@ -10,6 +7,15 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 import ru.narod.vn91.pointsop.php.PhpBackupServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+
+import javax.jnlp.FileContents;
+import javax.jnlp.FileOpenService;
+import javax.jnlp.FileSaveService;
+import javax.jnlp.ServiceManager;
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 
 public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
@@ -448,21 +454,23 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				timeLimits, gameResult, 0,
 				moveList, true);
 
-//		try {
-//			ByteArrayInputStream is = new ByteArrayInputStream(
-//					sgfData.getBytes());
-//			FileOpenService fos = (FileOpenService) ServiceManager.lookup("javax.jnlp.FileOpenService");
-//			FileSaveService fss = (FileSaveService) ServiceManager.lookup("javax.jnlp.FileSaveService");
-//
-//			//					userFirst + "-" + userSecond + " "
-//			//					+ GlobalGuiSettings.myDateFormat + " "
-//			//					+ GlobalGuiSettings.myTimeFormat,
-//			FileContents fileContents = fss.saveFileDialog(
-//					"Vasya - Frosya 2011-04-01", extensions,
-//					is, "Vasya - Frosya 2011-04-01");
-//		} catch (Exception e) {
-//			System.err.println("Error: " + e.getMessage());
-//		}
+		try {
+			ByteArrayInputStream is = new ByteArrayInputStream(
+					sgfData.getBytes());
+			FileOpenService fos = (FileOpenService) ServiceManager.lookup(
+					"javax.jnlp.FileOpenService"
+			);
+			FileSaveService fss = (FileSaveService) ServiceManager.lookup("javax.jnlp.FileSaveService");
+
+			//					userFirst + "-" + userSecond + " "
+			//					+ GlobalGuiSettings.myDateFormat + " "
+			//					+ GlobalGuiSettings.myTimeFormat,
+			FileContents fileContents = fss.saveFileDialog(
+					"Vasya - Frosya 2011-04-01", extensions,
+					is, "Vasya - Frosya 2011-04-01");
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
 	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
 
 	private void jToggleButton_ShowTreeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeStateChanged

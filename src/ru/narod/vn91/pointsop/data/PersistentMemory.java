@@ -3,17 +3,14 @@ package ru.narod.vn91.pointsop.data;
 import java.awt.Color;
 import java.util.prefs.Preferences;
 
-/**
- *
- * @author vasya
- */
 public class PersistentMemory {
 
+	static public int version = 2;
 	static Preferences memory = Preferences.userRoot().node(
 			"ru.narod.ru.pointsop.userdata");
 
 	public static int getVersion() {
-		return memory.getInt("version", 0);
+		return memory.getInt("version", version);
 	}
 
 	public static void setVersion(int ver) {
@@ -78,7 +75,7 @@ public class PersistentMemory {
 	}
 
 	public static String getKeijKvantttAiPath() {
-		return memory.get("keijkvantttai", "keijkvantttai");
+		return memory.get("keijkvantttai", "");
 	}
 
 	private static double limitDotWidth(double d) {
