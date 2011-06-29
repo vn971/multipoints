@@ -133,18 +133,18 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 
 	private void jButton_SearchOpponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SearchOpponentActionPerformed
 		server.searchOpponent();
-		JOptionPane.showMessageDialog(this,
-				"В связи дурацкой особенностью сервера, "
-				+ "эта кнопка не работает если жать её слишком часто.\n "
-				+ "Постарайтесь жать только когда необходимо..");
+//		JOptionPane.showMessageDialog(this,
+//				"В связи дурацкой особенностью сервера, "
+//				+ "эта кнопка не работает если жать её слишком часто.\n "
+//				+ "Постарайтесь жать только когда необходимо..");
 	}//GEN-LAST:event_jButton_SearchOpponentActionPerformed
 
 	private void jButton_StopSearchingOpponentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_StopSearchingOpponentActionPerformed
 		server.stopSearchingOpponent();
-		JOptionPane.showMessageDialog(this,
-				"В связи дурацкой особенностью сервера, "
-				+ "эта кнопка не работает если жать её слишком часто.\n "
-				+ "Постарайтесь жать только когда необходимо..");
+//		JOptionPane.showMessageDialog(this,
+//				"В связи дурацкой особенностью сервера, "
+//				+ "эта кнопка не работает если жать её слишком часто.\n "
+//				+ "Постарайтесь жать только когда необходимо..");
 	}//GEN-LAST:event_jButton_StopSearchingOpponentActionPerformed
 
 	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
