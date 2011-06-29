@@ -140,7 +140,7 @@ public class ServerPointsxt
 		super.setName(myName);
 		this.myNickOnServ = myName;
 
-		super.setMessageDelay(0L);
+		super.setMessageDelay(100L);
 		super.setVersion("PointsOp (a client from vn91)");
 		try {
 			super.setEncoding("CP1251");

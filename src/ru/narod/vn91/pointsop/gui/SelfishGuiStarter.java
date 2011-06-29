@@ -37,7 +37,7 @@ public class SelfishGuiStarter {
 			PersistentMemory.setKeijKvantttAiPath("");
 		}
 		PersistentMemory.setVersion(PersistentMemory.version);
-		final JFrame frame = new JFrame("Точки - pointsgame.net 0.9.2");
+		final JFrame frame = new JFrame("Точки - pointsOp 0.9.5");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
@@ -145,44 +145,10 @@ public class SelfishGuiStarter {
 			}
 
 			{
-				JMenu jMenu = new JMenu("Обучение");
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">правила игры Точки</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D1%87%D0%BA%D0%B8"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem("test");
-					jMenuItem.setEnabled(false);
-					jMenu.add(jMenuItem);
-				}
-
-				jMenuBar.add(jMenu);
-			}
-
-
-			{
 				JMenu jMenu = new JMenu("Играть с ИИ");
-
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">о программе PointsAI</a></html>"
+							"<html><a href=\"\">Priymak PointsAI - о программе</a></html>"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
@@ -203,7 +169,7 @@ public class SelfishGuiStarter {
 				}
 
 				{
-					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.08");
+					final JMenuItem jMenuItem = new JMenuItem("Priymak PointsAI - 1.08");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -225,7 +191,7 @@ public class SelfishGuiStarter {
 				}
 
 				{
-					final JMenuItem jMenuItem = new JMenuItem("PointsAI 1.07");
+					final JMenuItem jMenuItem = new JMenuItem("Priymak PointsAI - 1.07");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -397,7 +363,7 @@ public class SelfishGuiStarter {
 			{
 				JMenu jMenu = new JMenu("Настройки");
 				{
-					JMenuItem jMenuItem = new JMenuItem("общие настройки");
+					JMenuItem jMenuItem = new JMenuItem("настройки");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -414,7 +380,27 @@ public class SelfishGuiStarter {
 			}
 			{
 				JMenu jMenu = new JMenu("Помощь");
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">правила игры Точки</a></html>"
+					);
+					jMenuItem.addActionListener(
+							new ActionListener() {
 
+								public void actionPerformed(ActionEvent e) {
+									try {
+										java.awt.Desktop.getDesktop().browse(
+												new URI(
+														"http://pointsgame.net/drupal6/node/4"
+												)
+										);
+									} catch (Exception ignored) {
+									}
+								}
+							}
+					);
+					jMenu.add(jMenuItem);
+				}
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">о программе PointsOP</a></html>"
