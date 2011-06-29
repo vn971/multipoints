@@ -136,7 +136,7 @@ public class ServerPointsxt
 		myName = getAllowedNick(myName, ircAcceptsRussianNicks);
 		myNick_Originally = myName;
 		myName = "^" + myName;
-		myName = myName + "_X091000000000[free]";
+		myName = myName + "_X092000000000[free]";
 		super.setName(myName);
 		this.myNickOnServ = myName;
 
@@ -173,7 +173,7 @@ public class ServerPointsxt
 		super.joinChannel(roomAsString);
 		super.changeNick(
 				String.format(
-						"%s_X0910000%05d[g101]", getMyName(),
+						"%s_X0920000%05d[g101]", getMyName(),
 						roomNumber
 				)
 		);
@@ -199,7 +199,7 @@ public class ServerPointsxt
 			);
 			super.changeNick(
 					String.format(
-							"%s_X0910000%s[g101]", getMyName(), roomName.substring(
+							"%s_X0920000%s[g101]", getMyName(), roomName.substring(
 							4
 					)
 					)
@@ -238,7 +238,7 @@ public class ServerPointsxt
 			String inputNick,
 			boolean acceptRussian) {
 		if (acceptRussian) {
-			inputNick = inputNick.replaceAll("[^a-zA-Z0-9а-яА-Я]", "");
+			inputNick = inputNick.replaceAll("[^a-zA-Z0-9ёа-яЁА-Я]", "");
 			if (inputNick.matches(".*[a-zA-Z].*")) {
 				inputNick = inputNick.replaceAll("[а-яА-Я]", "");
 				// delete all russian letters in case of a mixed nickname
@@ -441,7 +441,7 @@ public class ServerPointsxt
 			)) {
 				super.changeNick(
 						String.format(
-								"%s_X0910000%s[g201]",
+								"%s_X0920000%s[g201]",
 								getMyName(), channel.substring(4)
 						)
 				);
@@ -993,7 +993,7 @@ public class ServerPointsxt
 			engine = null;
 			ServerPointsxt.this.changeNick(
 					String.format(
-							"%s_X091000000000[free]",
+							"%s_X092000000000[free]",
 							ServerPointsxt.this.getMyName()
 					)
 			);

@@ -25,7 +25,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	String userFirst, userSecond;
 	RoomInterface roomInterface;
 	private StyledDocument document = new DefaultStyledDocument();
-	boolean lastMessageWasHighlighted = true;
 
 	void scrollDown() {
 		if (jCheckBoxMenuItem_Autoscroll.isSelected()) {
@@ -79,12 +78,9 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 				document.insertString(document.getLength(), " " + message
 						+ "\n", GlobalGuiSettings.chatIncoming);
 			}
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		scrollDown();
-
-//		System.err.println("roomInterface = " + roomInterface);
-//		System.err.println("roomInterface.getServer() = " + roomInterface.getServer());
 
 		if (message.toLowerCase().contains(
 				roomInterface.getServer().getMyName().
@@ -100,7 +96,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 					GlobalGuiSettings.serverNotice);
 			document.insertString(document.getLength(), " " + message
 					+ "\n", GlobalGuiSettings.serverNotice);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		scrollDown();
 	}
@@ -155,7 +151,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 								if (undo.canUndo()) {
 									undo.undo();
 								}
-							} catch (CannotUndoException e) {
+							} catch (CannotUndoException ignored) {
 							}
 						}
 					});
@@ -176,7 +172,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 								if (undo.canRedo()) {
 									undo.redo();
 								}
-							} catch (CannotRedoException e) {
+							} catch (CannotRedoException ignored) {
 							}
 						}
 					});
@@ -196,7 +192,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		this.userFirst = userFirst;
 		this.userSecond = userSecond;
 		this.roomInterface = roomInterface;
-		RoomPart_Userlist userList = roomInterface.getRoomPart_UserList();
 	}
 
 	/** This method is called from within the constructor to
@@ -331,8 +326,8 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 			String message = jTextField_Chat.getText();
 			if (message.startsWith("/me")) {
 				String actionFormattedMessage = "ACTION " + message.substring(3);
-				String messageWOActionStamp =
-						message.substring(3);
+//				String messageWOActionStamp =
+//						message.substring(3);
 				roomInterface.getServer().
 						sendChat(roomInterface.getRoomNameOnServer(),
 						actionFormattedMessage);

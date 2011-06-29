@@ -1,13 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * RoomPart_GameList.java
- *
- * Created on Jan 30, 2011, 4:16:59 PM
- */
 package ru.narod.vn91.pointsop.gui;
 
 import java.util.ArrayList;

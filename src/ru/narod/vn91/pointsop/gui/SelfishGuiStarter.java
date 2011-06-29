@@ -105,8 +105,11 @@ public class SelfishGuiStarter {
 
 //		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
 //				"", 1, 1, "", false, "", true, true));
-//		tabbedPane.addTab("priv chat", new PrivateChat(null, guiController, ""),
-//				false);
+//		tabbedPane.addTab(
+//				"priv chat", new PrivateChat(null, guiController, ""),
+//				false
+//		);
+//		tabbedPane.addTab("Ai test", new AiRoom().panel1, true);
 
 		{
 			JMenuBar jMenuBar = new JMenuBar();
@@ -278,7 +281,7 @@ public class SelfishGuiStarter {
 									try {
 										java.awt.Desktop.getDesktop().browse(
 												new URI(
-														"       ывввввввввввввввввафывафвапфвапфвап"
+														"http://dl.dropbox.com/u/15765203/keijkvantttai.exe"
 												)
 										);
 									} catch (Exception ignored) {
@@ -329,41 +332,18 @@ public class SelfishGuiStarter {
 							new ActionListener() {
 
 								public void actionPerformed(ActionEvent e) {
-//									try {
-//										FileOpenService fos = (FileOpenService) ServiceManager.lookup(
-//												"javax.jnlp.FileOpenService"
-//										);
-//										FileContents fileContents = fos.openFileDialog(
-//												"", new String[]{"exe"}
-//										);
-//										if (fileContents!=null) {
-//											System.out.println(
-//													"fileContents.getName() = " + fileContents.getName()
-//											);
-//										}
-//									} catch (UnavailableServiceException ignored) {
-//										JOptionPane.showMessageDialog(
-//												null,
-//												"Не удалось вызвать функцию открытия файла. "
-//														+ "Вероятно, вы запускаете файл не с помощью JNLP. \n"
-//														+ "По вопросам обращайтесь сюда: \n"
-//														+ "http://vkontakte.ru/topic-21455903_24499649"
-//										);
-//									} catch (IOException e1) {
-//										e1.printStackTrace();
-//									}
 									String command = JOptionPane.showInputDialog(
-											"Для работы с данным ИИ скачайте, пожалуйста, вот этот файл \n" +
-													"http://dl.dropbox.com/u/15765203/keijkvantttai.exe\n" +
-													"к себе на компьютер и потом введите сюда путь к скачанному файлу. \n" +
-													"Например, если вы скачали keijkvantttai.exe в директорию " +
-													"c:/Downloads/  \n" +
-													"то введите c:/Downloads/keijkvantttai.exe\n\n" +
+											"Для работы с данным ИИ скачайте, пожалуйста, \n" +
+													"файл с искусственным интеллектом (ссылка выше).\n\n" +
+													"" +
+													"После этого введите сюда путь к скачанному файлу. \n" +
+													"Например, если вы скачали keijkvantttai.exe в директорию c:/Downloads/  то введите \n" +
+													"c:/Downloads/keijkvantttai.exe\n\n" +
 													"Чтобы узнать путь к скачанному файлу можно, например, \n" +
-													"заглянуть в свойства файла и скопировать оттуда строку.\n" +
+													"заглянуть в свойства файла и скопировать строчку 'размещение'.\n\n" +
 													"Или запустить файлик и скопировать инфу которую он предоставляет (new). \n\n" +
 													"P.S. К сожалению, " +
-													"по политике безопасности java " +
+													"по политике безопасности java, " +
 													"выбрать файл более привычным способом не получается.",
 											PersistentMemory.getKeijKvantttAiPath()
 									);
@@ -374,6 +354,11 @@ public class SelfishGuiStarter {
 											command = command + "keijkvantttai.exe";
 										}
 										PersistentMemory.setKeijKvantttAiPath(command);
+										JOptionPane.showMessageDialog(
+												null,
+												"Путь изменён на " + command + " \n" +
+														"Попробуйте теперь запустить ИИ. :)"
+										);
 										jMenuItem_KeijkvantttaiExecute.setEnabled(
 												!PersistentMemory.getKeijKvantttAiPath().equals("")
 										);

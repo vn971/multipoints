@@ -5,9 +5,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 
-public class KeijKvantttAi implements Gui2Ai_Interface {
+public class KeijKvantttAi
+		implements Gui2Ai_Interface {
 
 	Ai2Gui_Interface gui;
 	SingleGameEngineInterface engine;
@@ -29,17 +31,32 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 		this.gui = gui;
 		try {
 			process = Runtime.getRuntime().exec(command);
-//					+ " " + 2 + sizeX + " " + sizeY
 			reader =
 					new BufferedReader(
-					new InputStreamReader(
-					process.getInputStream()));
+							new InputStreamReader(
+									process.getInputStream()
+							)
+					);
 			writer =
 					new BufferedWriter(
-					new OutputStreamWriter(
-					process.getOutputStream()));
+							new OutputStreamWriter(
+									process.getOutputStream()
+							)
+					);
+			Runtime.getRuntime().addShutdownHook(
+					new Thread() {
+						@Override
+						public void run() {
+							try {
+								writer.write("-1\n");
+								writer.flush();
+							} catch (IOException ignored) {
+							}
+							process.destroy();
+						}
+					}
+			);
 		} catch (Exception ex) {
-//			gui.endOfGame();
 		}
 	}
 
@@ -65,8 +82,8 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 			long timeExpected) {
 		String message =
 				"" + (x - 1) + " " + (y - 1) + " "
-				+ (isRed ? "1" : "0") + " "
-				+ (toBeAnswered ? "1" : "0") + "\n";
+						+ (isRed ? "1" : "0") + " "
+						+ (toBeAnswered ? "1" : "0") + "\n";
 		try {
 			writer.write(message);
 			writer.flush();
@@ -81,8 +98,8 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 		try {
 			writer.write("-1\n");
 			writer.flush();
-//			process.destroy();
-		} catch (Exception ex) {
+			process.destroy();
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -90,7 +107,8 @@ public class KeijKvantttAi implements Gui2Ai_Interface {
 		return "Keij&Kvanttt AI";
 	}
 
-	class ListenThread extends Thread {
+	class ListenThread
+			extends Thread {
 
 		@Override
 		public void run() {

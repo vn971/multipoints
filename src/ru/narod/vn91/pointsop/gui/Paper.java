@@ -17,6 +17,7 @@ import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
 import ru.narod.vn91.pointsop.data.CustomColors;
 import ru.narod.vn91.pointsop.data.PersistentMemory;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
@@ -26,7 +27,8 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 
-public abstract class Paper extends JPanel {
+public abstract class Paper
+		extends JPanel {
 
 	private SingleGameEngineInterface engine;
 	Point cursorDot = null;
@@ -44,7 +46,8 @@ public abstract class Paper extends JPanel {
 	private Color colorGrid = CustomColors.getMixedColor(
 			colorBackground,
 			CustomColors.getContrastColor(colorBackground),
-			0.75f);
+			0.75f
+	);
 	private Color colorPaperBorders = colorGrid;
 	private Color colorRedTired =
 			CustomColors.getAlphaModifiedColor(colorRedPoint, 128);
@@ -61,7 +64,8 @@ public abstract class Paper extends JPanel {
 	private Color colorBluCtrlSurr =
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
 
-	protected void setColors(Color p1,
+	protected void setColors(
+			Color p1,
 			Color p2,
 			Color background) {
 		colorRedPoint = p1;
@@ -70,7 +74,8 @@ public abstract class Paper extends JPanel {
 		colorGrid = CustomColors.getMixedColor(
 				colorBackground,
 				CustomColors.getContrastColor(colorBackground),
-				0.75f);
+				0.75f
+		);
 		colorPaperBorders = colorGrid;
 		colorRedTired = CustomColors.getAlphaModifiedColor(colorRedPoint, 128);
 		colorBluTired = CustomColors.getAlphaModifiedColor(colorBluPoint, 128);
@@ -87,19 +92,20 @@ public abstract class Paper extends JPanel {
 			int y) {
 		return makeMove(false, x, y, !engine.getLastDotColor());
 	}
-	
-	public MoveResult makeMove(int x,int y,boolean isRed) {
+
+	public MoveResult makeMove(int x, int y, boolean isRed) {
 		return makeMove(false, x, y, isRed);
 	}
+
 	/**
-	 * 
 	 * @param silent true if redrawing is needed
 	 * @param x
 	 * @param y
 	 * @param isRed
 	 * @return look SingleGameEngineInterface.makeMove()
 	 */
-	public MoveResult makeMove(boolean silent,
+	public MoveResult makeMove(
+			boolean silent,
 			int x,
 			int y,
 			boolean isRed) {
@@ -108,8 +114,10 @@ public abstract class Paper extends JPanel {
 			previousX = engine.getLastDot().x;
 			previousY = engine.getLastDot().y;
 		}
-		SingleGameEngineInterface.MoveResult moveResult = engine.makeMove(x, y,
-				isRed);
+		SingleGameEngineInterface.MoveResult moveResult = engine.makeMove(
+				x, y,
+				isRed
+		);
 		if (silent == false) {
 			repaint();
 //			Graphics graphics = this.getGraphics();
@@ -151,49 +159,61 @@ public abstract class Paper extends JPanel {
 		{
 			URL url = SelfishGuiStarter.class.getResource("cursor-sight2.png");
 			Image image = new ImageIcon(url).getImage();
-			Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(
-					16, 16), "cursor-sight");
+			Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(
+					image, new Point(
+					16, 16
+			), "cursor-sight"
+			);
 			super.setCursor(cursor);
 		}
-		super.addMouseListener(new java.awt.event.MouseAdapter() {
+		super.addMouseListener(
+				new java.awt.event.MouseAdapter() {
 
-			@Override
-			public void mousePressed(java.awt.event.MouseEvent evt) {
-				Point humanCoordinates = getHumanCoordinates(evt.getPoint());
-				if (humanCoordinates != null) {
-					paperClick(humanCoordinates.x, humanCoordinates.y, evt);
+					@Override
+					public void mousePressed(java.awt.event.MouseEvent evt) {
+						Point humanCoordinates = getHumanCoordinates(evt.getPoint());
+						if (humanCoordinates != null) {
+							paperClick(humanCoordinates.x, humanCoordinates.y, evt);
+						}
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						_paperMouseMove(-1, -1, e);
+					}
 				}
-			}
+		);
 
-			@Override
-			public void mouseExited(MouseEvent e) {
-				_paperMouseMove(-1, -1, e);
-			}
-		});
+		super.addMouseMotionListener(
+				new MouseMotionListener() {
 
-		super.addMouseMotionListener(new MouseMotionListener() {
+					public void mouseDragged(MouseEvent e) {
+					}
 
-			public void mouseDragged(MouseEvent e) {
-			}
-
-			public void mouseMoved(MouseEvent e) {
-				Point humanCoordinates = getHumanCoordinates(e.getPoint());
-				if (humanCoordinates != null) {
-					_paperMouseMove(humanCoordinates.x, humanCoordinates.y, e);
+					public void mouseMoved(MouseEvent e) {
+						if (squareSize > 0) {
+							Point humanCoordinates = getHumanCoordinates(e.getPoint());
+							if (humanCoordinates != null) {
+								_paperMouseMove(humanCoordinates.x, humanCoordinates.y, e);
+							}
+						}
+					}
 				}
-			}
-		});
+		);
 	}
 
-	public abstract void paperClick(int x,
+	public abstract void paperClick(
+			int x,
 			int y,
 			MouseEvent evt);
 
-	public abstract void paperMouseMove(int x,
+	public abstract void paperMouseMove(
+			int x,
 			int y,
 			MouseEvent evt);
 
-	public void _paperMouseMove(int x,
+	public void _paperMouseMove(
+			int x,
 			int y,
 			MouseEvent evt) {
 		Point humanCoordinates = (x == -1) ? null : new Point(x, y);
@@ -210,7 +230,8 @@ public abstract class Paper extends JPanel {
 		paperMouseMove(x, y, evt);
 	}
 
-	public void initPaper(int sizeX,
+	public void initPaper(
+			int sizeX,
 			int sizeY) {
 		engine = new SingleGameEngine(sizeX, sizeY);
 		repaint();
@@ -221,8 +242,10 @@ public abstract class Paper extends JPanel {
 			return;
 		}
 		int x = cursorDot.x, y = cursorDot.y;
-		if (engine.getDotType(x, y).isIn(DotType.EMPTY, DotType.RED_CTRL,
-				DotType.BLUE_CTRL) == false) {
+		if (engine.getDotType(x, y).isIn(
+				DotType.EMPTY, DotType.RED_CTRL,
+				DotType.BLUE_CTRL
+		) == false) {
 			return;
 		}
 		Graphics graphics = super.getGraphics();
@@ -235,11 +258,12 @@ public abstract class Paper extends JPanel {
 				graphics.setFont(font);
 				graphics.setColor(Color.BLACK);
 				super.setBackground(Color.ORANGE);
-				((Graphics2D)graphics).setBackground(Color.black);
+				((Graphics2D) graphics).setBackground(Color.black);
 				{
 					String string = "" + (x);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
-							string);
+							string
+					);
 					Point pixel = getPixel(x, -0.1);
 					pixel.translate(-stringWidth / 2, 0);
 					graphics.drawString(string, pixel.x, pixel.y);
@@ -247,7 +271,8 @@ public abstract class Paper extends JPanel {
 				{
 					String string = "" + (y);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
-							string);
+							string
+					);
 					int stringHeight = graphics.getFontMetrics().getHeight();
 					Point pixel = getPixel(.25, y);
 					pixel.translate(-stringWidth, +stringHeight / 2);
@@ -257,23 +282,26 @@ public abstract class Paper extends JPanel {
 		}
 
 		graphics.setColor(colorBackground);
-		int pointRadius = (int)(squareSize * dotWidth / 2);
+		int pointRadius = (int) (squareSize * dotWidth / 2);
 		graphics.drawOval(
 				getPixel(x, y).x - pointRadius,
 				getPixel(x, y).y - pointRadius,
 				2 * pointRadius,
-				2 * pointRadius);
+				2 * pointRadius
+		);
 		graphics.setColor(colorGrid);
 		graphics.drawLine(
 				getPixel(x, y).x - pointRadius - 1,
 				getPixel(x, y).y,
 				getPixel(x, y).x + pointRadius + 1,
-				getPixel(x, y).y);
+				getPixel(x, y).y
+		);
 		graphics.drawLine(
 				getPixel(x, y).x,
 				getPixel(x, y).y - pointRadius - 1,
 				getPixel(x, y).x,
-				getPixel(x, y).y + pointRadius + 1);
+				getPixel(x, y).y + pointRadius + 1
+		);
 	}
 
 	void drawCursor() {
@@ -281,8 +309,10 @@ public abstract class Paper extends JPanel {
 			return;
 		}
 		int x = cursorDot.x, y = cursorDot.y;
-		if (engine.getDotType(x, y).isIn(DotType.EMPTY, DotType.RED_CTRL,
-				DotType.BLUE_CTRL) == false) {
+		if (engine.getDotType(x, y).isIn(
+				DotType.EMPTY, DotType.RED_CTRL,
+				DotType.BLUE_CTRL
+		) == false) {
 			return;
 		}
 		Graphics graphics = super.getGraphics();
@@ -298,12 +328,13 @@ public abstract class Paper extends JPanel {
 			graphics.setColor(colorRedPoint);
 		}
 
-		int ovalRadius = (int)(squareSize * dotWidth / 2);
+		int ovalRadius = (int) (squareSize * dotWidth / 2);
 		graphics.drawOval(
 				getPixel(x, y).x - ovalRadius,
 				getPixel(x, y).y - ovalRadius,
 				2 * ovalRadius,
-				2 * ovalRadius);
+				2 * ovalRadius
+		);
 	}
 
 	void drawLastDotHint(Graphics graphics) {
@@ -316,12 +347,15 @@ public abstract class Paper extends JPanel {
 		if (engine.getLastDot() != null) {
 			int x = engine.getLastDot().x, y = engine.getLastDot().y;
 			if ((graphics.getClipBounds() != null)
-					&& graphics.getClipBounds().intersects(getRectangleAroundDot(
-					x, y)) == false) {
+					&& graphics.getClipBounds().intersects(
+					getRectangleAroundDot(
+							x, y
+					)
+			) == false) {
 				return;
 			}
 			DotType dotType = engine.getDotType(x, y);
-			int pointRadius = (int)(squareSize * dotWidth / 2);
+			int pointRadius = (int) (squareSize * dotWidth / 2);
 			if (dotType == DotType.RED) {
 				//цвет красной заливки
 				graphics.setColor(colorRedSurr);
@@ -338,7 +372,8 @@ public abstract class Paper extends JPanel {
 						pixelX - innerRadius,
 						pixelY - innerRadius,
 						innerRadius * 2,
-						innerRadius * 2);
+						innerRadius * 2
+				);
 			}
 			{
 				int innerRadius = pointRadius + 2;
@@ -346,13 +381,15 @@ public abstract class Paper extends JPanel {
 						pixelX - innerRadius,
 						pixelY - innerRadius,
 						innerRadius * 2,
-						innerRadius * 2);
+						innerRadius * 2
+				);
 			}
 		}
 
 	}
 
-	void drawSurrounding(Graphics graphics,
+	void drawSurrounding(
+			Graphics graphics,
 			SurroundingAbstract surrounding) {
 		if (graphics == null) {
 			graphics = super.getGraphics();
@@ -402,17 +439,20 @@ public abstract class Paper extends JPanel {
 				graphics.setColor(colorRedCtrlSurr);
 				break;
 		}
-		Graphics2D graphics2d = (Graphics2D)graphics;
-		int lineWidth = (int)(squareSize * dotWidth * 0.125) * 2 + 1;
+		Graphics2D graphics2d = (Graphics2D) graphics;
+		int lineWidth = (int) (squareSize * dotWidth * 0.125) * 2 + 1;
 		BasicStroke basicStroke =
-				new BasicStroke(lineWidth,
-				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+				new BasicStroke(
+						lineWidth,
+						BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND
+				);
 		graphics2d.setStroke(basicStroke);
 		graphics.drawPolygon(polygon);
 		graphics2d.setStroke(new BasicStroke());
 	}
 
-	void drawConnection(Graphics graphics,
+	void drawConnection(
+			Graphics graphics,
 			int x1,
 			int y1,
 			int x2,
@@ -424,15 +464,25 @@ public abstract class Paper extends JPanel {
 			}
 		}
 		if ((graphics.getClipBounds() != null)
-				&& (graphics.getClipBounds().intersects(getRectangleAroundDot(x1,
-				y1)) == false)
-				&& (graphics.getClipBounds().intersects(getRectangleAroundDot(x2,
-				y2)) == false)) {
+				&& (graphics.getClipBounds().intersects(
+				getRectangleAroundDot(
+						x1,
+						y1
+				)
+		) == false)
+				&& (graphics.getClipBounds().intersects(
+				getRectangleAroundDot(
+						x2,
+						y2
+				)
+		) == false)) {
 			return;
 		}
 		int dx = x2 - x1, dy = y2 - y1;
-		DotType type1 = engine.getDotType(x1, y1), type2 = engine.getDotType(x2,
-				y2);
+		DotType type1 = engine.getDotType(x1, y1), type2 = engine.getDotType(
+				x2,
+				y2
+		);
 
 		if ((dx >= -1) && (dx <= 1)
 				&& (dy >= -1) && (dy <= 1)
@@ -444,21 +494,24 @@ public abstract class Paper extends JPanel {
 			} else {
 				graphics.setColor(colorBluPoint);
 			}
-			int lineWidth = (int)(squareSize * dotWidth * 0.125) * 2 + 1;
+			int lineWidth = (int) (squareSize * dotWidth * 0.125) * 2 + 1;
 			BasicStroke basicStroke =
-					new BasicStroke(lineWidth,
-					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-			((Graphics2D)graphics).setStroke(basicStroke);
+					new BasicStroke(
+							lineWidth,
+							BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND
+					);
+			((Graphics2D) graphics).setStroke(basicStroke);
 			Point pixel1 = getPixel(x1, y1);
 			Point pixel2 = getPixel(x2, y2);
 			graphics.drawLine(pixel1.x, pixel1.y, pixel2.x, pixel2.y);
-			((Graphics2D)graphics).setStroke(new BasicStroke());
+			((Graphics2D) graphics).setStroke(new BasicStroke());
 		}
 
 
 	}
 
-	void drawPoint(Graphics graphics,
+	void drawPoint(
+			Graphics graphics,
 			int x,
 			int y,
 			boolean paintEmpty) {
@@ -470,7 +523,8 @@ public abstract class Paper extends JPanel {
 		}
 		if ((graphics.getClipBounds() != null)
 				&& getRectangleAroundDot(x, y).intersects(
-				graphics.getClipBounds()) == false) {
+				graphics.getClipBounds()
+		) == false) {
 			return;
 		}
 
@@ -478,7 +532,7 @@ public abstract class Paper extends JPanel {
 		{
 			int pixelX = getPixel(x, y).x;
 			int pixelY = getPixel(x, y).y;
-			int pointRadius = (int)(squareSize * dotWidth / 2);
+			int pointRadius = (int) (squareSize * dotWidth / 2);
 			int pointDiameter = 2 * pointRadius - 1;
 			int drawX = pixelX - pointRadius + 1;
 			int drawY = pixelY - pointRadius + 1;
@@ -511,20 +565,27 @@ public abstract class Paper extends JPanel {
 					break;
 			}
 
-			if (paintEmpty && dotType.isIn(DotType.EMPTY, DotType.RED_CTRL,
-					DotType.BLUE_CTRL)) {
+			if (paintEmpty && dotType.isIn(
+					DotType.EMPTY, DotType.RED_CTRL,
+					DotType.BLUE_CTRL
+			)) {
 				graphics.setColor(colorBackground);
 				graphics.fillOval(drawX, drawY, pointDiameter, pointDiameter);
 				graphics.setColor(colorGrid);
-				graphics.drawLine(pixelX, pixelY - pointRadius + 1, pixelX,
-						pixelY + pointRadius - 1);
-				graphics.drawLine(pixelX - pointRadius + 1, pixelY,
-						pixelX + pointRadius - 1, pixelY);
+				graphics.drawLine(
+						pixelX, pixelY - pointRadius + 1, pixelX,
+						pixelY + pointRadius - 1
+				);
+				graphics.drawLine(
+						pixelX - pointRadius + 1, pixelY,
+						pixelX + pointRadius - 1, pixelY
+				);
 			}
 		}
 	}
 
-	void drawPoint(Graphics graphics,
+	void drawPoint(
+			Graphics graphics,
 			int x,
 			int y) {
 		drawPoint(graphics, x, y, false);
@@ -538,7 +599,8 @@ public abstract class Paper extends JPanel {
 		setColors(
 				PersistentMemory.getPlayer1Color(),
 				PersistentMemory.getPlayer2Color(),
-				PersistentMemory.getBackgroundColor());
+				PersistentMemory.getBackgroundColor()
+		);
 		if (engine == null) {
 			return;
 		}
@@ -550,28 +612,36 @@ public abstract class Paper extends JPanel {
 			int paperSizeY = this.getHeight();
 			double squareKoefficientX = paperSizeX / (engineSizeX + .5d + borderXcoeffecient);
 			double squareKoefficientY = paperSizeY / (engineSizeY + .5d + borderYcoeffecient);
-			squareSize = (int)Math.min(squareKoefficientX, squareKoefficientY);
-			offsetX = (int)(paperSizeX - squareSize * (engineSizeX + borderXcoeffecient)) / 2;
-			offsetY = (int)(paperSizeY - squareSize * (engineSizeY + borderYcoeffecient)) / 2;
+			squareSize = (int) Math.min(squareKoefficientX, squareKoefficientY);
+			offsetX = (int) (paperSizeX - squareSize * (engineSizeX + borderXcoeffecient)) / 2;
+			offsetY = (int) (paperSizeY - squareSize * (engineSizeY + borderYcoeffecient)) / 2;
 			graphics.setColor(colorBackground);
-			graphics.fillRect(graphics.getClipBounds().x,
+			graphics.fillRect(
+					graphics.getClipBounds().x,
 					graphics.getClipBounds().y,
 					graphics.getClipBounds().width,
-					graphics.getClipBounds().height);
+					graphics.getClipBounds().height
+			);
 		}
 
 		{
 			// <drawing-grid>
 			graphics.setColor(colorGrid);
 			for (int x = 1; x <= engineSizeX; x++) {
-				graphics.drawLine(getPixel(x, 0.5).x, getPixel(x, 0.5).y, getPixel(
+				graphics.drawLine(
+						getPixel(x, 0.5).x, getPixel(x, 0.5).y, getPixel(
 						x,
-						engineSizeY + 0.5).x, getPixel(x, engineSizeY + 0.5).y);
+						engineSizeY + 0.5
+				).x, getPixel(x, engineSizeY + 0.5).y
+				);
 			}
 			for (int y = 1; y <= engineSizeY; y++) {
-				graphics.drawLine(getPixel(0.5, y).x, getPixel(0.5, y).y, getPixel(
-						engineSizeX + 0.5, y).x,
-						getPixel(engineSizeX + 0.5, y).y);
+				graphics.drawLine(
+						getPixel(0.5, y).x, getPixel(0.5, y).y, getPixel(
+						engineSizeX + 0.5, y
+				).x,
+						getPixel(engineSizeX + 0.5, y).y
+				);
 			}
 			// </drawing-grid>
 		}
@@ -588,16 +658,20 @@ public abstract class Paper extends JPanel {
 				}
 			}
 		}
-		
-		((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		
+
+		((Graphics2D) graphics).setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON
+		);
+
 		for (int x = 1; x <= engineSizeX; x++) {
 			for (int y = 1; y <= engineSizeY; y++) {
 				// draw DEAD points
-				if (engine.getDotType(x, y).isIn(DotType.BLUE_EATED_RED,
+				if (engine.getDotType(x, y).isIn(
+						DotType.BLUE_EATED_RED,
 						DotType.BLUE_TIRED, DotType.RED_EATED_BLUE,
-						DotType.RED_TIRED)) {
+						DotType.RED_TIRED
+				)) {
 					drawPoint(graphics, x, y);
 				}
 			}
@@ -606,9 +680,11 @@ public abstract class Paper extends JPanel {
 		for (int x = 1; x <= engineSizeX; x++) {
 			for (int y = 1; y <= engineSizeY; y++) {
 				// draw DEAD points
-				if (engine.getDotType(x, y).isIn(DotType.BLUE_EATED_RED,
+				if (engine.getDotType(x, y).isIn(
+						DotType.BLUE_EATED_RED,
 						DotType.BLUE_TIRED, DotType.RED_EATED_BLUE,
-						DotType.RED_TIRED)) {
+						DotType.RED_TIRED
+				)) {
 					drawPoint(graphics, x, y);
 				}
 			}
@@ -621,25 +697,31 @@ public abstract class Paper extends JPanel {
 		for (int x = 1; x <= engineSizeX; x++) {
 			for (int y = 1; y <= engineSizeY; y++) {
 				// draw ALIVE points
-				if (!engine.getDotType(x, y).isIn(DotType.BLUE_EATED_RED,
+				if (!engine.getDotType(x, y).isIn(
+						DotType.BLUE_EATED_RED,
 						DotType.BLUE_TIRED, DotType.RED_EATED_BLUE,
-						DotType.RED_TIRED)) {
+						DotType.RED_TIRED
+				)) {
 					drawPoint(graphics, x, y);
 				}
 			}
 		}
 
 		drawLastDotHint(graphics);
-		
-		((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_OFF);
-		
+
+		((Graphics2D) graphics).setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_OFF
+		);
+
 		{
 			// drawing paper borders
-			Graphics2D graphics2d = (Graphics2D)graphics;
+			Graphics2D graphics2d = (Graphics2D) graphics;
 			BasicStroke basicStroke =
-					new BasicStroke((float)(squareSize * dotWidth * 0.10),
-					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+					new BasicStroke(
+							(float) (squareSize * dotWidth * 0.10),
+							BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND
+					);
 			graphics2d.setStroke(basicStroke);
 			graphics.setColor(colorPaperBorders);
 			int x1 = getPixel(0.5, engineSizeY + 0.5).x;
@@ -647,7 +729,7 @@ public abstract class Paper extends JPanel {
 			int x2 = getPixel(engineSizeX + 0.5, 0.5).x;
 			int y2 = getPixel(engineSizeX + 0.5, 0.5).y;
 			graphics.drawRect(x1, y1, x2 - x1, y2 - y1);
-			((Graphics2D)graphics).setStroke(new BasicStroke());
+			((Graphics2D) graphics).setStroke(new BasicStroke());
 		}
 
 		{
@@ -663,7 +745,8 @@ public abstract class Paper extends JPanel {
 				for (int x = 1; x <= engineSizeX; x++) {
 					String string = "" + (x);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
-							string);
+							string
+					);
 					Point pixel = getPixel(x, -0.1);
 					pixel.translate(-stringWidth / 2, 0);
 					graphics.drawString(string, pixel.x, pixel.y);
@@ -671,7 +754,8 @@ public abstract class Paper extends JPanel {
 				for (int y = 1; y <= engineSizeY; y++) {
 					String string = "" + (y);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
-							string);
+							string
+					);
 					int stringHeight = graphics.getFontMetrics().getHeight();
 					Point pixel = getPixel(.25, y);
 					pixel.translate(-stringWidth, +stringHeight / 2);
@@ -682,17 +766,20 @@ public abstract class Paper extends JPanel {
 		}
 	}
 
-	private int getStringWidth(Graphics graphics,
+	private int getStringWidth(
+			Graphics graphics,
 			String string) {
 		int result = graphics.getFontMetrics().stringWidth(string);
 		return result;
 	}
 
-	private int getStringHeight(Graphics graphics,
+	private int getStringHeight(
+			Graphics graphics,
 			String string) {
 		int result = graphics.getFontMetrics().getHeight();
 		if ((string.toLowerCase().equals(string)) && (string.toUpperCase().equals(
-				string))) {
+				string
+		))) {
 			result -= 4;
 		} else {
 			result -= 1;
@@ -724,8 +811,8 @@ public abstract class Paper extends JPanel {
 //			}
 //		}
 		int resultX, resultY;
-		resultX = (int)(((pixel.x - offsetX) / squareSize) + 0.75 - borderXcoeffecient);
-		resultY = (int)((((double)pixel.y - offsetY) / squareSize) + 0.75);
+		resultX = (int) (((pixel.x - offsetX) / squareSize) + 0.75 - borderXcoeffecient);
+		resultY = (int) ((((double) pixel.y - offsetY) / squareSize) + 0.75);
 		resultY = engine.getSizeY() + 1 - resultY;
 		if ((resultX > 0) && (resultY > 0)
 				&& (resultX <= engine.getSizeX()) && (resultY <= engine.getSizeY())) {
@@ -736,20 +823,24 @@ public abstract class Paper extends JPanel {
 
 	}
 
-	private Point getPixel(double x,
+	private Point getPixel(
+			double x,
 			double y) {
 		Point result = new Point();
 		y = engine.getSizeY() + 1 - y;
-		result.x = (int)(offsetX + squareSize * (x + borderXcoeffecient - 0.25));
-		result.y = (int)(offsetY + squareSize * (y - 0.25));
+		result.x = (int) (offsetX + squareSize * (x + borderXcoeffecient - 0.25));
+		result.y = (int) (offsetY + squareSize * (y - 0.25));
 		return result;
 	}
 
-	private Rectangle getRectangleAroundDot(int x,
+	private Rectangle getRectangleAroundDot(
+			int x,
 			int y) {
 		Point pixel = getPixel(x, y);
-		int pointRadius = (int)(squareSize * dotWidth / 2);
-		return new Rectangle(pixel.x - pointRadius, pixel.y - pointRadius,
-				pointRadius * 2, pointRadius * 2);
+		int pointRadius = (int) (squareSize * dotWidth / 2);
+		return new Rectangle(
+				pixel.x - pointRadius, pixel.y - pointRadius,
+				pointRadius * 2, pointRadius * 2
+		);
 	}
 }

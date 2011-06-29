@@ -1,22 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * RoomPart_Userlist.java
- *
- * Created on Jan 28, 2011, 6:34:16 PM
- */
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.FontMetrics;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.*;
+import javax.swing.table.*;
 
-public class RoomPart_Userlist extends javax.swing.JPanel {
+public class RoomPart_Userlist
+		extends javax.swing.JPanel {
 
 	RoomInterface roomInterface;
 	GuiController centralGuiController;
@@ -27,7 +17,9 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 	private String getSelectedUser() {
 		if ((jTable_UserList.getSelectedRow() >= 0)
 				&& (jTable_UserList.getSelectedRow() < jTable_UserList.getRowCount())) {
-			Object tableContents = jTable_UserList.getValueAt(jTable_UserList.getSelectedRow(), COLUMN_NAME);
+			Object tableContents = jTable_UserList.getValueAt(
+					jTable_UserList.getSelectedRow(), COLUMN_NAME
+			);
 			return (tableContents == null) ? "" : tableContents.toString();
 		} else {
 			return "";
@@ -42,7 +34,8 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 
 	private int compareNames(Object o1, Object o2) {
 		return o1.toString().toLowerCase().replaceAll("\\^", "").compareTo(
-				o2.toString().toLowerCase().replaceAll("\\^", ""));
+				o2.toString().toLowerCase().replaceAll("\\^", "")
+		);
 	}
 
 	void userJoined(String user, int rank, String status) {
@@ -57,23 +50,26 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 		do {
 			--rowNumb;
 			if (rowNumb >= 0) {
-				int compareRanks = compareRanks("" + rank, tableModel.getValueAt(rowNumb, COLUMN_RATING).toString());
-				int compareNames = compareNames(user, tableModel.getValueAt(rowNumb, COLUMN_NAME));
+				int compareRanks = compareRanks(
+						"" + rank, tableModel.getValueAt(rowNumb, COLUMN_RATING).toString()
+				);
+				int compareNames = compareNames(
+						user, tableModel.getValueAt(rowNumb, COLUMN_NAME)
+				);
 				continueSearch = (compareRanks > 0) || (compareRanks == 0 && compareNames < 0);
 			} else {
 				continueSearch = false;
 			}
 		} while (continueSearch);
 
-//		while (continueSearch) {
-//			continueSearch = (rowNumb >= 0)
-//					&& (compareRanks("" + rank, tableModel.getValueAt(rowNumb, COLUMN_RATING).toString()));
-////				&& (compareNames(user, tableModel.getValueAt(rowNumb, COLUMN_NAME)) < 0)
-//		}
-		String[] row = {"", "", ""};
-		row[COLUMN_NAME] = user;
-		row[COLUMN_RATING] = (rank == 0) ? "" : "" + rank;
+		Object[] row = {null, null, null};
+		row[COLUMN_NAME] = "" + user;
+		row[COLUMN_RATING] = "" + ((rank == 0) ? "" : "" + rank);
 		row[COLUMN_STATUS] = status;
+//		row[COLUMN_STATUS] = status;
+//		row[COLUMN_STATUS] = new JLabel(
+//				"te"
+//		);
 		tableModel.insertRow(rowNumb + 1, row);
 
 		if (jTable_UserList.getRowCount() >= 1) {
@@ -95,7 +91,9 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 		}
 	}
 
-	/** Creates new form RoomPart_Userlist */
+	/**
+	 * Creates new form RoomPart_Userlist
+	 */
 	public RoomPart_Userlist() {
 		initComponents();
 	}
@@ -107,17 +105,34 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 		this.centralGuiController = centralGuiController;
 		RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
 		{
-			FontMetrics tableFontMetrics = jTable_UserList.getFontMetrics(jTable_UserList.getFont());
+			FontMetrics tableFontMetrics = jTable_UserList.getFontMetrics(
+					jTable_UserList.getFont()
+			);
 
-			TableColumn statusColumn = jTable_UserList.getColumnModel().getColumn(COLUMN_STATUS);
+			TableColumn statusColumn = jTable_UserList.getColumnModel().getColumn(
+					COLUMN_STATUS
+			);
 			int statusWidth = tableFontMetrics.stringWidth("XX");
 			statusColumn.setPreferredWidth(statusWidth);
 			statusColumn.setWidth(statusWidth);
 			statusColumn.setMaxWidth(statusWidth);
 			statusColumn.setMinWidth(statusWidth);
 			statusColumn.setResizable(false);
+//			class KeyIconCellRenderer
+//					extends DefaultTableCellRenderer {
+//				public KeyIconCellRenderer() {
+////					super.setText("");
+////					super.setIcon(new ImageIcon("/ru/narod/vn91/pointsop/gui/vp.png"));
+//				}
+//			}
+//			jTable_UserList.getColumnModel().getColumn(COLUMN_STATUS).setCellRenderer(
+//					new KeyIconCellRenderer()
+//			);
 
-			TableColumn ratingColumn = jTable_UserList.getColumnModel().getColumn(COLUMN_RATING);
+			TableColumn ratingColumn = jTable_UserList.getColumnModel().getColumn(
+					COLUMN_RATING
+			);
+//			ratingColumn.set
 			int ratingWidth = tableFontMetrics.stringWidth("XXXXXX");
 			ratingColumn.setPreferredWidth(ratingWidth);
 			ratingColumn.setWidth(ratingWidth);
@@ -127,83 +142,99 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 		}
 	}
 
-	/** This method is called from within the constructor to
+	/**
+	 * This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
 	 * always regenerated by the Form Editor.
 	 */
 	@SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+	private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jScrollPane_UserList = new javax.swing.JScrollPane();
-        jTable_UserList = new javax.swing.JTable();
+		jPopupMenu1 = new javax.swing.JPopupMenu();
+		jMenuItem1 = new javax.swing.JMenuItem();
+		jScrollPane_UserList = new javax.swing.JScrollPane();
+		jTable_UserList = new javax.swing.JTable();
 
-        jMenuItem1.setText("Для дополнительных действий щелкните дважды мышкой");
-        jPopupMenu1.add(jMenuItem1);
+		jMenuItem1.setText("Для дополнительных действий щелкните дважды мышкой");
+		jPopupMenu1.add(jMenuItem1);
 
-        jTable_UserList.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+		jTable_UserList.setModel(
+				new javax.swing.table.DefaultTableModel(
+						new Object[][]{
 
-            },
-            new String [] {
-                "", "Имя", "рейт"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
+						},
+						new String[]{
+								"", "Имя", "рейт"
+						}
+				) {
+					Class[] types = new Class[]{
+							java.lang.String.class, java.lang.String.class, java.lang.String.class
+					};
+					boolean[] canEdit = new boolean[]{
+							false, false, false
+					};
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+					public Class getColumnClass(int columnIndex) {
+						return types[columnIndex];
+					}
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable_UserList.setToolTipText("<html>\n\t* = отошёл,   ! = играет<br>\n\tДля дополнительных действий щелкните дважды мышкой<br>\n</html>");
-        jTable_UserList.setComponentPopupMenu(jPopupMenu1);
-        jTable_UserList.setFocusable(false);
-        jTable_UserList.getTableHeader().setReorderingAllowed(false);
-        jTable_UserList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable_UserListMouseClicked(evt);
-            }
-        });
-        jScrollPane_UserList.setViewportView(jTable_UserList);
+					public boolean isCellEditable(int rowIndex, int columnIndex) {
+						return canEdit[columnIndex];
+					}
+				}
+		);
+		jTable_UserList.setToolTipText(
+				"<html>\n\t* = отошёл,   ! = играет<br>\n\tДля дополнительных действий щелкните дважды мышкой<br>\n</html>"
+		);
+		jTable_UserList.setComponentPopupMenu(jPopupMenu1);
+		jTable_UserList.setFocusable(false);
+		jTable_UserList.getTableHeader().setReorderingAllowed(false);
+		jTable_UserList.addMouseListener(
+				new java.awt.event.MouseAdapter() {
+					public void mouseClicked(java.awt.event.MouseEvent evt) {
+						jTable_UserListMouseClicked(evt);
+					}
+				}
+		);
+		jScrollPane_UserList.setViewportView(jTable_UserList);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		this.setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(
+								jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 223,
+								Short.MAX_VALUE
+						)
+		);
+		layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(
+								jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 318,
+								Short.MAX_VALUE
+						)
+		);
+	}// </editor-fold>//GEN-END:initComponents
 
 	private void jTable_UserListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_UserListMouseClicked
 		if (evt.getClickCount() == 2) {
 			String user = getSelectedUser();
-			centralGuiController.createPrivateChatWindow(roomInterface.getServer(), user);
+			centralGuiController.createPrivateChatWindow(
+					roomInterface.getServer(), user
+			);
 		} else if (evt.getButton() == MouseEvent.BUTTON1) {
 			Point p = evt.getPoint();
 			if (jTable_UserList.getCellRect(0, 0, true).contains(p)) {
 			}
 		}
 	}//GEN-LAST:event_jTable_UserListMouseClicked
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane_UserList;
-    private javax.swing.JTable jTable_UserList;
-    // End of variables declaration//GEN-END:variables
+
+	// Variables declaration - do not modify//GEN-BEGIN:variables
+	private javax.swing.JMenuItem jMenuItem1;
+	private javax.swing.JPopupMenu jPopupMenu1;
+	private javax.swing.JScrollPane jScrollPane_UserList;
+	private javax.swing.JTable jTable_UserList;
+	// End of variables declaration//GEN-END:variables
 }
