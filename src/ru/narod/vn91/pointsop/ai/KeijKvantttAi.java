@@ -12,12 +12,12 @@ public class KeijKvantttAi
 		implements Gui2Ai_Interface {
 
 	Ai2Gui_Interface gui;
-	SingleGameEngineInterface engine;
-	boolean aiColor = false;
+
 	Process process;
 	BufferedReader reader;
 	BufferedWriter writer;
 	ListenThread listenThread;
+	
 	boolean isDisposed = false;
 	int sizeX, sizeY;
 
