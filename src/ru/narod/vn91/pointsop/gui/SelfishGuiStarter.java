@@ -37,7 +37,7 @@ public class SelfishGuiStarter {
 			PersistentMemory.setKeijKvantttAiPath("");
 		}
 		PersistentMemory.setVersion(PersistentMemory.version);
-		final JFrame frame = new JFrame("Точки - pointsOp 0.9.5");
+		final JFrame frame = new JFrame("Точки - pointsOp 0.9.7");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
