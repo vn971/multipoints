@@ -9,7 +9,7 @@ import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ru.narod.vn91.pointsop.data.PersistentMemory;
+import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -199,15 +199,15 @@ public class GuiController {
 				containerRoom_Game
 		);
 //		System.out.println(
-//				"PersistentMemory.getPlayer1Color().toString() = " + PersistentMemory.getPlayer1Color().toString());
+//				"Memory.getPlayer1Color().toString() = " + Memory.getPlayer1Color().toString());
 		tabbedPane.addTab(
 				"<html><font color="
 						+ GlobalGuiSettings.getHtmlColor(
-						PersistentMemory.getPlayer1Color()
+						Memory.getPlayer1Color()
 				)
 						+ ">" + userFirst + "</font><font color=black> - </font><font color="
 						+ GlobalGuiSettings.getHtmlColor(
-						PersistentMemory.getPlayer2Color()
+						Memory.getPlayer2Color()
 				)
 						+ ">" + userSecond + "</font></html>",
 				containerRoom_Game, true

@@ -2,13 +2,8 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import javax.jnlp.FileContents;
-import javax.jnlp.FileOpenService;
-import javax.jnlp.ServiceManager;
-import javax.jnlp.UnavailableServiceException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -20,7 +15,7 @@ import javax.swing.JTabbedPane;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
-import ru.narod.vn91.pointsop.data.PersistentMemory;
+import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 
 public class SelfishGuiStarter {
@@ -29,14 +24,14 @@ public class SelfishGuiStarter {
 		for (String arg : args) {
 			System.out.println(arg);
 		}
-		if (PersistentMemory.getVersion() <= 0) {
-			PersistentMemory.resetColors();
+		if (Memory.getVersion() <= 1
+				&& Memory.getKeijKvantttAiPath().equals("keijkvantttai")) {
+			Memory.setKeijKvantttAiPath("");
 		}
-		if (PersistentMemory.getVersion() <= 1
-				&& PersistentMemory.getKeijKvantttAiPath().equals("keijkvantttai")) {
-			PersistentMemory.setKeijKvantttAiPath("");
+		if (Memory.getVersion() < 4) {
+			Memory.resetColors();
 		}
-		PersistentMemory.setVersion(PersistentMemory.version);
+		Memory.setNewestVersion();
 		final JFrame frame = new JFrame("Точки - pointsOp 0.9.8");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
@@ -44,21 +39,21 @@ public class SelfishGuiStarter {
 		frame.setSize(925, 670);
 
 		{
-			if (PersistentMemory.getFrameWidth() > 0
-					&& PersistentMemory.getFrameHeight() > 0) {
-//					&& PersistentMemory.getFrameX() > 0
-//					&& PersistentMemory.getFrameY() > 0
+			if (Memory.getFrameWidth() > 0
+					&& Memory.getFrameHeight() > 0) {
+				//					&& Memory.getFrameX() > 0
+				//					&& Memory.getFrameY() > 0
 				frame.setBounds(
-						PersistentMemory.getFrameX(),
-						PersistentMemory.getFrameY(),
-						PersistentMemory.getFrameWidth(),
-						PersistentMemory.getFrameHeight()
+						Memory.getFrameX(),
+						Memory.getFrameY(),
+						Memory.getFrameWidth(),
+						Memory.getFrameHeight()
 				);
-//				frame.setSize(
-//						PersistentMemory.getFrameWidth(),
-//						PersistentMemory.getFrameHeight());
+				//				frame.setSize(
+				//						Memory.getFrameWidth(),
+				//						Memory.getFrameHeight());
 			}
-//			frame.setLocationRelativeTo(frame.getRootPane());
+			//			frame.setLocationRelativeTo(frame.getRootPane());
 
 			frame.addComponentListener(
 					new ComponentListener() {
@@ -67,15 +62,15 @@ public class SelfishGuiStarter {
 						}
 
 						public void componentResized(ComponentEvent e) {
-							PersistentMemory.setFrameWidth(frame.getWidth());
-							PersistentMemory.setFrameHeight(frame.getHeight());
-							PersistentMemory.setFrameX(frame.getX());
-							PersistentMemory.setFrameY(frame.getY());
+							Memory.setFrameWidth(frame.getWidth());
+							Memory.setFrameHeight(frame.getHeight());
+							Memory.setFrameX(frame.getX());
+							Memory.setFrameY(frame.getY());
 						}
 
 						public void componentMoved(ComponentEvent e) {
-							PersistentMemory.setFrameX(frame.getX());
-							PersistentMemory.setFrameY(frame.getY());
+							Memory.setFrameX(frame.getX());
+							Memory.setFrameY(frame.getY());
 						}
 
 						public void componentHidden(ComponentEvent e) {
@@ -103,120 +98,22 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
-//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
-//				"", 1, 1, "", false, "", true, true));
-//		tabbedPane.addTab(
-//				"priv chat", new PrivateChat(null, guiController, ""),
-//				false
-//		);
-//		tabbedPane.addTab("Ai test", new AiRoom().panel1, true);
+		//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
+		//				"", 1, 1, "", false, "", true, true));
+		//		tabbedPane.addTab(
+		//				"priv chat", new PrivateChat(null, guiController, ""),
+		//				false
+		//		);
+		//		tabbedPane.addTab("Ai test", new AiRoom().panel1, true);
 
 		{
 			JMenuBar jMenuBar = new JMenuBar();
 
 			{
-				JMenu jMenu = new JMenu("Файл");
-				{
-					JMenuItem jMenuItem = new JMenuItem("открыть");
-					jMenuItem.setEnabled(false);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem("сохранить");
-					jMenuItem.setEnabled(false);
-					jMenu.add(jMenuItem);
-				}
-//				{
-//					JMenuItem jMenuItem = new JMenuItem("создать тестовую игру");
-//					jMenuItem.addActionListener(new ActionListener() {
-//
-//						public void actionPerformed(ActionEvent e) {
-//
-//							GameRoom gameRoom = new GameRoom(null, null, null,
-//									null, null, 0, 0, null, false, null,
-//									true, true);
-//							tabbedPane.addTab("тестовая игра", gameRoom, true);
-//							tabbedPane.setSelectedComponent(gameRoom);
-//						}
-//					});
-//					jMenu.add(jMenuItem);
-//				}
-				jMenuBar.add(jMenu);
-			}
-
-			{
-				JMenu jMenu = new JMenu("Играть с ИИ");
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Priymak PointsAI - о программе</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://sites.google.com/site/priymakpoints/intelligence"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-
-				{
-					final JMenuItem jMenuItem = new JMenuItem("Priymak PointsAI - 1.08");
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									AiVirtualServer aiWrapper =
-											new AiVirtualServer(
-													guiController
-											);
-									aiWrapper.setAi(
-											new com.google.sites.priymakpoints.pointsai.pointsAI_1_08.PointsAIEngine(
-													aiWrapper, 39, 32
-											)
-									);
-									aiWrapper.init();
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-
-				{
-					final JMenuItem jMenuItem = new JMenuItem("Priymak PointsAI - 1.07");
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									AiVirtualServer aiWrapper =
-											new AiVirtualServer(
-													guiController
-											);
-									aiWrapper.setAi(
-											new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
-													aiWrapper, 39, 32
-											)
-									);
-									aiWrapper.init();
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-
-				jMenu.add(new JSeparator());
-
+				JMenu jMenu_AI = new JMenu("Играть с ИИ");
 				{
 					final JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=>Keij&Kvanttt AI - помощь в настройке</a></html>"
+							"<html><a href=>Keij&Kvanttt AI - описание работы с этим ИИ</a></html>"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
@@ -233,29 +130,54 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-					jMenu.add(jMenuItem);
+					jMenu_AI.add(jMenuItem);
 				}
 
+				JMenu jMenu_KeijDownloads = new JMenu("Keij&Kvanttt AI - скачать необходимые файлы");
 				{
-					final JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=>Keij&Kvanttt AI - ссылка для скачки exe-шника</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
+					{
+						final JMenuItem jMenuItem = new JMenuItem(
+								"<html><a href=>exe-файл для винды</a></html>"
+						);
+						jMenuItem.addActionListener(
+								new ActionListener() {
 
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://dl.dropbox.com/u/15765203/keijkvantttai.exe"
-												)
-										);
-									} catch (Exception ignored) {
+									public void actionPerformed(ActionEvent e) {
+										try {
+											java.awt.Desktop.getDesktop().browse(
+													new URI(
+															"http://code.google.com/p/pointsgame/"
+													)
+											);
+										} catch (Exception ignored) {
+										}
 									}
 								}
-							}
-					);
-					jMenu.add(jMenuItem);
+						);
+						jMenu_KeijDownloads.add(jMenuItem);
+					}
+					{
+						final JMenuItem jMenuItem = new JMenuItem(
+								"<html><a href=>исполняемый файл для линукса и мака</a></html>"
+						);
+						jMenuItem.addActionListener(
+								new ActionListener() {
+
+									public void actionPerformed(ActionEvent e) {
+										try {
+											java.awt.Desktop.getDesktop().browse(
+													new URI(
+															"http://pointsgame.net/kekvai/keijkvantttai.linux"
+													)
+											);
+										} catch (Exception ignored) {
+										}
+									}
+								}
+						);
+						jMenu_KeijDownloads.add(jMenuItem);
+					}
+					jMenu_AI.add(jMenu_KeijDownloads);
 				}
 
 				final JMenuItem jMenuItem_KeijkvantttaiExecute;
@@ -275,7 +197,7 @@ public class SelfishGuiStarter {
 											new KeijKvantttAi(
 													aiWrapper,
 													39, 32,
-													PersistentMemory.getKeijKvantttAiPath()
+													Memory.getKeijKvantttAiPath()
 											)
 									);
 									aiWrapper.init();
@@ -283,16 +205,16 @@ public class SelfishGuiStarter {
 							}
 					);
 					jMenuItem_KeijkvantttaiExecute.setEnabled(
-							!PersistentMemory.getKeijKvantttAiPath().equals("")
+							! Memory.getKeijKvantttAiPath().equals("")
 					);
-//					/home/u2/Downloads/kkai/PointsConsole/a.out
-//
-//					jMenu.add(jMenuItem_KeijkvantttaiExecute);
+					//					/home/u2/Downloads/kkai/PointsConsole/a.out
+					//
+					//					jMenu.add(jMenuItem_KeijkvantttaiExecute);
 				}
 
 				{
 					final JMenuItem jMenuItem = new JMenuItem(
-							"Keij&Kvanttt AI - настройки запуска."
+							"Keij&Kvanttt AI - указать путь скачанного файла"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
@@ -311,7 +233,7 @@ public class SelfishGuiStarter {
 													"P.S. К сожалению, " +
 													"по политике безопасности java, " +
 													"выбрать файл более привычным способом не получается.",
-											PersistentMemory.getKeijKvantttAiPath()
+											Memory.getKeijKvantttAiPath()
 									);
 									if (command != null) {
 										if (command.endsWith("\\")
@@ -319,27 +241,97 @@ public class SelfishGuiStarter {
 												|| command.endsWith(File.pathSeparator)) {
 											command = command + "keijkvantttai.exe";
 										}
-										PersistentMemory.setKeijKvantttAiPath(command);
+										Memory.setKeijKvantttAiPath(command);
 										JOptionPane.showMessageDialog(
 												null,
 												"Путь изменён на " + command + " \n" +
 														"Попробуйте теперь запустить ИИ. :)"
 										);
 										jMenuItem_KeijkvantttaiExecute.setEnabled(
-												!PersistentMemory.getKeijKvantttAiPath().equals("")
+												! Memory.getKeijKvantttAiPath().equals("")
 										);
 									}
 								}
 							}
 					);
-					jMenu.add(jMenuItem);
-					jMenu.add(jMenuItem_KeijkvantttaiExecute);
+					jMenu_AI.add(jMenuItem);
+					jMenu_AI.add(jMenuItem_KeijkvantttaiExecute);
 				}
 
-				jMenu.add(new JSeparator());
+				jMenu_AI.add(new JSeparator());
 
 				{
-					final JMenuItem jMenuItem = new JMenuItem("Рандомный ИИ");
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">Priymak PointsAI - о программе</a></html>"
+					);
+					jMenuItem.addActionListener(
+							new ActionListener() {
+
+								public void actionPerformed(ActionEvent e) {
+									try {
+										java.awt.Desktop.getDesktop().browse(
+												new URI(
+														"http://sites.google.com/site/priymakpoints/intelligence"
+												)
+										);
+									} catch (Exception ignored) {
+									}
+								}
+							}
+					);
+					jMenu_AI.add(jMenuItem);
+				}
+
+				{
+					final JMenuItem jMenuItem =
+							new JMenuItem("Priymak PointsAI - запуск 1.08");
+					jMenuItem.addActionListener(
+							new ActionListener() {
+
+								public void actionPerformed(ActionEvent e) {
+									AiVirtualServer aiWrapper =
+											new AiVirtualServer(
+													guiController
+											);
+									aiWrapper.setAi(
+											new com.google.sites.priymakpoints.pointsai.pointsAI_1_08.PointsAIEngine(
+													aiWrapper, 39, 32
+											)
+									);
+									aiWrapper.init();
+								}
+							}
+					);
+					jMenu_AI.add(jMenuItem);
+				}
+
+				{
+					final JMenuItem jMenuItem =
+							new JMenuItem("Priymak PointsAI - запуск 1.07");
+					jMenuItem.addActionListener(
+							new ActionListener() {
+
+								public void actionPerformed(ActionEvent e) {
+									AiVirtualServer aiWrapper =
+											new AiVirtualServer(
+													guiController
+											);
+									aiWrapper.setAi(
+											new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
+													aiWrapper, 39, 32
+											)
+									);
+									aiWrapper.init();
+								}
+							}
+					);
+					jMenu_AI.add(jMenuItem);
+				}
+
+				jMenu_AI.add(new JSeparator());
+
+				{
+					final JMenuItem jMenuItem = new JMenuItem("Рандомный ИИ - запуск");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -354,10 +346,10 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-					jMenu.add(jMenuItem);
+					jMenu_AI.add(jMenuItem);
 				}
 
-				jMenuBar.add(jMenu);
+				jMenuBar.add(jMenu_AI);
 			}
 
 			{

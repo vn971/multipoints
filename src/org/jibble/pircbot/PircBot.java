@@ -3068,7 +3068,7 @@ public abstract class PircBot implements ReplyConstants {
     
     // Outgoing message stuff.
     private Queue _outQueue = new Queue();
-    private long _messageDelay = 1000;
+    private long _messageDelay = 100;
     
     // A Hashtable of channels that points to a selfreferential Hashtable of
     // User objects (used to remember which users are in which channels).

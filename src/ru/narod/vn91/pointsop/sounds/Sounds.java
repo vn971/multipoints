@@ -2,7 +2,8 @@ package ru.narod.vn91.pointsop.sounds;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
-import ru.narod.vn91.pointsop.data.PersistentMemory;
+
+import ru.narod.vn91.pointsop.data.Memory;
 
 public class Sounds {
 
@@ -69,8 +70,8 @@ public class Sounds {
 			audioMakeMove = Applet.newAudioClip(getClass().getClassLoader().
 					getResource("ru/narod/vn91/pointsop/sounds/makeMove.wav"));
 		}
-		if ((PersistentMemory.getClickAudibility() == PersistentMemory.ClickAudibility.IN_ALL_GAMES)
-				|| (isInMyGame && (PersistentMemory.getClickAudibility() == PersistentMemory.ClickAudibility.IN_MY_GAMES))) {
+		if ((Memory.getClickAudibility() == Memory.ClickAudibility.IN_ALL_GAMES)
+				|| (isInMyGame && (Memory.getClickAudibility() == Memory.ClickAudibility.IN_MY_GAMES))) {
 			playInNewThread(audioMakeMove);
 		}
 

@@ -17,7 +17,8 @@ import javax.swing.text.StyledDocument;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
-import ru.narod.vn91.pointsop.data.PersistentMemory;
+
+import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
 public class RoomPart_Chat extends javax.swing.JPanel {
@@ -38,7 +39,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		try {
 			if (user.equals(userFirst)) {
 				StyleConstants.setForeground(GlobalGuiSettings.playerNameRed,
-						PersistentMemory.getPlayer1Color());
+						Memory.getPlayer1Color());
 
 				document.insertString(document.getLength(),
 						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
@@ -50,7 +51,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 						GlobalGuiSettings.chatIncoming);
 			} else if (user.equals(userSecond)) {
 				StyleConstants.setForeground(GlobalGuiSettings.playerNameBlue,
-						PersistentMemory.getPlayer2Color());
+						Memory.getPlayer2Color());
 
 				document.insertString(document.getLength(),
 						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
@@ -129,6 +130,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		jButton_ClearChat.setVisible(false);
 		jToggleButton_ScrollDown.setVisible(false);
 		jToggleButton_ShowJoinLeave.setVisible(false);
+		jCheckBoxMenuItem_ShowUserJoin.setSelected(false);
 
 		{
 			final UndoManager undo = new UndoManager();

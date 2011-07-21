@@ -1,5 +1,4 @@
 // по чату и т.п.
-//* при открытии новой вкладки автоматически перемещать курсор на чат
 //* возможность вести логи чатов
 //* возможность менять ширину колонки с приватным чатом
 //* строчки через один слегка затемнять.
@@ -21,7 +20,6 @@
 //
 // opros 29 marta
 //
-// pont - соединялки
 // romati - регулировка цвета и размера точек
 // huligan - более красивые точки
 // qmesis - настройки времени
@@ -129,7 +127,13 @@ public class ServerPointsxt
 		try {
 			login = InetAddress.getLocalHost().getHostName();
 			login = login.replaceAll("[^a-zA-Z0-9-]", "");
+			if (login.length() > 9) {
+				login = login.substring(0, 9);
+			}
 		} catch (Exception ignored) {
+		}
+		if (login.equals("")) {
+			login = "l";
 		}
 		super.setLogin(login);
 
@@ -139,6 +143,8 @@ public class ServerPointsxt
 		myName = myName + "_X092000000000[free]";
 		super.setName(myName);
 		this.myNickOnServ = myName;
+
+//		super.setVerbose(true);
 
 		super.setMessageDelay(100L);
 		super.setVersion("PointsOp (a client from vn91)");
@@ -177,12 +183,19 @@ public class ServerPointsxt
 						roomNumber
 				)
 		);
-		super.sendMessage(
-				defaultChannel,
-				"Оставил заявку на блиц. " +
-						"Как её принять игрокам pointsXT " +
-						"см. через команду !opstart"
-		);
+		{
+			// chat notify...
+			String notifyMessage =
+					"оставил(а) заявку на блиц. " +
+							"См. команду !opstart для игры между pointsXT и pointsOp.";
+			super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
+			gui.chatReceived(
+					this,
+					defaultChannel,
+					getMyName(),
+					"*** " + notifyMessage
+			);
+		}
 	}
 
 	public void acceptOpponent(
@@ -237,6 +250,29 @@ public class ServerPointsxt
 				gameRoomName,
 				commandCommonPrefix + commandIWantJoinGame
 		);
+	}
+
+	public void tryInvitePointsxt(String target, boolean isVerbose) {
+		if (target.startsWith("\\^")) {
+			super.sendMessage(
+					target,
+					"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
+			);
+			return;
+		}
+		if (myGame.isInSearchNow() == false) {
+			if (isVerbose) {
+				super.sendMessage(
+						target,
+						"На игру можно вызывать только игрока " +
+								"который в состоянии поиска оппонента. " +
+								"(Это системное сообщение.)"
+				);
+			}
+			return;
+		}
+
+		super.sendMessage(target, "/PointsXTStart NotRait Blits Chisto");
 	}
 
 	public static String getAllowedNick(
@@ -317,7 +353,7 @@ public class ServerPointsxt
 			);
 		}
 		if (channel.equals(myGame.roomName) && myGame.amIRed) {
-			super.sendMessage(sender, getSpectrGame_PointsxtStyle());
+			this.sendSpectr(sender);
 		}
 	}
 
@@ -416,7 +452,8 @@ public class ServerPointsxt
 		}
 		userConnected_PointsxtStyle(defaultChannel, newNick, /*silent*/ true);
 
-		int rankOld = getPlayerRank(oldNick), rankNew = getPlayerRank(newNick);
+		int rankOld = getPlayerRank(oldNick);
+		int rankNew = getPlayerRank(newNick);
 		if ((rankNew != rankOld) && (rankOld != 0) && (rankNew != 0)) {
 			gui.serverNoticeReceived(
 					this, defaultChannel,
@@ -433,6 +470,11 @@ public class ServerPointsxt
 			String login,
 			String hostname,
 			String message) {
+		if (channel.equals(defaultChannel) && (
+				message.equalsIgnoreCase("!s")
+						|| message.equalsIgnoreCase("!ы"))) {
+			tryInvitePointsxt(sender, false);
+		}
 		String nick = nicknameManager.getOrCreateShortNick(sender);
 		int playerNumb = getPlayerIngameNumber(sender);
 		if (message.startsWith(commandCommonPrefix)) {
@@ -538,6 +580,7 @@ public class ServerPointsxt
 					sender
 			) + " sends you a sound"
 			);
+			tryInvitePointsxt(sender, true);
 		} else if (message.equals("/GetTehGame")) {
 			//			if (myGame.isActive()) {
 			//				super.sendMessage(
@@ -545,7 +588,7 @@ public class ServerPointsxt
 			//						"Игра уже начата, извините. (Это системное сообщение.)"
 			//				);
 			//			} else {
-			super.sendMessage(sender, getSpectrGame_PointsxtStyle());
+			this.sendSpectr(sender);
 			//			}
 		} else if (message.startsWith("/PointsXTAccept ")) {
 			String room = getPlayerRoom(sender);
@@ -561,7 +604,7 @@ public class ServerPointsxt
 					super.partChannel(myGame.roomName);
 					super.changeNick(
 							String.format(
-									"%s_X0920000%s[g201]",
+									"%s_X0920000%s[g101]",
 									getMyName(),
 									roomNumber
 							)
@@ -599,8 +642,13 @@ public class ServerPointsxt
 					}
 				}
 			}
-		} else if (message.equals("!opstart")) {
-			super.sendMessage(sender, "/PointsXTStart NotRait Blits Chisto");
+		} else if (message.startsWith("/PointsXTDiscard")) {
+		} else if (message.startsWith("/PointsXTStart")) {
+		} else if (
+				message.equalsIgnoreCase("!s")
+						|| message.startsWith("!opstart")
+						|| message.equalsIgnoreCase("!ы")) {
+			tryInvitePointsxt(sender, true);
 		} else if (message.startsWith("/PASSOK")
 				&& (sender.equalsIgnoreCase("podbot"))) {
 			subscribeRoom("#pointsxt");
@@ -655,6 +703,8 @@ public class ServerPointsxt
 		} else if (message.equals("/Ping")) {
 			// pointsxt-style ping-ing
 			super.sendMessage(sender, "/Pong");
+		} else if (message.equals("/GameMinimaze")) {
+		} else if (message.equals("/GameMaximaze")) {
 		} else {
 			String nick = nicknameManager.getOrCreateShortNick(sender);
 			gui.privateMessageReceived(
@@ -1005,7 +1055,7 @@ public class ServerPointsxt
 	}
 
 	/**
-	 * @return gui name
+	 * @return GUI name
 	 */
 	public String getMyName() {
 		return myNickOnServ.replaceAll(pointsxtTail_RegExp, "");
@@ -1023,23 +1073,9 @@ public class ServerPointsxt
 		return Character.toString((char) (i + '0'));
 	}
 
-	public String getSpectrGame_PointsxtStyle() {
+	protected String getSpectr_MainPart() {
 		StringBuilder result = new StringBuilder();
-		result.append("/SpectrGame ");
-		String numberOfTurnsAsString =
-				myGame.moveList.isEmpty() ? "-001"
-						: String.format("%03d", myGame.moveList.size() - 1);
-		result.append(numberOfTurnsAsString);
-		result.append(
-				String.format(
-						"%03d",
-						myGame.engine.getSurroundings().size()
-				)
-		);
-		result.append(myGame.isRedMoveNow() ? "2" : "1");
-		result.append("00000000");
-		for (int moveIndex = 0; moveIndex < myGame.moveList.size(); moveIndex++) {
-			SimpleMove simpleMove = myGame.moveList.get(moveIndex);
+		for (SimpleMove simpleMove : myGame.moveList) {
 			int x = simpleMove.x - 1;
 			int y = 32 - simpleMove.y;
 			if (simpleMove.isRed) {
@@ -1070,6 +1106,40 @@ public class ServerPointsxt
 		return result.toString();
 	}
 
+	protected String getSpectr_CommonPrefix() {
+		StringBuilder result = new StringBuilder();
+		result.append("/SpectrGame ");
+		String numberOfTurnsAsString =
+				myGame.moveList.isEmpty() ? "-001"
+						: String.format("%03d", myGame.moveList.size() - 1);
+		result.append(numberOfTurnsAsString);
+		result.append(
+				String.format(
+						"%03d",
+						myGame.engine.getSurroundings().size()
+				)
+		);
+		result.append(myGame.isRedMoveNow() ? "2" : "1");
+		result.append("00000000");
+		return result.toString();
+	}
+
+	public void sendSpectr(String targetIrcNick) {
+		String mainSpectrData = getSpectr_MainPart();
+		final int blockStep = 260;
+		int blockStart = 0;
+		while (blockStart < mainSpectrData.length()) {
+			int blockEnd = Math.min(mainSpectrData.length(), blockStart + blockStep);
+			String blockAsString = mainSpectrData.substring(blockStart, blockEnd);
+			super.sendMessage(
+					targetIrcNick,
+					getSpectr_CommonPrefix() + blockAsString
+			);
+			blockStart += blockStep;
+		}
+	}
+
+
 	class MyGame {
 
 		String roomName = "";
@@ -1082,6 +1152,10 @@ public class ServerPointsxt
 
 		private boolean isActive() {
 			return "".equals(opponentName) == false;
+		}
+
+		private boolean isInSearchNow() {
+			return ! (roomName == null || roomName.equals(""));
 		}
 
 		private void clear() {
@@ -1144,7 +1218,7 @@ public class ServerPointsxt
 							roomName,
 							"" + (char) ('0' + x - 1)
 									+ (char) ('0' + 32 - y)
-									+ "999"
+									+ "005"
 					);
 				}
 			}
@@ -1199,7 +1273,7 @@ class IrcNicknameManager {
 			String newIrcNick) {
 		String shortNick = IrcNick2ShortNick.get(oldIrcNick);
 		IrcNick2ShortNick.put(newIrcNick, shortNick);
-		//		IrcNick2ShortNick.remove(oldIrcNick);
+		IrcNick2ShortNick.remove(oldIrcNick);
 
 		ShortNick2IrcNick.put(shortNick, newIrcNick); // overwrite the old
 	}

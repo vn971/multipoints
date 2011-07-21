@@ -7,8 +7,8 @@ import java.util.Enumeration;
 import javax.swing.AbstractButton;
 import javax.swing.JColorChooser;
 import ru.narod.vn91.pointsop.data.CustomColors;
-import ru.narod.vn91.pointsop.data.PersistentMemory;
-import ru.narod.vn91.pointsop.data.PersistentMemory.ClickAudibility;
+import ru.narod.vn91.pointsop.data.Memory;
+import ru.narod.vn91.pointsop.data.Memory.ClickAudibility;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
 public class SettingsPanel extends javax.swing.JPanel {
@@ -18,7 +18,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 	class PointsClickListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			PersistentMemory.setClickAudibility(e.getActionCommand());
+			Memory.setClickAudibility(e.getActionCommand());
 		}
 	}
 	PointsClickListener pointsClickListener = new PointsClickListener();
@@ -26,15 +26,15 @@ public class SettingsPanel extends javax.swing.JPanel {
 	class PrivateChatListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-//			PersistentMemory.memory.put("PrivateChat", e.getActionCommand());
+//			Memory.memory.put("PrivateChat", e.getActionCommand());
 		}
 	}
 	PrivateChatListener privateChatListener = new PrivateChatListener();
 
 	private void setColors() {
-		Color p1 = PersistentMemory.getPlayer1Color();
-		Color p2 = PersistentMemory.getPlayer2Color();
-		Color back = PersistentMemory.getBackgroundColor();
+		Color p1 = Memory.getPlayer1Color();
+		Color p2 = Memory.getPlayer2Color();
+		Color back = Memory.getBackgroundColor();
 		jButton_P1Color.setBackground(p1);
 		jButton_P2Color.setBackground(p2);
 		jButton_BackgroundColor.setBackground(back);
@@ -55,16 +55,16 @@ public class SettingsPanel extends javax.swing.JPanel {
 				ClickAudibility.NOWHERE.name());
 //		jSlider1.setValueIsAdjusting(true);
 		jSlider1.setValue(
-				(int)(PersistentMemory.getDotWidth()
+				(int)(Memory.getDotWidth()
 				* (jSlider1.getMaximum() - jSlider1.getMinimum() + 1)
 				+ 0.5));
 //		jSlider1.setValueIsAdjusting(false);
 		jCheckBox_DrawConnections.setSelected(
-				PersistentMemory.getDrawConnections());
+				Memory.getDrawConnections());
 		setColors();
 		{
 			Enumeration<AbstractButton> pointClickButtons = buttonGroup_PointClick.getElements();
-			String userSetting = PersistentMemory.getClickAudibility().name();
+			String userSetting = Memory.getClickAudibility().name();
 			for (Enumeration<AbstractButton> enumerator = pointClickButtons; enumerator.hasMoreElements();) {
 				AbstractButton abstractButton = enumerator.nextElement();
 				if (abstractButton.getActionCommand().equals(userSetting)) {
@@ -273,47 +273,49 @@ public class SettingsPanel extends javax.swing.JPanel {
 
 	private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
 		if (initPhase == false) {
-			PersistentMemory.setDotWidth(
-					((double)jSlider1.getValue())
-					/ jSlider1.getMaximum());
+			Memory.setDotWidth(
+					((double) jSlider1.getValue())
+							/ jSlider1.getMaximum()
+			);
 		}
 	}//GEN-LAST:event_jSlider1StateChanged
 
 	private void jCheckBox_DrawConnectionsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox_DrawConnectionsStateChanged
-		PersistentMemory.setDrawConnections(
-				jCheckBox_DrawConnections.isSelected());
+		Memory.setDrawConnections(
+				jCheckBox_DrawConnections.isSelected()
+		);
 	}//GEN-LAST:event_jCheckBox_DrawConnectionsStateChanged
 
 	private void jButton_P1ColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_P1ColorActionPerformed
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
-				PersistentMemory.getPlayer1Color());
+				Memory.getPlayer1Color());
 		if (c != null) {
-			PersistentMemory.setPlayer1Color(c);
+			Memory.setPlayer1Color(c);
 			setColors();
 		}
 	}//GEN-LAST:event_jButton_P1ColorActionPerformed
 
 	private void jButton_P2ColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_P2ColorActionPerformed
 		Color c = JColorChooser.showDialog(null, "цвет второго игрока",
-				PersistentMemory.getPlayer2Color());
+				Memory.getPlayer2Color());
 		if (c != null) {
-			PersistentMemory.setPlayer2Color(c);
+			Memory.setPlayer2Color(c);
 			setColors();
 		}
 	}//GEN-LAST:event_jButton_P2ColorActionPerformed
 
 	private void jButton_BackgroundColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BackgroundColorActionPerformed
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
-				PersistentMemory.getBackgroundColor());
+				Memory.getBackgroundColor());
 		if (c != null) {
-			PersistentMemory.setBackgroundColor(c);
+			Memory.setBackgroundColor(c);
 			setColors();
 		}
 
 	}//GEN-LAST:event_jButton_BackgroundColorActionPerformed
 
 	private void jButton_ResetColorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ResetColorsActionPerformed
-		PersistentMemory.resetColors();
+		Memory.resetColors();
 		setColors();
 	}//GEN-LAST:event_jButton_ResetColorsActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

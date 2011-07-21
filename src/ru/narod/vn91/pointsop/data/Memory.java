@@ -3,28 +3,32 @@ package ru.narod.vn91.pointsop.data;
 import java.awt.Color;
 import java.util.prefs.Preferences;
 
-public class PersistentMemory {
+public class Memory {
 
-	static public int version = 2;
+	static public int newestVersion = 4;
 	static Preferences memory = Preferences.userRoot().node(
 			"ru.narod.ru.pointsop.userdata");
 
 	public static int getVersion() {
-		return memory.getInt("version", version);
+		return memory.getInt("version", newestVersion);
 	}
 
 	public static void setVersion(int ver) {
 		memory.putInt("version", ver);
 	}
 
+	public static void setNewestVersion() {
+		memory.putInt("version", newestVersion);
+	}
+
 	public static void setUserName(String newName) {
 		memory.put("username", newName);
 	}
-	
+
 	public static void setFrameWidth(int frameWidth) {
 		memory.putInt("frameWidth", frameWidth);
 	}
-	
+
 	public static void setFrameHeight(int frameHeight) {
 		memory.putInt("frameHeight", frameHeight);
 	}
@@ -38,19 +42,19 @@ public class PersistentMemory {
 	}
 
 	public static int getFrameWidth() {
-		return memory.getInt("frameWidth", -1);
+		return memory.getInt("frameWidth", - 1);
 	}
 
 	public static int getFrameHeight() {
-		return memory.getInt("frameHeight", -1);
+		return memory.getInt("frameHeight", - 1);
 	}
 
 	public static int getFrameX() {
-		return memory.getInt("frameX", -1);
+		return memory.getInt("frameX", - 1);
 	}
 
 	public static int getFrameY() {
-		return memory.getInt("frameY", -1);
+		return memory.getInt("frameY", - 1);
 	}
 
 	public static String getUserName() {
@@ -109,25 +113,28 @@ public class PersistentMemory {
 	public static void setDrawConnections(boolean b) {
 		memory.putBoolean("DrawConnections", b);
 	}
+	static Color defaultColor1 = new Color(255, 0, 0);
+	static Color defaultColor2 = new Color(21, 96, 189);
+	static Color defaultColorBackground = new Color(255, 255, 255);
 
 	public static Color getPlayer1Color() {
-		int r = memory.getInt("1Red", 255);
-		int g = memory.getInt("1Green", 0);
-		int b = memory.getInt("1Blue", 0);
+		int r = memory.getInt("1Red", defaultColor1.getRed());
+		int g = memory.getInt("1Green", defaultColor1.getGreen());
+		int b = memory.getInt("1Blue", defaultColor1.getBlue());
 		return new Color(r, g, b);
 	}
 
 	public static Color getPlayer2Color() {
-		int r = memory.getInt("2Red", 21);
-		int g = memory.getInt("2Green", 96);
-		int b = memory.getInt("2Blue", 189);
+		int r = memory.getInt("2Red", defaultColor2.getRed());
+		int g = memory.getInt("2Green", defaultColor2.getGreen());
+		int b = memory.getInt("2Blue", defaultColor2.getBlue());
 		return new Color(r, g, b);
 	}
 
 	public static Color getBackgroundColor() {
-		int r = memory.getInt("BRed", 0);
-		int g = memory.getInt("BGreen", 0);
-		int b = memory.getInt("BBlue", 0);
+		int r = memory.getInt("BRed", defaultColorBackground.getRed());
+		int g = memory.getInt("BGreen", defaultColorBackground.getGreen());
+		int b = memory.getInt("BBlue", defaultColorBackground.getGreen());
 		return new Color(r, g, b);
 	}
 
@@ -150,9 +157,9 @@ public class PersistentMemory {
 	}
 
 	public static void resetColors() {
-		setPlayer1Color(new Color(255, 0, 0, 255));
-		setPlayer2Color(new Color(21, 96, 189, 255));
-		setBackgroundColor(new Color(254, 254, 254, 255));
+		setPlayer1Color(defaultColor1);
+		setPlayer2Color(defaultColor2);
+		setBackgroundColor(defaultColorBackground);
 	}
 
 	public enum ClickAudibility {

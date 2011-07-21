@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import ru.narod.vn91.pointsop.data.CustomColors;
-import ru.narod.vn91.pointsop.data.PersistentMemory;
+import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
@@ -593,13 +593,13 @@ public abstract class Paper
 
 	@Override
 	public void paint(Graphics graphics) {
-		//System.out.println(PersistentMemory.getDotWidth());
-		dotWidth = PersistentMemory.getDotWidth();
-		drawConnections = PersistentMemory.getDrawConnections();
+		//System.out.println(Memory.getDotWidth());
+		dotWidth = Memory.getDotWidth();
+		drawConnections = Memory.getDrawConnections();
 		setColors(
-				PersistentMemory.getPlayer1Color(),
-				PersistentMemory.getPlayer2Color(),
-				PersistentMemory.getBackgroundColor()
+				Memory.getPlayer1Color(),
+				Memory.getPlayer2Color(),
+				Memory.getBackgroundColor()
 		);
 		if (engine == null) {
 			return;

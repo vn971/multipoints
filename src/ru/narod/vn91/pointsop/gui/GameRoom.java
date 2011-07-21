@@ -262,6 +262,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jButton_TurnsBackwards.setVisible(false);
 		jButton_TurnsForward.setVisible(false);
 		jButton_AdditionalActions.setVisible(false);
+		jButton_EndGame.setVisible(false);
+		jButton_Pass.setVisible(false);
+		jButton_Stop.setVisible(false);
 //		}
 		{
 			// netbeans debug

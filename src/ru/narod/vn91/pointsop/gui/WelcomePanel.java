@@ -6,8 +6,7 @@ import java.awt.event.MouseListener;
 import java.net.URI;
 import javax.swing.JLabel;
 
-import ru.narod.vn91.pointsop.data.PersistentMemory;
-import ru.narod.vn91.pointsop.server.ServerPointsop;
+import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
 
 public class WelcomePanel extends javax.swing.JPanel {
@@ -19,7 +18,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 		nick = ServerPointsxt.getAllowedNick(nick, true);
 		jTextField_Username.setText(nick);
 		if (nick.equals("") == false) {
-			PersistentMemory.setUserName(nick);
+			Memory.setUserName(nick);
 //			if (nick.equals("pp")) {
 //				guiController.pointsopServer = new ServerPointsop(guiController);
 //				guiController.pointsopServer.connect();
@@ -56,7 +55,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 		jTextField_Email.setVisible(false);
 		jTextField_Icq.setVisible(false);
 		jPasswordField.setVisible(false);
-		jTextField_Username.setText(PersistentMemory.getUserName());
+		jTextField_Username.setText(Memory.getUserName());
 		jTextField_Username.select(
 				jTextField_Username.getText().length(),
 				jTextField_Username.getText().length()
