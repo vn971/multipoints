@@ -337,35 +337,32 @@ public class ServerPointsxt
 	}
 
 	@Override
+	protected void onConnect() {
+		if (super.isConnected()) {
+			gui.receiveRawServerInfo(
+					this,
+					"Удалось соединиться с " + defaultServ
+					+ ", пытаюсь подключиться к основной комнате...",
+					GuiController.MessageType.INFO);
+		}
+	}
+
+	@Override
 	protected void onJoin(
 			String channel,
 			String sender,
 			String login,
 			String hostname) {
 		userConnected_PointsxtStyle(channel, sender, /*not silent*/ false);
-
-		// other code is executed only when user joins a channel, not changes his nick.
+// other code is executed only when user joins a channel, not changes his nick.
 		if ((channel.equals(defaultChannel)) && (sender.equals(myNickOnServ))) {
 			gui.receiveRawServerInfo(
 					this,
 					"Успешно подключился к основной комнате.",
-					GuiController.MessageType.INFO
-			);
+					GuiController.MessageType.INFO);
 		}
 		if (channel.equals(myGame.roomName) && myGame.amIRed) {
 			this.sendSpectr(sender);
-		}
-	}
-
-	@Override
-	protected void onConnect() {
-		if (super.isConnected()) {
-			gui.receiveRawServerInfo(
-					this,
-					"Удалось соединиться с " + defaultServ
-							+ ", пытаюсь подключиться к основной комнате...",
-					GuiController.MessageType.INFO
-			);
 		}
 	}
 
@@ -940,12 +937,12 @@ public class ServerPointsxt
 			String room,
 			String user) {
 		if (room.equals(defaultChannel)) {
-			nicknameManager.removeIrcNick(user);
 			gui.userLeavedRoom(
 					this, room,
 					nicknameManager.getOrCreateShortNick(user)
 			);
 			clearCreatedGames_PointsxtStyle(user);
+			nicknameManager.removeIrcNick(user);
 		} else {
 			if (user.equalsIgnoreCase("podbot") == false) {
 				gui.userLeavedRoom(
@@ -986,7 +983,7 @@ public class ServerPointsxt
 		} else {
 			Thread timeOutThread = new Thread() {
 
-				@SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
+//				@SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
 				@Override
 				public void run() {
 					long timeEnd = new Date().getTime() + 5 * 1000;
