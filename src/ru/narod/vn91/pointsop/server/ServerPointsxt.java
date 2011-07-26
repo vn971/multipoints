@@ -976,7 +976,7 @@ public class ServerPointsxt
 				myGame.moveList.add(new SimpleMove(x, y, isRed));
 			}
 		}
-		gui.makedMove(this, room, silent, x, y, isRed);
+		gui.makedMove(this, room, silent, x, y, isRed, myGame.timeLeftRed(), myGame.timeLeftBlue());
 		boolean iHaveMoved = ! myGame.isMyMoveNow();
 		if (iHaveMoved) {
 			myGame.lastTimeoutThread = null;
@@ -1147,6 +1147,14 @@ public class ServerPointsxt
 		Thread lastTimeoutThread = null;
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
 
+		public int timeLeftRed() {
+			return 5;
+		}
+		
+		public int timeLeftBlue() {
+			return 5;
+		}
+		
 		private boolean isActive() {
 			return "".equals(opponentName) == false;
 		}

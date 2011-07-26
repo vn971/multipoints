@@ -45,7 +45,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 			double aiThinksOfHisPosition,
 			String message,
 			long timeTook) {
-		gui.makedMove(this, "", false, x, y, isRed);
+		gui.makedMove(this, "", false, x, y, isRed, 999, 999);
 		receiveMessage(message);
 	}
 

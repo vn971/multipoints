@@ -1,5 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Date;
 
 import javax.swing.JLabel;
@@ -7,129 +9,87 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 class TimerLabel extends JLabel {
 
+	TimerThread thread = null;
+	Integer secondsLastTimeShown = -1;
 
 	void init() {
 	}
-
-	TimerThread thread = null;
-	private Long timeOut = 0L;
-//	private Object synchObject = new Object();
 
 	public TimerLabel() {
 		super();
 		this.showSeconds(0);
 	}
 
-	public void setRemainingTime(int seconds, boolean freeze) {
-		if (thread!=null) {
+	public synchronized void setRemainingTime(int seconds, boolean freeze) {
+		if (thread != null) {
 			thread.stopTimerThread();
 		}
 		if (freeze == true) {
-			// synchronized (timeOut) {
-			timeOut = 0L;
-			// }
-			showSeconds(seconds);
-		} else if (seconds <= 0){
-			timeOut = 0L;
 			showSeconds(seconds);
 		} else {
-			timeOut = new Date().getTime() + 1000L * seconds;
-			showSeconds(seconds);
-		}
-			Thread thread = new Thread() {
-
-				void sleep_Custom(long t) {
-					if (t > 0) {
-						long stopSleep = new Date().getTime() + t;
-						long remainSleep;
-						while ((remainSleep = stopSleep - new Date().getTime()) > 0) {
-							try {
-								sleep(remainSleep + 50);
-							} catch (Exception e) {
-							}
-						}
-					}
-				}
-
-				@Override
-				public void run() {
-					while (TimerLabel.this.isDisplayable()) {
-						long current = new Date().getTime();
-						long suggestedToShow = timeOut - 1000L * secondsToShowNext;
-						System.out.println("updating timer..., current=" + current
-								+ ", suggToSh=" + suggestedToShow);
-
-						if (timeOut <= 0) {
-							System.out.println("-");
-							sleep_Custom(1000L);
-						}
-					// else if (current < suggestedToShow) {
-					// System.out.println("0");
-					// sleep_Custom(suggestedToShow - current);
-					// } else if (current >= suggestedToShow && current < timeOut) {
-					// System.out.println("1");
-					// int secondsToShow = (int) ((timeOut - current) / 1000L);
-					// showSeconds(secondsToShow);
-					// secondsToShowNext = secondsToShow - 1;
-					// sleep_Custom(timeOut - current - 1000L * secondsToShowNext);
-					// }
-					else if (current < suggestedToShow) {
-						System.out.println("0");
-						sleep_Custom(suggestedToShow - current);
-					} else if (current >= suggestedToShow && current < timeOut) {
-						System.out.println("1");
-						showSeconds(secondsToShowNext);
-						// secondsToShowNext = (int) ((timeOut - current) / 1000L);
-						secondsToShowNext -= 1;
-						sleep_Custom(Math.min(1000L,
-								timeOut - current - 1000L * secondsToShowNext));
-						// int secondsToShow = (int) ((timeOut - current) / 1000L);
-						// showSeconds(secondsToShow);
-						// secondsToShowNext = secondsToShow - 1;
-						// sleep_Custom(timeOut - current - 1000L * secondsToShowNext);
-					}
-						else if (current >= timeOut) {
-							System.out.println("+");
-							secondsToShowNext = -1;
-							showSeconds(0);
-							sleep_Custom(1000L);
-						} else {
-							// cannot be.
-						}
-					}
-				}
-			};
-			thread.setPriority(Thread.MAX_PRIORITY);
-			thread.setDaemon(true);
-			thread.start();
+			thread = new TimerThread();
+			thread.init(seconds);
 		}
 	}
 
-	private synchronized void showSeconds(int seconds) {
-		int minutesVisual = (seconds ) / 60;
-		int secondsVisual = (seconds ) % 60;
-		String string = String.format("%02d:%02d", minutesVisual, secondsVisual);
-		super.setText(string);
+	private void showSeconds(int seconds) {
+		synchronized (secondsLastTimeShown) {
+			if (secondsLastTimeShown != seconds) {
+				super.setForeground((seconds <= 5) ? Color.RED : Color.BLACK);
+				int minutesVisual = (seconds) / 60;
+				int secondsVisual = (seconds) % 60;
+				String string = String
+						.format("%02d:%02d", minutesVisual, secondsVisual);
+				super.setText(string);
+				secondsLastTimeShown = seconds;
+			}
+		}
 	}
 
-	private class TimerThread extends Thread{
+	private class TimerThread extends Thread {
 
 		Long goal;
-		Boolean isAlive = true;
+		Boolean isTimerAlive = true;
 
 		public void stopTimerThread() {
-			synchronized (isAlive) {
-				isAlive = false;
+			synchronized (isTimerAlive) {
+				isTimerAlive = false;
 			}
 		}
 
+		@Override
+		public void run() {
+			while (true) {
+				long current = new Date().getTime();
+				int fullSecondsRemaining = (int) Math.floor
+						((double) (goal - current) / 1000);
+
+				synchronized (isTimerAlive) {
+					if (isTimerAlive &&
+							TimerLabel.this.isDisplayable()
+							&& fullSecondsRemaining >= -1) {
+						TimerLabel.this.showSeconds(fullSecondsRemaining + 1);
+					} else {
+						break;
+					}
+				}
+
+				try {
+					System.out.println("going to sleep for="
+							+ (goal - current - fullSecondsRemaining * 1000L + 50));
+					super.sleep(goal - current - fullSecondsRemaining * 1000L + 50);
+				} catch (Exception e) {
+				}
+			}
+		};
+
 		public void init(int seconds) {
-			goal = new Date().getTime() + 1000L * seconds;
-
-
+			super.setDaemon(true);
+			super.setPriority(Thread.MAX_PRIORITY);
+			goal = new Date().getTime() + 1000L * seconds - 1;
+			super.start();
 		}
 
 	}
-
 
 }

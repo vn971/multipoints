@@ -34,7 +34,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	boolean isRedTurnNow = true;
 	Sgf.GameResult gameResult = Sgf.GameResult.UNFINISHED;
 	Paper paper;
-	TimerLabel timerLabel;
+	TimerLabel timerLabel_Red;
+	TimerLabel timerLabel_Blue;
 
 	public JPanel getMainJPanel() {
 		return this;
@@ -84,7 +85,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	public void makeMove(boolean silent,
 			int x,
 			int y,
-			boolean isRed) {
+			boolean isRed,
+			int remainingTimeRed,
+			int remainingTimeBlue) {
 		MoveResult moveResult = paper.makeMove(silent, x, y, isRed);
 		if (moveResult != MoveResult.ERROR) {
 			MoveInfoAbstract moveInfoAbstract = new MoveInfoAbstract();
@@ -116,6 +119,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 				showScoreAndCursor();
 				new Sounds().playMakeMove(amIPlaying);
+				timerLabel_Red.setRemainingTime(remainingTimeRed, !isRed);
+				timerLabel_Blue.setRemainingTime(remainingTimeBlue, isRed);
 			}
 		}
 	}
@@ -178,7 +183,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			if (server != null) {
 				server.makeMove(nameOnServer, x, y);
 			} else {
-				makeMove(false, x, y, isRedTurnNow);
+				makeMove(false, x, y, isRedTurnNow,1800,1800);
 				isRedTurnNow = !isRedTurnNow;
 			}
 		}
@@ -250,7 +255,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			}
 		};
 		paper.initPaper(39, 32);
-		timerLabel = new TimerLabel();
+		timerLabel_Red = new TimerLabel();
+		timerLabel_Blue = new TimerLabel();
 
 //		if (amIPlaying) {
 //			стартовая позиция скрест
@@ -261,15 +267,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 //		}
 
 		initComponents();
-		timerLabel.init();
 		jPanel_Tree.setVisible(false);
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
 		roomPart_Chat.initChat(this, userFirst, userSecond);
 //		if (amIPlaying == false) {
-		jButton_TurnsBackwards.setVisible(false);
-		jButton_TurnsForward.setVisible(false);
-		jButton_AdditionalActions.setVisible(false);
+//		jButton_AdditionalActions.setVisible(false);
 		jButton_EndGame.setVisible(false);
 		jButton_Pass.setVisible(false);
 		jButton_Stop.setVisible(false);
@@ -296,8 +299,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     roomPart_UserList = new ru.narod.vn91.pointsop.gui.RoomPart_Userlist();
     roomPart_Chat = new ru.narod.vn91.pointsop.gui.RoomPart_Chat();
     jButton_AdditionalActions = new javax.swing.JButton();
-    jButton_TurnsBackwards = new javax.swing.JButton();
-    jButton_TurnsForward = new javax.swing.JButton();
     jPanel_ForGame = new javax.swing.JPanel();
     jPanel_Paper = paper;
     jLabel_MouseCoords = new javax.swing.JLabel();
@@ -306,7 +307,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     jButton_Pass = new javax.swing.JButton();
     jButton_Stop = new javax.swing.JButton();
     jButton_EndGame = new javax.swing.JButton();
-    jLabel1 = timerLabel;
+    jPanel2 = new javax.swing.JPanel();
+    jLabel1 = timerLabel_Red;
+    jButton1 = new javax.swing.JButton();
+    jLabel2 = timerLabel_Blue;
     jPanel_Tree = new javax.swing.JPanel();
 
     jMenuItem_SaveGame.setText("jMenuItem1");
@@ -317,48 +321,41 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     });
     jPopupMenu_AdditionalActions.add(jMenuItem_SaveGame);
 
-    jButton_AdditionalActions.setText("другие возможности");
+    jButton_AdditionalActions.setText("сохранить игру");
     jButton_AdditionalActions.setComponentPopupMenu(jPopupMenu_AdditionalActions);
-
-    jButton_TurnsBackwards.setText("<<<");
-
-    jButton_TurnsForward.setText(">>>");
+    jButton_AdditionalActions.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton_AdditionalActionsActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout jPanel_ForChatLayout = new javax.swing.GroupLayout(jPanel_ForChat);
     jPanel_ForChat.setLayout(jPanel_ForChatLayout);
     jPanel_ForChatLayout.setHorizontalGroup(
       jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_ForChatLayout.createSequentialGroup()
-        .addComponent(jButton_TurnsBackwards)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jButton_TurnsForward)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-        .addComponent(jButton_AdditionalActions))
       .addComponent(roomPart_UserList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
       .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+      .addComponent(jButton_AdditionalActions, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
     );
     jPanel_ForChatLayout.setVerticalGroup(
       jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel_ForChatLayout.createSequentialGroup()
-        .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jButton_AdditionalActions)
-          .addComponent(jButton_TurnsBackwards)
-          .addComponent(jButton_TurnsForward))
+        .addComponent(jButton_AdditionalActions)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(roomPart_UserList, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addGap(18, 18, 18)
-        .addComponent(roomPart_Chat, javax.swing.GroupLayout.PREFERRED_SIZE, 216, Short.MAX_VALUE))
+        .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout jPanel_PaperLayout = new javax.swing.GroupLayout(jPanel_Paper);
     jPanel_Paper.setLayout(jPanel_PaperLayout);
     jPanel_PaperLayout.setHorizontalGroup(
       jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 762, Short.MAX_VALUE)
+      .addGap(0, 547, Short.MAX_VALUE)
     );
     jPanel_PaperLayout.setVerticalGroup(
       jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 371, Short.MAX_VALUE)
+      .addGap(0, 411, Short.MAX_VALUE)
     );
 
     jLabel_MouseCoords.setFont(jLabel_MouseCoords.getFont().deriveFont(jLabel_MouseCoords.getFont().getSize()+3f));
@@ -386,8 +383,39 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     jButton_EndGame.setText("конец игры...");
     jButton_EndGame.setEnabled(false);
 
+    jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
     jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+2f));
     jLabel1.setText("00:00");
+
+    jButton1.setText("<Время>");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
+
+    jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+2f));
+    jLabel2.setText("00:00");
+
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel2Layout.createSequentialGroup()
+        .addComponent(jLabel2)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jButton1)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel1))
+    );
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+        .addComponent(jButton1)
+        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+    );
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -395,24 +423,23 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel1Layout.createSequentialGroup()
         .addComponent(jToggleButton_ShowTree)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 668, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
         .addComponent(jButton_Pass)
         .addGap(18, 18, 18)
         .addComponent(jButton_Stop)
         .addGap(18, 18, 18)
         .addComponent(jButton_EndGame)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel1)
-        .addContainerGap())
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jToggleButton_ShowTree)
       .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jToggleButton_ShowTree)
         .addComponent(jButton_EndGame)
         .addComponent(jButton_Stop)
-        .addComponent(jButton_Pass)
-        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+        .addComponent(jButton_Pass))
+      .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
     );
 
     jPanel_Tree.setBorder(javax.swing.BorderFactory.createTitledBorder("дерево ходов (пока не рабочее...)"));
@@ -421,7 +448,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     jPanel_Tree.setLayout(jPanel_TreeLayout);
     jPanel_TreeLayout.setHorizontalGroup(
       jPanel_TreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 750, Short.MAX_VALUE)
+      .addGap(0, 535, Short.MAX_VALUE)
     );
     jPanel_TreeLayout.setVerticalGroup(
       jPanel_TreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,10 +459,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     jPanel_ForGame.setLayout(jPanel_ForGameLayout);
     jPanel_ForGameLayout.setHorizontalGroup(
       jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE)
+      .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
       .addComponent(jPanel_Tree, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
       .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     jPanel_ForGameLayout.setVerticalGroup(
       jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -466,35 +493,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
   }// </editor-fold>//GEN-END:initComponents
 
 	private void jMenuItem_SaveGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveGameActionPerformed
-		String[] extensions = {".sgf", ".sgftochki"};
-		String sgfData = Sgf.constructSgf(
-				userFirst, userSecond,
-				rank1, rank2, 39, 32,
-				timeLimits, gameResult, 0,
-				moveList, true);
 
-		try {
-			ByteArrayInputStream is = new ByteArrayInputStream(
-					sgfData.getBytes());
-			FileOpenService fos = (FileOpenService) ServiceManager.lookup(
-					"javax.jnlp.FileOpenService"
-			);
-			FileSaveService fss = (FileSaveService) ServiceManager.lookup("javax.jnlp.FileSaveService");
-
-			//					userFirst + "-" + userSecond + " "
-			//					+ GlobalGuiSettings.myDateFormat + " "
-			//					+ GlobalGuiSettings.myTimeFormat,
-			FileContents fileContents = fss.saveFileDialog(
-					"Vasya - Frosya 2011-04-01", extensions,
-					is, "Vasya - Frosya 2011-04-01");
-		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
-		}
 	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
 
 	private void jToggleButton_ShowTreeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeStateChanged
 //		System.out.println(timerLabel);
-		timerLabel.setRemainingTime(3);
+//		timerLabel.setRemainingTime(5,false);
 		if (jToggleButton_ShowTree.isSelected()) {
 			jToggleButton_ShowTree.setText("v");
 			jPanel_Tree.setVisible(true);
@@ -506,17 +510,53 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	private void jToggleButton_ShowTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeActionPerformed
 	}//GEN-LAST:event_jToggleButton_ShowTreeActionPerformed
+
+	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		JOptionPane.showMessageDialog(this, "Дополнительные действия с временем пока недоступны.");
+		
+	}//GEN-LAST:event_jButton1ActionPerformed
+
+	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
+		// TODO add your handling code here:
+		String[] extensions = {".sgf", ".sgftochki"};
+		String sgfData = Sgf.constructSgf(
+				userFirst, userSecond,
+				rank1, rank2, 39, 32,
+				timeLimits, gameResult, 0,
+				moveList, true);
+
+		try {
+			ByteArrayInputStream is = new ByteArrayInputStream(
+					sgfData.getBytes());
+//			FileOpenService fos = (FileOpenService) ServiceManager.lookup(
+//					"javax.jnlp.FileOpenService"
+//			);
+			FileSaveService fss = (FileSaveService) ServiceManager.lookup("javax.jnlp.FileSaveService");
+
+			//					userFirst + "-" + userSecond + " "
+			//					+ GlobalGuiSettings.myDateFormat + " "
+			//					+ GlobalGuiSettings.myTimeFormat,
+			//FileContents fileContents =
+			fss.saveFileDialog(
+					"Vasya - Frosya 2011-04-01", extensions,
+					is, "Vasya - Frosya 2011-04-01");
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+	}//GEN-LAST:event_jButton_AdditionalActionsActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton jButton1;
   private javax.swing.JButton jButton_AdditionalActions;
   private javax.swing.JButton jButton_EndGame;
   private javax.swing.JButton jButton_Pass;
   private javax.swing.JButton jButton_Stop;
-  private javax.swing.JButton jButton_TurnsBackwards;
-  private javax.swing.JButton jButton_TurnsForward;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel_MouseCoords;
   private javax.swing.JMenuItem jMenuItem_SaveGame;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel_ForChat;
   private javax.swing.JPanel jPanel_ForGame;
   private javax.swing.JPanel jPanel_Paper;

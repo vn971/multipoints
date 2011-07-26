@@ -414,10 +414,12 @@ public class GuiController {
 			boolean silent,
 			int x,
 			int y,
-			boolean isRed) {
+			boolean isRed,
+			int timeLeftRed,
+			int timeLeftBlue) {
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
 		if (gameRoom != null) {
-			gameRoom.makeMove(silent, x, y, isRed);
+			gameRoom.makeMove(silent, x, y, isRed,timeLeftRed,timeLeftBlue);
 			tabbedPane.makeBold(gameRoom);
 		}
 	}
