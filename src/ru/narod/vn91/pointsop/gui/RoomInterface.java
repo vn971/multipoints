@@ -29,5 +29,5 @@ public interface RoomInterface {
 
 	String getRoomNameOnServer();
 
-	boolean close();
+	boolean userAsksClose();
 }

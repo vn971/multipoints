@@ -598,7 +598,7 @@ class JTabbedPaneMod
 		Component panelToRemove = super.getComponentAt(index);
 		if (panelToRemove instanceof RoomInterface) {
 			RoomInterface roomInterface = RoomInterface.class.cast(panelToRemove);
-			boolean immediateClose = roomInterface.close();
+			boolean immediateClose = roomInterface.userAsksClose();
 			if (immediateClose == true) {
 				super.remove(index);
 			}

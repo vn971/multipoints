@@ -68,7 +68,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		return nameOnServer;
 	}
 
-	public boolean close() {
+	public boolean userAsksClose() {
 		if (server != null) {
 			server.unsubscribeRoom(nameOnServer);
 			return false;
@@ -76,6 +76,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			return true;
 		}
 	}
+
+//	public void destroy() {
+//
+//	}
 
 	public void makeMove(boolean silent,
 			int x,
@@ -257,6 +261,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 //		}
 
 		initComponents();
+		timerLabel.init();
 		jPanel_Tree.setVisible(false);
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
@@ -489,7 +494,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	private void jToggleButton_ShowTreeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeStateChanged
 //		System.out.println(timerLabel);
-		timerLabel.setRemainingTime(91);
+		timerLabel.setRemainingTime(3);
 		if (jToggleButton_ShowTree.isSelected()) {
 			jToggleButton_ShowTree.setText("v");
 			jPanel_Tree.setVisible(true);

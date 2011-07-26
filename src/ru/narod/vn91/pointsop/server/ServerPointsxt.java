@@ -441,12 +441,12 @@ public class ServerPointsxt
 			String login,
 			String hostname,
 			String newNick) {
-		nicknameManager.changeIrcNick(oldNick, newNick);
 		clearCreatedGames_PointsxtStyle(oldNick);
-		if (nicknameManager.getOrCreateShortNick(newNick).
-				equals(nicknameManager.getOrCreateShortNick(oldNick)) == false) {
-			userDisconnected_PointsxtStyle(defaultChannel, oldNick);
-		}
+		nicknameManager.changeIrcNick(oldNick, newNick);
+//		if (nicknameManager.getOrCreateShortNick(newNick).
+//				equals(nicknameManager.getOrCreateShortNick(oldNick)) == false) {
+//			userDisconnected_PointsxtStyle(defaultChannel, oldNick);
+//		}
 		userConnected_PointsxtStyle(defaultChannel, newNick, /*silent*/ true);
 
 		int rankOld = getPlayerRank(oldNick);
@@ -615,8 +615,8 @@ public class ServerPointsxt
 					gui.subscribedGame(
 							room,
 							this,
-							nicknameManager.getOrCreateShortNick(sender),
 							getMyName(),
+							nicknameManager.getOrCreateShortNick(sender),
 							0,
 							0,
 							"999мин/ход",

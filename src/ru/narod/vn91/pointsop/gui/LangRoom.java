@@ -42,7 +42,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 		return nameOnServer;
 	}
 
-	public boolean close() {
+	public boolean userAsksClose() {
 		getServer().unsubscribeRoom(nameOnServer);
 		return false;
 	}
