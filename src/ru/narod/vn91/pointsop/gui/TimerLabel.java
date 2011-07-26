@@ -91,37 +91,73 @@ class TimerLabel extends JLabel {
 				void sleep_Custom(long t) {
 					if (t > 0) {
 						long stopSleep = new Date().getTime() + t;
-
+						long remainSleep;
+						while ((remainSleep = stopSleep - new Date().getTime()) > 0) {
+							try {
+								sleep(remainSleep + 50);
+							} catch (Exception e) {
+							}
+						}
 					}
 				}
 
 				@Override
 				public void run() {
 					while (TimerLabel.this.isDisplayable()) {
-						if (timeOut != 0) {
-							showSeconds((int) (Math.random() * 911));
+						long current = new Date().getTime();
+						long suggestedToShow = timeOut - 1000L * secondsToShowNext;
+						System.out.println("updating timer..., current=" + current
+								+ ", suggToSh=" + suggestedToShow);
 
-						} else {
+						if (timeOut <= 0) {
+							System.out.println("-");
 							sleep_Custom(1000L);
+						}
+					// else if (current < suggestedToShow) {
+					// System.out.println("0");
+					// sleep_Custom(suggestedToShow - current);
+					// } else if (current >= suggestedToShow && current < timeOut) {
+					// System.out.println("1");
+					// int secondsToShow = (int) ((timeOut - current) / 1000L);
+					// showSeconds(secondsToShow);
+					// secondsToShowNext = secondsToShow - 1;
+					// sleep_Custom(timeOut - current - 1000L * secondsToShowNext);
+					// }
+					else if (current < suggestedToShow) {
+						System.out.println("0");
+						sleep_Custom(suggestedToShow - current);
+					} else if (current >= suggestedToShow && current < timeOut) {
+						System.out.println("1");
+						showSeconds(secondsToShowNext);
+						// secondsToShowNext = (int) ((timeOut - current) / 1000L);
+						secondsToShowNext -= 1;
+						sleep_Custom(Math.min(1000L,
+								timeOut - current - 1000L * secondsToShowNext));
+						// int secondsToShow = (int) ((timeOut - current) / 1000L);
+						// showSeconds(secondsToShow);
+						// secondsToShowNext = secondsToShow - 1;
+						// sleep_Custom(timeOut - current - 1000L * secondsToShowNext);
+					}
+						else if (current >= timeOut) {
+							System.out.println("+");
+							secondsToShowNext = -1;
+							showSeconds(-1);
+							sleep_Custom(1000L);
+						} else {
+							// cannot be.
 						}
 					}
 				}
 			};
-			thread.setPriority(Thread.MIN_PRIORITY);
+			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.setDaemon(true);
 			thread.start();
 		}
 	}
 
 	private synchronized void showSeconds(int seconds) {
-		// why +1? :
-		// This is needed because the user must always
-		// see a value 1 second's bigger than the real one.
-		// for example, 0 seconds + 100 milliseconds is a positive value
-		// for the computer but 00:00 is negative (time-out) value for a human.
-		// int secondsVisual = seconds + 1;
-		int minutesVisual = (seconds + 1) / 60;
-		int secondsVisual = (seconds + 1) % 60;
+		int minutesVisual = (seconds ) / 60;
+		int secondsVisual = (seconds ) % 60;
 		String string = String.format("%02d:%02d", minutesVisual, secondsVisual);
 		super.setText(string);
 	}
