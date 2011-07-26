@@ -7,85 +7,35 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 class TimerLabel extends JLabel {
 
-	Thread thread = null;
 
 	void init() {
-		// Thread thread = new Thread() {
-		// @Override
-		// public void run() {
-		// System.out.println("TimerLabel.this.isDisplayable() = "
-		// + TimerLabel.this.isDisplayable());
-		// while (TimerLabel.this.isDisplayable()) {
-		// setText("" + Math.random());
-
-		// }
-
-		// while (true) {
-		// long millisRemaining = timeOut - new Date().getTime();
-		// int secondsRemaining = (int) (millisRemaining / 1000);
-		// if (millisRemaining <= 0) {
-		// showSeconds(0);
-		// break;
-		// }
-		// if (secondsRemaining != secondsShownLast) {
-		// showSeconds(secondsRemaining);
-		// }
-		//
-		// // wait
-		// Object o = new Object();
-		// synchronized (o) {
-		// try {
-		// long millisecondsToSleep =
-		// millisRemaining - 1000L * secondsRemaining + 50;
-		// o.wait(millisecondsToSleep);
-		// } catch (InterruptedException e) {
-		// // e.printStackTrace();
-		// }
-		// }
-		// }
-		// // exiting, freeing the thread
-		// thread = null;
-
-		// };
-		// };
-		// thread.setPriority(Thread.MIN_PRIORITY);
-		// thread.setDaemon(true);
-		// thread.start();
 	}
 
-	private long timeOut = 0;
-	// private int secondsShownLast = -1;
-	private int secondsToShowNext = -1;
-	boolean isActive = false;
+	TimerThread thread = null;
+	private Long timeOut = 0L;
+//	private Object synchObject = new Object();
 
 	public TimerLabel() {
 		super();
-		this.showSeconds(-1);
-		// super("00:00");
+		this.showSeconds(0);
 	}
 
-	public synchronized void setRemainingTime(int seconds) {
-		if (seconds > 0) {
-			// long millis = 1000L * seconds;
-			// showSeconds(seconds);
-			// if (thread != null) {
-			// showSeconds(seconds);
-			// } else {
-			// this.timeOut = new Date().getTime() + 1000L * seconds;
-			// thread = new CounterThread();
-			// thread.start();
-			// }
-			this.timeOut = new Date().getTime() + 1000L * seconds;
-			showSeconds(seconds);
-			secondsToShowNext = seconds - 1;
-		} else {
-			this.timeOut = 0;
-			showSeconds(-1);
-			secondsToShowNext = -1;
+	public void setRemainingTime(int seconds, boolean freeze) {
+		if (thread!=null) {
+			thread.stopTimerThread();
 		}
-		if (isActive == false) {
-			isActive = true;
-
+		if (freeze == true) {
+			// synchronized (timeOut) {
+			timeOut = 0L;
+			// }
+			showSeconds(seconds);
+		} else if (seconds <= 0){
+			timeOut = 0L;
+			showSeconds(seconds);
+		} else {
+			timeOut = new Date().getTime() + 1000L * seconds;
+			showSeconds(seconds);
+		}
 			Thread thread = new Thread() {
 
 				void sleep_Custom(long t) {
@@ -141,7 +91,7 @@ class TimerLabel extends JLabel {
 						else if (current >= timeOut) {
 							System.out.println("+");
 							secondsToShowNext = -1;
-							showSeconds(-1);
+							showSeconds(0);
 							sleep_Custom(1000L);
 						} else {
 							// cannot be.
@@ -161,5 +111,25 @@ class TimerLabel extends JLabel {
 		String string = String.format("%02d:%02d", minutesVisual, secondsVisual);
 		super.setText(string);
 	}
+
+	private class TimerThread extends Thread{
+
+		Long goal;
+		Boolean isAlive = true;
+
+		public void stopTimerThread() {
+			synchronized (isAlive) {
+				isAlive = false;
+			}
+		}
+
+		public void init(int seconds) {
+			goal = new Date().getTime() + 1000L * seconds;
+
+
+		}
+
+	}
+
 
 }
