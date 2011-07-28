@@ -35,7 +35,7 @@ class TimerLabel extends JLabel {
 	private void showSeconds(int seconds) {
 		synchronized (secondsLastTimeShown) {
 			if (secondsLastTimeShown != seconds) {
-				super.setForeground((seconds <= 5) ? Color.RED : Color.BLACK);
+//				super.setForeground((seconds <= 5) ? Color.RED : Color.BLACK);
 				int minutesVisual = (seconds) / 60;
 				int secondsVisual = (seconds) % 60;
 				String string = String

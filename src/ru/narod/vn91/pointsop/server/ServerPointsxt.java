@@ -472,6 +472,7 @@ public class ServerPointsxt
 						|| message.equalsIgnoreCase("!ы"))) {
 			tryInvitePointsxt(sender, false);
 		}
+		// catch game-invite
 		String nick = nicknameManager.getOrCreateShortNick(sender);
 		int playerNumb = getPlayerIngameNumber(sender);
 		if (message.startsWith(commandCommonPrefix)) {
@@ -976,7 +977,7 @@ public class ServerPointsxt
 				myGame.moveList.add(new SimpleMove(x, y, isRed));
 			}
 		}
-		gui.makedMove(this, room, silent, x, y, isRed, myGame.timeLeftRed(), myGame.timeLeftBlue());
+		gui.makedMove(this, room, silent, x, y, isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue());
 		boolean iHaveMoved = ! myGame.isMyMoveNow();
 		if (iHaveMoved) {
 			myGame.lastTimeoutThread = null;
@@ -986,7 +987,7 @@ public class ServerPointsxt
 //				@SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
 				@Override
 				public void run() {
-					long timeEnd = new Date().getTime() + 5 * 1000;
+					long timeEnd = new Date().getTime() + myGame.getTimeLeftForMe() * 1000;
 					long estimatedTime = timeEnd - new Date().getTime();
 					while (estimatedTime > 0) {
 						Object o = new Object();
@@ -1027,8 +1028,17 @@ public class ServerPointsxt
 			String roomName,
 			int x,
 			int y) {
-		myGame.makeMove(roomName, x, y);
+		myGame.makeMove(roomName, x, y,myGame.getDefaultTime());
 	}
+
+	synchronized private void makeMove(
+			String roomName,
+			int x,
+			int y,
+			int timeLeft) {
+		myGame.makeMove(roomName, x, y,timeLeft);
+	}
+
 
 	public void sendChat(
 			String room,
@@ -1142,19 +1152,38 @@ public class ServerPointsxt
 		String roomName = "";
 		String opponentName = "";
 		boolean amIRed;
+		int timeLeftRed = 5;
+		int timeLeftBlue = 5;
 		SingleGameEngineInterface engine;
 		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
 		Thread lastTimeoutThread = null;
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
+		int defaultTime = 5;
 
-		public int timeLeftRed() {
+		public int getDefaultTime() {
+			return this.defaultTime;
+		}
+
+		public int getTimeLeftRed() {
 			return 5;
 		}
-		
-		public int timeLeftBlue() {
+
+		public int getTimeLeftForBlue() {
 			return 5;
 		}
-		
+
+		public int getTimeLeftForColor(boolean color) {
+			if (color==true) {
+				return getTimeLeftRed();
+			} else {
+				return getTimeLeftForBlue();
+			}
+		}
+
+		public int getTimeLeftForMe() {
+			return getTimeLeftForColor(amIRed);
+		}
+
 		private boolean isActive() {
 			return "".equals(opponentName) == false;
 		}
@@ -1209,7 +1238,8 @@ public class ServerPointsxt
 		public void makeMove(
 				String roomName,
 				int x,
-				int y) {
+				int y,
+				int timeLeft) {
 			if (roomName.equals(this.roomName)) {
 				boolean isFirstMoveAllowed = ((moveList.size() >= 2))
 						|| ((x - 1 >= 12) && (x - 1 <= 19)
@@ -1223,7 +1253,7 @@ public class ServerPointsxt
 							roomName,
 							"" + (char) ('0' + x - 1)
 									+ (char) ('0' + 32 - y)
-									+ "005"
+									+ "005" // TODO
 					);
 				}
 			}
