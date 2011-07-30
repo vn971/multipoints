@@ -13,7 +13,7 @@ import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
-public class GuiController {
+public class GuiController implements GuiForServerInterface {
 
 	JTabbedPaneMod tabbedPane;
 	JTextPane serverOutput;
@@ -30,10 +30,8 @@ public class GuiController {
 		this.tabbedPane = tabbedPane;
 	}
 
-	/**
-	 * Server implementations should execute this method if they get disconnected from a physical server
-	 *
-	 * @param server always return <b>this</b>
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverClosed(ru.narod.vn91.pointsop.server.ServerInterface)
 	 */
 	public synchronized void serverClosed(ServerInterface server) {
 		if (server == pointsxt_ircworldru_server) {
@@ -58,6 +56,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedLangRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
+	 */
 	public synchronized void userJoinedLangRoom(
 			ServerInterface server,
 			String room,
@@ -79,6 +80,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedGameRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
+	 */
 	public synchronized void userJoinedGameRoom(
 			ServerInterface server,
 			String room,
@@ -99,6 +103,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userLeavedRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	 */
 	public synchronized void userLeavedRoom(
 			ServerInterface server,
 			String room,
@@ -122,6 +129,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userDisconnected(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	 */
 	public synchronized void userDisconnected(
 			ServerInterface server,
 			String user) {
@@ -138,6 +148,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#subscribedLangRoom(java.lang.String, ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean)
+	 */
 	public synchronized void subscribedLangRoom(
 			String roomNameOnServer,
 			ServerInterface serverInterface,
@@ -169,6 +182,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#subscribedGame(java.lang.String, ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, int, int, java.lang.String, boolean, java.lang.String, boolean, boolean)
+	 */
 	public synchronized void subscribedGame(
 			String roomNameOnServer,
 			ServerInterface server,
@@ -215,6 +231,9 @@ public class GuiController {
 		tabbedPane.setSelectedComponent(containerRoom_Game);
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	 */
 	public synchronized void unsubsribedRoom(
 			ServerInterface server,
 			String room) {
@@ -231,6 +250,9 @@ public class GuiController {
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedGame(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	 */
 	public synchronized void unsubsribedGame(
 			ServerInterface server,
 			String room) {
@@ -246,6 +268,9 @@ public class GuiController {
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#chatReceived(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	public synchronized void chatReceived(
 			ServerInterface server,
 			String room,
@@ -267,6 +292,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#privateMessageReceived(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	 */
 	public synchronized void privateMessageReceived(
 			ServerInterface server,
 			String user,
@@ -297,6 +325,9 @@ public class GuiController {
 		privateChat.addChat(user, message, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#createPrivateChatWindow(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	 */
 	public synchronized void createPrivateChatWindow(
 			ServerInterface server,
 			String user) {
@@ -319,6 +350,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverNoticeReceived(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	 */
 	public synchronized void serverNoticeReceived(
 			ServerInterface server,
 			String room,
@@ -338,6 +372,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameCreated(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	public synchronized void gameCreated(
 			ServerInterface server,
 			String masterRoom,
@@ -360,6 +397,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyCreated(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	public synchronized void gameVacancyCreated(
 			ServerInterface server,
 			String masterRoom,
@@ -378,12 +418,8 @@ public class GuiController {
 		}
 	}
 
-	/**
-	 * game is destroyed from list of games (NOT tabs of Lang-rooms!)
-	 *
-	 * @param server
-	 * @param masterRoom
-	 * @param oldRoom
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
 	 */
 	public synchronized void gameDestroyed(
 			ServerInterface server,
@@ -396,6 +432,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	 */
 	public synchronized void gameVacancyDestroyed(
 			ServerInterface server,
 			String masterRoom,
@@ -408,6 +447,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#makedMove(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean, int, int, boolean, int, int)
+	 */
 	public synchronized void makedMove(
 			ServerInterface server,
 			String room,
@@ -424,6 +466,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameStop(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean)
+	 */
 	public synchronized void gameStop(
 			ServerInterface server,
 			String room,
@@ -434,6 +479,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameLost(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean, boolean)
+	 */
 	public synchronized void gameLost(
 			ServerInterface server,
 			String room,
@@ -448,6 +496,9 @@ public class GuiController {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#receiveRawServerInfo(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, ru.narod.vn91.pointsop.gui.GuiController.MessageType)
+	 */
 	public synchronized void receiveRawServerInfo(
 			ServerInterface server,
 			String info,
@@ -479,11 +530,6 @@ public class GuiController {
 			);
 		} catch (Exception ignored) {
 		}
-	}
-
-	public enum MessageType {
-
-		INFO, ERROR,
 	}
 }
 

@@ -2,7 +2,7 @@ package ru.narod.vn91.pointsop.server;
 
 import ru.narod.vn91.pointsop.ai.Ai2Gui_Interface;
 import ru.narod.vn91.pointsop.ai.Gui2Ai_Interface;
-import ru.narod.vn91.pointsop.gui.GuiController;
+import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 
 /**
  * Чтобы присоединить свой ИИ к Op теперь можно:
@@ -19,11 +19,11 @@ import ru.narod.vn91.pointsop.gui.GuiController;
  */
 public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
-	GuiController gui;
+	GuiForServerInterface gui;
 	Gui2Ai_Interface ai;
 //	String userSecond;
 
-	public AiVirtualServer(GuiController gui) {
+	public AiVirtualServer(GuiForServerInterface gui) {
 		this.gui = gui;
 	}
 
@@ -58,7 +58,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public void endOfGame() {
 		gui.unsubsribedGame(this, "");
 		gui.receiveRawServerInfo(this, ai.getName() + "закончил игру.",
-				GuiController.MessageType.ERROR);
+				GuiForServerInterface.MessageType.ERROR);
 	}
 
 	public void connect() {

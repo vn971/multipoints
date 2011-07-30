@@ -8,7 +8,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 
 	ServerInterface server;
 	String nameOnServer;
-	GuiController centralGuiController;
+	GuiForServerInterface centralGuiController;
 
 	public JPanel getMainJPanel() {
 		return this;

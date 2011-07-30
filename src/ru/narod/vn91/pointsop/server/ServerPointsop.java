@@ -7,15 +7,16 @@ import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
-import ru.narod.vn91.pointsop.gui.GuiController;
+
+import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 
 public class ServerPointsop implements ServerInterface {
 
 	Socket socket = null;
-	GuiController gui;
+	GuiForServerInterface gui;
 	String serverName = "pointsOp";
 
-	public ServerPointsop(GuiController guiController) {
+	public ServerPointsop(GuiForServerInterface guiController) {
 		this.gui = guiController;
 	}
 
@@ -105,11 +106,11 @@ public class ServerPointsop implements ServerInterface {
 			}
 			return result;
 		} catch (MalformedURLException e) {
-			gui.receiveRawServerInfo(this, "Please check the URL:" + e, GuiController.MessageType.INFO);
+			gui.receiveRawServerInfo(this, "Please check the URL:" + e, GuiForServerInterface.MessageType.INFO);
 			return null;
 		} catch (IOException e1) {
 			gui.receiveRawServerInfo(this,
-					"Can't read  from the Internet: " + e1, GuiController.MessageType.INFO);
+					"Can't read  from the Internet: " + e1, GuiForServerInterface.MessageType.INFO);
 			return null;
 		}
 	}
@@ -131,7 +132,7 @@ public class ServerPointsop implements ServerInterface {
 				BufferedReader in = new BufferedReader(new InputStreamReader(
 						ServerPointsop.this.socket.getInputStream()));
 				gui.receiveRawServerInfo(ServerPointsop.this, in.readLine(),
-						GuiController.MessageType.INFO);
+						GuiForServerInterface.MessageType.INFO);
 				ServerPointsop.this.socket.close();
 			} catch (Exception e) {
 			}

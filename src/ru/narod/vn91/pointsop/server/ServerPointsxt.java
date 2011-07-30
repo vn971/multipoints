@@ -45,14 +45,14 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
-import ru.narod.vn91.pointsop.gui.GuiController;
+import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
 public class ServerPointsxt
 		extends PircBot
 		implements ServerInterface {
 
-	GuiController gui;
+	GuiForServerInterface gui;
 	String myNickOnServ, myNick_Originally;
 	private String defaultServ;
 	private String defaultChannel;
@@ -81,7 +81,7 @@ public class ServerPointsxt
 									ServerPointsxt.this,
 									"Cоединение с сервером " + defaultServ
 											+ ". Пожалуйста, подождите... (примерно 30 секунд)",
-									GuiController.MessageType.INFO
+									GuiForServerInterface.MessageType.INFO
 							);
 							connect(defaultServ, 6667, ircPassword);
 							myNickOnServ = getNick();
@@ -107,7 +107,7 @@ public class ServerPointsxt
 
 	public ServerPointsxt(
 			String server,
-			GuiController gui,
+			GuiForServerInterface gui,
 			String myName,
 			String ircPassword,
 			String roomPassword,
@@ -155,7 +155,8 @@ public class ServerPointsxt
 	}
 
 	public synchronized void searchOpponent() {
-		myGame.leaveGame();
+		System.out.println("searchopponent();");
+		myGame.leaveGame(false);
 		int roomNumber;
 		String roomAsString;
 		boolean unoccupiedFound = false;
@@ -207,14 +208,13 @@ public class ServerPointsxt
 		//		if (opponentName.equals("") == false) {
 		//			return;
 		//		} this protection is already done earlier
-		myGame.opponentName = nicknameManager.getIrcNick(name);
-		if (myGame.opponentName == null) {
-			myGame.opponentName = "";
+		if (nicknameManager.getIrcNick(name)==null) {
 		} else {
+			myGame.opponentName = name;
 			myGame.amIRed = true;
 			super.sendMessage(
 					roomName,
-					commandCommonPrefix + commandAcceptOpponent + myGame.opponentName
+					commandCommonPrefix + commandAcceptOpponent + myGame.getOpponentIrcName()
 			);
 			super.changeNick(
 					String.format(
@@ -241,7 +241,7 @@ public class ServerPointsxt
 	}
 
 	public void stopSearchingOpponent() {
-		myGame.leaveGame();
+		myGame.leaveGame(false);
 	}
 
 	public void requestJoinGame(String gameRoomName) {
@@ -328,7 +328,7 @@ public class ServerPointsxt
 			// because it causes a bug in pointsxt
 			lastSpectrTime = new Date();
 			if (roomName.equals(myGame.roomName)) {
-				myGame.leaveGame();
+				myGame.leaveGame(true);
 			} else {
 				super.partChannel(roomName);
 				gui.unsubsribedRoom(this, roomName);
@@ -343,7 +343,7 @@ public class ServerPointsxt
 					this,
 					"Удалось соединиться с " + defaultServ
 					+ ", пытаюсь подключиться к основной комнате...",
-					GuiController.MessageType.INFO);
+					GuiForServerInterface.MessageType.INFO);
 		}
 	}
 
@@ -359,7 +359,7 @@ public class ServerPointsxt
 			gui.receiveRawServerInfo(
 					this,
 					"Успешно подключился к основной комнате.",
-					GuiController.MessageType.INFO);
+					GuiForServerInterface.MessageType.INFO);
 		}
 		if (channel.equals(myGame.roomName) && myGame.amIRed) {
 			this.sendSpectr(sender);
@@ -408,14 +408,15 @@ public class ServerPointsxt
 			String login,
 			String hostname) {
 		userDisconnected_PointsxtStyle(channel, sender);
-		if (sender.equals(myGame.opponentName)
-				&& channel.equals(myGame.roomName)) {
-			myGame.leaveGame();
-			//			gui.chatReceived(
-			//					this, channel,
-			//					nicknameManager.getOrCreateShortNick(sender),
-			//					"Ваш оппонент закрыл игру.");
-		}
+//		if (nicknameManager.getOrCreateShortNick(sender)
+//				.equals(myGame.getOpponentShortName())
+//				&& channel.equals(myGame.roomName)) {
+//			myGame.leaveGame(false);
+//			//			gui.chatReceived(
+//			//					this, channel,
+//			//					nicknameManager.getOrCreateShortNick(sender),
+//			//					"Ваш оппонент закрыл игру.");
+//		}
 	}
 
 	@Override
@@ -478,7 +479,7 @@ public class ServerPointsxt
 		if (message.startsWith(commandCommonPrefix)) {
 			if ((message.startsWith(commandCommonPrefix + commandIWantJoinGame))
 					&& (channel.equals(myGame.roomName))
-					&& (myGame.opponentName.equals(""))) {
+					&& (myGame.isActive() == false)) {
 				String opponentNick = nicknameManager.getOrCreateShortNick(
 						sender
 				);
@@ -611,7 +612,7 @@ public class ServerPointsxt
 					myGame.amIRed = true;
 					myGame.engine = new SingleGameEngine(39, 32);
 					myGame.moveList = new ArrayList<SimpleMove>();
-					myGame.opponentName = sender;
+					myGame.opponentName = nicknameManager.getOrCreateShortNick(sender);
 					myGame.roomName = room;
 					gui.subscribedGame(
 							room,
@@ -718,7 +719,7 @@ public class ServerPointsxt
 		gui.receiveRawServerInfo(
 				this,
 				line.replaceAll(pointsxtTail_RegExp, ""),
-				GuiController.MessageType.INFO
+				GuiForServerInterface.MessageType.INFO
 		);
 	}
 
@@ -950,7 +951,8 @@ public class ServerPointsxt
 						this, room,
 						nicknameManager.getOrCreateShortNick(user)
 				);
-				if (user.equals(myGame.opponentName)
+				if (nicknameManager.getOrCreateShortNick(user).
+						equals(myGame.getOpponentShortName())
 						&& room.equals(myGame.roomName)) {
 					myGame.clear();
 					gui.chatReceived(this, room, "", "Оппонент покинул игру");
@@ -1160,6 +1162,14 @@ public class ServerPointsxt
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
 		int defaultTime = 5;
 
+		public String getOpponentIrcName() {
+			return nicknameManager.getIrcNick(opponentName);
+		}
+
+		public String getOpponentShortName() {
+			return opponentName;
+		}
+
 		public int getDefaultTime() {
 			return this.defaultTime;
 		}
@@ -1193,6 +1203,7 @@ public class ServerPointsxt
 		}
 
 		private void clear() {
+//			System.out.println("myGame.clear()");
 			randomMovesProvider = new RandomMovesProvider(39, 32);
 			roomName = "";
 			moveList.clear();
@@ -1206,13 +1217,16 @@ public class ServerPointsxt
 			);
 		}
 
-		void leaveGame() {
-			if (opponentName != null) {
-				ServerPointsxt.this.partChannel(roomName);
-				ServerPointsxt.this.gui.unsubsribedGame(
-						ServerPointsxt.this, roomName
-				);
+		void leaveGame(boolean isGuiVisible) {
+			if (isActive()) {
+				String roomNameCopy = roomName;
+				ServerPointsxt.this.partChannel(roomNameCopy);
 				clear();
+				if (isGuiVisible) {
+					ServerPointsxt.this.gui.unsubsribedGame(
+							ServerPointsxt.this, roomNameCopy
+							);
+				}
 			}
 		}
 

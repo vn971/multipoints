@@ -2,10 +2,21 @@ package ru.narod.vn91.pointsop.gui;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
-public interface GuiInterface_ForServer {
-	void serverClosed(ServerInterface server);
+public interface GuiForServerInterface {
 
-	void userJoinedLangRoom(
+	public enum MessageType {
+
+		INFO, ERROR,
+	}
+
+	/**
+	 * Server implementations should execute this method if they get disconnected from a physical server
+	 *
+	 * @param server always return <b>this</b>
+	 */
+	public abstract void serverClosed(ServerInterface server);
+
+	public abstract void userJoinedLangRoom(
 			ServerInterface server,
 			String room,
 			String user,
@@ -13,7 +24,7 @@ public interface GuiInterface_ForServer {
 			int rank,
 			String status);
 
-	void userJoinedGameRoom(
+	public abstract void userJoinedGameRoom(
 			ServerInterface server,
 			String room,
 			String user,
@@ -21,22 +32,22 @@ public interface GuiInterface_ForServer {
 			int rank,
 			String status);
 
-	void userLeavedRoom(
+	public abstract void userLeavedRoom(
 			ServerInterface server,
 			String room,
 			String user);
 
-	void userDisconnected(
+	public abstract void userDisconnected(
 			ServerInterface server,
 			String user);
 
-	void subscribedLangRoom(
+	public abstract void subscribedLangRoom(
 			String roomNameOnServer,
 			ServerInterface serverInterface,
 			String guiRoomName,
 			boolean isServersMainRoom);
 
-	void subscribedGame(
+	public abstract void subscribedGame(
 			String roomNameOnServer,
 			ServerInterface server,
 			String userFirst,
@@ -49,35 +60,31 @@ public interface GuiInterface_ForServer {
 			boolean chatReadOnly,
 			boolean amIPlaying);
 
-	void unsubsribedRoom(
+	public abstract void unsubsribedRoom(
 			ServerInterface server,
 			String room);
 
-	void unsubsribedGame(
+	public abstract void unsubsribedGame(
 			ServerInterface server,
 			String room);
 
-	void chatReceived(
+	public abstract void chatReceived(
 			ServerInterface server,
 			String room,
 			String user,
 			String message);
 
-	void privateMessageReceived(
+	public abstract void privateMessageReceived(
 			ServerInterface server,
 			String user,
 			String message);
 
-	void createPrivateChatWindow(
-			ServerInterface server,
-			String user);
-
-	void serverNoticeReceived(
+	public abstract void serverNoticeReceived(
 			ServerInterface server,
 			String room,
 			String message);
 
-	void gameCreated(
+	public abstract void gameCreated(
 			ServerInterface server,
 			String masterRoom,
 			String newRoom,
@@ -85,44 +92,54 @@ public interface GuiInterface_ForServer {
 			String user2,
 			String settings);
 
-	void gameVacancyCreated(
+	public abstract void gameVacancyCreated(
 			ServerInterface server,
 			String masterRoom,
 			String newRoom,
 			String user,
 			String settings);
 
-	void gameDestroyed(
+	/**
+	 * game is destroyed from list of games (NOT tabs of Lang-rooms!)
+	 *
+	 * @param server
+	 * @param masterRoom
+	 * @param oldRoom
+	 */
+	public abstract void gameDestroyed(
 			ServerInterface server,
 			String masterRoom,
 			String oldRoom);
 
-	void gameVacancyDestroyed(
+	public abstract void gameVacancyDestroyed(
 			ServerInterface server,
 			String masterRoom,
 			String oldRoom);
 
-	void makedMove(
+	public abstract void makedMove(
 			ServerInterface server,
 			String room,
 			boolean silent,
 			int x,
 			int y,
-			boolean isRed);
+			boolean isRed,
+			int timeLeftRed,
+			int timeLeftBlue);
 
-	void gameStop(
+	public abstract void gameStop(
 			ServerInterface server,
 			String room,
 			boolean isRedPlayer);
 
-	void gameLost(
+	public abstract void gameLost(
 			ServerInterface server,
 			String room,
 			boolean isRedLooser,
 			boolean wantToSave);
 
-	void receiveRawServerInfo(
+	public abstract void receiveRawServerInfo(
 			ServerInterface server,
 			String info,
-			GuiController.MessageType type);
+			MessageType type);
+
 }

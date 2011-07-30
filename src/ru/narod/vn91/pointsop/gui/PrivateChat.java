@@ -22,7 +22,7 @@ import ru.narod.vn91.pointsop.sounds.Sounds;
 public class PrivateChat extends javax.swing.JPanel {
 
 	ServerInterface server;
-	GuiController guiController;
+	GuiForServerInterface guiController;
 	private String companionNick;
 	private StyledDocument document = new DefaultStyledDocument();
 	boolean lastMessageWasHighlighted = true;
@@ -117,7 +117,7 @@ public class PrivateChat extends javax.swing.JPanel {
 
 	/** Creates new form PrivateChat */
 	public PrivateChat(final ServerInterface server,
-			GuiController guiController,
+			GuiForServerInterface guiController,
 			final String companionNick) {
 		this.server = server;
 		this.companionNick = companionNick;

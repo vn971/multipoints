@@ -22,7 +22,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	ServerInterface server;
 	private String nameOnServer;
-	GuiController centralGuiController;
+	GuiForServerInterface centralGuiController;
 	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
 	String userFirst, userSecond;
 	int rank1, rank2;
@@ -513,7 +513,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 		JOptionPane.showMessageDialog(this, "Дополнительные действия с временем пока недоступны.");
-		
+
 	}//GEN-LAST:event_jButton1ActionPerformed
 
 	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
