@@ -28,7 +28,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 
 public abstract class Paper
-		extends JPanel {
+		extends JPanel implements Runnable{
 
 	private SingleGameEngineInterface engine;
 	Point cursorDot = null;
@@ -63,6 +63,7 @@ public abstract class Paper
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
 	private Color colorBluCtrlSurr =
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
+	private Thread t;
 
 	protected void setColors(
 			Color p1,
@@ -354,40 +355,109 @@ public abstract class Paper
 			) == false) {
 				return;
 			}
-			DotType dotType = engine.getDotType(x, y);
-			int pointRadius = (int) (squareSize * dotWidth / 2);
-			if (dotType == DotType.RED) {
-				//цвет красной заливки
-				graphics.setColor(colorRedSurr);
-			} else {
-				//цвет синей заливки
-				graphics.setColor(colorBluSurr);
-			}
-			int pixelX = getPixel(x, y).x;
-			int pixelY = getPixel(x, y).y;
 			//нарисовать последний ход
 			{
-				int innerRadius = pointRadius + 1;
-				graphics.drawOval(
-						pixelX - innerRadius,
-						pixelY - innerRadius,
-						innerRadius * 2,
-						innerRadius * 2
-				);
+				t=new Thread(this);t.start();
 			}
-			{
-				int innerRadius = pointRadius + 2;
-				graphics.drawOval(
-						pixelX - innerRadius,
-						pixelY - innerRadius,
-						innerRadius * 2,
-						innerRadius * 2
-				);
-			}
+
 		}
 
 	}
 
+	public void run(){
+		Graphics graphics = super.getGraphics();
+
+		int totalTime=0;
+		int x = engine.getLastDot().x, y = engine.getLastDot().y;
+		int pixelX = getPixel(x, y).x;
+		int pixelY = getPixel(x, y).y;
+		int pointRadius = (int) (squareSize * dotWidth / 2);
+		
+		for(;;){
+			try{t.sleep(10);}catch(Exception e){}
+			totalTime+=10;
+			graphics.setColor(new Color(totalTime*2,totalTime*2,totalTime*2));
+			//анимация последнего хода
+			{
+				{
+					int innerRadius = pointRadius + 1;
+					graphics.drawOval(
+							pixelX - innerRadius,
+							pixelY - innerRadius,
+							innerRadius * 2,
+							innerRadius * 2
+					);
+				}
+				{
+					int innerRadius = pointRadius + 2;
+					graphics.drawOval(
+							pixelX - innerRadius,
+							pixelY - innerRadius,
+							innerRadius * 2,
+							innerRadius * 2
+					);
+				}
+			}
+			System.out.println("drawing");
+			if(totalTime>100)break;
+		}
+		
+	graphics.setColor(colorBackground);	
+	{
+		int innerRadius = pointRadius + 1;
+		graphics.drawOval(
+				pixelX - innerRadius,
+				pixelY - innerRadius,
+				innerRadius * 2,
+				innerRadius * 2
+		);
+	}
+	{
+		int innerRadius = pointRadius + 2;
+		graphics.drawOval(
+				pixelX - innerRadius,
+				pixelY - innerRadius,
+				innerRadius * 2,
+				innerRadius * 2
+		);
+	}
+		
+	((Graphics2D) graphics).setRenderingHint(
+			RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON
+	);
+	
+		DotType dotType = engine.getDotType(x, y);
+		if (dotType == DotType.RED) {
+			//цвет красной заливки
+			graphics.setColor(colorRedSurr);
+		} else {
+			//цвет синей заливки
+			graphics.setColor(colorBluSurr);
+		}
+		
+		{
+			int innerRadius = pointRadius + 1;
+			graphics.drawOval(
+					pixelX - innerRadius,
+					pixelY - innerRadius,
+					innerRadius * 2,
+					innerRadius * 2
+			);
+		}
+		{
+			int innerRadius = pointRadius + 2;
+			graphics.drawOval(
+					pixelX - innerRadius,
+					pixelY - innerRadius,
+					innerRadius * 2,
+					innerRadius * 2
+			);
+		}
+		graphics.setColor(Color.black);
+		t.stop();
+	}
+	
 	void drawSurrounding(
 			Graphics graphics,
 			SurroundingAbstract surrounding) {
@@ -708,11 +778,6 @@ public abstract class Paper
 		}
 
 		drawLastDotHint(graphics);
-
-		((Graphics2D) graphics).setRenderingHint(
-				RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_OFF
-		);
 
 		{
 			// drawing paper borders
