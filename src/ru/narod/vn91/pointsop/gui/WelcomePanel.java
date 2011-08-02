@@ -424,36 +424,36 @@ public class WelcomePanel extends javax.swing.JPanel {
 						getClass().getResource("/ru/narod/vn91/pointsop/gui/pointsOP.png")
 				)
 		); // NOI18N
-		
-		jLabel_Qestions.setText("<html>Описание программы</html>");
-		jLabel_Qestions
-				.setToolTipText("http://pointsgame.net/site/pointsop");
-		jLabel_Qestions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-		
+
 		jLabel_IncontactGroup.setText("<html>Группа ВКонтакте</html>");
-		jLabel_IncontactGroup.setToolTipText("http://vkontakte.ru/pointsgame");
+		jLabel_IncontactGroup.setToolTipText("http://vkontakte.ru/club21455903");
 		jLabel_IncontactGroup
 				.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+		jLabel_Qestions.setText("<html>Вопросы по PointsOP</html>");
+		jLabel_Qestions
+				.setToolTipText("http://vkontakte.ru/topic-21455903_24260448");
+		jLabel_Qestions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
 		jLabel_GameWishes.setText(
-				"<html>Сайт про игру Точки</html>"
+				"<html>Пожелания по игровой части: вид поля, формат игры</html>"
 		);
 		jLabel_GameWishes
-				.setToolTipText("http://pointsgame.net");
+				.setToolTipText("http://vkontakte.ru/topic-21455903_24387150");
 		jLabel_GameWishes
 				.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-		/*jLabel_ChatWishes
+		jLabel_ChatWishes
 				.setText("<html>Пожелания по списку игроков, чату, дизайну</html>");
 		jLabel_ChatWishes
 				.setToolTipText("http://vkontakte.ru/topic-21455903_24407841");
 		jLabel_ChatWishes
-				.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));*/
+				.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-		/*jLabel_Links.setText("<html>Полезные ссылки</html>");
+		jLabel_Links.setText("<html>Полезные ссылки</html>");
 		jLabel_Links
 				.setToolTipText("http://sites.google.com/site/oscarpoints/links");
-		jLabel_Links.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));*/
+		jLabel_Links.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
 		jTextPane_ServerOutput.setEditable(false);
 		jTextPane_ServerOutput.setText(
@@ -528,7 +528,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 										.addComponent(
 												jLabel_Logo,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
-												330,
+												180,
 												javax.swing.GroupLayout.PREFERRED_SIZE
 										)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)

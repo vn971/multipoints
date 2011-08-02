@@ -1246,7 +1246,7 @@ public class ServerPointsxt
 							roomName,
 							"" + (char) ('0' + x - 1)
 									+ (char) ('0' + 32 - y)
-									+ "005" // TODO
+									+ "005"
 					);
 				}
 			}

@@ -52,14 +52,19 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 			ServerInterface server,
 			String nameOnServer,
 			GuiController centralGuiController) {
+//		System.out.println("LangRoom.LangRoom()");
 		this.server = server;
 		this.nameOnServer = nameOnServer;
 		this.centralGuiController = centralGuiController;
 		initComponents();
 
+//		System.out.println("LangRoom.LangRoom()2");
 		roomPart_Chat1.initChat(this, null, null);
+//		System.out.println("LangRoom.LangRoom()3");
 		roomPart_UserList1.initRoomPart(this, centralGuiController);
+//		System.out.println("LangRoom.LangRoom()4");
 		roomPart_GameList1.initRoomPart(this, centralGuiController);
+//		System.out.println("LangRoom.LangRoom()5");
 	}
 
 	/** This method is called from within the constructor to

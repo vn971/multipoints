@@ -741,7 +741,7 @@ public abstract class Paper
 				font = font.deriveFont(fontSize);
 				// if FONT < ....
 				graphics.setFont(font);
-				graphics.setColor(Color.BLACK);
+				graphics.setColor(CustomColors.getContrastColor(Memory.getBackgroundColor()));
 				for (int x = 1; x <= engineSizeX; x++) {
 					String string = "" + (x);
 					int stringWidth = graphics.getFontMetrics().stringWidth(

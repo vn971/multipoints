@@ -193,7 +193,7 @@ public class SelfishGuiStarter {
 					);
 					jMenu.add(jMenuItem);
 				}
-				
+
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"Тест (уровень 2)"
@@ -228,7 +228,7 @@ public class SelfishGuiStarter {
 					);
 					jMenu.add(jMenuItem);
 				}
-				
+
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">О программе PointsIQ</a></html>"
@@ -252,9 +252,9 @@ public class SelfishGuiStarter {
 				}
 				jMenuBar.add(jMenu);
 			}
-			
-			
-			
+
+
+
 			{
 				JMenu jMenu_AI = new JMenu("Играть с ИИ");
 				{
@@ -404,7 +404,7 @@ public class SelfishGuiStarter {
 					jMenu_AI.add(jMenuItem_KeijkvantttaiExecute);
 				}
 
-				jMenu_AI.add(new JSeparator());
+//				jMenu_AI.add(new JSeparator());
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
@@ -425,7 +425,7 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-					jMenu_AI.add(jMenuItem);
+//					jMenu_AI.add(jMenuItem);
 				}
 
 				{
@@ -448,7 +448,7 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-					jMenu_AI.add(jMenuItem);
+//					jMenu_AI.add(jMenuItem);
 				}
 
 				{
@@ -471,7 +471,7 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-					jMenu_AI.add(jMenuItem);
+//					jMenu_AI.add(jMenuItem);
 				}
 
 				jMenu_AI.add(new JSeparator());

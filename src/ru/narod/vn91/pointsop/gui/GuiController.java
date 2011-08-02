@@ -156,16 +156,20 @@ public class GuiController implements GuiForServerInterface {
 			ServerInterface serverInterface,
 			String guiRoomName,
 			boolean isServersMainRoom) {
+//		System.out.println("GuiController.subscribedLangRoom()");
 		LangRoom langRoom = langRooms.get(
 				new ServerRoom(
 						roomNameOnServer,
 						serverInterface
 				)
 		);
+
 		if (langRoom != null) {
 			// nothing
 		} else {
+//			System.out.println("GuiController.subscribedLangRoom()2");
 			langRoom = new LangRoom(serverInterface, roomNameOnServer, this);
+//			System.out.println("GuiController.subscribedLangRoom()3");
 			langRooms.put(
 					new ServerRoom(roomNameOnServer, serverInterface),
 					langRoom
@@ -179,6 +183,7 @@ public class GuiController implements GuiForServerInterface {
 			if (isServersMainRoom) {
 				tabbedPane.setSelectedComponent(langRoom);
 			}
+			System.out.println("GuiController.subscribedLangRoom()4");
 		}
 	}
 
