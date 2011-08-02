@@ -15,7 +15,7 @@ import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
  * <br>3) включить созданный ИИ в работу.
  * Это делается через {@link AiVirtualServer}, надо просто посмотреть пример
  * из SelfishGuiStarted и скопировать. Там 3 строчки.
- * 
+ *
  */
 public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 

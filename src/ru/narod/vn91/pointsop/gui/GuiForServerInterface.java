@@ -32,7 +32,7 @@ public interface GuiForServerInterface {
 			int rank,
 			String status);
 
-	public abstract void userLeavedRoom(
+	public abstract void userLeftRoom(
 			ServerInterface server,
 			String room,
 			String user);

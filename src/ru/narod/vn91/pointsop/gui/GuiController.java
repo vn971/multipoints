@@ -106,7 +106,7 @@ public class GuiController implements GuiForServerInterface {
 	/* (non-Javadoc)
 	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userLeavedRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
 	 */
-	public synchronized void userLeavedRoom(
+	public synchronized void userLeftRoom(
 			ServerInterface server,
 			String room,
 			String user) {

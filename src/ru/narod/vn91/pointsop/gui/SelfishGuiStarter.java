@@ -339,6 +339,7 @@ public class SelfishGuiStarter {
 									// ai as server
 									AiVirtualServer aiWrapper =
 											new AiVirtualServer(
+//													(GuiForServerInterface)guiController
 													guiController
 											);
 									aiWrapper.setAi(new RandomAi(aiWrapper, 39, 32));

@@ -1,29 +1,7 @@
-// по чату и т.п.
-//* возможность вести логи чатов
-//* возможность менять ширину колонки с приватным чатом
-//* строчки через один слегка затемнять.
-//* возможность отключаться от общего канала, оставаясь в игре
-//* смайлики (ещё под вопросом, нужно ли..)
-//* подключение через proxy
-//* возможность сворачиваться в трей
-//* всплывающая подсказка в списке игр (как открыть игру?..)
-//* открывать окно приватного чата и игры через правую кнопку мыши
-//* крестик для закрытия вкладки появляется только при выделении этой вкладки (защита от случаиного нажатия).
+// welcome to ___HELL___
+// this is the most ugly code in pointsOp,
+// because it deals with the most ugly protocol (IRC-pointsxt)
 //
-//по игровой части:
-//
-//* сохранение игр на компьютер
-//* счетчики времени
-//* соединение точек палочками, отдельная раскраска мини-треугольников.
-//* возможность прокрутки партии по ходам.
-//* красивые объёмные точки вместо плоских
-//
-// opros 29 marta
-//
-// romati - регулировка цвета и размера точек
-// huligan - более красивые точки
-// qmesis - настройки времени
-// agent47 - настройки времени
 package ru.narod.vn91.pointsop.server;
 
 import java.io.IOException;
@@ -407,6 +385,7 @@ public class ServerPointsxt
 			String sender,
 			String login,
 			String hostname) {
+		System.out.println("ServerPointsxt.onPart()");
 		userDisconnected_PointsxtStyle(channel, sender);
 //		if (nicknameManager.getOrCreateShortNick(sender)
 //				.equals(myGame.getOpponentShortName())
@@ -939,7 +918,7 @@ public class ServerPointsxt
 			String room,
 			String user) {
 		if (room.equals(defaultChannel)) {
-			gui.userLeavedRoom(
+			gui.userLeftRoom(
 					this, room,
 					nicknameManager.getOrCreateShortNick(user)
 			);
@@ -947,7 +926,7 @@ public class ServerPointsxt
 			nicknameManager.removeIrcNick(user);
 		} else {
 			if (user.equalsIgnoreCase("podbot") == false) {
-				gui.userLeavedRoom(
+				gui.userLeftRoom(
 						this, room,
 						nicknameManager.getOrCreateShortNick(user)
 				);
