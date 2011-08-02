@@ -374,9 +374,9 @@ public abstract class Paper
 		int pointRadius = (int) (squareSize * dotWidth / 2);
 		
 		for(;;){
-			try{t.sleep(10);}catch(Exception e){}
-			totalTime+=10;
-			graphics.setColor(new Color(totalTime*2,totalTime*2,totalTime*2));
+			try{t.sleep(20);}catch(Exception e){}
+			totalTime+=20;
+			graphics.setColor(new Color(totalTime,totalTime,totalTime));
 			//анимация последнего хода
 			{
 				{
@@ -399,7 +399,7 @@ public abstract class Paper
 				}
 			}
 			System.out.println("drawing");
-			if(totalTime>100)break;
+			if(totalTime>200)break;
 		}
 		
 	graphics.setColor(colorBackground);	
@@ -455,7 +455,7 @@ public abstract class Paper
 			);
 		}
 		graphics.setColor(Color.black);
-		t.stop();
+		//t.stop();
 	}
 	
 	void drawSurrounding(
