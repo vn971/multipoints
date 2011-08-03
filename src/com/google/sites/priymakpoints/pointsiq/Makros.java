@@ -7,7 +7,6 @@ import java.util.List;
 public class Makros{
 	
 	List<MakrosLevelMove> moves=new ArrayList<MakrosLevelMove>();
-	boolean isDelete;
 	String str="";
 
 public Makros(String str){
@@ -22,7 +21,6 @@ public Makros(String str){
 	}
 }	
 
-public boolean isDelete(){return isDelete;}
 public String toString(){return str;}
 public MakrosLevelMove[] getMoves(){
 	MakrosLevelMove[] base;
@@ -34,6 +32,5 @@ public MakrosLevelMove[] getMoves(){
 	return base;
 }
 
-//public static void main(String[] args){new Makros("");}
 
 }
