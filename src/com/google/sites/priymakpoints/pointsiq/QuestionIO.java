@@ -1,19 +1,31 @@
 package com.google.sites.priymakpoints.pointsiq;
 
+import java.io.CharArrayWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JOptionPane;
+import javax.activation.URLDataSource;
 
-public class QuestionIO implements Variables{
+public class QuestionIO{
 	
-	private List<Question> baseList=new ArrayList<Question>();//���� ���������
-	private Question base[];//���� ���������
-	private C_ReadAndWriteFile file=new C_ReadAndWriteFile();
+	private List<Question> baseList=new ArrayList<Question>();
+	private Question base[];
 	
 public Question[] getBase(int level){
-	String strLoad="";
-	try{strLoad=file.ReadURLTxtFile();}catch(Exception e){new JOptionPane().showMessageDialog(null, "Base not found. Program exit");};
+	StringBuffer s=new StringBuffer();
+	try {
+		URLDataSource d=new URLDataSource(PointsIQ.class.getResource("PointsIQbase.txt"));
+		InputStream r=d.getInputStream();
+		Reader in = new InputStreamReader(r, "UTF-8");
+		CharArrayWriter w=new CharArrayWriter();
+		int c=0;
+		while(true){c=in.read();	if(c!=-1)w.write(c);else break;	}
+		s.append(w.toCharArray());
+	}catch(Exception e){}
+	String strLoad=s.substring(0, s.length());
 	
 	String move;
 	

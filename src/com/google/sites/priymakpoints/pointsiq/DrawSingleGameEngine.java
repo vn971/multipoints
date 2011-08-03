@@ -14,29 +14,18 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 
-public class DrawSingleGameEngine implements Variables{
+public class DrawSingleGameEngine{
 	
-	int sizeX=Variables.sizeX;
-	int sizeY=Variables.sizeY;
-	private String[][] fieldState=new String[sizeX][sizeY];
+	private int sizeX=20;
+	private int sizeY=20;
 	Point lastAI=null,lastHuman=null;
+	private int offsetX=1;
+	private int offsetY=3;
+	private int squareSize=16;
+	private int pointSize=(int)(squareSize/2);
 	
-public DrawSingleGameEngine(){}	
-
-public void setSize(int x,int y){sizeX=x;sizeY=y;}
 public void setLastAI(int x,int y){if(x==0|y==0)lastAI=null;else lastAI=new Point(x, y);}
 public void setLastHuman(int x,int y){if(x==0|y==0)lastHuman=null;else lastHuman=new Point(x, y);}
-public Point getLastAI(){return lastAI;}
-public Point getLastHuman(){return lastHuman;}
-
-public 	String[][] getFieldState(SingleGameEngine singleGameEngine){
-	for (int x = 1; x <= sizeX; x++) 
-		for (int y = 1; y <= sizeY; y++) {
-			DotType dotType = singleGameEngine.getDotType(x, y);
-			fieldState[x-1][y-1]=dotType.toString();// <get field state>
-	}
-	return fieldState;
-}
 
 public void drawPoint(Graphics graphics,int x,int y,Color color){
 	int pixelX = getPixel(x, y).x;
@@ -49,15 +38,11 @@ public void drawPoint(Graphics graphics,int x,int y,Color color){
 }
 	
 public void paint(Graphics graphics,SingleGameEngine singleGameEngine){
-	// <drawing-grid>
-	//if(lastHuman==null&lastAI==null){
-		graphics.setColor(new Color(225,225,225));
-		for (int x = 1; x <= sizeX; x++) 
-			graphics.drawLine(getPixel(x, 0.5).x, getPixel(x, 0.5).y, getPixel(x,sizeY + 0.5).x, getPixel(x, sizeY + 0.5).y);
-		for (int y = 1; y <= sizeY; y++)
-			graphics.drawLine(getPixel(0.5, y).x, getPixel(0.5, y).y, getPixel(sizeX + 0.5, y).x, getPixel(sizeX + 0.5, y).y);
-	//}
-	// </drawing-grid>
+	graphics.setColor(new Color(225,225,225));
+	for (int x = 1; x <= sizeX; x++) 
+		graphics.drawLine(getPixel(x, 0.5).x, getPixel(x, 0.5).y, getPixel(x,sizeY + 0.5).x, getPixel(x, sizeY + 0.5).y);
+	for (int y = 1; y <= sizeY; y++)
+		graphics.drawLine(getPixel(0.5, y).x, getPixel(0.5, y).y, getPixel(sizeX + 0.5, y).x, getPixel(sizeX + 0.5, y).y);
 	List<SurroundingAbstract> surroundingsList = singleGameEngine.getSurroundings();
 	
 	((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -93,28 +78,14 @@ public void paint(Graphics graphics,SingleGameEngine singleGameEngine){
 	
 	int pointDiameter = pointSize;
 	
-	// <drawing-last-move>
-	/*try{
-		
-		if(game.isHodHuman())graphics.setColor(new Color(255, 0, 0, 100));
-		else graphics.setColor(new Color(21, 96, 189, 100));//�����
-		int pixelX = getPixel(game.getLastX(), game.getLastY()).x;
-		int pixelY = getPixel(game.getLastX(), game.getLastY()).y;
-		int drawX = pixelX - pointSize/2;
-		int drawY = pixelY - pointSize/2;
-		graphics.drawOval(drawX-2, drawY-2, pointDiameter+2, pointDiameter+2);//���������� ��������� ���
-		graphics.drawOval(drawX-3, drawY-3, pointDiameter+4, pointDiameter+4);//���������� ��������� ���
-	}catch(Exception e){}*/	
-	
-	// <drawing-last-move (for makros)>
 	if(lastHuman!=null){
-		graphics.setColor(new Color(21, 96, 189, 100));//�����
+		graphics.setColor(new Color(21, 96, 189, 100));
 		int pixelX = getPixel(lastHuman.x, lastHuman.y).x;
 		int pixelY = getPixel(lastHuman.x, lastHuman.y).y;
 		int drawX = pixelX - pointSize/2;
 		int drawY = pixelY - pointSize/2;
-		graphics.drawOval(drawX-2, drawY-2, pointDiameter+2, pointDiameter+2);//���������� ��������� ���
-		graphics.drawOval(drawX-3, drawY-3, pointDiameter+4, pointDiameter+4);//���������� ��������� ���
+		graphics.drawOval(drawX-2, drawY-2, pointDiameter+2, pointDiameter+2);
+		graphics.drawOval(drawX-3, drawY-3, pointDiameter+4, pointDiameter+4);
 	}
 	if(lastAI!=null){
 		graphics.setColor(new Color(255, 0, 0, 100));
@@ -122,8 +93,8 @@ public void paint(Graphics graphics,SingleGameEngine singleGameEngine){
 		int pixelY = getPixel(lastAI.x, lastAI.y).y;
 		int drawX = pixelX - pointSize/2;
 		int drawY = pixelY - pointSize/2;
-		graphics.drawOval(drawX-2, drawY-2, pointDiameter+2, pointDiameter+2);//���������� ��������� ���
-		graphics.drawOval(drawX-3, drawY-3, pointDiameter+4, pointDiameter+4);//���������� ��������� ���
+		graphics.drawOval(drawX-2, drawY-2, pointDiameter+2, pointDiameter+2);
+		graphics.drawOval(drawX-3, drawY-3, pointDiameter+4, pointDiameter+4);
 	}
 	
 	{
@@ -187,34 +158,6 @@ public void paint(Graphics graphics,SingleGameEngine singleGameEngine){
 	}
 }
 	
-// </drawing-area>
-public void drawArea(Graphics graphics,int area_center_x,int area_center_y){
-	//if(!game.isHodHuman()&isAIneedHelp){
-		graphics.setColor(Color.green);
-		int pixelX = getPixel(area_center_x, area_center_y).x;
-		int pixelY = getPixel(area_center_x, area_center_y).y;
-		int drawX = pixelX - pointSize/2;
-		int drawY = pixelY - pointSize/2;
-		graphics.drawRect(drawX-3*squareSize-2, drawY-3*squareSize-2,(int)7*squareSize-2,(int)7*squareSize-2);
-		graphics.drawRect(drawX-3*squareSize-3, drawY-3*squareSize-3,(int)7*squareSize-2,(int)7*squareSize-2);
-		
-		graphics.setColor(new Color(0, 255, 0, 20));
-		graphics.fillRect(drawX-3*squareSize-1, drawY-3*squareSize-1,(int)7*squareSize,(int)7*squareSize);
-	//}
-}
-
-
-public void drawStringEquivalent(String string,int x,int y,Graphics graphics,int pointDiameter){//���������� ��������� ���������� �����
-	Font font = graphics.getFont();
-	font = font.deriveFont(pointDiameter);
-	graphics.setFont(font);
-	int stringWidth = getStringWidth(graphics, string);
-	int stringHeight = getStringHeight(graphics, string);
-	int drawStringX = getPixel(x, y).x - stringWidth / 2;
-	int drawStringY = getPixel(x, y).y + stringHeight / 2;
-	graphics.drawString(string, drawStringX, drawStringY);
-}
-
 private Point getPixel(double x, double y) {
 	Point result = new Point();
 	result.x = (int) (squareSize * (x + offsetX - 0.25));
