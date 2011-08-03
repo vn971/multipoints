@@ -143,7 +143,10 @@ public class Sgf {
 				? "" + fieldSizeX
 				: "" + fieldSizeX + ":" + fieldSizeY;
 		String timeMainProperty, timeAdditionalProperty;
-		if (timeLimits.equals("5sec/turn")) {
+		if (timeLimits==null) {
+			timeMainProperty = "1";
+			timeAdditionalProperty = "1";
+		} else if (timeLimits.equals("5sec/turn")) {
 			timeMainProperty = "5";
 			timeAdditionalProperty = "5";
 		} else if (timeLimits.equals("180sec/5turns")) {

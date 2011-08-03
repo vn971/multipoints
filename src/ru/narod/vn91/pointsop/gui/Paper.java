@@ -15,6 +15,8 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
+import java.util.Date;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -27,8 +29,8 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 
-public abstract class Paper
-		extends JPanel {
+@SuppressWarnings("serial")
+public abstract class Paper extends JPanel {
 
 	private SingleGameEngineInterface engine;
 	Point cursorDot = null;
@@ -63,6 +65,7 @@ public abstract class Paper
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
 	private Color colorBluCtrlSurr =
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
+//	private Thread t;
 
 	protected void setColors(
 			Color p1,
@@ -348,44 +351,14 @@ public abstract class Paper
 			int x = engine.getLastDot().x, y = engine.getLastDot().y;
 			if ((graphics.getClipBounds() != null)
 					&& graphics.getClipBounds().intersects(
-					getRectangleAroundDot(
-							x, y
-					)
-			) == false) {
+							getRectangleAroundDot(x, y)) == false) {
+				// no intersection
 				return;
-			}
-			DotType dotType = engine.getDotType(x, y);
-			int pointRadius = (int) (squareSize * dotWidth / 2);
-			if (dotType == DotType.RED) {
-				//цвет красной заливки
-				graphics.setColor(colorRedSurr);
 			} else {
-				//цвет синей заливки
-				graphics.setColor(colorBluSurr);
-			}
-			int pixelX = getPixel(x, y).x;
-			int pixelY = getPixel(x, y).y;
-			//нарисовать последний ход
-			{
-				int innerRadius = pointRadius + 1;
-				graphics.drawOval(
-						pixelX - innerRadius,
-						pixelY - innerRadius,
-						innerRadius * 2,
-						innerRadius * 2
-				);
-			}
-			{
-				int innerRadius = pointRadius + 2;
-				graphics.drawOval(
-						pixelX - innerRadius,
-						pixelY - innerRadius,
-						innerRadius * 2,
-						innerRadius * 2
-				);
+				// нарисовать последний ход
+				new LastMoveDrawer().start();
 			}
 		}
-
 	}
 
 	void drawSurrounding(
@@ -709,11 +682,6 @@ public abstract class Paper
 
 		drawLastDotHint(graphics);
 
-		((Graphics2D) graphics).setRenderingHint(
-				RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_OFF
-		);
-
 		{
 			// drawing paper borders
 			Graphics2D graphics2d = (Graphics2D) graphics;
@@ -741,7 +709,8 @@ public abstract class Paper
 				font = font.deriveFont(fontSize);
 				// if FONT < ....
 				graphics.setFont(font);
-				graphics.setColor(CustomColors.getContrastColor(Memory.getBackgroundColor()));
+//				graphics.setColor(CustomColors.getContrastColor(Memory.getBackgroundColor()));
+				graphics.setColor(Color.BLACK);
 				for (int x = 1; x <= engineSizeX; x++) {
 					String string = "" + (x);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
@@ -843,4 +812,131 @@ public abstract class Paper
 				pointRadius * 2, pointRadius * 2
 		);
 	}
+	class LastMoveDrawer extends Thread {
+
+		public void run() {
+			Graphics graphics = Paper.this.getGraphics();
+
+			long animationTotalTime = 5000L;
+			long timeOut = new Date().getTime() + animationTotalTime;
+			long animationStep = animationTotalTime / 10;
+
+			int x = engine.getLastDot().x, y = engine.getLastDot().y;
+			int pixelX = getPixel(x, y).x;
+			int pixelY = getPixel(x, y).y;
+			int pointRadius = (int) (squareSize * dotWidth / 2);
+
+			for (;;) {
+				try {
+					new Object().wait(animationStep);
+				} catch (Exception e) {
+				}
+				// totalTime += 20;
+				long currentTime = new Date().getTime();
+				if (currentTime > timeOut) {
+					break;
+				}
+				float animationPercent = ((float) (timeOut - currentTime))
+						/ animationTotalTime;
+				if (animationPercent > 1 || animationPercent < 0) {
+					animationPercent = 0.5F;
+				}
+//				graphics.setColor(new Color(
+//						animationPercent, animationPercent, animationPercent
+//				));
+				graphics.setColor(
+						CustomColors.getMixedColor(
+								CustomColors.getContrastColor(Memory.getBackgroundColor()),
+								Memory.getBackgroundColor(),
+								animationPercent));
+				// анимация последнего хода
+				{
+					{
+						int innerRadius = pointRadius + 1;
+						graphics.drawOval(
+								pixelX - innerRadius,
+								pixelY - innerRadius,
+								innerRadius * 2,
+								innerRadius * 2
+								);
+					}
+					{
+						int innerRadius = pointRadius + 2;
+						graphics.drawOval(
+								pixelX - innerRadius,
+								pixelY - innerRadius,
+								innerRadius * 2,
+								innerRadius * 2
+								);
+					}
+				}
+				// System.out.println("drawing");
+			}
+
+			// лучше исправить потом. Здесь можно просто вызвать метод paint()
+			// или repaint(), как его там... Если успею то попробую сам.
+			// Размер перерисовываемого квадратика для paint() дать просто по размером
+			// 1ой точки.
+
+
+			// Paper.this.repaint(Paper.this.getRectangleAroundDot(x, y));
+			// doesn't work because repaint invokes redrawing of the last point.
+
+
+			graphics.setColor(colorBackground);
+			{
+				int innerRadius = pointRadius + 1;
+				graphics.drawOval(
+						pixelX - innerRadius,
+						pixelY - innerRadius,
+						innerRadius * 2,
+						innerRadius * 2
+						);
+			}
+			{
+				int innerRadius = pointRadius + 2;
+				graphics.drawOval(
+						pixelX - innerRadius,
+						pixelY - innerRadius,
+						innerRadius * 2,
+						innerRadius * 2
+						);
+			}
+
+			((Graphics2D) graphics).setRenderingHint(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON
+					);
+
+			DotType dotType = engine.getDotType(x, y);
+			if (dotType == DotType.RED) {
+				// цвет красной заливки
+				graphics.setColor(colorRedSurr);
+			} else {
+				// цвет синей заливки
+				graphics.setColor(colorBluSurr);
+			}
+
+			{
+				int innerRadius = pointRadius + 1;
+				graphics.drawOval(
+						pixelX - innerRadius,
+						pixelY - innerRadius,
+						innerRadius * 2,
+						innerRadius * 2
+						);
+			}
+			{
+				int innerRadius = pointRadius + 2;
+				graphics.drawOval(
+						pixelX - innerRadius,
+						pixelY - innerRadius,
+						innerRadius * 2,
+						innerRadius * 2
+						);
+			}
+			graphics.setColor(Color.black);
+		}
+	}
+
 }

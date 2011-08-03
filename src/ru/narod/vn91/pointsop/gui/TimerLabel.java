@@ -75,8 +75,8 @@ class TimerLabel extends JLabel {
 				}
 
 				try {
-					System.out.println("going to sleep for="
-							+ (goal - current - fullSecondsRemaining * 1000L + 50));
+//					System.out.println("going to sleep for="
+//							+ (goal - current - fullSecondsRemaining * 1000L + 50));
 					super.sleep(goal - current - fullSecondsRemaining * 1000L + 50);
 				} catch (Exception e) {
 				}
