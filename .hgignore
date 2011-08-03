@@ -19,3 +19,4 @@ syntax: regexp
 glob:help-files/op-77-232-28-15.sh
 glob:help-files/chmod+x.sh
 glob:help-files/*.jnlp
+glob:.classpath
