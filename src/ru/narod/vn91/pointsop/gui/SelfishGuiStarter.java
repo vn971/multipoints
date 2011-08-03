@@ -435,16 +435,22 @@ public class SelfishGuiStarter {
 							new ActionListener() {
 
 								public void actionPerformed(ActionEvent e) {
-									AiVirtualServer aiWrapper =
-											new AiVirtualServer(
-													guiController
-											);
-									aiWrapper.setAi(
-											new com.google.sites.priymakpoints.pointsai.pointsAI_1_08.PointsAIEngine(
-													aiWrapper, 39, 32
-											)
-									);
-									aiWrapper.init();
+									new Thread() {
+										@Override
+										public void run() {
+											AiVirtualServer aiWrapper =
+													new AiVirtualServer(
+															guiController
+													);
+											aiWrapper
+													.setAi(
+													new com.google.sites.priymakpoints.pointsai.pointsAI_1_08.PointsAIEngine(
+															aiWrapper, 39, 32
+													)
+													);
+											aiWrapper.init();
+										}
+									}.start();
 								}
 							}
 					);
@@ -458,16 +464,22 @@ public class SelfishGuiStarter {
 							new ActionListener() {
 
 								public void actionPerformed(ActionEvent e) {
-									AiVirtualServer aiWrapper =
-											new AiVirtualServer(
-													guiController
-											);
-									aiWrapper.setAi(
-											new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
-													aiWrapper, 39, 32
-											)
-									);
-									aiWrapper.init();
+									new Thread() {
+										@Override
+										public void run() {
+											AiVirtualServer aiWrapper =
+													new AiVirtualServer(
+															guiController
+													);
+											aiWrapper
+													.setAi(
+													new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
+															aiWrapper, 39, 32
+													)
+													);
+											aiWrapper.init();
+										}
+									}.start();
 								}
 							}
 					);

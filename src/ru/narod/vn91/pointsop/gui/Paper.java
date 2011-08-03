@@ -353,10 +353,45 @@ public abstract class Paper extends JPanel {
 					&& graphics.getClipBounds().intersects(
 							getRectangleAroundDot(x, y)) == false) {
 				// no intersection
-				return;
 			} else {
 				// нарисовать последний ход
-				new LastMoveDrawer().start();
+
+				boolean doAnimation = true;
+
+				if (doAnimation) {
+					new LastMoveDrawer().start();
+				} else {
+					DotType dotType = engine.getDotType(x, y);
+					int pointRadius = (int) (squareSize * dotWidth / 2);
+					if (dotType == DotType.RED) {
+						// цвет красной заливки
+						graphics.setColor(colorRedSurr);
+					} else {
+						// цвет синей заливки
+						graphics.setColor(colorBluSurr);
+					}
+					int pixelX = getPixel(x, y).x;
+					int pixelY = getPixel(x, y).y;
+					// нарисовать последний ход
+					{
+						int innerRadius = pointRadius + 1;
+						graphics.drawOval(
+								pixelX - innerRadius,
+								pixelY - innerRadius,
+								innerRadius * 2,
+								innerRadius * 2
+								);
+					}
+					{
+						int innerRadius = pointRadius + 2;
+						graphics.drawOval(
+								pixelX - innerRadius,
+								pixelY - innerRadius,
+								innerRadius * 2,
+								innerRadius * 2
+								);
+					}
+				}
 			}
 		}
 	}
@@ -817,7 +852,7 @@ public abstract class Paper extends JPanel {
 		public void run() {
 			Graphics graphics = Paper.this.getGraphics();
 
-			long animationTotalTime = 5000L;
+			long animationTotalTime = 200L;
 			long timeOut = new Date().getTime() + animationTotalTime;
 			long animationStep = animationTotalTime / 10;
 
@@ -846,8 +881,10 @@ public abstract class Paper extends JPanel {
 //				));
 				graphics.setColor(
 						CustomColors.getMixedColor(
-								CustomColors.getContrastColor(Memory.getBackgroundColor()),
-								Memory.getBackgroundColor(),
+								// CustomColors.getContrastColor(Memory.getBackgroundColor()),
+								// Memory.getBackgroundColor(),
+								Color.WHITE,
+								Color.BLACK,
 								animationPercent));
 				// анимация последнего хода
 				{
