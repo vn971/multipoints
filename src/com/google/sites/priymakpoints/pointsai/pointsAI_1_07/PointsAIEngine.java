@@ -8,7 +8,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 
 public class PointsAIEngine implements Gui2Ai_Interface{
-	
+
 	PointsAI pointsAI;
 	Ai2Gui_Interface gui;
 	SingleGameEngineInterface engine;
@@ -19,11 +19,15 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 			int sizeY) {
 		this.gui = gui;
 		this.engine = new SingleGameEngine(sizeX, sizeY);
-		
-		try{pointsAI=new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAI();
-		}catch(Exception e1){JOptionPane.showMessageDialog(null, "Невозможно запустить ИИ!", "Ошибка", 0);}		
+
+		try {
+			pointsAI = new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAI();
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, "Невозможно запустить ИИ!", "Ошибка",
+					0);
+		}
 	}
-	
+
 	public void init() {
 		{
 			engine.makeMove(19, 17, true);
@@ -34,7 +38,7 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 			engine.makeMove(19, 16, false);
 			engine.makeMove(20, 16, false);
 			engine.makeMove(21, 17, false);
-			
+
 			gui.makeMove(19, 17, true, 0, null, 1);
 			gui.makeMove(18, 16, true, 0, null, 1);
 			gui.makeMove(20, 17, true, 0, null, 1);
@@ -43,7 +47,7 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 			gui.makeMove(19, 16, false, 0, null, 1);
 			gui.makeMove(20, 16, false, 0, null, 1);
 			gui.makeMove(21, 17, false, 0, null, 1);
-			
+
 			pointsAI.makeMove(19,17,true);
 			pointsAI.makeMove(18,16,true);
 			pointsAI.makeMove(20,17,true);
@@ -52,7 +56,7 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 			pointsAI.makeMove(19,16,false);
 			pointsAI.makeMove(20,16,false);
 			pointsAI.makeMove(21,17,false);
-			
+
 			int variant=new java.util.Random().nextInt(6);
 			int x=0,y=0;
 			switch(variant){
@@ -73,7 +77,7 @@ public class PointsAIEngine implements Gui2Ai_Interface{
 			boolean isRed,
 			boolean toBeAnswered,
 			long timeExpected) {
-		
+
 		MoveResult moveResult = engine.makeMove(x, y, !isRed);
 		pointsAI.makeMove(x,y,!isRed);
 		if (moveResult != MoveResult.ERROR) {

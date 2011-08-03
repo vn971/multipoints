@@ -430,7 +430,7 @@ public class SelfishGuiStarter {
 
 				{
 					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak AI - запуск 1.08 (прога может повиснуть?)");
+							new JMenuItem("Priymak AI - запуск 1.08");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -459,7 +459,7 @@ public class SelfishGuiStarter {
 
 				{
 					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak AI - запуск 1.07 (прога может повиснуть?)");
+							new JMenuItem("Priymak AI - запуск 1.07");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 

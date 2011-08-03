@@ -82,7 +82,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 //
 //	}
 
-	public void makeMove(boolean silent,
+	public void makeMove(
+			boolean silent,
 			int x,
 			int y,
 			boolean isRed,

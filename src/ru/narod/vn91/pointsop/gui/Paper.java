@@ -32,6 +32,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAb
 @SuppressWarnings("serial")
 public abstract class Paper extends JPanel {
 
+	static boolean doAnimation = true;
 	private SingleGameEngineInterface engine;
 	Point cursorDot = null;
 	int surroundingsAlreadyDrawed = 0;
@@ -65,7 +66,6 @@ public abstract class Paper extends JPanel {
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
 	private Color colorBluCtrlSurr =
 			CustomColors.getAlphaModifiedColor(colorBackground, 0);
-//	private Thread t;
 
 	protected void setColors(
 			Color p1,
@@ -356,8 +356,6 @@ public abstract class Paper extends JPanel {
 			} else {
 				// нарисовать последний ход
 
-				boolean doAnimation = true;
-
 				if (doAnimation) {
 					new LastMoveDrawer().start();
 				} else {
@@ -601,7 +599,6 @@ public abstract class Paper extends JPanel {
 
 	@Override
 	public void paint(Graphics graphics) {
-		//System.out.println(Memory.getDotWidth());
 		dotWidth = Memory.getDotWidth();
 		drawConnections = Memory.getDrawConnections();
 		setColors(
