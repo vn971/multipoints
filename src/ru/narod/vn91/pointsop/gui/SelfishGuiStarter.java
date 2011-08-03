@@ -404,7 +404,7 @@ public class SelfishGuiStarter {
 					jMenu_AI.add(jMenuItem_KeijkvantttaiExecute);
 				}
 
-//				jMenu_AI.add(new JSeparator());
+				jMenu_AI.add(new JSeparator());
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
@@ -425,12 +425,12 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-//					jMenu_AI.add(jMenuItem);
+					jMenu_AI.add(jMenuItem);
 				}
 
 				{
 					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak PointsAI - запуск 1.08");
+							new JMenuItem("Priymak AI - запуск 1.08 (прога может повиснуть?)");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -454,12 +454,12 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-//					jMenu_AI.add(jMenuItem);
+					jMenu_AI.add(jMenuItem);
 				}
 
 				{
 					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak PointsAI - запуск 1.07");
+							new JMenuItem("Priymak AI - запуск 1.07 (прога может повиснуть?)");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -483,7 +483,7 @@ public class SelfishGuiStarter {
 								}
 							}
 					);
-//					jMenu_AI.add(jMenuItem);
+					jMenu_AI.add(jMenuItem);
 				}
 
 				jMenu_AI.add(new JSeparator());

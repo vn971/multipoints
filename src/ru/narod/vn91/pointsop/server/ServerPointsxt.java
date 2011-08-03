@@ -164,16 +164,16 @@ public class ServerPointsxt
 		);
 		{
 			// chat notify...
-			String notifyMessage =
-					"оставил(а) заявку на блиц. " +
-							"См. команду !opstart для игры между pointsXT и pointsOp.";
-			super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
-			gui.chatReceived(
-					this,
-					defaultChannel,
-					getMyName(),
-					"*** " + notifyMessage
-			);
+			// String notifyMessage =
+			// "оставил(а) заявку на блиц. " +
+			// "См. команду !opstart для игры между pointsXT и pointsOp.";
+			// super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
+			// gui.chatReceived(
+			// this,
+			// defaultChannel,
+			// getMyName(),
+			// "*** " + notifyMessage
+			// );
 		}
 	}
 
