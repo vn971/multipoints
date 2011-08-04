@@ -48,10 +48,10 @@ made subject to such option by the copyright holder.
 
     <property name="jnlp.file.name.default" value="launch.jnlp"/>
     <property name="jnlp.dest.dir" location="dist"/>
-    
+
     <!-- helper file to create list of arguments, etc. -->
     <property name="helper.file" location="helper.txt"/>
-    
+
     <target name="default">
         <echo message="Default target is not set, you must specify which target you want to run."/>
     </target>
@@ -186,17 +186,17 @@ made subject to such option by the copyright holder.
     <target name="-do-jar-jnlp" depends="-create-tmp-manifest,-copy-tmp-manifest,-add-trusted-only-attribute,-add-trusted-library-attribute,-do-jar-applet,-do-jar-jnlp-application,-do-jar-jnlp-component"/>
 
     <!-- Init jnlp filename -->
-    
+
     <target name="-init-filename" depends="-check-filename-prop,-set-jnlp-filename-custom,-set-jnlp-filename-default"/>
-    
+
     <target name="-set-jnlp-filename-custom" if="jnlp.file.name.set">
         <property name="jnlp.file" value="${jnlp.file.name}"/>
     </target>
-    
+
     <target name="-set-jnlp-filename-default" unless="jnlp.file.name.set">
         <property name="jnlp.file" value="${jnlp.file.name.default}"/>
     </target>
-    
+
     <target name="-check-filename-prop">
         <condition property="jnlp.file.name.set">
             <and>
@@ -207,25 +207,25 @@ made subject to such option by the copyright holder.
             </and>
         </condition>
     </target>
-    
+
     <!-- Test JNLP enabled-->
-    
+
     <target name="-test-jnlp-enabled">
         <condition property="is.jnlp.enabled">
             <istrue value="${jnlp.enabled}"/>
         </condition>
     </target>
-    
+
     <!-- Generating JNLP file -->
-    
+
     <target name="generate-jnlp" depends="sign-jars,-test-generate-task-available,-unavailable-generate-task" if="generate.task.available">
-        <taskdef name="generate-jnlp" classname="org.netbeans.modules.javawebstart.anttasks.GenerateJnlpFileTask" 
+        <taskdef name="generate-jnlp" classname="org.netbeans.modules.javawebstart.anttasks.GenerateJnlpFileTask"
             classpath="${libs.JWSAntTasks.classpath}"/>
         <property name="jnlp.lazy.jars" value=""/>
         <generate-jnlp destfile="${jnlp.dest.dir}/${jnlp.file}_" template="master-${jnlp.descriptor}.jnlp" destdir="dist" lazyJars="${jnlp.lazy.jars}"/>
         <antcall target="-strip-empty-lines"/>
     </target>
-    
+
     <target name="-strip-empty-lines">
         <copy file="${jnlp.dest.dir}/${jnlp.file}_" tofile="${jnlp.dest.dir}/${jnlp.file}" overwrite="true" encoding="UTF-8">
             <filterchain>
@@ -236,19 +236,19 @@ made subject to such option by the copyright holder.
         </copy>
         <delete file="${jnlp.dest.dir}/${jnlp.file}_" failonerror="false"/>
     </target>
-    
+
     <target name="-test-generate-task-available">
-        <available property="generate.task.available" classname="org.netbeans.modules.javawebstart.anttasks.GenerateJnlpFileTask" 
+        <available property="generate.task.available" classname="org.netbeans.modules.javawebstart.anttasks.GenerateJnlpFileTask"
         classpath="${libs.JWSAntTasks.classpath}"/>
     </target>
-    
+
     <target name="-unavailable-generate-task" unless="generate.task.available">
         <echo message="Task required to generate JNLP file is missing, probably the library 'JWS Ant Tasks' is missing either from shared folder or from IDE installation."/>
         <fail/>
     </target>
-    
+
     <!-- Codebase processing -->
-    
+
     <target name="-codebase-props-check">
         <condition property="local.codebase">
             <or>
@@ -271,23 +271,23 @@ made subject to such option by the copyright holder.
             <equals arg1="${jnlp.codebase.type}" arg2="user" trim="true"/>
         </condition>
     </target>
-    
+
     <target name="-init-non-user-codebase" if="non.user.codebase">
         <property name="jnlp.codebase.value" value="${jnlp.codebase.url}"/>
     </target>
-    
+
     <target name="-init-user-codebase" if="user.codebase">
         <property name="jnlp.codebase.value" value="${jnlp.codebase.user}"/>
     </target>
 
     <!-- Security -->
-    
+
     <target name="-security-props-check">
         <condition property="jnlp.signed.true">
             <istrue value="${jnlp.signed}"/>
         </condition>
     </target>
-    
+
     <target name="-jnlp-init-keystore" depends="-jnlp-init-keystore-props,-check-keystore-exists" unless="jnlp.signjar.keystore.exists">
         <echo message="${application.vendor}" file="${helper.file}"/>
         <loadfile property="application.vendor.filtered" srcfile="${helper.file}">
@@ -301,11 +301,11 @@ made subject to such option by the copyright holder.
         <genkey dname="${jnlp.signjar.vendor}" alias="${jnlp.signjar.alias}" keystore="${jnlp.signjar.keystore}"
             storepass="${jnlp.signjar.storepass}" keypass="${jnlp.signjar.keypass}"/>
     </target>
-    
+
     <target name="-check-keystore-exists">
         <available property="jnlp.signjar.keystore.exists" file="${jnlp.signjar.keystore}"/>
     </target>
-    
+
     <target name="-jnlp-init-keystore-props">
         <property name="jnlp.signjar.keystore" value="${basedir}/build/nb-jws.ks"/>
         <property name="jnlp.signjar.storepass" value="storepass"/>
@@ -316,11 +316,11 @@ made subject to such option by the copyright holder.
     <!-- Signing -->
 
     <target name="-test-signjars-task-available">
-        <available property="signjars.task.available" 
-            classname="org.netbeans.modules.javawebstart.anttasks.SignJarsTask" 
+        <available property="signjars.task.available"
+            classname="org.netbeans.modules.javawebstart.anttasks.SignJarsTask"
             classpath="${libs.JWSAntTasks.classpath}"/>
     </target>
-    
+
     <target name="-check-signing-possible" depends="-security-props-check,-test-signjars-task-available,-unavailable-signjars-task">
         <condition property="jnlp.signed.true+signjars.task.available">
             <and>
@@ -329,15 +329,15 @@ made subject to such option by the copyright holder.
             </and>
         </condition>
     </target>
-    
+
     <target name="-unavailable-signjars-task" depends="-test-signjars-task-available" unless="signjars.task.available">
         <echo message="Task required to sign JAR file is missing, probably the library 'JWS Ant Tasks' is missing either from shared folder or from IDE installation. JAR files will not be signed."/>
     </target>
 
     <target name="sign-jars" depends="-jnlp-init-keystore,-check-signing-possible" if="jnlp.signed.true+signjars.task.available">
-        <taskdef name="sign-jars" classname="org.netbeans.modules.javawebstart.anttasks.SignJarsTask" 
+        <taskdef name="sign-jars" classname="org.netbeans.modules.javawebstart.anttasks.SignJarsTask"
             classpath="${libs.JWSAntTasks.classpath}"/>
-        <sign-jars keystore="${jnlp.signjar.keystore}" storepass="${jnlp.signjar.storepass}" 
+        <sign-jars keystore="${jnlp.signjar.keystore}" storepass="${jnlp.signjar.storepass}"
                 keypass="${jnlp.signjar.keypass}" alias="${jnlp.signjar.alias}" mainjar="${dist.jar}" destdir="dist"
                 codebase="${jnlp.codebase.value}" signedjarsprop="jnlp.signed.jars"
                 componentsprop="jnlp.components">
@@ -346,18 +346,9 @@ made subject to such option by the copyright holder.
             </fileset>
         </sign-jars>
     </target>
-    
+
     <!-- Running/Debugging -->
-    
-    <target name="jws-run" depends="jar,-verify-jnlp-enabled,-verify-codebase,-init-platform" description="Start javaws execution">
-        <exec executable="${platform.home}/bin/javaws">
-            <arg file="${jnlp.dest.dir}/${jnlp.file}"/>
-        </exec>
-    </target>
-    
-    <target name="jws-debug" if="netbeans.home" depends="jar,-verify-jnlp-enabled,-verify-codebase,-debug-start-debugger,-debug-javaws-debuggee" 
-        description="Debug javaws project in IDE"/>
-        
+
     <target name="-init-debug-args">
         <property name="version-output" value="java version &quot;${ant.java.version}"/>
         <condition property="have-jdk-older-than-1.4">
@@ -385,15 +376,15 @@ made subject to such option by the copyright holder.
             <arg file="${jnlp.dest.dir}/${jnlp.file}"/>
         </exec>
     </target>
-    
+
     <target name="-verify-codebase" depends="-codebase-props-check" unless="local.codebase">
         <fail message="Project cannot be run with non-local codebase. Open project properties dialog and set Web Start Codebase to Local Execution."/>
     </target>
-    
+
     <target name="-verify-jnlp-enabled" depends="-test-jnlp-enabled" unless="is.jnlp.enabled">
         <fail message="Project cannot be run with selected Run Configuration when Java Web Start is disabled."/>
     </target>
-    
+
     <!-- Generate simple HTML preview page -->
 
     <target name="-check-html-preview">
@@ -410,5 +401,5 @@ made subject to such option by the copyright holder.
             classpath="${libs.JWSAntTasks.classpath}"/>
         <copy-template-page destfile="${jnlp.dest.dir}/launch.html" template="preview-${jnlp.descriptor}.html" destdir="${jnlp.dest.dir}"/>
     </target>
-    
+
 </project>

@@ -159,16 +159,17 @@ public abstract class Paper extends JPanel {
 	public Paper() {
 		super();
 //		super.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-		{
-			URL url = SelfishGuiStarter.class.getResource("cursor-sight2.png");
-			Image image = new ImageIcon(url).getImage();
-			Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(
-					image, new Point(
-					16, 16
-			), "cursor-sight"
-			);
-			super.setCursor(cursor);
-		}
+//		super.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//		{
+//			URL url = SelfishGuiStarter.class.getResource("cursor-sight2.png");
+//			Image image = new ImageIcon(url).getImage();
+//			Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(
+//					image, new Point(
+//					16, 16
+//			), "cursor-sight"
+//			);
+//			super.setCursor(cursor);
+//		}
 		super.addMouseListener(
 				new java.awt.event.MouseAdapter() {
 

@@ -408,7 +408,7 @@ public class SelfishGuiStarter {
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Priymak PointsAI - о программе</a></html>"
+							"<html><a href=\"\">Priymak AI - о программе</a></html>"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {

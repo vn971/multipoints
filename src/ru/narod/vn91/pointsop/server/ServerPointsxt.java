@@ -133,7 +133,6 @@ public class ServerPointsxt
 	}
 
 	public synchronized void searchOpponent() {
-		System.out.println("searchopponent();");
 		myGame.leaveGame(false);
 		int roomNumber;
 		String roomAsString;
@@ -385,7 +384,6 @@ public class ServerPointsxt
 			String sender,
 			String login,
 			String hostname) {
-		System.out.println("ServerPointsxt.onPart()");
 		userDisconnected_PointsxtStyle(channel, sender);
 //		if (nicknameManager.getOrCreateShortNick(sender)
 //				.equals(myGame.getOpponentShortName())
@@ -926,11 +924,18 @@ public class ServerPointsxt
 			nicknameManager.removeIrcNick(user);
 		} else {
 			if (user.equalsIgnoreCase("podbot") == false) {
-				gui.userLeftRoom(
-						this, room,
-						nicknameManager.getOrCreateShortNick(user)
-				);
-				if (nicknameManager.getOrCreateShortNick(user).
+				String userShort = nicknameManager.getOrCreateShortNick(user);
+//				System.out.println("userShort = " + userShort);
+//				System.out.println("myNickOnServ = " + myNickOnServ);
+				if (userShort.equals(getMyName())) {
+					gui.unsubsribedGame(this, room);
+				} else {
+					gui.userLeftRoom(
+							this, room,
+							userShort
+							);
+				}
+				if (userShort.
 						equals(myGame.getOpponentShortName())
 						&& room.equals(myGame.roomName)) {
 					myGame.clear();
@@ -1011,15 +1016,6 @@ public class ServerPointsxt
 			int y) {
 		myGame.makeMove(roomName, x, y,myGame.getDefaultTime());
 	}
-
-	synchronized private void makeMove(
-			String roomName,
-			int x,
-			int y,
-			int timeLeft) {
-		myGame.makeMove(roomName, x, y,timeLeft);
-	}
-
 
 	public void sendChat(
 			String room,
