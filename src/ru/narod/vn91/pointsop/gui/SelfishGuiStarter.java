@@ -514,13 +514,13 @@ public class SelfishGuiStarter {
 			{
 				JMenu jMenu = new JMenu("Настройки");
 				{
-					JMenuItem jMenuItem = new JMenuItem("настройки");
+					JMenuItem jMenuItem = new JMenuItem("Настройки");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
 								public void actionPerformed(ActionEvent e) {
 									SettingsPanel settings = new SettingsPanel();
-									tabbedPane.addTab("настройки", settings, true);
+									tabbedPane.addTab("Настройки", settings, true);
 									tabbedPane.setSelectedComponent(settings);
 								}
 							}
@@ -553,7 +553,27 @@ public class SelfishGuiStarter {
 					);
 					jMenu.add(jMenuItem);
 				}
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"<html><a href=\"\">Обсуждение PointsOP</a></html>"
+					);
+					jMenuItem.addActionListener(
+							new ActionListener() {
 
+								public void actionPerformed(ActionEvent e) {
+									try {
+										java.awt.Desktop.getDesktop().browse(
+												new URI(
+														"http://vkontakte.ru/pointsgame"
+												)
+										);
+									} catch (Exception ignored) {
+									}
+								}
+							}
+					);
+					jMenu.add(jMenuItem);
+				}
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">Полезные ссылки</a></html>"

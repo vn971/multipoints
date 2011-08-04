@@ -169,7 +169,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="698" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="706" max="32767" attributes="0"/>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -200,7 +200,7 @@
                           </Group>
                           <Component id="jPanel_AllServers" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="29" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -407,13 +407,13 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel_Logo" alignment="0" pref="773" max="32767" attributes="0"/>
+                      <Component id="jLabel_Logo" alignment="0" pref="786" max="32767" attributes="0"/>
                       <Component id="jLabel_IncontactGroup" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel_Qestions" alignment="0" min="-2" max="-2" attributes="1"/>
                       <Component id="jLabel_GameWishes" alignment="0" min="-2" max="-2" attributes="1"/>
                       <Component id="jLabel_Links" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel_ChatWishes" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane_ServerOutput" alignment="0" pref="773" max="32767" attributes="2"/>
+                      <Component id="jScrollPane_ServerOutput" alignment="0" pref="786" max="32767" attributes="2"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -435,7 +435,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel_Links" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="jScrollPane_ServerOutput" pref="152" max="32767" attributes="0"/>
+                  <Component id="jScrollPane_ServerOutput" pref="172" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -452,8 +452,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_IncontactGroup">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x413;&#x440;&#x443;&#x43f;&#x43f;&#x430; &#x412;&#x41a;&#x43e;&#x43d;&#x442;&#x430;&#x43a;&#x442;&#x435;&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/club21455903"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x41e; &#x43f;&#x440;&#x43e;&#x433;&#x440;&#x430;&#x43c;&#x43c;&#x435; PointsOP&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="http://pointsgame.net/site/pointsop"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -464,8 +464,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_Qestions">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x412;&#x43e;&#x43f;&#x440;&#x43e;&#x441;&#x44b; &#x43f;&#x43e; PointsOP&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24260448"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x41e;&#x431;&#x441;&#x443;&#x436;&#x434;&#x435;&#x43d;&#x438;&#x435; PointsOP&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/pointsgame"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -476,8 +476,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_GameWishes">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x41f;&#x43e;&#x436;&#x435;&#x43b;&#x430;&#x43d;&#x438;&#x44f; &#x43f;&#x43e; &#x438;&#x433;&#x440;&#x43e;&#x432;&#x43e;&#x439; &#x447;&#x430;&#x441;&#x442;&#x438;: &#x432;&#x438;&#x434; &#x43f;&#x43e;&#x43b;&#x44f;, &#x444;&#x43e;&#x440;&#x43c;&#x430;&#x442; &#x438;&#x433;&#x440;&#x44b;&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24387150"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x41d;&#x43e;&#x432;&#x43e;&#x441;&#x442;&#x438;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="http://pointsgame.net/site/news"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -488,8 +488,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_ChatWishes">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x41f;&#x43e;&#x436;&#x435;&#x43b;&#x430;&#x43d;&#x438;&#x44f; &#x43f;&#x43e; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x443; &#x438;&#x433;&#x440;&#x43e;&#x43a;&#x43e;&#x432;, &#x447;&#x430;&#x442;&#x443;, &#x434;&#x438;&#x437;&#x430;&#x439;&#x43d;&#x443;&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="http://vkontakte.ru/topic-21455903_24407841"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x421;&#x430;&#x439;&#x442; &#x43e;&#x431; &#x438;&#x433;&#x440;&#x435; &#x422;&#x43e;&#x447;&#x43a;&#x438;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="http://pointsgame.net"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -501,7 +501,7 @@
         <Component class="javax.swing.JLabel" name="jLabel_Links">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x41f;&#x43e;&#x43b;&#x435;&#x437;&#x43d;&#x44b;&#x435; &#x441;&#x441;&#x44b;&#x43b;&#x43a;&#x438;&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="http://sites.google.com/site/oscarpoints/links"/>
+            <Property name="toolTipText" type="java.lang.String" value="http://pointsgame.net/site/links"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
