@@ -18,6 +18,8 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 
 	boolean isDisposed = false;
 
+	StringBuffer fullLog = new StringBuffer();
+
 	public ConsoleAi6Implementation(
 			ConsoleGui6 gui,
 			String command) {
@@ -64,12 +66,19 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 
 	void writeToProcess(String string) {
 		try {
-//			System.out.println(new Date()+ " " + string);
+			fullLog.append(new Date().getTime());
+			fullLog.append(" ");
+
+			fullLog.append(string);
 			writer.write(string);
+
 			writer.write("\n");
+			fullLog.append("\n");
+
 			writer.flush();
 		} catch (IOException e) {
-			gui.error(e.toString());
+			error();
+//			gui.error(e.toString());
 		}
 	}
 
@@ -148,6 +157,10 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		writeToProcess("1 version");
 	}
 
+	private void error() {
+		gui.error(fullLog.toString());
+	}
+
 	class ListenThread
 			extends Thread {
 		BufferedReader reader;
@@ -165,21 +178,22 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 						break;
 						// TODO I shoudn't need that!!
 					}
-//					System.out.println(new Date()+ " " + rawLine);
+					fullLog.append(new Date().getTime());
+					fullLog.append(" ");
+					fullLog.append(rawLine);
+					fullLog.append("\n");
 					try {
-						// String[] aiMoveSplitted = aiMove_Raw.split(" ", 3);
-						// int x = Integer.parseInt(aiMoveSplitted[0]) + 1;
-						// int y = Integer.parseInt(aiMoveSplitted[1]) + 1;
-						// boolean isRed = aiMoveSplitted[2].equals("1");
-						// gui.play(x, y, isRed);
 						String[] splitted = rawLine.split(" ");
 						if (splitted.length < 3) {
 							break;
 						}
 						if (splitted[0].equals("?")) {
-							gui.error(rawLine);
+							if (splitted.length>=3 && splitted[2].equals("play")) {
+								// do not log it, because if IRC bugs
+							} else {
+								error();
+							}
 						} else if (splitted[0].equals("=")) {
-							// String id = splitted[1];
 							String command = splitted[2];
 							String arg1 = (splitted.length > 3) ? splitted[3] : "";
 							String arg2 = (splitted.length > 4) ? splitted[4] : "";
@@ -189,7 +203,6 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 											? ""
 											: rawLine.split(" ",
 													4)[3];
-
 							if (command.equals("list_commands")) {
 							} else if (command.equals("quit")) {
 							} else if (command.equals("boardsize")) {
@@ -223,17 +236,18 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 										Integer.parseInt(arg2),
 										getColor(arg3));
 							} else if (command.equals("undo")) {
-								gui.error("cannot handle 'undo' message: " + rawLine);
+								error();
+								// gui.error("cannot handle 'undo' message: " + rawLine);
 							} else {
-								gui.error("unknown message: " + rawLine);
+								error();
+								// gui.error("unknown message: " + rawLine);
 							}
 
 						} else {
-							gui.error(rawLine);
+							error();
 						}
 					} catch (Exception e) {
-						gui.error("received unknown message: " + rawLine + ", exception: "
-								+ e.toString());
+						error();
 					}
 				} catch (IOException ex) {
 					boolean processFinished = true;
@@ -243,7 +257,6 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 						processFinished = false;
 					}
 					if (processFinished) {
-						// gui.error("process was destroyed");
 					}
 				}
 			}

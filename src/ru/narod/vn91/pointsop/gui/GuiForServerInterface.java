@@ -79,6 +79,10 @@ public interface GuiForServerInterface {
 			String user,
 			String message);
 
+	public abstract void soundReceived(
+			ServerInterface server,
+			String user);
+
 	public abstract void serverNoticeReceived(
 			ServerInterface server,
 			String room,
@@ -99,6 +103,16 @@ public interface GuiForServerInterface {
 			String user,
 			String settings);
 
+	public abstract void gameVacancyDestroyed(
+			ServerInterface server,
+			String masterRoom,
+			String oldRoom);
+
+	public abstract void gameRequestReceived(
+			ServerInterface server,
+			String room,
+			String possibleOpponent);
+
 	/**
 	 * game is destroyed from list of games (NOT tabs of Lang-rooms!)
 	 *
@@ -107,11 +121,6 @@ public interface GuiForServerInterface {
 	 * @param oldRoom
 	 */
 	public abstract void gameDestroyed(
-			ServerInterface server,
-			String masterRoom,
-			String oldRoom);
-
-	public abstract void gameVacancyDestroyed(
 			ServerInterface server,
 			String masterRoom,
 			String oldRoom);

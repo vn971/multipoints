@@ -178,16 +178,20 @@ public class ServerPointsxt
 
 	public void acceptOpponent(
 			String roomName,
-			String name) {
+			String newOpponent) {
 		if (! roomName.equals(myGame.roomName)) {
 			return;
 		}
-		//		if (opponentName.equals("") == false) {
-		//			return;
-		//		} this protection is already done earlier
-		if (nicknameManager.getIrcNick(name)==null) {
+		// if (opponentName.equals("") == false) {
+		// return;
+		// } this protection is already done earlier
+		String ircOpponentName = nicknameManager.getIrcNick(newOpponent);
+		if (ircOpponentName == null) {
+			// do nothing
+		} else if (isPointsXTNickname(ircOpponentName)) {
+			tryInvitePointsxt(ircOpponentName, false);
 		} else {
-			myGame.opponentName = name;
+			myGame.opponentName = newOpponent;
 			myGame.amIRed = true;
 			super.sendMessage(
 					roomName,
@@ -200,7 +204,7 @@ public class ServerPointsxt
 					)
 			);
 			gui.subscribedGame(
-					roomName, this, getMyName(), name, 0, 0,
+					roomName, this, getMyName(), newOpponent, 0, 0,
 					"999мин/ход", false, "", true, true/*i am the player*/
 			);
 			for (User user : super.getUsers(roomName)) {
@@ -230,26 +234,26 @@ public class ServerPointsxt
 	}
 
 	public void tryInvitePointsxt(String target, boolean isVerbose) {
-		if (target.startsWith("\\^")) {
-			super.sendMessage(
-					target,
-					"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
-			);
-			return;
-		}
-		if (myGame.isInSearchNow() == false) {
-			if (isVerbose) {
-				super.sendMessage(
-						target,
-						"На игру можно вызывать только игрока " +
-								"который в состоянии поиска оппонента. " +
-								"(Это системное сообщение.)"
-				);
-			}
-			return;
-		}
+//		if (target.startsWith("\\^")) {
+//			super.sendMessage(
+//					target,
+//					"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
+//			);
+//			return;
+//		} else if (myGame.isInSearchNow() == false) {
+//			if (isVerbose) {
+//				super.sendMessage(
+//						target,
+//						"На игру можно вызывать только игрока " +
+//								"который в состоянии поиска оппонента. " +
+//								"(Это системное сообщение.)"
+//						);
+//			}
+//			return;
+//		} else
 
-		super.sendMessage(target, "/PointsXTStart NotRait Blits Chisto");
+			super.sendMessage(target, "/PointsXTStart NotRait Blits Chisto");
+
 	}
 
 	public static String getAllowedNick(
@@ -448,7 +452,18 @@ public class ServerPointsxt
 		if (channel.equals(defaultChannel) && (
 				message.equalsIgnoreCase("!s")
 						|| message.equalsIgnoreCase("!ы"))) {
-			tryInvitePointsxt(sender, false);
+
+			if (isPointsopNickname(sender)) {
+//				super.sendMessage(
+//						target,
+//						"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
+//				);
+//				return;
+			} else if (myGame.isInSearchNow() == false) {
+			} else {
+				gui.gameRequestReceived(
+						this, myGame.roomName, nicknameManager.getOrCreateShortNick(sender));
+			}
 		}
 		// catch game-invite
 		String nick = nicknameManager.getOrCreateShortNick(sender);
@@ -460,7 +475,8 @@ public class ServerPointsxt
 				String opponentNick = nicknameManager.getOrCreateShortNick(
 						sender
 				);
-				this.acceptOpponent(channel, opponentNick);
+				System.out.println("received Op-game request");
+				gui.gameRequestReceived(this, channel, opponentNick);
 			} else if (message.startsWith(
 					commandCommonPrefix + commandAcceptOpponent + myNickOnServ
 			)) {
@@ -550,13 +566,28 @@ public class ServerPointsxt
 			String message) {
 
 		if (message.equals("/SendSOUND")) {
-			new Sounds().playAlarmSignal();
-			gui.serverNoticeReceived(
-					this, defaultChannel, nicknameManager.getOrCreateShortNick(
-					sender
-			) + " sends you a sound"
-			);
-			tryInvitePointsxt(sender, true);
+//			new Sounds().playAlarmSignal();
+//			gui.serverNoticeReceived(
+//					this, defaultChannel, nicknameManager.getOrCreateShortNick(
+//					sender
+//			) + " sends you a sound"
+//			);
+
+			if (isPointsopNickname(sender)) {
+				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
+			} else if (myGame.isInSearchNow() == false) {
+				super.sendMessage(
+						sender,
+						"На игру можно вызывать только игрока " +
+								"который в состоянии поиска оппонента. " +
+								"(Это системное сообщение.)"
+						);
+			} else {
+				gui.gameRequestReceived(
+								this, myGame.roomName, nicknameManager
+										.getOrCreateShortNick(sender));
+//			tryInvitePointsxt(sender, true);
+			}
 		} else if (message.equals("/GetTehGame")) {
 			//			if (myGame.isActive()) {
 			//				super.sendMessage(
@@ -569,7 +600,7 @@ public class ServerPointsxt
 		} else if (message.startsWith("/PointsXTAccept ")) {
 			String room = getPlayerRoom(sender);
 			String roomNumber = getPlayerRoomNumber(sender);
-			if (isPointsxtNickname(sender)
+			if (isGamerNickname(sender)
 					&& (getPlayerRoomNumber(sender).equals("")) == false) {
 				if (myGame.isActive()) {
 					super.sendMessage(
@@ -624,7 +655,7 @@ public class ServerPointsxt
 				message.equalsIgnoreCase("!s")
 						|| message.startsWith("!opstart")
 						|| message.equalsIgnoreCase("!ы")) {
-			tryInvitePointsxt(sender, true);
+//			tryInvitePointsxt(sender, true);
 		} else if (message.startsWith("/PASSOK")
 				&& (sender.equalsIgnoreCase("podbot"))) {
 			subscribeRoom("#pointsxt");
@@ -700,12 +731,17 @@ public class ServerPointsxt
 		);
 	}
 
-	private boolean isPointsxtNickname(String fullNick) {
+	private boolean isGamerNickname(String fullNick) {
 		return fullNick.matches(".*" + pointsxtTail_RegExp);
 	}
 
+	private boolean isPointsXTNickname(String ircNick) {
+		return (isPointsopNickname(ircNick) == false)
+				&& ircNick.matches(".*" + pointsxtTail_RegExp);
+	}
+
 	private String getPlayerRoom(String nick) {
-		if (isPointsxtNickname(nick) == false) {
+		if (isGamerNickname(nick) == false) {
 			return "";
 		} else {
 			String roomSuffix =
@@ -719,7 +755,7 @@ public class ServerPointsxt
 	}
 
 	private String getPlayerRoomNumber(String nick) {
-		if (isPointsxtNickname(nick) == false) {
+		if (isGamerNickname(nick) == false) {
 			return "";
 		} else {
 			String roomSuffix =
@@ -779,7 +815,7 @@ public class ServerPointsxt
 	}
 
 	private int getPlayerRank(String ircNick) {
-		if (isPointsxtNickname(ircNick)) {
+		if (isGamerNickname(ircNick)) {
 			String rankAsString = ircNick.substring(
 					ircNick.length() - 15,
 					ircNick.length() - 11
@@ -791,7 +827,7 @@ public class ServerPointsxt
 	}
 
 	private String extractUserStatus(String nick) {
-		if (isPointsxtNickname(nick)) {
+		if (isGamerNickname(nick)) {
 			String stateType = nick.substring(
 					nick.length() - 5,
 					nick.length() - 1
@@ -809,7 +845,7 @@ public class ServerPointsxt
 	}
 
 	private String getPlayerGameType(String nick) {
-		if (isPointsxtNickname(nick)) {
+		if (isGamerNickname(nick)) {
 			return getGameInfoFromIrcNick(nick).getTimeAndIsRated();
 		} else {
 			return "";
@@ -817,7 +853,7 @@ public class ServerPointsxt
 	}
 
 	private int getPlayerIngameNumber(String fullNick) {
-		if (isPointsxtNickname(fullNick)) {
+		if (isGamerNickname(fullNick)) {
 			String letter = fullNick.substring(
 					fullNick.length() - 4,
 					fullNick.length() - 3
@@ -839,7 +875,7 @@ public class ServerPointsxt
 		return charr - "0".charAt(0);
 	}
 
-	private boolean isPointsop(String ircNick) {
+	private boolean isPointsopNickname(String ircNick) {
 		return ircNick.startsWith("^")
 				&& ircNick.matches(".*" + pointsxtTail_RegExp + ".*");
 	}
@@ -901,7 +937,7 @@ public class ServerPointsxt
 								"error creating a game"
 						);
 					}
-				} else if (isPointsop(fullNickname)) {
+				} else if (isPointsopNickname(fullNickname)) {
 					// no opponent found of a pointsOp player
 					gui.gameVacancyCreated(
 							this, defaultChannel, newRoom,

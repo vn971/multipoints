@@ -10,7 +10,7 @@ public interface ServerInterface {
 
 	void requestJoinGame(String gameRoomName);
 
-	void acceptOpponent(String roomName, String name);
+	void acceptOpponent(String roomName, String newOpponent);
 
 	public void stopSearchingOpponent();
 

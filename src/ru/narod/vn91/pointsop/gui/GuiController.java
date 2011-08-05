@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
+import ru.narod.vn91.pointsop.sounds.Sounds;
 
 public class GuiController implements GuiForServerInterface {
 
@@ -330,6 +331,12 @@ public class GuiController implements GuiForServerInterface {
 		privateChat.addChat(user, message, false);
 	}
 
+	@Override
+	public void soundReceived(ServerInterface server, String user) {
+		new Sounds().playAlarmSignal();
+		privateMessageReceived(server, user, "послан звуковой сигнал");
+	}
+
 	/* (non-Javadoc)
 	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#createPrivateChatWindow(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
 	 */
@@ -424,20 +431,6 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
-	 */
-	public synchronized void gameDestroyed(
-			ServerInterface server,
-			String masterRoom,
-			String oldRoom) {
-		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
-		if (room == null) {
-		} else {
-			room.getRoomPart_GameList().gameDestroyed(oldRoom);
-		}
-	}
-
-	/* (non-Javadoc)
 	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
 	 */
 	public synchronized void gameVacancyDestroyed(
@@ -446,6 +439,27 @@ public class GuiController implements GuiForServerInterface {
 			String oldRoom) {
 		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
 //		room.getClass().getInterfaces();
+		if (room == null) {
+		} else {
+			room.getRoomPart_GameList().gameDestroyed(oldRoom);
+		}
+	}
+
+	@Override
+	public void gameRequestReceived(ServerInterface server, String room,
+			String possibleOpponent) {
+		new Sounds().playAlarmSignal();
+		server.acceptOpponent(room, possibleOpponent);
+	}
+
+/* (non-Javadoc)
+	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	 */
+	public synchronized void gameDestroyed(
+			ServerInterface server,
+			String masterRoom,
+			String oldRoom) {
+		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
 		if (room == null) {
 		} else {
 			room.getRoomPart_GameList().gameDestroyed(oldRoom);
