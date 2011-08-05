@@ -178,7 +178,7 @@ public class SelfishGuiStarter {
 					jMenu.addSeparator();
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 1)"
+							"Тест (уровень 1) 30 заданий"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
@@ -196,7 +196,7 @@ public class SelfishGuiStarter {
 
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 2)"
+							"Тест (уровень 2) 30 заданий"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
@@ -213,7 +213,7 @@ public class SelfishGuiStarter {
 				}
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 3)"
+							"Тест (уровень 3) 30 заданий"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
@@ -228,7 +228,42 @@ public class SelfishGuiStarter {
 					);
 					jMenu.add(jMenuItem);
 				}
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"Тест (уровень 4) 0 заданий"
+					);
+					jMenuItem.addActionListener(
+							new ActionListener() {
 
+								public void actionPerformed(ActionEvent e) {
+									try {
+										new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
+									} catch (Exception ignored) {
+									}
+								}
+							}
+					);
+					jMenuItem.setEnabled(false);
+					jMenu.add(jMenuItem);
+				}
+				{
+					JMenuItem jMenuItem = new JMenuItem(
+							"Тест (уровень 5) 0 заданий"
+					);
+					jMenuItem.addActionListener(
+							new ActionListener() {
+
+								public void actionPerformed(ActionEvent e) {
+									try {
+										new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
+									} catch (Exception ignored) {
+									}
+								}
+							}
+					);
+					jMenuItem.setEnabled(false);
+					jMenu.add(jMenuItem);
+				}
 				{
 					JMenuItem jMenuItem = new JMenuItem(
 							"<html><a href=\"\">О программе PointsIQ</a></html>"
