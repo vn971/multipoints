@@ -24,7 +24,6 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
-import ru.narod.vn91.pointsop.sounds.Sounds;
 
 public class ServerPointsxt
 		extends PircBot
