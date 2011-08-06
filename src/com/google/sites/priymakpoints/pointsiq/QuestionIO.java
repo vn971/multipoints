@@ -9,12 +9,12 @@ import java.util.Iterator;
 import java.util.List;
 import javax.activation.URLDataSource;
 
-public class QuestionIO{
+class QuestionIO{
 	
 	private List<Question> baseList=new ArrayList<Question>();
 	private Question base[];
 	
-public Question[] getBase(int level){
+Question[] getBase(int level){
 	StringBuffer s=new StringBuffer();
 	try {
 		URLDataSource d=new URLDataSource(PointsIQ.class.getResource("PointsIQbase.txt"));
@@ -45,9 +45,6 @@ public Question[] getBase(int level){
 	return base;
 }
 
-public Question getQuestion(int index){
-	for(int i=0;i<base.length;i++)if(base[i].index==index)return base[i];
-	return null;
-}
+Question getQuestion(int index){for(int i=0;i<base.length;i++)if(base[i].index==index)return base[i];return null;}
 	
 }

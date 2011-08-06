@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Makros{
+class Makros{
 	
-	List<MakrosLevelMove> moves=new ArrayList<MakrosLevelMove>();
-	String str="";
+	private List<MakrosLevelMove> moves=new ArrayList<MakrosLevelMove>();
+	private String str="";
 
-public Makros(String str){
-	
+Makros(String str){
 	this.str=str;
 	String move;
-	
 	while(str.length()>7){
 		move=str.substring(str.indexOf("(")+1,str.indexOf(")"));
 		str=str.substring(str.indexOf(")")+1);
@@ -22,7 +20,7 @@ public Makros(String str){
 }	
 
 public String toString(){return str;}
-public MakrosLevelMove[] getMoves(){
+MakrosLevelMove[] getMoves(){
 	MakrosLevelMove[] base;
 	int count=0;
 	Iterator i=moves.iterator();
@@ -31,6 +29,5 @@ public MakrosLevelMove[] getMoves(){
 	while(i.hasNext()){base[count]=(MakrosLevelMove)i.next();count++;}
 	return base;
 }
-
 
 }

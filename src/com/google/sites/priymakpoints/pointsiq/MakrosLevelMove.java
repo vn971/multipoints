@@ -2,14 +2,14 @@ package com.google.sites.priymakpoints.pointsiq;
 
 import java.awt.Point;
 
-public class MakrosLevelMove {
+class MakrosLevelMove {
 
-	public Point humanPoint, AIPoint;
-	public int levelNumber=0;
-	public String levelLetter="";
-	public String preLevels="";
-	public int x,y;
-	String str;
+	Point humanPoint, AIPoint;
+	int levelNumber=0;
+	String levelLetter="";
+	String preLevels="";
+	private int x,y;
+	private String str;
 	
 MakrosLevelMove(String str){
 	this.str=str;

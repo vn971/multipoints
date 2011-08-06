@@ -5,18 +5,17 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 
-public class PointsIQGame{
+class PointsIQGame{
 
-	public SingleGameEngine singleGameEngine;
-	public DrawSingleGameEngine OP_paint=new DrawSingleGameEngine();
+	SingleGameEngine singleGameEngine;
+	DrawSingleGameEngine OP_paint=new DrawSingleGameEngine();
 	private Graphics graphics;
 	private PointsIQ pointsIQ;
 	int qNumber=0,qLevel=0,qTrue=0,qThis=0;
 	boolean isComplete=true;
-	public int squareSize=16;
-	public int offsetX=1;
-	public int offsetY=3;
-	public int pointSize=(int)(squareSize/2);
+	private int squareSize=16;
+	private int offsetX=1;
+	private int offsetY=3;
 	String spc="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	
 PointsIQGame(PointsIQ pointsIQ){this.pointsIQ=pointsIQ;newGame();}

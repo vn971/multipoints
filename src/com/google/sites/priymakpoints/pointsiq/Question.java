@@ -1,12 +1,12 @@
 package com.google.sites.priymakpoints.pointsiq;
 
-public class Question{
+class Question{
 	
-	public int index=0,level=0;
-	public String str="",text="",startPos="",comment="";
-	public Makros makros;
+	int index=0,level=0;
+	String str="",text="",startPos="",comment="";
+	Makros makros;
 
-public Question(String str){	
+Question(String str){	
 	this.str=str;
 	String move;
 	

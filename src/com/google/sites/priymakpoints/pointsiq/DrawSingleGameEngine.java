@@ -9,25 +9,24 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.util.List;
-
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 
-public class DrawSingleGameEngine{
+class DrawSingleGameEngine{
 	
 	private int sizeX=20;
 	private int sizeY=20;
-	Point lastAI=null,lastHuman=null;
+	private Point lastAI=null,lastHuman=null;
 	private int offsetX=1;
 	private int offsetY=3;
 	private int squareSize=16;
 	private int pointSize=(int)(squareSize/2);
 	
-public void setLastAI(int x,int y){if(x==0|y==0)lastAI=null;else lastAI=new Point(x, y);}
-public void setLastHuman(int x,int y){if(x==0|y==0)lastHuman=null;else lastHuman=new Point(x, y);}
+void setLastAI(int x,int y){if(x==0|y==0)lastAI=null;else lastAI=new Point(x, y);}
+void setLastHuman(int x,int y){if(x==0|y==0)lastHuman=null;else lastHuman=new Point(x, y);}
 
-public void drawPoint(Graphics graphics,int x,int y,Color color){
+void drawPoint(Graphics graphics,int x,int y,Color color){
 	int pixelX = getPixel(x, y).x;
 	int pixelY = getPixel(x, y).y;
 	int pointDiameter = pointSize;
@@ -37,7 +36,7 @@ public void drawPoint(Graphics graphics,int x,int y,Color color){
 	graphics.fillOval(drawX, drawY, pointDiameter-2, pointDiameter-2);
 }
 	
-public void paint(Graphics graphics,SingleGameEngine singleGameEngine){
+void paint(Graphics graphics,SingleGameEngine singleGameEngine){
 	graphics.setColor(new Color(225,225,225));
 	for (int x = 1; x <= sizeX; x++) 
 		graphics.drawLine(getPixel(x, 0.5).x, getPixel(x, 0.5).y, getPixel(x,sizeY + 0.5).x, getPixel(x, sizeY + 0.5).y);
@@ -163,18 +162,6 @@ private Point getPixel(double x, double y) {
 	result.x = (int) (squareSize * (x + offsetX - 0.25));
 	result.y = (int) (squareSize * (y + offsetY- 0.25));
 	return result;
-}
-int getStringWidth(Graphics graphics, String string) {int result = graphics.getFontMetrics().stringWidth(string);return result;}
-
-int getStringHeight(Graphics graphics, String string) {
-	int result = graphics.getFontMetrics().getHeight();
-	if ((string.toLowerCase().equals(string)) && (string.toUpperCase().equals(string))) {
-		result -= 4;
-	} else {
-		result -= 1;
-	}
-	return result;
-
 }
 
 }
