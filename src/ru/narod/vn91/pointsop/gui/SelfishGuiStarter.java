@@ -230,38 +230,19 @@ public class SelfishGuiStarter {
 				}
 				{
 					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 4) 0 заданий"
+							"Тест (уровень 4) 15 заданий"
 					);
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
 								public void actionPerformed(ActionEvent e) {
 									try {
-										new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
+										new com.google.sites.priymakpoints.pointsiq.PointsIQ(4);
 									} catch (Exception ignored) {
 									}
 								}
 							}
 					);
-					jMenuItem.setEnabled(false);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 5) 0 заданий"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenuItem.setEnabled(false);
 					jMenu.add(jMenuItem);
 				}
 				{
