@@ -7,6 +7,7 @@ build\nb-jws.ks
 build/built-jar.properties
 *.iws
 .idea/workspace.xml
+.classpath
 
 syntax: regexp
 
