@@ -1,7 +1,6 @@
 package com.google.sites.priymakpoints.pointsiq;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -15,12 +14,11 @@ import java.util.EventListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 
 public class PointsIQ extends JFrame implements Runnable,MouseListener, WindowListener, MouseMotionListener{
 
-	private PointsIQGame game;//=new PointsAIGame();
+	private PointsIQGame game;
 	private int preX=0,preY=0;
 	private JButton butText,butNext,butSGF;
 	private Question[] base;
@@ -28,13 +26,14 @@ public class PointsIQ extends JFrame implements Runnable,MouseListener, WindowLi
 	private int curQuestion=0,curLevel=0;private String preLevels="";private Point AIAnswer=null;
 	private int squareSize=16;
 	private QuestionIO io=new QuestionIO();
-	JLabel labelCoordinates=new JLabel(),label=new JLabel();
+	JLabel labelCoordinates;
 	public Thread t=new Thread(this);
 	{		
+		labelCoordinates=new JLabel();labelCoordinates.setBounds(290, 480, 70, 20);this.add(labelCoordinates);
 		butText=getButton(10, 350, 330, 125, "", null);
 		butText.setEnabled(false);butText.setForeground(Color.black);butText.setBackground(Color.white);
-		butNext=getButton(10, 480, 130, 25, "Продолжить", new ActionListener(){public void actionPerformed(ActionEvent e){nextQuestion();}});	
-		butSGF=getButton(150, 480, 130, 25, "Экспорт в .sgf", new ActionListener(){
+		butNext=getButton(10, 480, 130, 20, "Продолжить", new ActionListener(){public void actionPerformed(ActionEvent e){butNext.setEnabled(false);nextQuestion();}});	
+		butSGF=getButton(150, 480, 130, 20, "Экспорт в .sgf", new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				
 			}
@@ -43,26 +42,21 @@ public class PointsIQ extends JFrame implements Runnable,MouseListener, WindowLi
 	}
 	
 public PointsIQ(int level){
-	this.setCursor(Cursor.HAND_CURSOR);
-	new C_JFrame(this,"PointsIQ",false,350,530,new Color(255,255,255));
+	//this.setCursor(Cursor.HAND_CURSOR);
+	new C_JFrame(this,"PointsIQ",false,345,505,new Color(255,255,255));
 	this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-	
+	this.setTitle("PointsIQ. Уровень сложности "+level);	
 	this.addMouseListener(this);this.addWindowListener(this);this.addMouseMotionListener(this);
-	
-	JMenuBar menu=new JMenuBar();menu.add(label);menu.add(labelCoordinates);this.setJMenuBar(menu);
 	
 	base=io.getBase(level);
 	game=new PointsIQGame(PointsIQ.this);
-	for(int i=0;i<base.length;i++){if(base[i].level==level)game.qNumber++;}
-	game.qLevel=level;label.setText(game.getLabelText());
 	t=new Thread(PointsIQ.this);t.start();
 	
-	nextQuestion();
+	butNext.setEnabled(false);nextQuestion();
 
 }
 
 private void nextQuestion(){
-	PointsIQ.this.setSize(PointsIQ.this.getWidth(), PointsIQ.this.getHeight()-33);
 	curLevel=0;preLevels="";AIAnswer=null;
 	
 	for(int i=curQuestion;i<=base.length;i++){
@@ -72,10 +66,8 @@ private void nextQuestion(){
 			PointsIQ.this.dispose();
 			break;
 		}
-		if(base[i].level==game.qLevel){
-			curQuestion=i+1;question=io.getQuestion(base[i].index);
-			game.newGame();game.isComplete=false;showQuestion();t=new Thread(PointsIQ.this);t.start();break;
-		}
+		curQuestion=i+1;question=io.getQuestion(base[i].index);
+		game.newGame();game.isComplete=false;showQuestion();t=new Thread(PointsIQ.this);t.start();break;
 	}
 };
 	
@@ -89,9 +81,9 @@ public void mousePressed(MouseEvent me) {
 			if(isExistsLevelMove(x,y)){
 				if(game.isCanMakeMove(AIAnswer.x,AIAnswer.y)){game.OP_paint.setLastHuman(-1, -1);game.OP_paint.setLastAI(AIAnswer.x,AIAnswer.y);game.makeMove(AIAnswer.x,AIAnswer.y, true);}
 				else {
-					game.isComplete=true;game.qTrue++;game.qThis++;label.setText(game.getLabelText());
-					butText.setText("<html><font color=green>Задание выполнено правильно!");
-					PointsIQ.this.setSize(PointsIQ.this.getWidth(), PointsIQ.this.getHeight()+33);
+					game.isComplete=true;game.qTrue++;game.qThis++;
+					butText.setText("<html><font color=green>Задание "+game.qThis+" выполнено правильно!");
+					butNext.setEnabled(true);
 					t=new Thread(PointsIQ.this);t.start();
 				}
 			}
@@ -110,9 +102,9 @@ public boolean isExistsLevelMove(int x,int y){
 			}
 		}
 	}
-	game.isComplete=true;game.qThis++;label.setText(game.getLabelText());
-	butText.setText("<html><font color=red>Задание выполнено неверно!<br><font color=black>Как правильно выполнить задание:<br><font color=blue>"+question.comment);
-	PointsIQ.this.setSize(PointsIQ.this.getWidth(), PointsIQ.this.getHeight()+33);
+	game.isComplete=true;game.qThis++;
+	butText.setText("<html><font color=red>Задание "+game.qThis+" выполнено неверно!<br><font color=black>Как правильно выполнить задание:<br><font color=blue>"+question.comment);
+	butNext.setEnabled(true);
 	t=new Thread(PointsIQ.this);t.start();
 	return false;
 }
@@ -120,10 +112,8 @@ public boolean isExistsLevelMove(int x,int y){
 public void windowActivated(WindowEvent e) {t.stop();t=new Thread(this);t.start();}
 
 public void showQuestion(){
-	game.qLevel=question.level;
-	butText.setText("<html>Текст задания:<br><font color=blue>"+question.text);
+	butText.setText("<html>Текст задания "+(game.qThis+1)+":<br><font color=blue>"+question.text);
 	showStartPos(question.startPos);
-	label.setText(game.getLabelText());	
 	game.repaint();
 }
 
@@ -146,20 +136,21 @@ public void mouseMoved(MouseEvent me){try{
 		Graphics graphics=this.getGraphics();
 		if(game.isCanMakeMove(preX, preY)){
 			graphics.setColor(Color.white);
-			graphics.drawOval(preX*squareSize+9, preY*squareSize+41, 6, 6);
+			graphics.drawOval(preX*squareSize+9, preY*squareSize+25, 6, 6);
 			graphics.setColor(new Color(225,225,225));
-			graphics.drawLine(preX*squareSize+9, preY*squareSize+44, preX*squareSize+15, preY*squareSize+44);
-			graphics.drawLine(preX*squareSize+12, preY*squareSize+41, preX*squareSize+12, preY*squareSize+47);
+			graphics.drawLine(preX*squareSize+9, preY*squareSize+28, preX*squareSize+15, preY*squareSize+28);
+			graphics.drawLine(preX*squareSize+12, preY*squareSize+25, preX*squareSize+12, preY*squareSize+31);
 		}		
 		preX=game.getMouseClickX(me);preY=game.getMouseClickY(me);	
 		if(preX>0&preX<(20+1)&preY>0&preY<(20+1))labelCoordinates.setText("<HTML><font color=gray>"+preX+":"+preY);
 		if(game.isCanMakeMove(preX, preY)){
 			graphics.setColor(Color.blue);
-			graphics.drawOval(preX*squareSize+9, preY*squareSize+41, 6, 6);
+			graphics.drawOval(preX*squareSize+9, preY*squareSize+25, 6, 6);
 		}
 	}
 }catch(Exception e){}}
 
+//public static void main(String[] args){new PointsIQ(4);}
 public void windowClosed(WindowEvent e) {}
 public void windowClosing(WindowEvent e) {}
 public void windowDeactivated(WindowEvent e) {}

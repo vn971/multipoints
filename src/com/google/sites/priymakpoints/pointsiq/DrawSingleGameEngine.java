@@ -19,7 +19,7 @@ class DrawSingleGameEngine{
 	private int sizeY=20;
 	private Point lastAI=null,lastHuman=null;
 	private int offsetX=1;
-	private int offsetY=3;
+	private int offsetY=2;
 	private int squareSize=16;
 	private int pointSize=(int)(squareSize/2);
 	
