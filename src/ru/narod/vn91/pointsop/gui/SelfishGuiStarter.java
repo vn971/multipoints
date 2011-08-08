@@ -176,71 +176,65 @@ public class SelfishGuiStarter {
 					jMenu.add(jMenuItem);
 				}
 					jMenu.addSeparator();
+					
 				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 1) 30 заданий"
-					);
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 1) 30 заданий");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
+								public void actionPerformed(ActionEvent e) {			
 									try {
-										new com.google.sites.priymakpoints.pointsiq.PointsIQ(1);
-									} catch (Exception ignored) {
-									}
-								}
+										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(1);
+										tabbedPane.addTab("PointsIQ level 1", pointsIQ, true);
+										tabbedPane.setSelectedComponent(pointsIQ);
+									} catch (Exception ignored) {	}
+								}	
 							}
 					);
 					jMenu.add(jMenuItem);
 				}
 
 				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 2) 30 заданий"
-					);
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 2) 30 заданий");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
+								public void actionPerformed(ActionEvent e) {			
 									try {
-										new com.google.sites.priymakpoints.pointsiq.PointsIQ(2);
-									} catch (Exception ignored) {
-									}
-								}
+										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(2);
+										tabbedPane.addTab("PointsIQ level 2", pointsIQ, true);
+										tabbedPane.setSelectedComponent(pointsIQ);
+									} catch (Exception ignored) {	}
+								}	
+							}
+					);
+					jMenu.add(jMenuItem);
+				}
+				
+				{
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 3) 30 заданий");		
+					jMenuItem.addActionListener(
+							new ActionListener() {
+								public void actionPerformed(ActionEvent e) {			
+									try {
+										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
+										tabbedPane.addTab("PointsIQ level 3", pointsIQ, true);
+										tabbedPane.setSelectedComponent(pointsIQ);
+									} catch (Exception ignored) {	}
+								}	
 							}
 					);
 					jMenu.add(jMenuItem);
 				}
 				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 3) 30 заданий"
-					);
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 4) 15 заданий");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
+								public void actionPerformed(ActionEvent e) {			
 									try {
-										new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"Тест (уровень 4) 15 заданий"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										new com.google.sites.priymakpoints.pointsiq.PointsIQ(4);
-									} catch (Exception ignored) {
-									}
-								}
+										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(4);
+										tabbedPane.addTab("PointsIQ level 4", pointsIQ, true);
+										tabbedPane.setSelectedComponent(pointsIQ);
+									} catch (Exception ignored) {	}
+								}	
 							}
 					);
 					jMenu.add(jMenuItem);
