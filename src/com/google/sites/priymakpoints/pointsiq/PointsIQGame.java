@@ -11,25 +11,16 @@ class PointsIQGame{
 	DrawSingleGameEngine OP_paint=new DrawSingleGameEngine();
 	private Graphics graphics;
 	private PointsIQ pointsIQ;
-	int qNumber=0,qLevel=0,qTrue=0,qThis=0;
+	int qTrue=0,qThis=0;
 	boolean isComplete=true;
 	private int squareSize=16;
 	private int offsetX=1;
-	private int offsetY=3;
+	private int offsetY=2;
 	String spc="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	
 PointsIQGame(PointsIQ pointsIQ){this.pointsIQ=pointsIQ;newGame();}
-
-void newGame(){
-	pointsIQ.label.setText(getLabelText());	
-	singleGameEngine=new SingleGameEngine(20,20);
-}	
-	
-void makeMove(int x, int y,boolean isRed){
-	singleGameEngine.makeMove(x,y,isRed);
-	pointsIQ.label.setText(getLabelText());	
-	repaint();
-}
+void newGame(){singleGameEngine=new SingleGameEngine(20,20);}	
+void makeMove(int x, int y,boolean isRed){singleGameEngine.makeMove(x,y,isRed);repaint();}
 
 boolean isCanMakeMove(int x, int y){return singleGameEngine.canMakeMove(x,y);}
 int getMouseClickX(MouseEvent me){return (int)(((double)me.getX()-5-(double)((offsetX-1)*squareSize))/(double)squareSize);};
@@ -37,13 +28,8 @@ int getMouseClickY(MouseEvent me){return (int)(((double)me.getY()-5-(double)((of
 void repaint(){
 	graphics=pointsIQ.getGraphics();
 	graphics.setColor(new Color(254,254,254));
-	graphics.fillRect(0, 50, squareSize*(20+1+offsetX), 20*(squareSize+1));
+	graphics.fillRect(0, 34, squareSize*(20+1+offsetX), 20*(squareSize+1));
 	OP_paint.paint(graphics, singleGameEngine);
-}
-
-String getLabelText(){
-	return "<HTML>"+spc+"Заданий <FONT color=blue>"+qNumber+"</FONT>"
-		+spc+"Ответов "+"<FONT color=blue> "+qTrue+" из "+qThis+"</FONT>"+spc+"Сложность <FONT color=blue>"+qLevel+"</HTML>";
 }
 
 }
