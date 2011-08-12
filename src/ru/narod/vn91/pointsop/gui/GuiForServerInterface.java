@@ -58,7 +58,8 @@ public interface GuiForServerInterface {
 			boolean isRated,
 			String startingPosition,
 			boolean chatReadOnly,
-			boolean amIPlaying);
+			boolean amIPlaying,
+			boolean amIRed);
 
 	public abstract void unsubsribedRoom(
 			ServerInterface server,

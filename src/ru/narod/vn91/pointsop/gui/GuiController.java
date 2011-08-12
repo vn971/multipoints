@@ -13,6 +13,7 @@ import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.gui.GameRoom;
 
 public class GuiController implements GuiForServerInterface {
 
@@ -202,7 +203,8 @@ public class GuiController implements GuiForServerInterface {
 			boolean isRated,
 			String startingPosition,
 			boolean chatReadOnly,
-			boolean amIPlaying) {
+			boolean amIPlaying,
+			boolean amIRed) {
 		if (roomInterfaces.containsKey(new ServerRoom(roomNameOnServer, server))) {
 			return;
 		}
@@ -210,8 +212,8 @@ public class GuiController implements GuiForServerInterface {
 				server, roomNameOnServer,
 				this,
 				userFirst, userSecond, rank1, rank2, timeLimits, isRated,
-				startingPosition, chatReadOnly, amIPlaying
-		);
+				startingPosition, chatReadOnly, amIPlaying, amIRed
+				);
 		gameRooms.put(
 				new ServerRoom(roomNameOnServer, server),
 				containerRoom_Game
@@ -333,8 +335,8 @@ public class GuiController implements GuiForServerInterface {
 
 	@Override
 	public void soundReceived(ServerInterface server, String user) {
-		new Sounds().playAlarmSignal();
 		privateMessageReceived(server, user, "послан звуковой сигнал");
+		new Sounds().playAlarmSignal();
 	}
 
 	/* (non-Javadoc)

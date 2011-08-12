@@ -31,7 +31,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		gui.subscribedGame("", this,
 				ai.getName(), "Me",
 				10, 10,
-				"", false, "", true, true);
+				"", false, "", true, true, true);
 		ai.init();
 	}
 

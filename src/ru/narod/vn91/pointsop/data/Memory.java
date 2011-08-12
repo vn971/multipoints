@@ -17,6 +17,14 @@ public class Memory {
 		memory.putInt("version", ver);
 	}
 
+	public static boolean isDebug() {
+		return memory.getBoolean("isDebug", false);
+	}
+
+	public static void setDebug(boolean isDebug) {
+		memory.putBoolean("isDebug", isDebug);
+	}
+
 	public static void setNewestVersion() {
 		memory.putInt("version", newestVersion);
 	}
@@ -173,5 +181,9 @@ public class Memory {
 				return IN_MY_GAMES;
 			}
 		}
+	}
+
+	public static void main(String[] args) {
+		setDebug(false);
 	}
 }

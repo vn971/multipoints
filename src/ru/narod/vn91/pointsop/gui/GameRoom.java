@@ -1,5 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
+import ru.narod.vn91.pointsop.data.Memory;
+import ru.narod.vn91.pointsop.data.ObjectKeeper;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
@@ -7,6 +9,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 import ru.narod.vn91.pointsop.php.PhpBackupServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.utils.TimedAction;
 
 import javax.jnlp.FileContents;
 import javax.jnlp.FileOpenService;
@@ -30,12 +33,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	boolean isRated;
 	String startingPosition;
 	int mousePosX, mousePosY, redScore, blueScore;
-	boolean amIPlaying, redStopped = false, blueStopped = false;
+	boolean amIPlaying, amIRed, redStopped = false, blueStopped = false;
 	boolean isRedTurnNow = true;
 	Sgf.GameResult gameResult = Sgf.GameResult.UNFINISHED;
 	Paper paper;
 	TimerLabel timerLabel_Red;
 	TimerLabel timerLabel_Blue;
+	Object synchronizationMakeMoveWhereMouse = new Object();
+	final ObjectKeeper<TimedAction> timedAction = new ObjectKeeper<TimedAction>();
+//	long timeLastTurnHappend;
 
 	public JPanel getMainJPanel() {
 		return this;
@@ -78,10 +84,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		}
 	}
 
-//	public void destroy() {
-//
-//	}
-
 	public void makeMove(
 			boolean silent,
 			int x,
@@ -89,6 +91,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			boolean isRed,
 			int remainingTimeRed,
 			int remainingTimeBlue) {
+		timedAction.o = null;
 		MoveResult moveResult = paper.makeMove(silent, x, y, isRed);
 		if (moveResult != MoveResult.ERROR) {
 			MoveInfoAbstract moveInfoAbstract = new MoveInfoAbstract();
@@ -122,6 +125,34 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				new Sounds().playMakeMove(amIPlaying);
 				timerLabel_Red.setRemainingTime(remainingTimeRed, !isRed);
 				timerLabel_Blue.setRemainingTime(remainingTimeBlue, isRed);
+
+				// make move to current mouse position
+//				System.out.println("maked move. #" + moveList.size());
+				if (isOnlineGame()
+						&& Memory.isDebug() == true
+						&& amIPlaying == true
+						&& isRed == !amIRed) {
+					final int moveListSize = moveList.size();
+					timedAction.o = new TimedAction() {
+
+						@Override
+						public boolean isAlive() {
+							return timedAction.o == this;
+						}
+
+						@Override
+						public void run() {
+							if (paper.getEngine().getDotType(mousePosX, mousePosY).isEmpty()
+									&&moveListSize == moveList.size()) {
+//								System.out.println("moveListSize = " + moveListSize);
+//								System.out.println("moveList.size() = " + moveList.size());
+								server.makeMove(nameOnServer, mousePosX, mousePosY);
+							}
+						}
+
+					};
+//					timedAction.o.executeWhen(new Date().getTime() + 4700L);
+				}
 			}
 		}
 	}
@@ -181,13 +212,25 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int y,
 			MouseEvent evt) {
 		if (amIPlaying && evt.getButton() == MouseEvent.BUTTON1) {
-			if (server != null) {
+			if (isOnlineGame()) {
 				server.makeMove(nameOnServer, x, y);
 			} else {
 				makeMove(false, x, y, isRedTurnNow,1800,1800);
 				isRedTurnNow = !isRedTurnNow;
 			}
 		}
+	}
+
+	public void paperMouseMove(int x,
+			int y,
+			MouseEvent evt) {
+		mousePosX = x;
+		mousePosY = y;
+		showScoreAndCursor();
+	}
+
+	private boolean isOnlineGame() {
+		return server!=null;
 	}
 
 	private void showScoreAndCursor() {
@@ -206,14 +249,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	}
 
-	public void paperMouseMove(int x,
-			int y,
-			MouseEvent evt) {
-		mousePosX = x;
-		mousePosY = y;
-		showScoreAndCursor();
-	}
-
 	/** Creates new form ContainerRoom_Game */
 	public GameRoom(
 			ServerInterface server,
@@ -227,8 +262,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			boolean isRated,
 			String startingPosition,
 			boolean chatReadOnly,
-			boolean amIPlaying) {
+			boolean amIPlaying,
+			boolean amIRed) {
 		this.amIPlaying = amIPlaying;
+		this.amIRed = amIRed;
 		this.server = server;
 		this.nameOnServer = nameOnServer;
 		this.centralGuiController = centralGuiController;
@@ -518,7 +555,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}//GEN-LAST:event_jButton1ActionPerformed
 
 	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
-		// TODO add your handling code here:
 		String[] extensions = {".sgf", ".sgftochki"};
 		String sgfData = Sgf.constructSgf(
 				userFirst, userSecond,
