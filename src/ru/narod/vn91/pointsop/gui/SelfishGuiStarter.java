@@ -178,7 +178,7 @@ public class SelfishGuiStarter {
 					jMenu.addSeparator();
 					
 				{
-					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 1) 30 заданий");		
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 1)");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
 								public void actionPerformed(ActionEvent e) {			
@@ -194,7 +194,7 @@ public class SelfishGuiStarter {
 				}
 
 				{
-					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 2) 30 заданий");		
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 2)");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
 								public void actionPerformed(ActionEvent e) {			
@@ -210,7 +210,7 @@ public class SelfishGuiStarter {
 				}
 				
 				{
-					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 3) 30 заданий");		
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 3)");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
 								public void actionPerformed(ActionEvent e) {			
@@ -225,7 +225,7 @@ public class SelfishGuiStarter {
 					jMenu.add(jMenuItem);
 				}
 				{
-					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 4) 15 заданий");		
+					JMenuItem jMenuItem = new JMenuItem("Тест (уровень 4)");		
 					jMenuItem.addActionListener(
 							new ActionListener() {
 								public void actionPerformed(ActionEvent e) {			

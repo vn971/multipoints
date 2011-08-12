@@ -11,16 +11,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
+import java.io.ByteArrayInputStream;
 import java.util.EventListener;
+import javax.jnlp.FileSaveService;
+import javax.jnlp.ServiceManager;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 import ru.narod.vn91.pointsop.gui.Paper;
@@ -45,31 +43,28 @@ public class PointsIQ extends javax.swing.JPanel{
 		butNext=getButton(10, 360, 130, 20, "Продолжить", new ActionListener(){public void actionPerformed(ActionEvent e){butNext.setEnabled(false);nextQuestion();}});	
 		butSGF=getButton(150, 360, 130, 20, "Экспорт в .sgf", new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				String content = "type=paste&"
-					+ "sgf=";
-			content = ""
-					+ "(;FF[4]GM[40]CA[UTF-8]SZ[20]"
-					+ "RU[Punish=0,Holes=1,AddTurn=0,MustSurr=1,MinArea=1,Pass=0,Stop=1,LastSafe=0,ScoreTerr=0,InstantWin=0]"
-					+ "AP[PointsIQ]PB[Player1]PW[Player2]TM[0]OT[0]\n"
-					+ "DT[" + new Date().toString() + "]"+ "\n"+ ""+ "\n"+ "WR[0]BR[0]"+ "\n";
-			try {
-				content = "type=paste&" + "sgf=" + URLEncoder.encode(content, "UTF-8");
-			} catch (UnsupportedEncodingException ex) {
-			}
-			/*for (int moveNumber = 0; moveNumber < moves.size(); moveNumber++) {
-				MoveInfoAbstract move = moves.get(moveNumber);
-				content += ";" + ((move.moveType == MoveType.RED) ? "W" : "B");
-				if (upsideDown) {
-					content += "[" + get1SgfCoord(move.coordX) + "" + get1SgfCoord(fieldSizeY + 1 - move.coordY) + "]\n";
-				} else {
-					content += "[" + get1SgfCoord(move.coordX) + "" + get1SgfCoord(move.coordY) + "]\n";
+				String content ="(;FF[4]GM[40]CA[UTF-8]AP[PointsIQ]SZ[20]RU[Punish=0,Holes=1,AddTurn=0,MustSurr=1,MinArea=1,Pass=0,Stop=0,LastSafe=0,ScoreTerr=0,InstantWin=0]PB[blue]PW[red]";
+				String str=question.startPos;
+				String move;
+				MoveType moveType;
+				while(str.length()>1){
+					move=str.substring(str.indexOf("[")+1,str.indexOf("]"));
+					str=str.substring(str.indexOf("]")+1);
+					int x=new Integer(move.substring(0,move.indexOf(",")));move=move.substring(move.indexOf(",")+1);
+					int y=new Integer(move.substring(0,move.indexOf(",")));move=move.substring(move.indexOf(",")+1);
+					if(move.equals("R")){moveType=MoveType.RED;}else {moveType=MoveType.BLUE;}
+					content += ";" + ((moveType == MoveType.RED) ? "W" : "B");
+					content += "[" + getSgfCoord(x) + "" + getSgfCoord(20 + 1 - y) + "]";
 				}
-			}*/
-			content += ")";
-
+				content += ")";
+				String[] extensions = {".sgf", ".sgftochki"};
+				try {
+					ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+					FileSaveService fss = (FileSaveService) ServiceManager.lookup("javax.jnlp.FileSaveService");
+					fss.saveFileDialog(	"", extensions,	is, "");
+				} catch (Exception exc) {System.err.println("Error: " + exc.getMessage());System.out.println(content);}
 			}
 		});
-		butSGF.setEnabled(false); 
 	}
 	
 public PointsIQ(int level){
@@ -179,6 +174,11 @@ private class C_Layout implements LayoutManager {
 	public Dimension preferredLayoutSize(Container parent) {return new Dimension(width, height);}
 	public Dimension minimumLayoutSize(Container parent) {return new Dimension(width, height);}
 	public void layoutContainer(Container parent) {}
+}
+
+private String getSgfCoord(int i) {
+	if (i <= 26) {return Character.toString((char) ((int) 'a' + i - 1));} 
+	else {return Character.toString((char) ((int) 'A' + i - 26 - 1));}
 }
 
 int getMouseClickX(MouseEvent me){return (int)(((double)me.getX()-4-(double)((offsetX-1)*squareSize))/(double)squareSize);};
