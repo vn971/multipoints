@@ -1,6 +1,6 @@
 package ru.narod.vn91.pointsop.gameEngine;
 
-import ru.narod.vn91.pointsop.data.DotAbstract;
+import ru.narod.vn91.pointsop.data.Dot;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 
 public class RandomMovesProvider {
@@ -37,10 +37,10 @@ public class RandomMovesProvider {
 	/**
 	 * @return next random move. This is done _fast_.
 	 */
-	public DotAbstract getNextDot() {
+	public Dot getNextDot() {
 		cursor += 1;
 		if (cursor < dimX * dimY) {
-			return new DotAbstract(
+			return new Dot(
 					1 + (moves[cursor] % dimX),
 					1 + (moves[cursor] / dimX));
 		} else {
@@ -48,8 +48,8 @@ public class RandomMovesProvider {
 		}
 	}
 
-	public DotAbstract findEmptyRandomPlace(SingleGameEngineInterface engine) {
-		DotAbstract dot;
+	public Dot findEmptyRandomPlace(SingleGameEngineInterface engine) {
+		Dot dot;
 		do {
 			dot = getNextDot();
 		} while (dot != null

@@ -132,12 +132,12 @@ public class Sgf {
 		return content;
 	}
 
-	public static String constructSgf(
+	public static String constructSgfSimple(
 			String redName, String blueName,
 			int rank1, int rank2,
 			int fieldSizeX, int fieldSizeY,
 			String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
-			ArrayList<MoveInfoAbstract> moves, boolean upsideDown) {
+			ArrayList<DotColored> moveList, boolean upsideDown) {
 		String content = "";
 		String sizeProperty = (fieldSizeX == fieldSizeY)
 				? "" + fieldSizeX
@@ -201,17 +201,35 @@ public class Sgf {
 				+ "\n"
 				+ "WR[" + rank1 + "]BR[" + rank2 + "]"
 				+ "\n";
-		for (int moveNumber = 0; moveNumber < moves.size(); moveNumber++) {
-			MoveInfoAbstract move = moves.get(moveNumber);
-			content += ";" + ((move.moveType == MoveType.RED) ? "W" : "B");
+		for (int moveNumber = 0; moveNumber < moveList.size(); moveNumber++) {
+			DotColored dot = moveList.get(moveNumber);
+			content += ";" + (dot.isRed ? "W" : "B");
 			if (upsideDown) {
-				content += "[" + get1SgfCoord(move.coordX) + "" + get1SgfCoord(fieldSizeY + 1 - move.coordY) + "]\n";
+				content += "[" + get1SgfCoord(dot.x) + "" + get1SgfCoord(fieldSizeY + 1 - dot.y) + "]\n";
 			} else {
-				content += "[" + get1SgfCoord(move.coordX) + "" + get1SgfCoord(move.coordY) + "]\n";
+				content += "[" + get1SgfCoord(dot.x) + "" + get1SgfCoord(dot.y) + "]\n";
 			}
 		}
 		content += ")";
 
 		return content;
+	}
+
+
+	public static String constructSgf(
+			String redName, String blueName,
+			int rank1, int rank2,
+			int fieldSizeX, int fieldSizeY,
+			String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
+			ArrayList<MoveInfoAbstract> moveList, boolean upsideDown) {
+
+		ArrayList<DotColored> moveListNew = new ArrayList<DotColored>();
+		for (MoveInfoAbstract moveInfo : moveList) {
+			DotColored dot = new DotColored(
+					moveInfo.coordX, moveInfo.coordY,
+					moveInfo.moveType == MoveType.RED);
+			moveListNew.add(dot);
+		}
+		return constructSgfSimple(redName, blueName, rank1, rank2, fieldSizeX, fieldSizeY, timeLimits, gameResult, scoreRedMinusBlue, moveListNew, upsideDown);
 	}
 }

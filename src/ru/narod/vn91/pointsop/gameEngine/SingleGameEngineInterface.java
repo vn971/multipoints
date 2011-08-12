@@ -100,6 +100,10 @@ public interface SingleGameEngineInterface {
 		public boolean notIn(DotType... set) {
 			return !isIn(set);
 		}
+
+		public boolean isEmpty() {
+			return isIn(DotType.EMPTY,DotType.RED_CTRL,DotType.BLUE_CTRL);
+		}
 	}
 
 	public enum MoveType {

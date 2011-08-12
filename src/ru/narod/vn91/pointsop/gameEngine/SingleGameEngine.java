@@ -333,7 +333,7 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 		if (randomMovesProvider == null) {
 			randomMovesProvider = new RandomMovesProvider(sizeX - 2, sizeY - 2);
 		}
-		ru.narod.vn91.pointsop.data.DotAbstract dot;
+		ru.narod.vn91.pointsop.data.Dot dot;
 		do {
 			dot = randomMovesProvider.getNextDot();
 		} while (dot != null && getDotType(dot.x, dot.y).notIn(

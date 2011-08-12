@@ -17,7 +17,7 @@ import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
-import ru.narod.vn91.pointsop.data.DotAbstract;
+import ru.narod.vn91.pointsop.data.Dot;
 import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
@@ -162,16 +162,15 @@ public class ServerPointsxt
 		);
 		{
 			// chat notify...
-			// String notifyMessage =
-			// "оставил(а) заявку на блиц. " +
-			// "См. команду !opstart для игры между pointsXT и pointsOp.";
-			// super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
-			// gui.chatReceived(
-			// this,
-			// defaultChannel,
-			// getMyName(),
-			// "*** " + notifyMessage
-			// );
+			 String notifyMessage =
+			 "оставил(а) заявку на блиц";
+			 super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
+			 gui.chatReceived(
+			 this,
+			 defaultChannel,
+			 getMyName(),
+			 "*** " + notifyMessage
+			 );
 		}
 	}
 
@@ -204,7 +203,7 @@ public class ServerPointsxt
 			);
 			gui.subscribedGame(
 					roomName, this, getMyName(), newOpponent, 0, 0,
-					"999мин/ход", false, "", true, true/*i am the player*/
+					"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
 			);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
@@ -290,7 +289,7 @@ public class ServerPointsxt
 						gameInfoAbstract.rank1, gameInfoAbstract.rank2,
 						gameInfoAbstract.timeLimits, gameInfoAbstract.isRated,
 						"",
-						true /* chat is read-only */, false/*I'm a spectator*/
+						true /* chat is read-only */, false/*I'm a spectator*/, true
 				);
 			}
 		}
@@ -492,7 +491,7 @@ public class ServerPointsxt
 				myGame.roomName = channel;
 				gui.subscribedGame(
 						channel, this, nick, getMyName(), 0, 0,
-						"999мин/ход", false, "", true, true/*i am the player*/
+						"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
 				);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
@@ -575,6 +574,7 @@ public class ServerPointsxt
 			if (isPointsopNickname(sender)) {
 				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
 			} else if (myGame.isInSearchNow() == false) {
+				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
 				super.sendMessage(
 						sender,
 						"На игру можно вызывать только игрока " +
@@ -633,7 +633,8 @@ public class ServerPointsxt
 							"",
 							true,
 							true
-							/*i am the player*/
+							/*i am the player*/,
+							myGame.amIRed
 					);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
@@ -996,47 +997,50 @@ public class ServerPointsxt
 			MoveResult moveResult = myGame.engine.makeMove(x, y, isRed);
 			if (moveResult != MoveResult.ERROR) {
 				myGame.moveList.add(new SimpleMove(x, y, isRed));
-			}
-		}
-		gui.makedMove(this, room, silent, x, y, isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue());
-		boolean iHaveMoved = ! myGame.isMyMoveNow();
-		if (iHaveMoved) {
-			myGame.lastTimeoutThread = null;
-		} else {
-			Thread timeOutThread = new Thread() {
 
-//				@SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
-				@Override
-				public void run() {
-					long timeEnd = new Date().getTime() + myGame.getTimeLeftForMe() * 1000;
-					long estimatedTime = timeEnd - new Date().getTime();
-					while (estimatedTime > 0) {
-						Object o = new Object();
-						synchronized (o) {
-							try {
-								o.wait(estimatedTime + 10);
-							} catch (InterruptedException ignored) {
+				gui.makedMove(this, room, silent, x, y, isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue());
+				boolean iHaveMoved = ! myGame.isMyMoveNow();
+				if (iHaveMoved) {
+					myGame.lastTimeoutThread = null;
+				} else if (myGame.moveList.size() >= 2){
+
+					Thread timeOutThread = new Thread() {
+//						@SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
+						@Override
+						public void run() {
+							long timeEnd = new Date().getTime() + myGame.getTimeLeftForMe() * 1000;
+							long estimatedTime = timeEnd - new Date().getTime();
+							while (estimatedTime > 0) {
+								Object o = new Object();
+								synchronized (o) {
+									try {
+										o.wait(estimatedTime + 10);
+									} catch (InterruptedException ignored) {
+									}
+								}
+								estimatedTime = timeEnd - new Date().getTime();
+							}
+							if (this.equals(myGame.lastTimeoutThread)) {
+								Dot dot = myGame.randomMovesProvider.findEmptyRandomPlace(
+										myGame.engine
+								);
+								if (dot != null) {
+									gui.serverNoticeReceived(
+											ServerPointsxt.this,
+											room,
+											"Время вышло и точка сама поставилась в случаиное место на поле"
+									);
+									makeMove(room, dot.x, dot.y);
+								}
 							}
 						}
-						estimatedTime = timeEnd - new Date().getTime();
-					}
-					if (this.equals(myGame.lastTimeoutThread)) {
-						DotAbstract dot = myGame.randomMovesProvider.findEmptyRandomPlace(
-								myGame.engine
-						);
-						if (dot != null) {
-							gui.serverNoticeReceived(
-									ServerPointsxt.this,
-									room,
-									"Время вышло и точка сама поставилась в случаиное место на поле"
-							);
-							makeMove(room, dot.x, dot.y);
-						}
-					}
+					};
+					myGame.lastTimeoutThread = timeOutThread;
+					timeOutThread.start();
 				}
-			};
-			myGame.lastTimeoutThread = timeOutThread;
-			timeOutThread.start();
+			}
+		} else {
+			gui.makedMove(this, room, silent, x, y, isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue());
 		}
 	}
 
@@ -1268,7 +1272,9 @@ public class ServerPointsxt
 				boolean isFirstMoveAllowed = ((moveList.size() >= 2))
 						|| ((x - 1 >= 12) && (x - 1 <= 19)
 						&& (32 - y >= 12) && (32 - y <= 26)); // 12<=x<=19, 12<=y<=26
-				if (isMyMoveNow() && isFirstMoveAllowed) {
+				if (isMyMoveNow()
+						&& isFirstMoveAllowed
+						&& engine.getDotType(x, y).isEmpty()) {
 					ServerPointsxt.this.sendMoveToGui(
 							roomName, false, x, y,
 							amIRed

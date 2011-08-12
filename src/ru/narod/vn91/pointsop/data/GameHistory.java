@@ -24,7 +24,7 @@ public class GameHistory {
 	public class Move extends Entry {
 
 		boolean isRed;
-		DotAbstract coords;
+		Dot coords;
 
 		boolean isBlue() {
 			return !isRed;

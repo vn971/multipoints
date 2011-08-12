@@ -2,22 +2,17 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.net.URL;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import ru.narod.vn91.pointsop.data.CustomColors;
@@ -154,6 +149,10 @@ public abstract class Paper extends JPanel {
 
 	int getBlueScore() {
 		return engine.getBlueScore();
+	}
+
+	SingleGameEngineInterface getEngine() {
+		return engine;
 	}
 
 	public Paper() {
