@@ -22,3 +22,4 @@ glob:help-files/chmod+x.sh
 glob:help-files/*.jnlp
 glob:.classpath
 glob:.recommenders*
+glob:.project
