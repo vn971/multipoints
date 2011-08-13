@@ -111,71 +111,24 @@ public class SelfishGuiStarter {
 
 			{
 				JMenu jMenu = new JMenu("Обучение");
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Правила игры</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/rules"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Разборы партий</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/analysis"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
 
 				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Архив игр</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/games"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
+					jMenu.add(new JMenuItemWithLink(
+							"Правила игры",
+					"http://pointsgame.net/site/rules"));
 				}
-					jMenu.addSeparator();
+				{
+					jMenu.add(new JMenuItemWithLink(
+							"Разборы партий",
+					"http://pointsgame.net/site/analysis"));
+				}
+				{
+					jMenu.add(new JMenuItemWithLink(
+							"Архив игр",
+							"http://pointsgame.net/site/games"));
+				}
+
+				jMenu.addSeparator();
 
 				{
 					JMenuItem jMenuItem = new JMenuItem("Тест - уровень 1");
@@ -239,100 +192,35 @@ public class SelfishGuiStarter {
 					);
 					jMenu.add(jMenuItem);
 				}
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">О программе PointsIQ</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
 
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/pointsiq"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
+				{
+					jMenu.add(new JMenuItemWithLink(
+							"О программе PointsIQ",
+							"http://pointsgame.net/site/pointsiq"));
 				}
+
 				jMenuBar.add(jMenu);
 			}
 
-
-
 			{
 				JMenu jMenu_AI = new JMenu("Играть с ИИ");
-				{
-					final JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=>Keij&Kvanttt AI - описание работы с этим ИИ</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
 
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://vkontakte.ru/topic-21455903_24989187"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu_AI.add(jMenuItem);
+				{
+					jMenu_AI.add(new JMenuItemWithLink(
+							"Keij&Kvanttt AI - описание работы с этим ИИ",
+					"http://vkontakte.ru/topic-21455903_24989187"));
 				}
 
 				JMenu jMenu_KeijDownloads = new JMenu("Keij&Kvanttt AI - скачать необходимые файлы");
 				{
-					{
-						final JMenuItem jMenuItem = new JMenuItem(
-								"<html><a href=>exe-файл для винды</a></html>"
-						);
-						jMenuItem.addActionListener(
-								new ActionListener() {
+					jMenu_KeijDownloads.add(new JMenuItemWithLink(
+								"exe-файл для винды",
+							"http://code.google.com/p/pointsgame/"));
 
-									public void actionPerformed(ActionEvent e) {
-										try {
-											java.awt.Desktop.getDesktop().browse(
-													new URI(
-															"http://code.google.com/p/pointsgame/"
-													)
-											);
-										} catch (Exception ignored) {
-										}
-									}
-								}
-						);
-						jMenu_KeijDownloads.add(jMenuItem);
-					}
-					{
-						final JMenuItem jMenuItem = new JMenuItem(
-								"<html><a href=>исполняемый файл для линукса и мака</a></html>"
-						);
-						jMenuItem.addActionListener(
-								new ActionListener() {
+					jMenu_KeijDownloads.add(new JMenuItemWithLink(
+									"исполняемый файл для линукса и мака",
+									"http://pointsgame.net/kekvai/keijkvantttai.linux"));
 
-									public void actionPerformed(ActionEvent e) {
-										try {
-											java.awt.Desktop.getDesktop().browse(
-													new URI(
-															"http://pointsgame.net/kekvai/keijkvantttai.linux"
-													)
-											);
-										} catch (Exception ignored) {
-										}
-									}
-								}
-						);
-						jMenu_KeijDownloads.add(jMenuItem);
-					}
 					jMenu_AI.add(jMenu_KeijDownloads);
 				}
 
@@ -363,9 +251,6 @@ public class SelfishGuiStarter {
 					jMenuItem_KeijkvantttaiExecute.setEnabled(
 							! Memory.getKeijKvantttAiPath().equals("")
 					);
-					//					/home/u2/Downloads/kkai/PointsConsole/a.out
-					//
-					//					jMenu.add(jMenuItem_KeijkvantttaiExecute);
 				}
 
 				{
@@ -417,25 +302,9 @@ public class SelfishGuiStarter {
 				jMenu_AI.add(new JSeparator());
 
 				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Priymak AI - о программе</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/pointsai"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu_AI.add(jMenuItem);
+					jMenu_AI.add(new JMenuItemWithLink(
+								"Priymak AI - о программе",
+								"http://pointsgame.net/site/pointsai"));
 				}
 
 				{
@@ -542,69 +411,15 @@ public class SelfishGuiStarter {
 			{
 				JMenu jMenu = new JMenu("Помощь");
 
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">О программе PointsOP</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/pointsop"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Обсуждение PointsOP</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://vkontakte.ru/pointsgame"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
-				{
-					JMenuItem jMenuItem = new JMenuItem(
-							"<html><a href=\"\">Полезные ссылки</a></html>"
-					);
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									try {
-										java.awt.Desktop.getDesktop().browse(
-												new URI(
-														"http://pointsgame.net/site/links"
-												)
-										);
-									} catch (Exception ignored) {
-									}
-								}
-							}
-					);
-					jMenu.add(jMenuItem);
-				}
+				jMenu.add(new JMenuItemWithLink(
+							"О программе PointsOP",
+							"http://pointsgame.net/site/pointsop"));
+				jMenu.add(new JMenuItemWithLink(
+							"Обсуждение PointsOP",
+						"http://vkontakte.ru/pointsgame"));
+				jMenu.add(new JMenuItemWithLink(
+							"Полезные ссылки",
+							"http://pointsgame.net/site/links"));
 				jMenuBar.add(jMenu);
 			}
 			frame.setJMenuBar(jMenuBar);
@@ -623,3 +438,61 @@ public class SelfishGuiStarter {
 		);
 	}
 }
+
+/**
+ * @see {@link WelcomePanel.LinkedLabel}
+ */
+class JMenuItemWithLink extends JMenuItem {
+
+	@Override
+	public void setText(String text) {
+		text = text.replaceAll("<html>|<a href=.*>|</a>|</html>", "");
+		super.setText(
+				"<html><a href=\"\""
+						+ ">"
+						+ text + "" + "</a></html>"
+				);
+	}
+
+	public JMenuItemWithLink(String text, final String url) {
+		super(text);
+		super.setToolTipText(url);
+
+		this.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				int userConfirmation = JOptionPane.showConfirmDialog(
+						null,
+						"Открываем ссылку: \n" + url,
+						"pointsOp - открытие ссылки",
+						JOptionPane.OK_CANCEL_OPTION);
+				if (userConfirmation == JOptionPane.OK_OPTION) {
+					try {
+						java.awt.Desktop.getDesktop().browse(new URI(url));
+					} catch (Exception ignored) {
+					}
+				}
+			}
+		});
+	}
+}
+
+//JMenuItem jMenuItem = new JMenuItem(
+//		"<html><a href=\"\">Правила игры</a></html>"
+//);
+//jMenuItem.addActionListener(
+//		new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				try {
+//					java.awt.Desktop.getDesktop().browse(
+//							new URI(
+//									"http://pointsgame.net/site/rules"
+//							)
+//					);
+//				} catch (Exception ignored) {
+//				}
+//			}
+//		}
+//);
+//jMenu.add(jMenuItem);
