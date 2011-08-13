@@ -457,7 +457,7 @@ public class ServerPointsxt
 //						"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
 //				);
 //				return;
-			} else if (myGame.isInSearchNow() == false) {
+			} else if (myGame.isSearching() == false) {
 			} else {
 				gui.gameRequestReceived(
 						this, myGame.roomName, nicknameManager.getOrCreateShortNick(sender));
@@ -469,7 +469,7 @@ public class ServerPointsxt
 		if (message.startsWith(commandCommonPrefix)) {
 			if ((message.startsWith(commandCommonPrefix + commandIWantJoinGame))
 					&& (channel.equals(myGame.roomName))
-					&& (myGame.isActive() == false)) {
+					&& (myGame.isPlaying() == false)) {
 				String opponentNick = nicknameManager.getOrCreateShortNick(
 						sender
 				);
@@ -573,7 +573,7 @@ public class ServerPointsxt
 
 			if (isPointsopNickname(sender)) {
 				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
-			} else if (myGame.isInSearchNow() == false) {
+			} else if (myGame.isSearching() == false) {
 				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
 				super.sendMessage(
 						sender,
@@ -601,7 +601,7 @@ public class ServerPointsxt
 			String roomNumber = getPlayerRoomNumber(sender);
 			if (isGamerNickname(sender)
 					&& (getPlayerRoomNumber(sender).equals("")) == false) {
-				if (myGame.isActive()) {
+				if (myGame.isPlaying()) {
 					super.sendMessage(
 							sender,
 							"Игра уже начата, извините. (Это системное сообщение.)"
@@ -1208,12 +1208,14 @@ public class ServerPointsxt
 			return getTimeLeftForColor(amIRed);
 		}
 
-		private boolean isActive() {
+		private boolean isPlaying() {
 			return "".equals(opponentName) == false;
 		}
 
-		private boolean isInSearchNow() {
-			return ! (roomName == null || roomName.equals(""));
+		private boolean isSearching() {
+			return roomName != null
+					&& roomName.equals("") == false
+					&& isPlaying() == false;
 		}
 
 		private void clear() {
@@ -1232,7 +1234,7 @@ public class ServerPointsxt
 		}
 
 		void leaveGame(boolean isGuiVisible) {
-			if (isActive()) {
+			if (isPlaying() || isSearching()) {
 				String roomNameCopy = roomName;
 				ServerPointsxt.this.partChannel(roomNameCopy);
 				clear();
@@ -1243,6 +1245,8 @@ public class ServerPointsxt
 				}
 			}
 		}
+
+//		void stopSearchingOpponent
 
 		boolean isMyMoveNow() {
 			boolean firstMove = amIRed && moveList.isEmpty();
