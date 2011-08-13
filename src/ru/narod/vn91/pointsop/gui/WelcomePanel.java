@@ -26,7 +26,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 //			}
 			if (guiController.pointsxt_vn91_server == null) {
 				guiController.pointsxt_vn91_server = new ServerPointsxt(
-						"pointsgame.net", guiController, nick, "none", "201120", true
+						"pointsgame.net", guiController, nick, "none", "201120", true, "142"
 				);
 				guiController.pointsxt_vn91_server.connect();
 			}

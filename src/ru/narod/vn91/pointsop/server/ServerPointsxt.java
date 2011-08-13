@@ -38,6 +38,7 @@ public class ServerPointsxt
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
+	String pointsxtVersion = "142";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
 	static String commandIWantJoinGame = "I want to join this game.";
@@ -88,7 +89,8 @@ public class ServerPointsxt
 			String myName,
 			String ircPassword,
 			String roomPassword,
-			boolean ircAcceptsRussianNicks
+			boolean ircAcceptsRussianNicks,
+			String pointsxtVersion
 	) {
 		super();
 		this.gui = gui;
@@ -97,6 +99,7 @@ public class ServerPointsxt
 		defaultChannel = "#pointsxt";
 		defaultPass = roomPassword;
 		this.ircAcceptsRussianNicks = ircAcceptsRussianNicks;
+		this.pointsxtVersion = pointsxtVersion;
 		//		defaultServer_Visible = defaultServ.equals("77.232.28.15") ? "pointsgame.info" : defaultServ;
 		defaultServer_Visible = defaultServ;
 
@@ -117,7 +120,7 @@ public class ServerPointsxt
 		myName = getAllowedNick(myName, ircAcceptsRussianNicks);
 		myNick_Originally = myName;
 		myName = "^" + myName;
-		myName = myName + "_X092000000000[free]";
+		myName = myName + "_X" + pointsxtVersion + "000000000[free]";
 		super.setName(myName);
 		this.myNickOnServ = myName;
 
@@ -156,9 +159,10 @@ public class ServerPointsxt
 		super.joinChannel(roomAsString);
 		super.changeNick(
 				String.format(
-						"%s_X0920000%05d[g101]", getMyName(),
+						"%s_X" + pointsxtVersion + "0000%05d[g101]",
+						getMyName(),
 						roomNumber
-				)
+						)
 		);
 		{
 			// chat notify...
@@ -197,7 +201,8 @@ public class ServerPointsxt
 			);
 			super.changeNick(
 					String.format(
-							"%s_X0920000%s[g101]", getMyName(),
+							"%s_X" + pointsxtVersion + "0000%s[g101]",
+							getMyName(),
 							roomName.substring(4)
 					)
 			);
@@ -480,9 +485,9 @@ public class ServerPointsxt
 			)) {
 				super.changeNick(
 						String.format(
-								"%s_X0920000%s[g201]",
+								"%s_X" + pointsxtVersion + "0000%s[g201]",
 								getMyName(), channel.substring(4)
-						)
+								)
 				);
 				myGame.amIRed = false;
 				myGame.engine = new SingleGameEngine(39, 32);
@@ -610,10 +615,10 @@ public class ServerPointsxt
 					super.partChannel(myGame.roomName);
 					super.changeNick(
 							String.format(
-									"%s_X0920000%s[g101]",
+									"%s_X" + pointsxtVersion + "0000%s[g101]",
 									getMyName(),
 									roomNumber
-							)
+									)
 					);
 					super.joinChannel(room);
 					myGame.amIRed = true;
@@ -1227,7 +1232,7 @@ public class ServerPointsxt
 			engine = null;
 			ServerPointsxt.this.changeNick(
 					String.format(
-							"%s_X092000000000[free]",
+							"%s_X" + pointsxtVersion + "000000000[free]",
 							ServerPointsxt.this.getMyName()
 					)
 			);

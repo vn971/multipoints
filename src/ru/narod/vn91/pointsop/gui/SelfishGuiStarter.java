@@ -32,7 +32,7 @@ public class SelfishGuiStarter {
 			Memory.resetColors();
 		}
 		Memory.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - pointsOp 0.9.8");
+		final JFrame frame = new JFrame("Точки - pointsOp 1.4.8");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
@@ -461,12 +461,13 @@ class JMenuItemWithLink extends JMenuItem {
 		this.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				boolean doAsk = false;
 				int userConfirmation = JOptionPane.showConfirmDialog(
 						null,
 						"Открываем ссылку: \n" + url,
 						"pointsOp - открытие ссылки",
 						JOptionPane.OK_CANCEL_OPTION);
-				if (userConfirmation == JOptionPane.OK_OPTION) {
+				if (doAsk == true && userConfirmation == JOptionPane.OK_OPTION) {
 					try {
 						java.awt.Desktop.getDesktop().browse(new URI(url));
 					} catch (Exception ignored) {
@@ -476,23 +477,3 @@ class JMenuItemWithLink extends JMenuItem {
 		});
 	}
 }
-
-//JMenuItem jMenuItem = new JMenuItem(
-//		"<html><a href=\"\">Правила игры</a></html>"
-//);
-//jMenuItem.addActionListener(
-//		new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				try {
-//					java.awt.Desktop.getDesktop().browse(
-//							new URI(
-//									"http://pointsgame.net/site/rules"
-//							)
-//					);
-//				} catch (Exception ignored) {
-//				}
-//			}
-//		}
-//);
-//jMenu.add(jMenuItem);
