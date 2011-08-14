@@ -25,13 +25,13 @@ import ru.narod.vn91.pointsop.gui.Paper;
 
 public class PointsIQ extends javax.swing.JPanel{
 
-	private JButton butText,butNext,butSGF;
+	private JButton butText,butNext,butSGF,butRePlay;
 	private Question[] base;
 	private Question question;
 	private int curQuestion=0,curLevel=0,squareSize=16,qTrue=0,qThis=0,offsetX=1,offsetY=0;
 	private String preLevels="";
 	private Point AIAnswer=null;
-	private boolean isComplete=true;
+	private boolean isComplete=true,isRePlay=false;
 	private QuestionIO io=new QuestionIO();
 	private JLabel labelCoordinates=new JLabel();
 	private JPanel jPanel_Paper;
@@ -40,8 +40,9 @@ public class PointsIQ extends javax.swing.JPanel{
 		labelCoordinates.setBounds(290, 360, 70, 20);this.add(labelCoordinates);
 		butText=getButton(350, 10, 240, 340, "", null);
 		butText.setEnabled(false);butText.setForeground(Color.black);butText.setBackground(Color.white);
-		butNext=getButton(10, 360, 130, 20, "Продолжить", new ActionListener(){public void actionPerformed(ActionEvent e){butNext.setEnabled(false);nextQuestion();}});	
-		butSGF=getButton(150, 360, 130, 20, "Экспорт в .sgf", new ActionListener(){
+		butNext=getButton(10, 360, 130, 20, "Продолжить", new ActionListener(){public void actionPerformed(ActionEvent e){nextQuestion();}});	
+		butRePlay=getButton(150, 360, 130, 20, "Повторить", new ActionListener(){public void actionPerformed(ActionEvent e){preQuestion();}});
+		butSGF=getButton(350, 360, 240, 20, "Экспорт в .sgf", new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				String content ="(;FF[4]GM[40]CA[UTF-8]AP[PointsIQ]SZ[20]RU[Punish=0,Holes=1,AddTurn=0,MustSurr=1,MinArea=1,Pass=0,Stop=0,LastSafe=0,ScoreTerr=0,InstantWin=0]PB[blue]PW[red]";
 				String str=question.startPos;
@@ -96,7 +97,8 @@ public PointsIQ(int level){
 				if(makeMove(x,y, false)!=MoveResult.ERROR){
 					if(isExistsLevelMove(x,y)){
 						if(makeMove(AIAnswer.x,AIAnswer.y, true)==MoveResult.ERROR){
-							isComplete=true;qTrue++;qThis++;
+							isComplete=true;
+							if(!isRePlay){qTrue++;qThis++;}
 							butText.setText("<html><font color=green>Задание "+qThis+" выполнено правильно!");
 							butNext.setEnabled(true);
 						}
@@ -109,11 +111,12 @@ public PointsIQ(int level){
 		public void mouseClicked(MouseEvent arg0) {}
 	});
 	
-	butNext.setEnabled(false);nextQuestion();
+	butNext.setEnabled(false);butRePlay.setEnabled(false);nextQuestion();
 }
 
 private void nextQuestion(){
 	curLevel=0;preLevels="";AIAnswer=null;
+	butNext.setEnabled(false);butRePlay.setEnabled(false);
 	
 	for(int i=curQuestion;i<=base.length;i++){
 		if(i==base.length){
@@ -122,10 +125,18 @@ private void nextQuestion(){
 			break;
 		}
 		curQuestion=i+1;question=io.getQuestion(base[i].index);
-		newGame();isComplete=false;showQuestion();break;
+		newGame();isComplete=false;isRePlay=false;showQuestion();break;
 	}
 };
+
+private void preQuestion(){
+	curLevel=0;preLevels="";AIAnswer=null;
+	butNext.setEnabled(false);butRePlay.setEnabled(false);
+	question=io.getQuestion(base[curQuestion-1].index);
+	newGame();isComplete=false;isRePlay=true;showQuestion();
 	
+};
+
 private boolean isExistsLevelMove(int x,int y){
 	Question.Makros.MakrosLevelMove moves[]=question.makros.getMoves();
 	for(int i=0;i<moves.length;i++){
@@ -137,9 +148,9 @@ private boolean isExistsLevelMove(int x,int y){
 			}
 		}
 	}
-	isComplete=true;qThis++;
+	isComplete=true;if(!isRePlay){qThis++;}
 	butText.setText("<html><font color=red>Задание "+qThis+" выполнено неверно!<br><font color=black>Как правильно выполнить задание:<br><font color=blue>"+question.comment);
-	butNext.setEnabled(true);
+	butNext.setEnabled(true);butRePlay.setEnabled(true);
 	return false;
 }
 

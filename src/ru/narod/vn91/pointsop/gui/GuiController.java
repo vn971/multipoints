@@ -22,6 +22,7 @@ public class GuiController implements GuiForServerInterface {
 	ServerInterface pointsxt_tochkiorg_server;
 	ServerInterface pointsxt_ircworldru_server;
 	ServerInterface pointsxt_vn91_server;
+	ServerInterface zagram_server;
 	ServerInterface pointsopServer;
 	HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
 	HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();

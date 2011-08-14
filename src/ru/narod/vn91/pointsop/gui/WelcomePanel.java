@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
+import ru.narod.vn91.pointsop.zagram.ServerZagram;
 
 public class WelcomePanel extends javax.swing.JPanel {
 
@@ -44,6 +45,21 @@ public class WelcomePanel extends javax.swing.JPanel {
 		}
 	}
 
+	private void userWantsZagramConnection() {
+		String nick = jTextField_Username.getText();
+		//nick = ServerZagram.getAllowedNick(nick, true);
+		//jTextField_Username.setText(nick);
+		if (nick.equals("") == false) {
+			//Memory.setUserName(nick);
+			if (guiController.zagram_server == null) {
+				guiController.zagram_server = new ServerZagram(
+						"zagram.org", guiController, nick
+				);
+				guiController.zagram_server.connect();
+			}
+		}
+	}
+	
 	/**
 	 * Creates new form WelcomePanel
 	 */
@@ -406,6 +422,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	private void jButton_ConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnectActionPerformed
 		userWantsPointsxtConnection();
+		userWantsZagramConnection();
 	}//GEN-LAST:event_jButton_ConnectActionPerformed
 
 	private void jTextField_UsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_UsernameKeyPressed
