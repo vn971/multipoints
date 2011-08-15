@@ -104,7 +104,6 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 
 	@Override
 	public void genmove(boolean color) {
-		// TODO Auto-generated method stub
 		writeToProcess("1 genmove " + getColor(color));
 	}
 
@@ -176,7 +175,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 					String rawLine = reader.readLine();
 					if (rawLine == null) {
 						break;
-						// TODO I shoudn't need that!!
+						// dunno why this is needed
 					}
 					fullLog.append(new Date().getTime());
 					fullLog.append(" ");

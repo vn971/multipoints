@@ -133,8 +133,8 @@ public interface GuiForServerInterface {
 			int x,
 			int y,
 			boolean isRed,
-			int timeLeftRed,
-			int timeLeftBlue);
+			boolean nowPlays,
+			int timeLeftRed, int timeLeftBlue);
 
 	public abstract void gameStop(
 			ServerInterface server,
