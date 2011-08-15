@@ -479,11 +479,11 @@ public class GuiController implements GuiForServerInterface {
 			int x,
 			int y,
 			boolean isRed,
-			int timeLeftRed,
-			int timeLeftBlue) {
+			boolean nowPlays,
+			int timeLeftRed, int timeLeftBlue) {
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
 		if (gameRoom != null) {
-			gameRoom.makeMove(silent, x, y, isRed,timeLeftRed,timeLeftBlue);
+			gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed, timeLeftBlue);
 			tabbedPane.makeBold(gameRoom);
 		}
 	}

@@ -89,6 +89,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int x,
 			int y,
 			boolean isRed,
+			boolean isNowRed,
 			int remainingTimeRed,
 			int remainingTimeBlue) {
 		timedAction.o = null;
@@ -123,15 +124,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 				showScoreAndCursor();
 				new Sounds().playMakeMove(amIPlaying);
-				timerLabel_Red.setRemainingTime(remainingTimeRed, !isRed);
-				timerLabel_Blue.setRemainingTime(remainingTimeBlue, isRed);
+				timerLabel_Red.setRemainingTime(remainingTimeRed, isNowRed);
+				timerLabel_Blue.setRemainingTime(remainingTimeBlue, !isNowRed);
 
 				// make move to current mouse position
 //				System.out.println("maked move. #" + moveList.size());
 				if (isOnlineGame()
 						&& Memory.isDebug() == true
 						&& amIPlaying == true
-						&& isRed == !amIRed) {
+						&& isNowRed == amIRed) {
 					final int moveListSize = moveList.size();
 					timedAction.o = new TimedAction() {
 
@@ -151,7 +152,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						}
 
 					};
-//					timedAction.o.executeWhen(new Date().getTime() + 4700L);
+					int secondsRemaining = amIRed ? remainingTimeRed : remainingTimeBlue;
+					timedAction.o.executeWhen(new Date().getTime()
+							+ secondsRemaining * 1000L - 200);
 				}
 			}
 		}
@@ -215,7 +218,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			if (isOnlineGame()) {
 				server.makeMove(nameOnServer, x, y);
 			} else {
-				makeMove(false, x, y, isRedTurnNow,1800,1800);
+				makeMove(false, x, y, isRedTurnNow, !isRedTurnNow, 1800, 1800);
 				isRedTurnNow = !isRedTurnNow;
 			}
 		}
