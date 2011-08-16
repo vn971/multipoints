@@ -16,15 +16,7 @@ public interface GuiForServerInterface {
 	 */
 	public abstract void serverClosed(ServerInterface server);
 
-	public abstract void userJoinedLangRoom(
-			ServerInterface server,
-			String room,
-			String user,
-			boolean silent,
-			int rank,
-			String status);
-
-	public abstract void userJoinedGameRoom(
+	public abstract void userJoinedRoom(
 			ServerInterface server,
 			String room,
 			String user,
@@ -147,9 +139,17 @@ public interface GuiForServerInterface {
 			boolean isRedLooser,
 			boolean wantToSave);
 
-	public abstract void receiveRawServerInfo(
+//	public abstract void raw(
+//			ServerInterface server,
+//			String info,
+//			MessageType type);
+
+	public abstract void raw(
 			ServerInterface server,
-			String info,
-			MessageType type);
+			String info);
+
+	public abstract void rawError(
+			ServerInterface server,
+			String info);
 
 }

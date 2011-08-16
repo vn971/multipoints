@@ -137,7 +137,7 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 						row).user1))
 						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
 						row).user2))) {
-					containerRoom.getServer().requestJoinGame(roomName);
+					containerRoom.getServer().requestPlay(roomName);
 				} else {
 					guiController.activateGameRoom(containerRoom.getServer(),
 							roomName);

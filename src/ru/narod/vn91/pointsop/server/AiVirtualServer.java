@@ -57,8 +57,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	public void endOfGame() {
 		gui.unsubsribedGame(this, "");
-		gui.receiveRawServerInfo(this, ai.getName() + "закончил игру.",
-				GuiForServerInterface.MessageType.ERROR);
+		gui.rawError(this, ai.getName() + "закончил игру.");
 	}
 
 	public void connect() {
@@ -80,7 +79,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void requestJoinGame(String gameRoomName) {
+	public void requestPlay(String gameRoomName) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

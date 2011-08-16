@@ -38,7 +38,7 @@ public class ServerPointsxt
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
-	String pointsxtVersion = "142";
+	String pointsxtVersion;
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
 	static String commandIWantJoinGame = "I want to join this game.";
@@ -55,11 +55,10 @@ public class ServerPointsxt
 					@Override
 					public void run() {
 						try {
-							gui.receiveRawServerInfo(
+							gui.raw(
 									ServerPointsxt.this,
 									"Cоединение с сервером " + defaultServ
-											+ ". Пожалуйста, подождите... (примерно 30 секунд)",
-									GuiForServerInterface.MessageType.INFO
+											+ ". Пожалуйста, подождите... (примерно 30 секунд)"
 							);
 							connect(defaultServ, 6667, ircPassword);
 							myNickOnServ = getNick();
@@ -196,8 +195,7 @@ public class ServerPointsxt
 			// do nothing
 		} else if (isPointsXTNickname(ircOpponentName)) {
 			tryInvitePointsxt(ircOpponentName, false);
-		} else if (ircOpponentName.matches(
-				"_X" + pointsxtVersion + "[0-9]{9,9}\\[....\\]")){
+		} else if (isPointsopSameVersionNickname(ircOpponentName)) {
 			myGame.opponentName = newOpponent;
 			myGame.amIRed = true;
 			super.sendMessage(
@@ -207,20 +205,13 @@ public class ServerPointsxt
 			this.setPointsxtNickname(roomName.substring(4)
 					, true, true);
 
-//			super.changeNick(
-//					String.format(
-//							"%s_X" + pointsxtVersion + "0000%s[g101]",
-//							getMyName(),
-//							roomName.substring(4)
-//					)
-//			);
 			gui.subscribedGame(
 					roomName, this, getMyName(), newOpponent, 0, 0,
 					"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
 			);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
-				gui.userJoinedGameRoom(
+				gui.userJoinedRoom(
 						this,
 						roomName,
 						nicknameManager.getOrCreateShortNick(ircNick),
@@ -236,7 +227,7 @@ public class ServerPointsxt
 		myGame.leaveGame(false);
 	}
 
-	public void requestJoinGame(String gameRoomName) {
+	public void requestPlay(String gameRoomName) {
 		super.joinChannel(gameRoomName);
 		super.sendMessage(
 				gameRoomName,
@@ -331,11 +322,10 @@ public class ServerPointsxt
 	@Override
 	protected void onConnect() {
 		if (super.isConnected()) {
-			gui.receiveRawServerInfo(
+			gui.raw(
 					this,
 					"Удалось соединиться с " + defaultServ
-					+ ", пытаюсь подключиться к основной комнате...",
-					GuiForServerInterface.MessageType.INFO);
+					+ ", пытаюсь подключиться к основной комнате...");
 		}
 	}
 
@@ -348,10 +338,9 @@ public class ServerPointsxt
 		userConnected_PointsxtStyle(channel, sender, /*not silent*/ false);
 // other code is executed only when user joins a channel, not changes his nick.
 		if ((channel.equals(defaultChannel)) && (sender.equals(myNickOnServ))) {
-			gui.receiveRawServerInfo(
+			gui.raw(
 					this,
-					"Успешно подключился к основной комнате.",
-					GuiForServerInterface.MessageType.INFO);
+					"Успешно подключился к основной комнате.");
 		}
 		if (channel.equals(myGame.roomName) && myGame.amIRed) {
 			this.sendSpectr(sender);
@@ -488,9 +477,9 @@ public class ServerPointsxt
 				);
 //				System.out.println("received Op-game request");
 				gui.gameRequestReceived(this, channel, opponentNick);
-			} else if (message.startsWith(
-					commandCommonPrefix + commandAcceptOpponent + myNickOnServ
-			)) {
+			} else if (message.startsWith(commandCommonPrefix
+					+ commandAcceptOpponent + myNickOnServ
+					) && isPointsopSameVersionNickname(sender)) {
 				this.setPointsxtNickname(
 						channel.substring(4),
 						true, false);
@@ -511,7 +500,7 @@ public class ServerPointsxt
 				);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
-					gui.userJoinedGameRoom(
+					gui.userJoinedRoom(
 							this,
 							channel,
 							nicknameManager.getOrCreateShortNick(ircNick),
@@ -655,7 +644,7 @@ public class ServerPointsxt
 					);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
-						gui.userJoinedGameRoom(
+						gui.userJoinedRoom(
 								this,
 								room,
 								nicknameManager.getOrCreateShortNick(ircNick),
@@ -741,11 +730,9 @@ public class ServerPointsxt
 
 	@Override
 	protected void onUnknown(String line) {
-		gui.receiveRawServerInfo(
+		gui.raw(
 				this,
-				line.replaceAll(pointsxtTail_RegExp, ""),
-				GuiForServerInterface.MessageType.INFO
-		);
+				line.replaceAll(pointsxtTail_RegExp, ""));
 	}
 
 	private boolean isGamerNickname(String fullNick) {
@@ -929,7 +916,7 @@ public class ServerPointsxt
 	private boolean isPointsopSameVersionNickname(String ircNick) {
 		return ircNick.startsWith("^")
 				&& ircNick.matches(
-						".*" + "_X"+pointsxtVersion+"[0-9]{9,9}\\[....\\]" + ".*");
+						".*" + "_X" + pointsxtVersion + "[0-9]{9,9}\\[....\\]" + ".*");
 	}
 
 	public void userConnected_PointsxtStyle(
@@ -939,14 +926,14 @@ public class ServerPointsxt
 		String pointsxtNick = nicknameManager.getOrCreateShortNick(fullNickname);
 		if (room.equals(defaultChannel)) {
 			// join Lang room
-			gui.userJoinedLangRoom(
+			gui.userJoinedRoom(
 					this, room, pointsxtNick, silent,
 					getPlayerRank(fullNickname), extractUserStatus(fullNickname)
 			);
 		} else {
 			// join Game room
 			if (fullNickname.equalsIgnoreCase("podbot") == false) {
-				gui.userJoinedGameRoom(
+				gui.userJoinedRoom(
 						this, room, pointsxtNick, silent,
 						getPlayerRank(fullNickname), extractUserStatus(fullNickname)
 				);
@@ -1220,8 +1207,6 @@ public class ServerPointsxt
 		String roomName = "";
 		String opponentName = "";
 		boolean amIRed;
-		int timeLeftRed = getDefaultTime();
-		int timeLeftBlue = getDefaultTime();
 		SingleGameEngineInterface engine;
 		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
 		Thread lastTimeoutThread = null;
@@ -1241,11 +1226,11 @@ public class ServerPointsxt
 		}
 
 		public int getTimeLeftRed() {
-			return timeLeftRed;
+			return getDefaultTime();
 		}
 
 		public int getTimeLeftForBlue() {
-			return timeLeftBlue;
+			return getDefaultTime();
 		}
 
 		public int getTimeLeftForColor(boolean color) {
@@ -1278,12 +1263,12 @@ public class ServerPointsxt
 			opponentName = "";
 			engine = null;
 			ServerPointsxt.this.setPointsxtNickname("", false, false);
-			ServerPointsxt.this.changeNick(
-					String.format(
-							"%s_X" + pointsxtVersion + "000000000[free]",
-							ServerPointsxt.this.getMyName()
-					)
-			);
+//			ServerPointsxt.this.changeNick(
+//					String.format(
+//							"%s_X" + pointsxtVersion + "000000000[free]",
+//							ServerPointsxt.this.getMyName()
+//					)
+//			);
 		}
 
 		void leaveGame(boolean isGuiVisible) {

@@ -22,6 +22,7 @@ public class GuiController implements GuiForServerInterface {
 	ServerInterface pointsxt_tochkiorg_server;
 	ServerInterface pointsxt_ircworldru_server;
 	ServerInterface pointsxt_vn91_server;
+	ServerInterface zagramTwo_server;
 	ServerInterface zagram_server;
 	ServerInterface pointsopServer;
 	HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
@@ -48,13 +49,12 @@ public class GuiController implements GuiForServerInterface {
 			pointsopServer = null;
 		}
 		if (!(server instanceof AiVirtualServer)) {
-			receiveRawServerInfo(
+			rawError(
 					server,
 					"Отключился от сервера... \n"
 							+ "К сожалению, переподключиться в \"тихом\" режиме "
 							+ "пока-что невозможно. \n"
-							+ "Чтобы подключиться, закройте приложение и откройте его заново.",
-					MessageType.ERROR
+							+ "Чтобы подключиться, закройте приложение и откройте его заново."
 			);
 		}
 	}
@@ -62,48 +62,35 @@ public class GuiController implements GuiForServerInterface {
 	/* (non-Javadoc)
 	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedLangRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
 	 */
-	public synchronized void userJoinedLangRoom(
+	public synchronized void userJoinedRoom(
 			ServerInterface server,
 			String room,
 			String user,
 			boolean silent,
 			int rank,
 			String status) {
-		LangRoom panel_Lang = langRooms.get(new ServerRoom(room, server));
-		if (panel_Lang != null) {
-			RoomPart_Userlist users = panel_Lang.getRoomPart_UserList();
+		LangRoom langRoom = langRooms.get(new ServerRoom(room, server));
+		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
+		if (langRoom != null) {
+			RoomPart_Userlist users = langRoom.getRoomPart_UserList();
 			if (users != null) {
 				users.userJoined(user, rank, status);
 			}
-			RoomPart_Chat chat = panel_Lang.getRoomPart_Chat();
+			RoomPart_Chat chat = langRoom.getRoomPart_Chat();
 			if ((chat != null) && (silent == false)) {
 				chat.addUserJoinedNotice(user);
 			}
-		} else {
+		} else if (gameRoom != null) {
+			RoomPart_Userlist users = gameRoom.getRoomPart_UserList();
+			if (users != null) {
+				users.userJoined(user, rank, status);
+			}
+			RoomPart_Chat chat = gameRoom.getRoomPart_Chat();
+			if ((chat != null) && (silent == false)) {
+				chat.addUserJoinedNotice(user);
+			}
 		}
-	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedGameRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
-	 */
-	public synchronized void userJoinedGameRoom(
-			ServerInterface server,
-			String room,
-			String user,
-			boolean silent,
-			int rank,
-			String status) {
-		GameRoom gameRoomPanel = gameRooms.get(new ServerRoom(room, server));
-		if (gameRoomPanel != null) {
-			RoomPart_Userlist users = gameRoomPanel.getRoomPart_UserList();
-			if (users != null) {
-				users.userJoined(user, rank, status);
-			}
-			RoomPart_Chat chat = gameRoomPanel.getRoomPart_Chat();
-			if ((chat != null) && (silent == false)) {
-				chat.addUserJoinedNotice(user);
-			}
-		}
 	}
 
 	/* (non-Javadoc)
@@ -518,25 +505,23 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#receiveRawServerInfo(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, ru.narod.vn91.pointsop.gui.GuiController.MessageType)
-	 */
-	public synchronized void receiveRawServerInfo(
-			ServerInterface server,
-			String info,
-			MessageType type) {
+	@Override
+	public void raw(ServerInterface server, String info) {
 		String oldText = serverOutput.getText();
 		serverOutput.setText(
 				oldText + server.getServerName() + ": " + info + "\n"
 		);
-		if (type == MessageType.ERROR) {
-			JOptionPane.showMessageDialog(
-					tabbedPane,
-					info,
-					"Error: " + info,
-					JOptionPane.ERROR_MESSAGE
-			);
-		}
+	}
+
+	@Override
+	public void rawError(ServerInterface server, String info) {
+		this.raw(server, info);
+		JOptionPane.showMessageDialog(
+				tabbedPane,
+				info,
+				"Error: " + info,
+				JOptionPane.ERROR_MESSAGE
+		);
 	}
 
 	public synchronized void activateGameRoom(
@@ -553,6 +538,7 @@ public class GuiController implements GuiForServerInterface {
 		} catch (Exception ignored) {
 		}
 	}
+
 }
 
 class ServerRoom {

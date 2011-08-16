@@ -8,7 +8,7 @@ public interface ServerInterface {
 
 	void searchOpponent();
 
-	void requestJoinGame(String gameRoomName);
+	void requestPlay(String gameRoomName);
 
 	void acceptOpponent(String roomName, String newOpponent);
 
@@ -18,9 +18,9 @@ public interface ServerInterface {
 
 	void surrender(String roomName);
 
-	void subscribeRoom(String name);
+	void subscribeRoom(String room);
 
-	void unsubscribeRoom(String name);
+	void unsubscribeRoom(String room);
 
 	void sendChat(String room, String message);
 

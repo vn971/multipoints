@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
+import ru.narod.vn91.pointsop.server.ServerZagram2;
 //import ru.narod.vn91.pointsop.zagram.ServerZagram;
 
 public class WelcomePanel extends javax.swing.JPanel {
@@ -25,7 +26,12 @@ public class WelcomePanel extends javax.swing.JPanel {
 //				guiController.pointsopServer.connect();
 //				return; // do not connect to tochki.org and ircworld.ru
 //			}
-			if (guiController.pointsxt_vn91_server == null) {
+			if (guiController.zagramTwo_server == null && Memory.isZagramTest()) {
+				guiController.zagramTwo_server = new ServerZagram2(nick, guiController);
+				guiController.zagramTwo_server.connect();
+			}
+			if (guiController.pointsxt_vn91_server == null &&
+					Memory.isZagramTest() == false) {
 				guiController.pointsxt_vn91_server = new ServerPointsxt(
 						"pointsgame.net", guiController, nick, "none", "201120", true, "142"
 				);
@@ -46,18 +52,16 @@ public class WelcomePanel extends javax.swing.JPanel {
 	}
 
 	private void userWantsZagramConnection() {
-		String nick = jTextField_Username.getText();
-		//nick = ServerZagram.getAllowedNick(nick, true);
-		//jTextField_Username.setText(nick);
-//		if (nick.equals("") == false) {
-//			//Memory.setUserName(nick);
-//			if (guiController.zagram_server == null) {
-//				guiController.zagram_server = new ServerZagram(
-//						"zagram.org", guiController, nick
-//				);
-//				guiController.zagram_server.connect();
-//			}
-//		}
+		// String nick = jTextField_Username.getText();
+		// if (nick.equals("") == false) {
+		// //Memory.setUserName(nick);
+		// if (guiController.zagram_server == null) {
+		// guiController.zagram_server = new ServerZagram(
+		// "zagram.org", guiController, nick
+		// );
+		// guiController.zagram_server.connect();
+		// }
+		// }
 	}
 
 	/**

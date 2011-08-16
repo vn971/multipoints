@@ -32,7 +32,7 @@ public class ServerPointsop implements ServerInterface {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void requestJoinGame(String gameRoomName) {
+	public void requestPlay(String gameRoomName) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -106,11 +106,11 @@ public class ServerPointsop implements ServerInterface {
 			}
 			return result;
 		} catch (MalformedURLException e) {
-			gui.receiveRawServerInfo(this, "Please check the URL:" + e, GuiForServerInterface.MessageType.INFO);
+			gui.raw(this, "Please check the URL:" + e);
 			return null;
 		} catch (IOException e1) {
-			gui.receiveRawServerInfo(this,
-					"Can't read  from the Internet: " + e1, GuiForServerInterface.MessageType.INFO);
+			gui.raw(this,
+					"Can't read  from the Internet: " + e1);
 			return null;
 		}
 	}
@@ -131,8 +131,7 @@ public class ServerPointsop implements ServerInterface {
 				ServerPointsop.this.socket = new Socket(ipAsString, 4444);
 				BufferedReader in = new BufferedReader(new InputStreamReader(
 						ServerPointsop.this.socket.getInputStream()));
-				gui.receiveRawServerInfo(ServerPointsop.this, in.readLine(),
-						GuiForServerInterface.MessageType.INFO);
+				gui.raw(ServerPointsop.this, in.readLine());
 				ServerPointsop.this.socket.close();
 			} catch (Exception e) {
 			}

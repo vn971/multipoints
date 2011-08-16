@@ -25,6 +25,14 @@ public class Memory {
 		memory.putBoolean("isDebug", isDebug);
 	}
 
+	public static boolean isZagramTest() {
+		return memory.getBoolean("isZagramTest", false);
+	}
+
+	public static void setZagramTest(boolean isZagramTest) {
+		memory.putBoolean("isZagramTest", isZagramTest);
+	}
+
 	public static void setNewestVersion() {
 		memory.putInt("version", newestVersion);
 	}
@@ -184,6 +192,7 @@ public class Memory {
 	}
 
 	public static void main(String[] args) {
+		setZagramTest(true);
 		setDebug(false);
 	}
 }
