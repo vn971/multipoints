@@ -19,6 +19,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 import ru.narod.vn91.pointsop.data.Memory;
+import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
 public class RoomPart_Chat extends javax.swing.JPanel {
@@ -102,9 +103,9 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		scrollDown();
 	}
 
-	void addUserJoinedNotice(String user) {
+	void addUserJoinedNotice(Player player) {
 		if (jCheckBoxMenuItem_ShowUserJoin.isSelected()) {
-			addServerNotice("в комнату вошёл(а) " + user + "");
+			addServerNotice("в комнату вошёл(а) " + player.guiName + "");
 		}
 	}
 

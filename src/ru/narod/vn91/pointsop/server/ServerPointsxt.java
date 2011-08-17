@@ -214,14 +214,7 @@ public class ServerPointsxt
 			);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
-				gui.userJoinedRoom(
-						this,
-						roomName,
-						nicknameManager.getOrCreateShortNick(ircNick),
-						true,
-						getPlayerRank(ircNick),
-						extractUserStatus(ircNick)
-				);
+				gui.userJoinedRoom(this, roomName, nicknameManager.getOrCreateShortNick(ircNick), true);
 			}
 		}
 	}
@@ -510,14 +503,7 @@ public class ServerPointsxt
 				);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
-					gui.userJoinedRoom(
-							this,
-							channel,
-							nicknameManager.getOrCreateShortNick(ircNick),
-							true,
-							getPlayerRank(ircNick),
-							extractUserStatus(ircNick)
-					);
+					gui.userJoinedRoom(this, channel, nicknameManager.getOrCreateShortNick(ircNick), true);
 				}
 			}
 			return; /* "if I won't take it - no one will."
@@ -654,14 +640,7 @@ public class ServerPointsxt
 					);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
-						gui.userJoinedRoom(
-								this,
-								room,
-								nicknameManager.getOrCreateShortNick(ircNick),
-								true,
-								getPlayerRank(ircNick),
-								extractUserStatus(ircNick)
-						);
+						gui.userJoinedRoom(this, room, nicknameManager.getOrCreateShortNick(ircNick), true);
 					}
 				}
 			}
@@ -931,26 +910,24 @@ public class ServerPointsxt
 
 	public void userConnected_PointsxtStyle(
 			String room,
-			String fullNickname,
+			String ircNick,
 			boolean silent) {
-		String pointsxtNick = nicknameManager.getOrCreateShortNick(fullNickname);
+		String pointsxtNick = nicknameManager.getOrCreateShortNick(ircNick);
+		gui.addUserInfo(
+				this, pointsxtNick,
+				pointsxtNick, null, getPlayerRank(ircNick),
+				0, 0, 0, extractUserStatus(ircNick));
 		if (room.equals(defaultChannel)) {
 			// join Lang room
-			gui.userJoinedRoom(
-					this, room, pointsxtNick, silent,
-					getPlayerRank(fullNickname), extractUserStatus(fullNickname)
-			);
+			gui.userJoinedRoom(this, room, pointsxtNick, silent);
 		} else {
 			// join Game room
-			if (fullNickname.equalsIgnoreCase("podbot") == false) {
-				gui.userJoinedRoom(
-						this, room, pointsxtNick, silent,
-						getPlayerRank(fullNickname), extractUserStatus(fullNickname)
-				);
+			if (ircNick.equalsIgnoreCase("podbot") == false) {
+				gui.userJoinedRoom(this, room, pointsxtNick, silent);
 			}
 		}
 		if (room.equals(defaultChannel)) {
-			String newRoom = getPlayerRoom(fullNickname);
+			String newRoom = getPlayerRoom(ircNick);
 			if (newRoom.length() > 0) {
 				User[] users = getUsers(defaultChannel);
 				String opponent = "";
@@ -967,18 +944,18 @@ public class ServerPointsxt
 					}
 				}
 				if (opponent.length() > 0) {
-					if (getPlayerIngameNumber(fullNickname) == 1) {
+					if (getPlayerIngameNumber(ircNick) == 1) {
 						gui.gameCreated(
 								this, defaultChannel, newRoom,
 								pointsxtNick, opponent, getPlayerGameType(
-								fullNickname
+										ircNick
 						)
 						);
-					} else if (getPlayerIngameNumber(fullNickname) == 2) {
+					} else if (getPlayerIngameNumber(ircNick) == 2) {
 						gui.gameCreated(
 								this, defaultChannel, newRoom,
 								opponent, pointsxtNick, getPlayerGameType(
-								fullNickname
+										ircNick
 						)
 						);
 					} else {
@@ -986,7 +963,7 @@ public class ServerPointsxt
 								"error creating a game"
 						);
 					}
-				} else if (isPointsopNickname(fullNickname)) {
+				} else if (isPointsopNickname(ircNick)) {
 					// no opponent found of a pointsOp player
 					gui.gameVacancyCreated(
 							this, defaultChannel, newRoom,

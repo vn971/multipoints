@@ -1,5 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.Image;
+
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public interface GuiForServerInterface {
@@ -16,13 +18,25 @@ public interface GuiForServerInterface {
 	 */
 	public abstract void serverClosed(ServerInterface server);
 
+	public abstract void addUserInfo(
+			ServerInterface server, String id,
+			String guiName, Image image,
+			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
+			String status);
+
+//	public abstract void userJoinedRoom(
+//			ServerInterface server,
+//			String room,
+//			String user,
+//			boolean silent,
+//			int rank,
+//			String status);
+
 	public abstract void userJoinedRoom(
 			ServerInterface server,
 			String room,
-			String user,
-			boolean silent,
-			int rank,
-			String status);
+			String id,
+			boolean isStartup);
 
 	public abstract void userLeftRoom(
 			ServerInterface server,

@@ -52,9 +52,9 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="3" rowCount="0">
-                <Column editable="false" title="" type="java.lang.String"/>
-                <Column editable="false" title="&#x418;&#x43c;&#x44f;" type="java.lang.String"/>
-                <Column editable="false" title="&#x440;&#x435;&#x439;&#x442;" type="java.lang.String"/>
+                <Column editable="false" title=" " type="java.lang.String"/>
+                <Column editable="false" title=" " type="java.lang.String"/>
+                <Column editable="false" title=" " type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&#xa;&#x9;* = &#x43e;&#x442;&#x43e;&#x448;&#x451;&#x43b;,   ! = &#x438;&#x433;&#x440;&#x430;&#x435;&#x442;&lt;br&gt;&#xa;&#x9;&#x414;&#x43b;&#x44f; &#x434;&#x43e;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x44b;&#x445; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x439; &#x449;&#x435;&#x43b;&#x43a;&#x43d;&#x438;&#x442;&#x435; &#x434;&#x432;&#x430;&#x436;&#x434;&#x44b; &#x43c;&#x44b;&#x448;&#x43a;&#x43e;&#x439;&lt;br&gt;&#xa;&lt;/html&gt;"/>

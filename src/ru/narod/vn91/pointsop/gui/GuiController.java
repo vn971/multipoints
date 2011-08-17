@@ -1,6 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -10,6 +11,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import ru.narod.vn91.pointsop.data.Memory;
+import ru.narod.vn91.pointsop.data.Player;
+import ru.narod.vn91.pointsop.data.PlayerPool;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
@@ -29,6 +32,7 @@ public class GuiController implements GuiForServerInterface {
 	HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();
 	HashMap<ServerRoom, LangRoom> langRooms = new HashMap<ServerRoom, LangRoom>();
 	HashMap<ServerUserName, PrivateChat> privateChatList = new HashMap<ServerUserName, PrivateChat>();
+	PlayerPool playerPool = new PlayerPool();
 
 	GuiController(final JTabbedPaneMod tabbedPane) {
 		this.tabbedPane = tabbedPane;
@@ -59,38 +63,55 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedLangRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
-	 */
-	public synchronized void userJoinedRoom(
-			ServerInterface server,
-			String room,
-			String user,
-			boolean silent,
-			int rank,
+	@Override
+	public void addUserInfo(
+			ServerInterface server, String id,
+			String guiName, Image image,
+			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status) {
+		Player player = playerPool.get(server, id);
+		Player updateInstance = new Player(server, id, guiName, rating, winCount,
+					lossCount, drawCount, image, status);
+		player.updateFrom(updateInstance);
+	}
+
+//	/* (non-Javadoc)
+//	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedLangRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
+//	 */
+//	public synchronized void userJoinedRoom(
+//			ServerInterface server,
+//			String room,
+//			String user,
+//			boolean silent,
+//			int rank,
+//			String status) {
+//	}
+
+	@Override
+	public void userJoinedRoom(ServerInterface server, String room, String id,
+			boolean isStartup) {
+		Player player = playerPool.get(server, id);
 		LangRoom langRoom = langRooms.get(new ServerRoom(room, server));
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
 		if (langRoom != null) {
 			RoomPart_Userlist users = langRoom.getRoomPart_UserList();
 			if (users != null) {
-				users.userJoined(user, rank, status);
+				users.userJoined(player);
 			}
 			RoomPart_Chat chat = langRoom.getRoomPart_Chat();
-			if ((chat != null) && (silent == false)) {
-				chat.addUserJoinedNotice(user);
+			if ((chat != null) && (isStartup == false)) {
+				chat.addUserJoinedNotice(player);
 			}
 		} else if (gameRoom != null) {
 			RoomPart_Userlist users = gameRoom.getRoomPart_UserList();
 			if (users != null) {
-				users.userJoined(user, rank, status);
+				users.userJoined(player);
 			}
 			RoomPart_Chat chat = gameRoom.getRoomPart_Chat();
-			if ((chat != null) && (silent == false)) {
-				chat.addUserJoinedNotice(user);
+			if ((chat != null) && (isStartup == false)) {
+				chat.addUserJoinedNotice(player);
 			}
 		}
-
 	}
 
 	/* (non-Javadoc)
@@ -99,7 +120,8 @@ public class GuiController implements GuiForServerInterface {
 	public synchronized void userLeftRoom(
 			ServerInterface server,
 			String room,
-			String user) {
+			String id) {
+		Player player = playerPool.get(server, id);
 		RoomInterface roomInterface = roomInterfaces.get(
 				new ServerRoom(
 						room,
@@ -110,11 +132,11 @@ public class GuiController implements GuiForServerInterface {
 		} else {
 			RoomPart_Userlist users = roomInterface.getRoomPart_UserList();
 			if (users != null) {
-				roomInterface.getRoomPart_UserList().userLeave(user);
+				roomInterface.getRoomPart_UserList().userLeave(player);
 			}
 			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
 			if (chat != null) {
-				chat.addUserLeftNotice(user);
+				chat.addUserLeftNotice(player.guiName);
 			}
 		}
 	}
@@ -130,10 +152,9 @@ public class GuiController implements GuiForServerInterface {
 						user,
 						server
 				)
-		);
+				);
 		if ((privateChat != null) && (tabbedPane.indexOfComponent(
-				privateChat
-		) >= 0)) {
+				privateChat) >= 0)) {
 			privateChat.addChat("server", user + " вышел из игры...", true);
 		}
 	}

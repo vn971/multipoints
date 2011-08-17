@@ -2,17 +2,23 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 import javax.swing.table.*;
+
+import ru.narod.vn91.pointsop.data.Player;
+import ru.narod.vn91.pointsop.data.PlayerChangeListener;
 
 public class RoomPart_Userlist
 		extends javax.swing.JPanel {
 
 	RoomInterface roomInterface;
 	GuiController centralGuiController;
-	final static int COLUMN_NAME = 1;
-	final static int COLUMN_RATING = 2;
-	final static int COLUMN_STATUS = 0;
+	final static int COLUMN_NAME = 0;
+	final static int COLUMN_RATING = 1;
+	final static int COLUMN_STATUS = 2;
+	ArrayList<Player> playerList = new ArrayList<Player>();
 
 	private String getSelectedUser() {
 		if ((jTable_UserList.getSelectedRow() >= 0)
@@ -26,68 +32,89 @@ public class RoomPart_Userlist
 		}
 	}
 
-	private int compareRanks(String a, String b) {
-		int rankA = a.equals("") ? 0 : Integer.parseInt(a);
-		int rankB = b.equals("") ? 0 : Integer.parseInt(b);
-		return rankA - rankB;
+	private Object[] constructRow(Player player) {
+		Object[] row = { null, null, null };
+		row[COLUMN_NAME] = player.guiName;
+		row[COLUMN_RATING] = ""
+				+ ((player.rating == null || player.rating == 0)
+						? "" : "" + player.rating);
+		row[COLUMN_STATUS] = (player.status == null) ? "" : player.status;
+		return row;
 	}
 
-	private int compareNames(Object o1, Object o2) {
-		return o1.toString().toLowerCase().replaceAll("\\^", "").compareTo(
-				o2.toString().toLowerCase().replaceAll("\\^", "")
-		);
-	}
+//	private int compareRanks(String a, String b) {
+//		int rankA = a.equals("") ? 0 : Integer.parseInt(a);
+//		int rankB = b.equals("") ? 0 : Integer.parseInt(b);
+//		return rankA - rankB;
+//	}
 
-	void userJoined(String user, int rank, String status) {
-		DefaultTableModel tableModel = ((DefaultTableModel) jTable_UserList.getModel());
-		for (int row = tableModel.getRowCount() - 1; row >= 0; --row) {
-			if (user.equals(tableModel.getValueAt(row, COLUMN_NAME))) {
-				tableModel.removeRow(row);
+//	private int compareNames(Object o1, Object o2) {
+//		return o1.toString().toLowerCase().replaceAll("\\^", "").compareTo(
+//				o2.toString().toLowerCase().replaceAll("\\^", "")
+//		);
+//	}
+
+	void userJoined(Player playerNew) {
+		for (Player player2 : playerList) {
+			if (playerNew == player2) {
+				return;
 			}
 		}
-		boolean continueSearch = true;
-		int rowNumb = tableModel.getRowCount();
-		do {
-			--rowNumb;
-			if (rowNumb >= 0) {
-				int compareRanks = compareRanks(
-						"" + rank, tableModel.getValueAt(rowNumb, COLUMN_RATING).toString()
-				);
-				int compareNames = compareNames(
-						user, tableModel.getValueAt(rowNumb, COLUMN_NAME)
-				);
-				continueSearch = (compareRanks > 0) || (compareRanks == 0 && compareNames < 0);
-			} else {
-				continueSearch = false;
-			}
-		} while (continueSearch);
 
-		Object[] row = {null, null, null};
-		row[COLUMN_NAME] = "" + user;
-		row[COLUMN_RATING] = "" + ((rank == 0) ? "" : "" + rank);
-		row[COLUMN_STATUS] = status;
-//		row[COLUMN_STATUS] = status;
-//		row[COLUMN_STATUS] = new JLabel(
-//				"te"
-//		);
-		tableModel.insertRow(rowNumb + 1, row);
+		final DefaultTableModel tableModel = ((DefaultTableModel)
+				jTable_UserList.getModel());
+		int position = 0;
+		for (Player player2 : playerList) {
+			if (Player.compare(playerNew, player2) <= 0) {
+				position += 1;
+			}
+		}
+		playerList.add(position, playerNew);
+
+		Object[] row = constructRow(playerNew);
+		tableModel.insertRow(position, row);
 
 		if (jTable_UserList.getRowCount() >= 1) {
-			jTable_UserList.setRowSelectionInterval(0, 0); // java seems to be buggy
+			// java seems to be buggy
+			jTable_UserList.setRowSelectionInterval(0, 0);
 		}
 		jTable_UserList.clearSelection(); // java seems to be buggy
+
+		playerNew.addChangeListener(new PlayerChangeListener() {
+
+			@Override
+			public void onChange(Player player) {
+				int position = 0;
+				for (Player player2 : playerList) {
+					if (player == player2) {
+
+						Object[] row = constructRow(player);
+						int columnNumber = 0;
+						for (Object object : row) {
+							tableModel.setValueAt(object, position, columnNumber);
+							columnNumber+=1;
+						}
+
+						break;
+					} else {
+						position+=1;
+					}
+				}
+			}
+		});
 	}
 
-	void userLeave(String user) {
+	void userLeave(Player playerLeaving) {
 		DefaultTableModel tableModel = ((DefaultTableModel) jTable_UserList.getModel());
-		boolean doExit = false;
-		int row = tableModel.getRowCount() - 1;
-		while ((row >= 0) && (row < tableModel.getRowCount()) && (doExit == false)) {
-			if (user.equals(tableModel.getValueAt(row, COLUMN_NAME))) {
-				tableModel.removeRow(row);
-				doExit = true;
+		int position=0;
+		for (Player player2 : playerList) {
+			if (playerLeaving == player2) {
+				tableModel.removeRow(position);
+				playerList.remove(position);
+				break;
+			} else {
+				position += 1;
 			}
-			--row;
 		}
 	}
 
@@ -103,7 +130,6 @@ public class RoomPart_Userlist
 			GuiController centralGuiController) {
 		this.roomInterface = containerRoom;
 		this.centralGuiController = centralGuiController;
-		RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
 		{
 			FontMetrics tableFontMetrics = jTable_UserList.getFontMetrics(
 					jTable_UserList.getFont()
@@ -112,12 +138,13 @@ public class RoomPart_Userlist
 			TableColumn statusColumn = jTable_UserList.getColumnModel().getColumn(
 					COLUMN_STATUS
 			);
-			int statusWidth = tableFontMetrics.stringWidth("XX");
+			int statusWidth = tableFontMetrics.stringWidth("XXXXXXXXX");
 			statusColumn.setPreferredWidth(statusWidth);
 			statusColumn.setWidth(statusWidth);
 			statusColumn.setMaxWidth(statusWidth);
 			statusColumn.setMinWidth(statusWidth);
 			statusColumn.setResizable(false);
+			statusColumn.setHeaderValue("статус");
 //			class KeyIconCellRenderer
 //					extends DefaultTableCellRenderer {
 //				public KeyIconCellRenderer() {
@@ -139,6 +166,10 @@ public class RoomPart_Userlist
 			ratingColumn.setMaxWidth(ratingWidth);
 			ratingColumn.setMinWidth(ratingWidth);
 			ratingColumn.setResizable(false);
+			ratingColumn.setHeaderValue("рейт");
+
+			jTable_UserList.getColumnModel().getColumn(COLUMN_NAME).
+					setHeaderValue("Имя");
 		}
 	}
 
@@ -149,74 +180,62 @@ public class RoomPart_Userlist
 	 * always regenerated by the Form Editor.
 	 */
 	@SuppressWarnings("unchecked")
-	// <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-	private void initComponents() {
+  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+  private void initComponents() {
 
-		jPopupMenu1 = new javax.swing.JPopupMenu();
-		jMenuItem1 = new javax.swing.JMenuItem();
-		jScrollPane_UserList = new javax.swing.JScrollPane();
-		jTable_UserList = new javax.swing.JTable();
+    jPopupMenu1 = new javax.swing.JPopupMenu();
+    jMenuItem1 = new javax.swing.JMenuItem();
+    jScrollPane_UserList = new javax.swing.JScrollPane();
+    jTable_UserList = new javax.swing.JTable();
 
-		jMenuItem1.setText("Для дополнительных действий щелкните дважды мышкой");
-		jPopupMenu1.add(jMenuItem1);
+    jMenuItem1.setText("Для дополнительных действий щелкните дважды мышкой");
+    jPopupMenu1.add(jMenuItem1);
 
-		jTable_UserList.setModel(
-				new javax.swing.table.DefaultTableModel(
-						new Object[][]{
+    jTable_UserList.setModel(new javax.swing.table.DefaultTableModel(
+      new Object [][] {
 
-						},
-						new String[]{
-								"", "Имя", "рейт"
-						}
-				) {
-					Class[] types = new Class[]{
-							java.lang.String.class, java.lang.String.class, java.lang.String.class
-					};
-					boolean[] canEdit = new boolean[]{
-							false, false, false
-					};
+      },
+      new String [] {
+        " ", " ", " "
+      }
+    ) {
+      Class[] types = new Class [] {
+        java.lang.String.class, java.lang.String.class, java.lang.String.class
+      };
+      boolean[] canEdit = new boolean [] {
+        false, false, false
+      };
 
-					public Class getColumnClass(int columnIndex) {
-						return types[columnIndex];
-					}
+      public Class getColumnClass(int columnIndex) {
+        return types [columnIndex];
+      }
 
-					public boolean isCellEditable(int rowIndex, int columnIndex) {
-						return canEdit[columnIndex];
-					}
-				}
-		);
-		jTable_UserList.setToolTipText(
-				"<html>\n\t* = отошёл,   ! = играет<br>\n\tДля дополнительных действий щелкните дважды мышкой<br>\n</html>"
-		);
-		jTable_UserList.setComponentPopupMenu(jPopupMenu1);
-		jTable_UserList.setFocusable(false);
-		jTable_UserList.getTableHeader().setReorderingAllowed(false);
-		jTable_UserList.addMouseListener(
-				new java.awt.event.MouseAdapter() {
-					public void mouseClicked(java.awt.event.MouseEvent evt) {
-						jTable_UserListMouseClicked(evt);
-					}
-				}
-		);
-		jScrollPane_UserList.setViewportView(jTable_UserList);
+      public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+      }
+    });
+    jTable_UserList.setToolTipText("<html>\n\t* = отошёл,   ! = играет<br>\n\tДля дополнительных действий щелкните дважды мышкой<br>\n</html>");
+    jTable_UserList.setComponentPopupMenu(jPopupMenu1);
+    jTable_UserList.setFocusable(false);
+    jTable_UserList.getTableHeader().setReorderingAllowed(false);
+    jTable_UserList.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        jTable_UserListMouseClicked(evt);
+      }
+    });
+    jScrollPane_UserList.setViewportView(jTable_UserList);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(
-								jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 223,
-								Short.MAX_VALUE
-						)
-		);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(
-								jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 318,
-								Short.MAX_VALUE
-						)
-		);
-	}// </editor-fold>//GEN-END:initComponents
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    this.setLayout(layout);
+    layout.setHorizontalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addComponent(jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+    );
+    layout.setVerticalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addComponent(jScrollPane_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+    );
+  }// </editor-fold>//GEN-END:initComponents
 
 	private void jTable_UserListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_UserListMouseClicked
 		if (evt.getClickCount() == 2) {
@@ -231,10 +250,10 @@ public class RoomPart_Userlist
 		}
 	}//GEN-LAST:event_jTable_UserListMouseClicked
 
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JMenuItem jMenuItem1;
-	private javax.swing.JPopupMenu jPopupMenu1;
-	private javax.swing.JScrollPane jScrollPane_UserList;
-	private javax.swing.JTable jTable_UserList;
-	// End of variables declaration//GEN-END:variables
+  // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JMenuItem jMenuItem1;
+  private javax.swing.JPopupMenu jPopupMenu1;
+  private javax.swing.JScrollPane jScrollPane_UserList;
+  private javax.swing.JTable jTable_UserList;
+  // End of variables declaration//GEN-END:variables
 }

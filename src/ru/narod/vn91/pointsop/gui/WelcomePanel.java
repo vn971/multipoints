@@ -27,12 +27,12 @@ public class WelcomePanel extends javax.swing.JPanel {
 //				return; // do not connect to tochki.org and ircworld.ru
 //			}
 			if (guiController.zagramTwo_server == null &&
-					nick.startsWith("mp")) {
+					nick.startsWith("!")) {
 				guiController.zagramTwo_server = new ServerZagram2(nick, guiController);
 				guiController.zagramTwo_server.connect();
 			}
 			if (guiController.pointsxt_vn91_server == null &&
-					nick.startsWith("mp") == false) {
+					nick.startsWith("!") == false) {
 				guiController.pointsxt_vn91_server = new ServerPointsxt(
 						"pointsgame.net", guiController, nick, "none", "201120", true, "155"
 				);
