@@ -116,6 +116,9 @@ public class ServerPointsxt
 		super.setLogin(login);
 
 		myName = getAllowedNick(myName, ircAcceptsRussianNicks);
+		if (myName.equals("")) {
+			myName = "a";
+		}
 		myNick_Originally = myName;
 		myName = "^" + myName;
 		myName = myName + "_X" + pointsxtVersion + "000000000[free]";
@@ -259,21 +262,28 @@ public class ServerPointsxt
 	}
 
 	public static String getAllowedNick(
-			String inputNick,
-			boolean acceptRussian) {
-		if (acceptRussian) {
-			inputNick = inputNick.replaceAll("[^a-zA-Z0-9ёа-яЁА-Я]", "");
-			if (inputNick.matches(".*[a-zA-Z].*")) {
-				inputNick = inputNick.replaceAll("[а-яА-Я]", "");
-				// delete all russian letters in case of a mixed nickname
-			}
+			final String myNameOnServer,
+			final boolean acceptNonEnglish) {
+		// final = I'm testing Functional Programming approach:)
+		final String filtered;
+		if (myNameOnServer.matches(".*[a-zA-Z].*")) {
+			filtered = myNameOnServer.replaceAll("[^a-zA-Z0-9]", "");
+		} else if (myNameOnServer.matches(".*[ёа-яЁА-Я].*") && acceptNonEnglish) {
+			filtered = myNameOnServer.replaceAll("[^ёа-яЁА-Я0-9]", "");
+		} else if (myNameOnServer.matches(".*[a-żA-Ż].*") && acceptNonEnglish) {
+			filtered = myNameOnServer.replaceAll("[^a-żA-Ż0-9]", "");
 		} else {
-			inputNick = inputNick.replaceAll("[^a-zA-Z0-9]", "");
+			filtered = myNameOnServer.replaceAll("[^0-9]", "");
 		}
-		if (inputNick.length() > 9) {
-			inputNick = inputNick.substring(0, 9);
+		final String result;
+		if (filtered.length()>9) {
+			result = filtered.substring(0,9);
+		} else {
+			result = filtered;
 		}
-		return inputNick;
+		// myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Zёа-яЁА-Яa-żA-Ż0-9]",
+		// "");
+		return result;
 	}
 
 	public void subscribeRoom(String roomName) {

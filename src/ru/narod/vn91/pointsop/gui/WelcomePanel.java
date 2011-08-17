@@ -17,8 +17,8 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	private void userWantsPointsxtConnection() {
 		String nick = jTextField_Username.getText();
-		nick = ServerPointsxt.getAllowedNick(nick, true);
-		jTextField_Username.setText(nick);
+//		nick = ServerPointsxt.getAllowedNick(nick, true);
+//		jTextField_Username.setText(nick);
 		if (nick.equals("") == false) {
 			Memory.setUserName(nick);
 //			if (nick.equals("pp")) {
@@ -26,12 +26,13 @@ public class WelcomePanel extends javax.swing.JPanel {
 //				guiController.pointsopServer.connect();
 //				return; // do not connect to tochki.org and ircworld.ru
 //			}
-			if (guiController.zagramTwo_server == null && Memory.isZagramTest()) {
+			if (guiController.zagramTwo_server == null &&
+					nick.startsWith("mp")) {
 				guiController.zagramTwo_server = new ServerZagram2(nick, guiController);
 				guiController.zagramTwo_server.connect();
 			}
 			if (guiController.pointsxt_vn91_server == null &&
-					Memory.isZagramTest() == false) {
+					nick.startsWith("mp") == false) {
 				guiController.pointsxt_vn91_server = new ServerPointsxt(
 						"pointsgame.net", guiController, nick, "none", "201120", true, "142"
 				);

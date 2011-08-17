@@ -302,7 +302,7 @@ public class PrivateChat extends javax.swing.JPanel {
 }//GEN-LAST:event_jTextField_ChatKeyPressed
 
 	private void jButton_SoundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SoundActionPerformed
-		server.sendChat(companionNick, "/SendSOUND");
+		server.sendPrivateMsg(companionNick, "/SendSOUND");
 	}//GEN-LAST:event_jButton_SoundActionPerformed
 
 	private void jButton_PingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PingActionPerformed

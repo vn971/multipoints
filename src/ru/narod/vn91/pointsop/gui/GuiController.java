@@ -507,10 +507,12 @@ public class GuiController implements GuiForServerInterface {
 
 	@Override
 	public void raw(ServerInterface server, String info) {
+		String add = server.getServerName() + ": " + info + "\n";
+
+//		System.out.print(add);
+
 		String oldText = serverOutput.getText();
-		serverOutput.setText(
-				oldText + server.getServerName() + ": " + info + "\n"
-		);
+		serverOutput.setText(oldText + add);
 	}
 
 	@Override
