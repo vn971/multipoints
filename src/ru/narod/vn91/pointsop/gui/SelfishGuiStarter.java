@@ -32,7 +32,7 @@ public class SelfishGuiStarter {
 			Memory.resetColors();
 		}
 		Memory.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - pointsOp 1.4.8");
+		final JFrame frame = new JFrame("Точки - MultiPoints 1.5.5");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
@@ -412,10 +412,10 @@ public class SelfishGuiStarter {
 				JMenu jMenu = new JMenu("Помощь");
 
 				jMenu.add(new JMenuItemWithLink(
-							"О программе PointsOP",
+							"О программе MultiPoints",
 							"http://pointsgame.net/site/pointsop"));
 				jMenu.add(new JMenuItemWithLink(
-							"Обсуждение PointsOP",
+							"Обсуждение MultiPoints",
 						"http://vkontakte.ru/pointsgame"));
 				jMenu.add(new JMenuItemWithLink(
 							"Полезные ссылки",
