@@ -3,7 +3,6 @@ package ru.narod.vn91.pointsop.gui;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 import javax.swing.table.*;
 
@@ -20,39 +19,24 @@ public class RoomPart_Userlist
 	final static int COLUMN_STATUS = 2;
 	ArrayList<Player> playerList = new ArrayList<Player>();
 
-	private String getSelectedUser() {
-		if ((jTable_UserList.getSelectedRow() >= 0)
-				&& (jTable_UserList.getSelectedRow() < jTable_UserList.getRowCount())) {
-			Object tableContents = jTable_UserList.getValueAt(
-					jTable_UserList.getSelectedRow(), COLUMN_NAME
-			);
-			return (tableContents == null) ? "" : tableContents.toString();
+	private Player getSelectedUser() {
+		int index = jTable_UserList.getSelectedRow();
+		if ((index >= 0)
+				&& (index < jTable_UserList.getRowCount())) {
+			return playerList.get(index);
 		} else {
-			return "";
+			return null;
 		}
 	}
 
 	private Object[] constructRow(Player player) {
 		Object[] row = { null, null, null };
 		row[COLUMN_NAME] = player.guiName;
-		row[COLUMN_RATING] = ""
-				+ ((player.rating == null || player.rating == 0)
-						? "" : "" + player.rating);
-		row[COLUMN_STATUS] = (player.status == null) ? "" : player.status;
+		row[COLUMN_RATING] = "" + (player.getRatingFailsafe() == 0
+				? "" : "" + player.getRatingFailsafe());
+		row[COLUMN_STATUS] = player.getStatusFailsafe();
 		return row;
 	}
-
-//	private int compareRanks(String a, String b) {
-//		int rankA = a.equals("") ? 0 : Integer.parseInt(a);
-//		int rankB = b.equals("") ? 0 : Integer.parseInt(b);
-//		return rankA - rankB;
-//	}
-
-//	private int compareNames(Object o1, Object o2) {
-//		return o1.toString().toLowerCase().replaceAll("\\^", "").compareTo(
-//				o2.toString().toLowerCase().replaceAll("\\^", "")
-//		);
-//	}
 
 	void userJoined(Player playerNew) {
 		for (Player player2 : playerList) {
@@ -138,7 +122,7 @@ public class RoomPart_Userlist
 			TableColumn statusColumn = jTable_UserList.getColumnModel().getColumn(
 					COLUMN_STATUS
 			);
-			int statusWidth = tableFontMetrics.stringWidth("XXXXXXXXX");
+			int statusWidth = tableFontMetrics.stringWidth("XXXXXXXXXX");
 			statusColumn.setPreferredWidth(statusWidth);
 			statusColumn.setWidth(statusWidth);
 			statusColumn.setMaxWidth(statusWidth);
@@ -239,15 +223,20 @@ public class RoomPart_Userlist
 
 	private void jTable_UserListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_UserListMouseClicked
 		if (evt.getClickCount() == 2) {
-			String user = getSelectedUser();
+			Player player = getSelectedUser();
 			centralGuiController.createPrivateChatWindow(
-					roomInterface.getServer(), user
+					roomInterface.getServer(), player.guiName
 			);
 		} else if (evt.getButton() == MouseEvent.BUTTON1) {
 			Point p = evt.getPoint();
 			if (jTable_UserList.getCellRect(0, 0, true).contains(p)) {
 			}
 		}
+		if (jTable_UserList.getRowCount() >= 1) {
+			// java seems to be buggy
+			jTable_UserList.setRowSelectionInterval(0, 0);
+		}
+		jTable_UserList.clearSelection(); // java seems to be buggy
 	}//GEN-LAST:event_jTable_UserListMouseClicked
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

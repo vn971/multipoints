@@ -24,7 +24,7 @@ public class ServerPointsop implements ServerInterface {
 //		new InputThread().start();
 	}
 
-	public void disconnecttt() {
+	public void disconnectServer() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -39,6 +39,10 @@ public class ServerPointsop implements ServerInterface {
 	public void acceptOpponent(String roomName,
 			String name) {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void rejectOpponent(String roomName, String notWantedOpponent) {
 	}
 
 	public void stopSearchingOpponent() {

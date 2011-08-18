@@ -4,13 +4,15 @@ public interface ServerInterface {
 
 	void connect();
 
-	void disconnecttt();
+	void disconnectServer();
 
 	void searchOpponent();
 
-	void requestPlay(String gameRoomName);
-
 	void acceptOpponent(String roomName, String newOpponent);
+
+	void rejectOpponent(String roomName, String notWantedOpponent);
+
+	void requestPlay(String gameRoomName);
 
 	public void stopSearchingOpponent();
 

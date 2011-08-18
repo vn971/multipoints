@@ -20,6 +20,11 @@ public class PlayerPool {
 		}
 	}
 
+	public void remove(ServerInterface server, String id) {
+		PlayerShort playerShort = new PlayerShort(server, id);
+		map.remove(playerShort);
+	}
+
 	class PlayerShort {
 
 		ServerInterface server;

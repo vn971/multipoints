@@ -77,7 +77,7 @@ public class ServerPointsxt
 		thread.start();
 	}
 
-	public void disconnecttt() {
+	public void disconnectServer() {
 		super.disconnect();
 		super.dispose();
 	}
@@ -117,7 +117,7 @@ public class ServerPointsxt
 
 		myName = getAllowedNick(myName, ircAcceptsRussianNicks);
 		if (myName.equals("")) {
-			myName = "a";
+			myName = String.format("Guest%04d", (int) (Math.random() * 9999));
 		}
 		myNick_Originally = myName;
 		myName = "^" + myName;
@@ -209,7 +209,8 @@ public class ServerPointsxt
 					, true, true);
 
 			gui.subscribedGame(
-					roomName, this, getMyName(), newOpponent, 0, 0,
+					roomName, this,
+					getMyName(), newOpponent,
 					"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
 			);
 			for (User user : super.getUsers(roomName)) {
@@ -217,6 +218,13 @@ public class ServerPointsxt
 				gui.userJoinedRoom(this, roomName, nicknameManager.getOrCreateShortNick(ircNick), true);
 			}
 		}
+	}
+
+	@Override
+	public void rejectOpponent(String roomName, String notWantedOpponent) {
+		super.sendMessage(
+				nicknameManager.getIrcNick(notWantedOpponent),
+				"Приглашение на игру отклонено.");
 	}
 
 	public void stopSearchingOpponent() {
@@ -293,7 +301,6 @@ public class ServerPointsxt
 				gui.subscribedGame(
 						roomName, this,
 						gameInfoAbstract.userFirst, gameInfoAbstract.userSecond,
-						gameInfoAbstract.rank1, gameInfoAbstract.rank2,
 						gameInfoAbstract.timeLimits, gameInfoAbstract.isRated,
 						"",
 						true /* chat is read-only */, false/*I'm a spectator*/, true
@@ -498,7 +505,7 @@ public class ServerPointsxt
 				myGame.opponentName = nick;
 				myGame.roomName = channel;
 				gui.subscribedGame(
-						channel, this, nick, getMyName(), 0, 0,
+						channel, this, nick, getMyName(),
 						"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
 				);
 				for (User user : super.getUsers(channel)) {
@@ -628,8 +635,6 @@ public class ServerPointsxt
 							this,
 							getMyName(),
 							nicknameManager.getOrCreateShortNick(sender),
-							0,
-							0,
 							"999мин/ход",
 							false,
 							"",

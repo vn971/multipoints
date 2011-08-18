@@ -145,6 +145,11 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 				}
 			}
 		}
+		if (jTable1.getRowCount() >= 1) {
+			// java seems to be buggy
+			jTable1.setRowSelectionInterval(0, 0);
+		}
+		jTable1.clearSelection(); // java seems to be buggy
 	}//GEN-LAST:event_jTable1MouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

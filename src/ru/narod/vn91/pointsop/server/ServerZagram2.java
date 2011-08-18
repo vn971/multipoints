@@ -36,6 +36,9 @@ public class ServerZagram2 implements ServerInterface {
 		}
 		// myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Zёа-яЁА-Яa-żA-Ż0-9]",
 		// "");
+		if (myNameOnServer.equals("")) {
+			myNameOnServer = String.format("Guest%04d", (int) (Math.random() * 9999));
+		}
 
 		this.myNameOnServer = "*" + myNameOnServer;
 		this.gui = gui;
@@ -50,6 +53,17 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
+	public void rejectOpponent(String roomName, String notWantedOpponent) {
+		String result =
+				getLinkContent("http://zagram.org/a.kropki?idGracza=" +
+						secretId + "&co=zaproszenieNie");
+		if (result.equals("") == false) {
+			gui.rawError(this,
+					"non-empty result when rejecting game invitation: " + result);
+		}
+	}
+
+	@Override
 	public void connect() {
 		new Thread() {
 			public void run() {
@@ -57,14 +71,21 @@ public class ServerZagram2 implements ServerInterface {
 				getLinkContent("http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
 						secretId + "&opis=" +
 						getUrlEncoded(myNameOnServer) + "&lang=ru");
+				Runtime.getRuntime().addShutdownHook(new Thread() {
+					@Override
+					public void run() {
+						disconnectServer();
+					}
+				});
+				new ThreadMain().start();
 			};
 		}.start();
-
-		new ThreadMain().start();
 	}
 
 	@Override
-	public void disconnecttt() {
+	public void disconnectServer() {
+		getLinkContent("http://zagram.org/a.kropki?playerId=" +
+				secretId + "&co=usunGracza");
 		this.isDisposed = true;
 	}
 
@@ -124,14 +145,14 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void surrender(String roomName) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void unsubscribeRoom(String room) {
 		String msgToSend = "q" + queue.sizePlusOne() + "." + room + ".";
 		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void surrender(String roomName) {
+		// TODO Auto-generated method stub
 	}
 
 	private synchronized String getLinkContent(String link) {
@@ -324,6 +345,19 @@ public class ServerZagram2 implements ServerInterface {
 						}
 						gui.addUserInfo(ServerZagram2.this, player, player, null, rating,
 								winCount, lossCount, drawCount, myStatus);
+					} else if (message.startsWith("vg")) {
+						String usefulPart = message.substring(2);
+						String sender = usefulPart.replaceAll("\\..*", "");
+						String gameDescription = usefulPart.replaceFirst("[^.].", "");
+						gui.privateMessageReceived(
+								ServerZagram2.this, "server",
+								"Player '" + sender + "' invited you to a game: "
+										+ gameDescription +
+										// ". The invitation is rejected because MultiPoints couldn't handle the game."
+										". MultiPoints can't handle this. Doing nothing."
+								);
+						ServerZagram2.this.rejectOpponent(null, sender);
+						// send reje
 					}
 				}
 			} else {

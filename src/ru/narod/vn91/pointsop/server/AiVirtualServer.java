@@ -30,7 +30,6 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public void init() {
 		gui.subscribedGame("", this,
 				ai.getName(), "Me",
-				10, 10,
 				"", false, "", true, true, true);
 		ai.init();
 	}
@@ -63,7 +62,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public void connect() {
 	}
 
-	public void disconnecttt() {
+	public void disconnectServer() {
 		throw new UnsupportedOperationException();
 //		gui.unsubsribedGame(this, "");
 //		gui.serverClosed(this);
@@ -86,6 +85,10 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public void acceptOpponent(String roomName,
 			String name) {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void rejectOpponent(String roomName, String notWantedOpponent) {
 	}
 
 	public void stopSearchingOpponent() {

@@ -24,14 +24,6 @@ public interface GuiForServerInterface {
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status);
 
-//	public abstract void userJoinedRoom(
-//			ServerInterface server,
-//			String room,
-//			String user,
-//			boolean silent,
-//			int rank,
-//			String status);
-
 	public abstract void userJoinedRoom(
 			ServerInterface server,
 			String room,
@@ -41,7 +33,7 @@ public interface GuiForServerInterface {
 	public abstract void userLeftRoom(
 			ServerInterface server,
 			String room,
-			String user);
+			String id);
 
 	public abstract void userDisconnected(
 			ServerInterface server,
@@ -56,10 +48,8 @@ public interface GuiForServerInterface {
 	public abstract void subscribedGame(
 			String roomNameOnServer,
 			ServerInterface server,
-			String userFirst,
-			String userSecond,
-			int rank1,
-			int rank2,
+			String idRed,
+			String idBlue,
 			String timeLimits,
 			boolean isRated,
 			String startingPosition,
@@ -152,11 +142,6 @@ public interface GuiForServerInterface {
 			String room,
 			boolean isRedLooser,
 			boolean wantToSave);
-
-//	public abstract void raw(
-//			ServerInterface server,
-//			String info,
-//			MessageType type);
 
 	public abstract void raw(
 			ServerInterface server,

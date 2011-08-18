@@ -24,3 +24,4 @@ glob:.classpath
 glob:.recommenders*
 glob:.project
 glob:build/classes/*
+glob:nbproject/private/private.properties

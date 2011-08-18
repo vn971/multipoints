@@ -2,6 +2,7 @@ package ru.narod.vn91.pointsop.gui;
 
 import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.data.ObjectKeeper;
+import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
@@ -11,8 +12,8 @@ import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.TimedAction;
 
-import javax.jnlp.FileContents;
-import javax.jnlp.FileOpenService;
+//import javax.jnlp.FileContents;
+//import javax.jnlp.FileOpenService;
 import javax.jnlp.FileSaveService;
 import javax.jnlp.ServiceManager;
 import javax.swing.*;
@@ -27,8 +28,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private String nameOnServer;
 	GuiForServerInterface centralGuiController;
 	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
-	String userFirst, userSecond;
-	int rank1, rank2;
+//	String userFirst, userSecond;
+//	int rank1, rank2;
+	Player playerRed, playerBlue;
 	String timeLimits;
 	boolean isRated;
 	String startingPosition;
@@ -161,7 +163,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public void stopGame(boolean isRedPlayer) {
-		String whoPressedStop = (isRedPlayer) ? userFirst : userSecond;
+		String whoPressedStop = (isRedPlayer) ? playerRed.guiName : playerBlue.guiName;
 		if (isRedPlayer) {
 			redStopped = true;
 		} else {
@@ -185,8 +187,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	public void gameLost(final boolean isRedLooser,
 			final boolean wantToSave) {
 		gameResult = (isRedLooser) ? Sgf.GameResult.BLUE_WON_BY_RESIGN : Sgf.GameResult.RED_WON_BY_RESIGN;
-		final String whoWon = (isRedLooser) ? userSecond : userFirst;
-		String whoLost = (isRedLooser) ? userFirst : userSecond;
+		final String whoWon = (isRedLooser) ? playerBlue.guiName : playerRed.guiName;
+		String whoLost = (isRedLooser) ? playerRed.guiName : playerBlue.guiName;
 		roomPart_Chat.addServerNotice(
 				"" + whoLost + " сдался... Победитель - " + whoWon + ".");
 		new Thread() {
@@ -196,13 +198,13 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				String eidokropkiLink = "";
 				if ((isRated == true) && (wantToSave == true)) {
 					eidokropkiLink = PhpBackupServer.sendToEidokropki(
-							userFirst, userSecond, rank1, rank2, 39, 32,
+							playerRed.guiName, playerBlue.guiName, playerRed.getRatingFailsafe(), playerBlue.getRatingFailsafe(), 39, 32,
 							timeLimits, gameResult, moveList);
 					getServer().sendChat(server.getMainRoom(),
-							"Закончена игра " + userFirst + "-" + userSecond
+							"Закончена игра " + playerRed.guiName + "-" + playerBlue.guiName
 							+ " ( " + eidokropkiLink + " ), победитель - " + whoWon + ". Поздравляем!");
 				}
-				PhpBackupServer.sendToPointsgt(userFirst, userSecond,
+				PhpBackupServer.sendToPointsgt(playerRed.guiName, playerBlue.guiName,
 						isRated, timeLimits, isRedLooser, moveList,
 						eidokropkiLink);
 			}
@@ -257,10 +259,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			ServerInterface server,
 			String nameOnServer,
 			GuiController centralGuiController,
-			String userFirst,
-			String userSecond,
-			int rank1,
-			int rank2,
+			Player playerRed,
+			Player playerBlue,
 			String timeLimits,
 			boolean isRated,
 			String startingPosition,
@@ -272,10 +272,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		this.server = server;
 		this.nameOnServer = nameOnServer;
 		this.centralGuiController = centralGuiController;
-		this.userFirst = userFirst;
-		this.userSecond = userSecond;
-		this.rank1 = rank1;
-		this.rank2 = rank2;
+		this.playerRed = playerRed;
+		this.playerBlue = playerBlue;
 		this.timeLimits = timeLimits;
 		this.isRated = isRated;
 		this.startingPosition = startingPosition;
@@ -311,7 +309,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jPanel_Tree.setVisible(false);
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
-		roomPart_Chat.initChat(this, userFirst, userSecond);
+		roomPart_Chat.initChat(this, playerRed.guiName, playerBlue.guiName);
 //		if (amIPlaying == false) {
 //		jButton_AdditionalActions.setVisible(false);
 		jButton_EndGame.setVisible(false);
@@ -560,8 +558,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
 		String[] extensions = {".sgf", ".sgftochki"};
 		String sgfData = Sgf.constructSgf(
-				userFirst, userSecond,
-				rank1, rank2, 39, 32,
+				playerRed.guiName, playerBlue.guiName,
+				playerRed.getRatingFailsafe(), playerBlue.getRatingFailsafe(), 39, 32,
 				timeLimits, gameResult, 0,
 				moveList, true);
 

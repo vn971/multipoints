@@ -43,13 +43,13 @@ public class GuiController implements GuiForServerInterface {
 	 */
 	public synchronized void serverClosed(ServerInterface server) {
 		if (server == pointsxt_ircworldru_server) {
-			pointsxt_ircworldru_server.disconnecttt();
+			pointsxt_ircworldru_server.disconnectServer();
 			pointsxt_ircworldru_server = null;
 		} else if (server == pointsxt_tochkiorg_server) {
-			pointsxt_tochkiorg_server.disconnecttt();
+			pointsxt_tochkiorg_server.disconnectServer();
 			pointsxt_tochkiorg_server = null;
 		} else if (server == pointsopServer) {
-			pointsopServer.disconnecttt();
+			pointsopServer.disconnectServer();
 			pointsopServer = null;
 		}
 		if (!(server instanceof AiVirtualServer)) {
@@ -146,17 +146,19 @@ public class GuiController implements GuiForServerInterface {
 	 */
 	public synchronized void userDisconnected(
 			ServerInterface server,
-			String user) {
+			String id) {
+		Player player = playerPool.get(server, id);
 		PrivateChat privateChat = privateChatList.get(
 				new ServerUserName(
-						user,
+						player.id,
 						server
 				)
 				);
-		if ((privateChat != null) && (tabbedPane.indexOfComponent(
-				privateChat) >= 0)) {
-			privateChat.addChat("server", user + " вышел из игры...", true);
+		if ((privateChat != null) && (tabbedPane.
+				indexOfComponent(privateChat) >= 0)) {
+			privateChat.addChat("server", player.guiName + " вышел из игры...", true);
 		}
+		playerPool.remove(server, id);
 	}
 
 	/* (non-Javadoc)
@@ -167,7 +169,6 @@ public class GuiController implements GuiForServerInterface {
 			ServerInterface serverInterface,
 			String guiRoomName,
 			boolean isServersMainRoom) {
-//		System.out.println("GuiController.subscribedLangRoom()");
 		LangRoom langRoom = langRooms.get(
 				new ServerRoom(
 						roomNameOnServer,
@@ -178,9 +179,7 @@ public class GuiController implements GuiForServerInterface {
 		if (langRoom != null) {
 			// nothing
 		} else {
-//			System.out.println("GuiController.subscribedLangRoom()2");
 			langRoom = new LangRoom(serverInterface, roomNameOnServer, this);
-//			System.out.println("GuiController.subscribedLangRoom()3");
 			langRooms.put(
 					new ServerRoom(roomNameOnServer, serverInterface),
 					langRoom
@@ -194,7 +193,6 @@ public class GuiController implements GuiForServerInterface {
 			if (isServersMainRoom) {
 				tabbedPane.setSelectedComponent(langRoom);
 			}
-			System.out.println("GuiController.subscribedLangRoom()4");
 		}
 	}
 
@@ -204,10 +202,10 @@ public class GuiController implements GuiForServerInterface {
 	public synchronized void subscribedGame(
 			String roomNameOnServer,
 			ServerInterface server,
-			String userFirst,
-			String userSecond,
-			int rank1,
-			int rank2,
+			String idRed,
+			String idBlue,
+//			int rank1,
+//			int rank2,
 			String timeLimits,
 			boolean isRated,
 			String startingPosition,
@@ -217,10 +215,12 @@ public class GuiController implements GuiForServerInterface {
 		if (roomInterfaces.containsKey(new ServerRoom(roomNameOnServer, server))) {
 			return;
 		}
+		Player pRed = playerPool.get(server, idRed);
+		Player pBlue = playerPool.get(server, idBlue);
 		GameRoom containerRoom_Game = new GameRoom(
 				server, roomNameOnServer,
 				this,
-				userFirst, userSecond, rank1, rank2, timeLimits, isRated,
+				pRed, pBlue, timeLimits, isRated,
 				startingPosition, chatReadOnly, amIPlaying, amIRed
 				);
 		gameRooms.put(
@@ -231,18 +231,16 @@ public class GuiController implements GuiForServerInterface {
 				new ServerRoom(roomNameOnServer, server),
 				containerRoom_Game
 		);
-//		System.out.println(
-//				"Memory.getPlayer1Color().toString() = " + Memory.getPlayer1Color().toString());
 		tabbedPane.addTab(
 				"<html><font color="
 						+ GlobalGuiSettings.getHtmlColor(
 						Memory.getPlayer1Color()
 				)
-						+ ">" + userFirst + "</font><font color=black> - </font><font color="
+						+ ">" + pRed.guiName + "</font><font color=black> - </font><font color="
 						+ GlobalGuiSettings.getHtmlColor(
 						Memory.getPlayer2Color()
 				)
-						+ ">" + userSecond + "</font></html>",
+						+ ">" + pBlue.guiName + "</font></html>",
 				containerRoom_Game, true
 		);
 		tabbedPane.setSelectedComponent(containerRoom_Game);
@@ -254,7 +252,6 @@ public class GuiController implements GuiForServerInterface {
 	public synchronized void unsubsribedRoom(
 			ServerInterface server,
 			String room) {
-//		System.out.println("gui.unsubscribedRoom " + room);
 		RoomInterface roomInterface = roomInterfaces.get(
 				new ServerRoom(
 						room,
