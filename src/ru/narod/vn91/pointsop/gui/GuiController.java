@@ -10,12 +10,12 @@ import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerPool;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.gui.GameRoom;
 
 public class GuiController implements GuiForServerInterface {
@@ -524,13 +524,13 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void raw(ServerInterface server, String info) {
+	public synchronized void raw(ServerInterface server, String info) {
 		String add = server.getServerName() + ": " + info + "\n";
 
-//		System.out.print(add);
+		System.out.print(add);
 
-		String oldText = serverOutput.getText();
-		serverOutput.setText(oldText + add);
+//		String oldText = serverOutput.getText();
+//		serverOutput.setText(oldText + add);
 	}
 
 	@Override

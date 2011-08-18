@@ -15,8 +15,8 @@ import javax.swing.JTabbedPane;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
-import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 public class SelfishGuiStarter {
 

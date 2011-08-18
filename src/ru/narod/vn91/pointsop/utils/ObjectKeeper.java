@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsop.data;
+package ru.narod.vn91.pointsop.utils;
 
 /**
  * for synchronization

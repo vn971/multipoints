@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import javax.swing.AbstractButton;
 import javax.swing.JColorChooser;
-import ru.narod.vn91.pointsop.data.CustomColors;
-import ru.narod.vn91.pointsop.data.Memory;
-import ru.narod.vn91.pointsop.data.Memory.ClickAudibility;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.utils.CustomColors;
+import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Memory.ClickAudibility;
 
 public class SettingsPanel extends javax.swing.JPanel {
 

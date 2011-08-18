@@ -3,7 +3,7 @@ package ru.narod.vn91.pointsop.sounds;
 import java.applet.Applet;
 import java.applet.AudioClip;
 
-import ru.narod.vn91.pointsop.data.Memory;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 public class Sounds {
 

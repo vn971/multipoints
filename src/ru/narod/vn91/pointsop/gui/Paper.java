@@ -15,14 +15,14 @@ import java.util.Date;
 
 import javax.swing.JPanel;
 
-import ru.narod.vn91.pointsop.data.CustomColors;
-import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
+import ru.narod.vn91.pointsop.utils.CustomColors;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 @SuppressWarnings("serial")
 public abstract class Paper extends JPanel {

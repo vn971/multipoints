@@ -18,9 +18,9 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
-import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 public class RoomPart_Chat extends javax.swing.JPanel {
 

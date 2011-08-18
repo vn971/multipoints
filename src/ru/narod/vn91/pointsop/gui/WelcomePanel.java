@@ -6,10 +6,10 @@ import java.awt.event.MouseListener;
 import java.net.URI;
 import javax.swing.JLabel;
 
-import ru.narod.vn91.pointsop.data.Memory;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
 import ru.narod.vn91.pointsop.server.ServerZagram2;
 //import ru.narod.vn91.pointsop.zagram.ServerZagram;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 public class WelcomePanel extends javax.swing.JPanel {
 
@@ -162,7 +162,7 @@ public class WelcomePanel extends javax.swing.JPanel {
         .addContainerGap())
     );
 
-    jPanel_Connections.setBorder(javax.swing.BorderFactory.createTitledBorder("подключиться к...:"));
+    jPanel_Connections.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "подключиться к:", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP));
 
     jButton_ConnectToZagram.setText("zagram.org");
     jButton_ConnectToZagram.setNextFocusableComponent(jTextField_Username);
@@ -232,6 +232,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 	private void jTextField_UsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_UsernameKeyPressed
 		if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 			connectToPointsxt();
+			connectToZagram();
 		}
 	}//GEN-LAST:event_jTextField_UsernameKeyPressed
 

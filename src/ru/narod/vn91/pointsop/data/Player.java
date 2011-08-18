@@ -12,13 +12,13 @@ public class Player {
 	public final ServerInterface server;
 	public final String id;
 
-	public String guiName;
-	public Integer rating;
-	public Integer winCount;
-	public Integer lossCount;
-	public Integer drawCount;
+	public String guiName = "";
+	public Integer rating = 0;
+	public Integer winCount = 0;
+	public Integer lossCount = 0;
+	public Integer drawCount = 0;
 	public Image image;
-	public String status;
+	public String status = "";
 
 	Collection<PlayerChangeListener> changeListenerList = new ArrayList<PlayerChangeListener>();
 
@@ -27,7 +27,6 @@ public class Player {
 		this.server = server;
 		this.id = id;
 		this.guiName = id;
-		this.status = "";
 		// others = null, 0
 	}
 

@@ -59,7 +59,7 @@ public class ServerZagram2 implements ServerInterface {
 						secretId + "&co=zaproszenieNie");
 		if (result.equals("") == false) {
 			gui.rawError(this,
-					"non-empty result when rejecting game invitation: " + result);
+					"Непустой ответ при попытке отказаться от игры: " + result);
 		}
 	}
 
@@ -152,11 +152,10 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void surrender(String roomName) {
-		// TODO Auto-generated method stub
 	}
 
 	private synchronized String getLinkContent(String link) {
-		// gui.raw(this, "visiting: " + link);
+		gui.raw(this, "visiting: " + link);
 		StringBuilder result = new StringBuilder();
 		try {
 			URL url;
@@ -165,10 +164,8 @@ public class ServerZagram2 implements ServerInterface {
 			url = new URL(link);
 			urlConn = url.openConnection();
 			inStream = new InputStreamReader(
-						urlConn.getInputStream());
-			BufferedReader buff = null;
-			buff = new BufferedReader(inStream);
-
+						urlConn.getInputStream(), "UTF-8");
+			BufferedReader buff = new BufferedReader(inStream);
 			while (true) {
 				String nextLine;
 				nextLine = buff.readLine();
@@ -181,7 +178,7 @@ public class ServerZagram2 implements ServerInterface {
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {
 		}
-		// gui.raw(this, "received: " + result.toString());
+		gui.raw(this, "received: " + result.toString());
 		return result.toString();
 	}
 
@@ -218,15 +215,6 @@ public class ServerZagram2 implements ServerInterface {
 		public void run() {
 			while (isDisposed == false) {
 
-				// Object o = new Object();
-				// synchronized (o) {
-				// try {
-				// o.wait(1000L);
-				// } catch (InterruptedException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-				// }
 				Wait.waitExactly(1000L);
 
 				String commands = "";
@@ -322,7 +310,7 @@ public class ServerZagram2 implements ServerInterface {
 										"",
 										"player "
 												+ playerAsString
-												+ " asks for undo. MultiPoints can't handle the request yet.:(");
+												+ " Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(");
 					} else if (message.startsWith("i")) {
 						// player left
 						String[] dotSplitted = message.substring("i".length()).split("\\.");
@@ -349,12 +337,17 @@ public class ServerZagram2 implements ServerInterface {
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", "");
 						String gameDescription = usefulPart.replaceFirst("[^.].", "");
-						gui.privateMessageReceived(
-								ServerZagram2.this, "server",
-								"Player '" + sender + "' invited you to a game: "
-										+ gameDescription +
-										// ". The invitation is rejected because MultiPoints couldn't handle the game."
-										". MultiPoints can't handle this. Doing nothing."
+						gui
+								.privateMessageReceived(
+										ServerZagram2.this,
+										"server",
+										"Игрок '"
+												+ sender
+												+ "' вызвал(а) тебя на игру: "
+												+ gameDescription
+												+
+												// ". The invitation is rejected because MultiPoints couldn't handle the game."
+												". MultiPoints пока не умеет обрабатывать это сообщение -- отослан отказ от игры."
 								);
 						ServerZagram2.this.rejectOpponent(null, sender);
 						// send reje

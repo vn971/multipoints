@@ -1,7 +1,5 @@
 package ru.narod.vn91.pointsop.gui;
 
-import ru.narod.vn91.pointsop.data.Memory;
-import ru.narod.vn91.pointsop.data.ObjectKeeper;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
@@ -10,6 +8,8 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 import ru.narod.vn91.pointsop.php.PhpBackupServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 import ru.narod.vn91.pointsop.utils.TimedAction;
 
 //import javax.jnlp.FileContents;
