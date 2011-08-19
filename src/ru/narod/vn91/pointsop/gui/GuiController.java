@@ -10,6 +10,8 @@ import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import ru.narod.vn91.pointsop.data.GameInfo;
+import ru.narod.vn91.pointsop.data.GamePool;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerPool;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
@@ -33,13 +35,18 @@ public class GuiController implements GuiForServerInterface {
 	HashMap<ServerRoom, LangRoom> langRooms = new HashMap<ServerRoom, LangRoom>();
 	HashMap<ServerUserName, PrivateChat> privateChatList = new HashMap<ServerUserName, PrivateChat>();
 	PlayerPool playerPool = new PlayerPool();
+	GamePool gamePool = new GamePool();
 
 	GuiController(final JTabbedPaneMod tabbedPane) {
 		this.tabbedPane = tabbedPane;
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverClosed(ru.narod.vn91.pointsop.server.ServerInterface)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverClosed(ru.narod.
+	 * vn91.pointsop.server.ServerInterface)
 	 */
 	public synchronized void serverClosed(ServerInterface server) {
 		if (server == pointsxt_ircworldru_server) {
@@ -58,8 +65,7 @@ public class GuiController implements GuiForServerInterface {
 					"Отключился от сервера... \n"
 							+ "К сожалению, переподключиться в \"тихом\" режиме "
 							+ "пока-что невозможно. \n"
-							+ "Чтобы подключиться, закройте приложение и откройте его заново."
-			);
+							+ "Чтобы подключиться, закройте приложение и откройте его заново.");
 		}
 	}
 
@@ -75,17 +81,27 @@ public class GuiController implements GuiForServerInterface {
 		player.updateFrom(updateInstance);
 	}
 
-//	/* (non-Javadoc)
-//	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userJoinedLangRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, boolean, int, java.lang.String)
-//	 */
-//	public synchronized void userJoinedRoom(
-//			ServerInterface server,
-//			String room,
-//			String user,
-//			boolean silent,
-//			int rank,
-//			String status) {
-//	}
+	@Override
+	public void addGameInfo(ServerInterface server, String id,
+			String redId, String blueId,
+			Boolean isRated, Integer handicapRed,
+			Integer freeTemporalTime,
+			Integer additionalAccumulatingTime,
+			Integer startingTime,
+			Integer periodLength) {
+		GameInfo gameInfo = gamePool.get(server, id);
+		Player redP = playerPool.get(server, redId);
+		Player blueP = playerPool.get(server, blueId);
+		GameInfo updateInstance = new GameInfo(
+				server, id,
+				redP, blueP,
+				isRated, handicapRed,
+				freeTemporalTime,
+				additionalAccumulatingTime,
+				startingTime,
+				periodLength);
+		gameInfo.updateFrom(updateInstance);
+	}
 
 	@Override
 	public void userJoinedRoom(ServerInterface server, String room, String id,
@@ -114,8 +130,12 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userLeavedRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#userLeavedRoom(ru.narod
+	 * .vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
 	 */
 	public synchronized void userLeftRoom(
 			ServerInterface server,
@@ -127,7 +147,7 @@ public class GuiController implements GuiForServerInterface {
 						room,
 						server
 				)
-		);
+				);
 		if (roomInterface == null) {
 		} else {
 			RoomPart_Userlist users = roomInterface.getRoomPart_UserList();
@@ -141,8 +161,12 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#userDisconnected(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#userDisconnected(ru.narod
+	 * .vn91.pointsop.server.ServerInterface, java.lang.String)
 	 */
 	public synchronized void userDisconnected(
 			ServerInterface server,
@@ -161,8 +185,13 @@ public class GuiController implements GuiForServerInterface {
 		playerPool.remove(server, id);
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#subscribedLangRoom(java.lang.String, ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#subscribedLangRoom(java
+	 * .lang.String, ru.narod.vn91.pointsop.server.ServerInterface,
+	 * java.lang.String, boolean)
 	 */
 	public synchronized void subscribedLangRoom(
 			String roomNameOnServer,
@@ -174,7 +203,7 @@ public class GuiController implements GuiForServerInterface {
 						roomNameOnServer,
 						serverInterface
 				)
-		);
+				);
 
 		if (langRoom != null) {
 			// nothing
@@ -183,11 +212,11 @@ public class GuiController implements GuiForServerInterface {
 			langRooms.put(
 					new ServerRoom(roomNameOnServer, serverInterface),
 					langRoom
-			);
+					);
 			roomInterfaces.put(
 					new ServerRoom(roomNameOnServer, serverInterface),
 					langRoom
-			);
+					);
 			tabbedPane.addTab(guiRoomName, langRoom, false);
 			tabbedPane.makeBold(langRoom);
 			if (isServersMainRoom) {
@@ -196,58 +225,51 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#subscribedGame(java.lang.String, ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, int, int, java.lang.String, boolean, java.lang.String, boolean, boolean)
-	 */
-	public synchronized void subscribedGame(
-			String roomNameOnServer,
-			ServerInterface server,
-			String idRed,
-			String idBlue,
-//			int rank1,
-//			int rank2,
-			String timeLimits,
-			boolean isRated,
-			String startingPosition,
-			boolean chatReadOnly,
-			boolean amIPlaying,
-			boolean amIRed) {
-		if (roomInterfaces.containsKey(new ServerRoom(roomNameOnServer, server))) {
+	@Override
+	public void subscribedGame(
+			ServerInterface server, String roomId,
+			String redId, String blueId,
+			boolean chatReadOnly, boolean amIPlaying, boolean amIRed) {
+		Player red = playerPool.get(server, redId);
+		Player blue = playerPool.get(server, blueId);
+		GameInfo game = gamePool.get(server, roomId);
+
+		if (roomInterfaces.containsKey(new ServerRoom(game.id, server))) {
 			return;
 		}
-		Player pRed = playerPool.get(server, idRed);
-		Player pBlue = playerPool.get(server, idBlue);
 		GameRoom containerRoom_Game = new GameRoom(
-				server, roomNameOnServer,
-				this,
-				pRed, pBlue, timeLimits, isRated,
-				startingPosition, chatReadOnly, amIPlaying, amIRed
-				);
+				game, red, blue,
+				this, chatReadOnly, amIPlaying, amIRed);
 		gameRooms.put(
-				new ServerRoom(roomNameOnServer, server),
+				new ServerRoom(game.id, server),
 				containerRoom_Game
-		);
+				);
 		roomInterfaces.put(
-				new ServerRoom(roomNameOnServer, server),
+				new ServerRoom(game.id, server),
 				containerRoom_Game
-		);
+				);
 		tabbedPane.addTab(
 				"<html><font color="
 						+ GlobalGuiSettings.getHtmlColor(
-						Memory.getPlayer1Color()
-				)
-						+ ">" + pRed.guiName + "</font><font color=black> - </font><font color="
+								Memory.getPlayer1Color()
+								)
+						+ ">" + red.guiName
+						+ "</font><font color=black> - </font><font color="
 						+ GlobalGuiSettings.getHtmlColor(
-						Memory.getPlayer2Color()
-				)
-						+ ">" + pBlue.guiName + "</font></html>",
+								Memory.getPlayer2Color()
+								)
+						+ ">" + blue.guiName + "</font></html>",
 				containerRoom_Game, true
-		);
+				);
 		tabbedPane.setSelectedComponent(containerRoom_Game);
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedRoom(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedRoom(ru.narod
+	 * .vn91.pointsop.server.ServerInterface, java.lang.String)
 	 */
 	public synchronized void unsubsribedRoom(
 			ServerInterface server,
@@ -257,15 +279,19 @@ public class GuiController implements GuiForServerInterface {
 						room,
 						server
 				)
-		);
+				);
 		if (roomInterface != null) {
 			tabbedPane.remove((Component) roomInterface);
 		}
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedGame(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedGame(ru.narod
+	 * .vn91.pointsop.server.ServerInterface, java.lang.String)
 	 */
 	public synchronized void unsubsribedGame(
 			ServerInterface server,
@@ -275,39 +301,50 @@ public class GuiController implements GuiForServerInterface {
 						room,
 						server
 				)
-		);
+				);
 		if (roomInterface != null) {
 			tabbedPane.remove((Component) roomInterface);
 		}
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#chatReceived(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#chatReceived(ru.narod.
+	 * vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String,
+	 * java.lang.String)
 	 */
 	public synchronized void chatReceived(
 			ServerInterface server,
 			String room,
 			String user,
-			String message) {
+			String message,
+			Long time) {
 		RoomInterface roomInterface = roomInterfaces.get(
 				new ServerRoom(
 						room,
 						server
 				)
-		);
+				);
 		if (roomInterface == null) {
 		} else {
 			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
 			if (chat != null) {
-				roomInterface.getRoomPart_Chat().addChat(user, message);
+				roomInterface.getRoomPart_Chat().addChat(user, message, time);
 				tabbedPane.makeBold(roomInterface.getMainJPanel());
 			}
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#privateMessageReceived(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#privateMessageReceived
+	 * (ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String,
+	 * java.lang.String)
 	 */
 	public synchronized void privateMessageReceived(
 			ServerInterface server,
@@ -318,7 +355,7 @@ public class GuiController implements GuiForServerInterface {
 						user,
 						server
 				)
-		);
+				);
 		if (privateChat == null) {
 			// creating new panel
 			privateChat = new PrivateChat(server, this, user);
@@ -329,7 +366,7 @@ public class GuiController implements GuiForServerInterface {
 			if (tabbedPane.indexOfComponent(privateChat) == -1) {
 				tabbedPane.addTab(
 						user, privateChat, true
-				); // resurrecting a closed panel
+						); // resurrecting a closed panel
 				tabbedPane.makeBold(privateChat);
 			} else {
 				// updating an old and not closed panel
@@ -345,8 +382,12 @@ public class GuiController implements GuiForServerInterface {
 		new Sounds().playAlarmSignal();
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#createPrivateChatWindow(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#createPrivateChatWindow
+	 * (ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
 	 */
 	public synchronized void createPrivateChatWindow(
 			ServerInterface server,
@@ -356,7 +397,7 @@ public class GuiController implements GuiForServerInterface {
 						user,
 						server
 				)
-		);
+				);
 		if (privateChat == null) {
 			privateChat = new PrivateChat(server, this, user);
 			privateChatList.put(new ServerUserName(user, server), privateChat);
@@ -370,8 +411,13 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverNoticeReceived(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverNoticeReceived(ru
+	 * .narod.vn91.pointsop.server.ServerInterface, java.lang.String,
+	 * java.lang.String)
 	 */
 	public synchronized void serverNoticeReceived(
 			ServerInterface server,
@@ -382,7 +428,7 @@ public class GuiController implements GuiForServerInterface {
 						room,
 						server
 				)
-		);
+				);
 		if (roomInterface == null) {
 		} else {
 			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
@@ -392,8 +438,13 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameCreated(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameCreated(ru.narod.vn91
+	 * .pointsop.server.ServerInterface, java.lang.String, java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public synchronized void gameCreated(
 			ServerInterface server,
@@ -406,19 +457,23 @@ public class GuiController implements GuiForServerInterface {
 				new ServerRoom(
 						masterRoom, server
 				)
-		);
+				);
 		if (roomInterface == null) {
 			throw new UnsupportedOperationException(
-					"creating a game with an incorrect MasterRoom"
-			);
+					"creating a game with an incorrect MasterRoom");
 		} else {
 			roomInterface.getRoomPart_GameList().
 					gameCreated(newRoom, user1, user2, settings, false);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyCreated(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyCreated(ru.
+	 * narod.vn91.pointsop.server.ServerInterface, java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public synchronized void gameVacancyCreated(
 			ServerInterface server,
@@ -434,19 +489,24 @@ public class GuiController implements GuiForServerInterface {
 					"<html><b>" + user + "</b></html>", "",
 					"<html><b>" + settings + "</b></html>",
 					true
-			);
+					);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyDestroyed(ru
+	 * .narod.vn91.pointsop.server.ServerInterface, java.lang.String,
+	 * java.lang.String)
 	 */
 	public synchronized void gameVacancyDestroyed(
 			ServerInterface server,
 			String masterRoom,
 			String oldRoom) {
 		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
-//		room.getClass().getInterfaces();
+		// room.getClass().getInterfaces();
 		if (room == null) {
 		} else {
 			room.getRoomPart_GameList().gameDestroyed(oldRoom);
@@ -460,8 +520,12 @@ public class GuiController implements GuiForServerInterface {
 		server.acceptOpponent(room, possibleOpponent);
 	}
 
-/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameDestroyed(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameDestroyed(ru.narod
+	 * .vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
 	 */
 	public synchronized void gameDestroyed(
 			ServerInterface server,
@@ -474,8 +538,13 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#makedMove(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean, int, int, boolean, int, int)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#makedMove(ru.narod.vn91
+	 * .pointsop.server.ServerInterface, java.lang.String, boolean, int, int,
+	 * boolean, int, int)
 	 */
 	public synchronized void makedMove(
 			ServerInterface server,
@@ -488,13 +557,18 @@ public class GuiController implements GuiForServerInterface {
 			int timeLeftRed, int timeLeftBlue) {
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
 		if (gameRoom != null) {
-			gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed, timeLeftBlue);
+			gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed,
+					timeLeftBlue);
 			tabbedPane.makeBold(gameRoom);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameStop(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameStop(ru.narod.vn91
+	 * .pointsop.server.ServerInterface, java.lang.String, boolean)
 	 */
 	public synchronized void gameStop(
 			ServerInterface server,
@@ -506,8 +580,12 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameLost(ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String, boolean, boolean)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameLost(ru.narod.vn91
+	 * .pointsop.server.ServerInterface, java.lang.String, boolean, boolean)
 	 */
 	public synchronized void gameLost(
 			ServerInterface server,
@@ -519,7 +597,7 @@ public class GuiController implements GuiForServerInterface {
 			gameRooms.get(new ServerRoom(room, server)).gameLost(
 					isRedLooser,
 					wantToSave
-			);
+					);
 		}
 	}
 
@@ -529,8 +607,8 @@ public class GuiController implements GuiForServerInterface {
 
 		System.out.print(add);
 
-//		String oldText = serverOutput.getText();
-//		serverOutput.setText(oldText + add);
+		// String oldText = serverOutput.getText();
+		// serverOutput.setText(oldText + add);
 	}
 
 	@Override
@@ -541,7 +619,7 @@ public class GuiController implements GuiForServerInterface {
 				info,
 				"Error: " + info,
 				JOptionPane.ERROR_MESSAGE
-		);
+				);
 	}
 
 	public synchronized void activateGameRoom(
@@ -553,8 +631,8 @@ public class GuiController implements GuiForServerInterface {
 							new ServerRoom(
 									roomName, server
 							)
-					)
-			);
+							)
+					);
 		} catch (Exception ignored) {
 		}
 	}
@@ -597,7 +675,8 @@ class ServerRoom {
 	public int hashCode() {
 		int hash = 3;
 		hash = 29 * hash + (this.roomName != null ? this.roomName.hashCode() : 0);
-		hash = 29 * hash + (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
+		hash = 29 * hash
+				+ (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
 		return hash;
 	}
 }
@@ -638,7 +717,8 @@ class ServerUserName {
 	public int hashCode() {
 		int hash = 3;
 		hash = 29 * hash + (this.userName != null ? this.userName.hashCode() : 0);
-		hash = 29 * hash + (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
+		hash = 29 * hash
+				+ (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
 		return hash;
 	}
 }
@@ -647,12 +727,13 @@ class JTabbedPaneMod
 		extends JTabbedPane {
 
 	/**
-	 * almost the same as the JTabbedPane.addTab method,
-	 * but if isCloseable is true, then an icon for closing the tab is created.
+	 * almost the same as the JTabbedPane.addTab method, but if isCloseable is
+	 * true, then an icon for closing the tab is created.
 	 *
 	 * @param title
 	 * @param component
-	 * @param isCloseable if yes, generates an icon for closing the tab.
+	 * @param isCloseable
+	 *          if yes, generates an icon for closing the tab.
 	 */
 	public void addTab(
 			String title,
@@ -662,7 +743,7 @@ class JTabbedPaneMod
 		if (isCloseable) {
 			TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
 					this, title
-			);
+					);
 			this.setTabComponentAt(getTabCount() - 1, buttonTabComponent);
 		} else {
 			this.setTabComponentAt(getTabCount() - 1, new JLabel(title));
@@ -700,19 +781,19 @@ class JTabbedPaneMod
 		String oldTitle = super.getTitleAt(tabIndex);
 		String newTitle = deleteBoldness(oldTitle).replaceAll(
 				"<html>", ""
-		).replaceAll(
-				"</html>", ""
-		);
+				).replaceAll(
+						"</html>", ""
+				);
 		newTitle = "<html>***" + newTitle + "</html>";
 		if (newTitle.equals(oldTitle) == false) {
 			if (TabComponent_Closeable.class.isInstance(
 					getTabComponentAt(
 							tabIndex
 					)
-			)) {
+					)) {
 				TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
 						JTabbedPaneMod.this, newTitle
-				);
+						);
 				super.setTabComponentAt(tabIndex, buttonTabComponent);
 				super.setTitleAt(tabIndex, newTitle);
 			} else {
@@ -723,31 +804,29 @@ class JTabbedPaneMod
 	}
 
 	public JTabbedPaneMod() {
-		addChangeListener(
-				new ChangeListener() {
+		addChangeListener(new ChangeListener() {
 
-					public void stateChanged(ChangeEvent e) {
-						int selectedIndex = getSelectedIndex();
-						String oldTitle = getTitleAt(selectedIndex);
-						String newTitle = deleteBoldness(oldTitle);
-						if (newTitle.equals(oldTitle) == false) {
-							if (TabComponent_Closeable.class.isInstance(
+			public void stateChanged(ChangeEvent e) {
+				int selectedIndex = getSelectedIndex();
+				String oldTitle = getTitleAt(selectedIndex);
+				String newTitle = deleteBoldness(oldTitle);
+				if (newTitle.equals(oldTitle) == false) {
+					if (TabComponent_Closeable.class.isInstance(
 									getTabComponentAt(
 											selectedIndex
 									)
 							)) {
-								TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
+						TabComponent_Closeable buttonTabComponent = new TabComponent_Closeable(
 										JTabbedPaneMod.this, newTitle
 								);
-								setTabComponentAt(selectedIndex, buttonTabComponent);
-								setTitleAt(selectedIndex, newTitle);
-							} else {
-								setTabComponentAt(selectedIndex, new JLabel(newTitle));
-								setTitleAt(selectedIndex, newTitle);
-							}
-						}
+						setTabComponentAt(selectedIndex, buttonTabComponent);
+						setTitleAt(selectedIndex, newTitle);
+					} else {
+						setTabComponentAt(selectedIndex, new JLabel(newTitle));
+						setTitleAt(selectedIndex, newTitle);
 					}
 				}
-		);
+			}
+		});
 	}
 }

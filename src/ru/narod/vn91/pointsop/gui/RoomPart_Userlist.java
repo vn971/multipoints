@@ -32,9 +32,8 @@ public class RoomPart_Userlist
 	private Object[] constructRow(Player player) {
 		Object[] row = { null, null, null };
 		row[COLUMN_NAME] = player.guiName;
-		row[COLUMN_RATING] = "" + (player.getRatingFailsafe() == 0
-				? "" : "" + player.getRatingFailsafe());
-		row[COLUMN_STATUS] = player.getStatusFailsafe();
+		row[COLUMN_RATING] = "" + (player.rating == 0 ? "" : "" + player.rating);
+		row[COLUMN_STATUS] = player.status;
 		return row;
 	}
 

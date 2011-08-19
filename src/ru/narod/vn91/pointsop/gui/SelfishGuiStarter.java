@@ -21,9 +21,6 @@ import ru.narod.vn91.pointsop.utils.Memory;
 public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
-		for (String arg : args) {
-			System.out.println(arg);
-		}
 		if (Memory.getVersion() <= 1
 				&& Memory.getKeijKvantttAiPath().equals("keijkvantttai")) {
 			Memory.setKeijKvantttAiPath("");
@@ -32,7 +29,7 @@ public class SelfishGuiStarter {
 			Memory.resetColors();
 		}
 		Memory.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 1.5.5");
+		final JFrame frame = new JFrame("Точки - MultiPoints 1.5.8");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());

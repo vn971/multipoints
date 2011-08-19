@@ -298,8 +298,26 @@ public class ServerZagram2 implements ServerInterface {
 						}
 					} else if (message.startsWith("ca")) {
 						// new chat
-						gui.chatReceived(ServerZagram2.this, currentRoom, "server", message
-								.substring("ca".length()));
+						String[] dotSplitted = message.substring("ca".length())
+								.split("\\.", 4);
+						try {
+							long time = Long.parseLong(dotSplitted[0]) * 1000L;
+							String nick = dotSplitted[1];
+							String nickType = dotSplitted[2];
+							String chatMessage = dotSplitted[3]
+									.replaceAll("&#60;", "<")
+									.replaceAll("&#62;", ">")
+									.replaceAll("&#39;", "'")
+									.replaceAll("&#34;", "\\")
+									.replaceAll("&#45;", "-")
+									;
+							gui.chatReceived(ServerZagram2.this,
+									currentRoom, nick, chatMessage, time);
+						} catch (NumberFormatException e) {
+							gui.raw(ServerZagram2.this,
+									"An error has occured while processing chat message: " +
+											message);
+						}
 					} else if (message.matches("u.undo")) {
 						boolean isRed = message.charAt(1) == '1';
 						String playerAsString = isRed ? "red" : "blue";
@@ -310,7 +328,8 @@ public class ServerZagram2 implements ServerInterface {
 										"",
 										"player "
 												+ playerAsString
-												+ " Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(");
+												+ " Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(",
+										null);
 					} else if (message.startsWith("i")) {
 						// player left
 						String[] dotSplitted = message.substring("i".length()).split("\\.");

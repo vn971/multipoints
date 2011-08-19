@@ -179,7 +179,8 @@ public class ServerPointsxt
 			 this,
 			 defaultChannel,
 			 getMyName(),
-			 "*** " + notifyMessage
+			 "*** " + notifyMessage,
+			 null
 			 );
 		}
 	}
@@ -209,10 +210,9 @@ public class ServerPointsxt
 					, true, true);
 
 			gui.subscribedGame(
-					roomName, this,
+					this, roomName,
 					getMyName(), newOpponent,
-					"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
-			);
+					true, true/*i am playing*/, myGame.amIRed);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
 				gui.userJoinedRoom(this, roomName, nicknameManager.getOrCreateShortNick(ircNick), true);
@@ -299,12 +299,11 @@ public class ServerPointsxt
 			GameInfoAbstract gameInfoAbstract = getGameInfoFromRoomName(roomName);
 			if (gameInfoAbstract != null) {
 				gui.subscribedGame(
-						roomName, this,
+						this,
+						roomName,
 						gameInfoAbstract.userFirst, gameInfoAbstract.userSecond,
-						gameInfoAbstract.timeLimits, gameInfoAbstract.isRated,
-						"",
-						true /* chat is read-only */, false/*I'm a spectator*/, true
-				);
+						true, false /*i'm spectator*/,
+						true);
 			}
 		}
 
@@ -505,9 +504,10 @@ public class ServerPointsxt
 				myGame.opponentName = nick;
 				myGame.roomName = channel;
 				gui.subscribedGame(
-						channel, this, nick, getMyName(),
-						"999мин/ход", false, "", true, true/*i am the player*/, myGame.amIRed
-				);
+						this,
+						channel,
+						nick, getMyName(),
+						true, true /*i'm playing*/, myGame.amIRed);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
 					gui.userJoinedRoom(this, channel, nicknameManager.getOrCreateShortNick(ircNick), true);
@@ -521,15 +521,16 @@ public class ServerPointsxt
 			if (message.startsWith("ACTION")) {
 				gui.chatReceived(
 						this, channel, "***" + nick, message.substring(
-						7
-				).replaceAll(pointsxtTail_RegExp, "")
-				);
+								7
+								).replaceAll(pointsxtTail_RegExp, ""),
+						null
+						);
 			} else {
 				gui.chatReceived(
 						this, channel, nick, message.replaceAll(
-						pointsxtTail_RegExp, ""
-				)
-				);
+								pointsxtTail_RegExp, ""),
+						null
+						);
 			}
 		} else {
 			// game channel
@@ -631,17 +632,11 @@ public class ServerPointsxt
 					myGame.opponentName = nicknameManager.getOrCreateShortNick(sender);
 					myGame.roomName = room;
 					gui.subscribedGame(
-							room,
 							this,
+							room,
 							getMyName(),
 							nicknameManager.getOrCreateShortNick(sender),
-							"999мин/ход",
-							false,
-							"",
-							true,
-							true
-							/*i am the player*/,
-							myGame.amIRed
+							false,true /*I'm playing*/,myGame.amIRed
 					);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
@@ -950,6 +945,13 @@ public class ServerPointsxt
 				}
 				if (opponent.length() > 0) {
 					if (getPlayerIngameNumber(ircNick) == 1) {
+						boolean isBlitz = getPlayerGameType(ircNick).startsWith("5");
+						boolean isRated = getGameInfoFromIrcNick(ircNick).isRated;
+						gui.addGameInfo(
+								this, newRoom,
+								pointsxtNick, opponent,
+								isRated,0,
+								isBlitz ? 5 : 180, 0, 0, isBlitz ? 1 : 5);
 						gui.gameCreated(
 								this, defaultChannel, newRoom,
 								pointsxtNick, opponent, getPlayerGameType(
@@ -957,11 +959,17 @@ public class ServerPointsxt
 						)
 						);
 					} else if (getPlayerIngameNumber(ircNick) == 2) {
+						boolean isBlitz = getPlayerGameType(ircNick).startsWith("5");
+						boolean isRated = getGameInfoFromIrcNick(ircNick).isRated;
+						gui.addGameInfo(
+								this, newRoom,
+								opponent, pointsxtNick,
+								isRated, 0,
+								isBlitz ? 5 : 180, 0, 0, isBlitz ? 1 : 5);
 						gui.gameCreated(
 								this, defaultChannel, newRoom,
 								opponent, pointsxtNick, getPlayerGameType(
-										ircNick
-						)
+										ircNick)
 						);
 					} else {
 						throw new UnsupportedOperationException(
@@ -1006,7 +1014,7 @@ public class ServerPointsxt
 						equals(myGame.getOpponentShortName())
 						&& room.equals(myGame.roomName)) {
 					myGame.clear();
-					gui.chatReceived(this, room, "", "Оппонент покинул игру");
+					gui.chatReceived(this, room, "", "Оппонент покинул игру", null);
 				}
 			}
 		}
@@ -1090,13 +1098,17 @@ public class ServerPointsxt
 	public void sendChat(
 			String room,
 			String message) {
-		super.sendMessage(room, message);
-		gui.chatReceived(
-				this, room, getMyName(), message.replaceAll(
-				"ACTION",
-				"***"
-		)
-		);
+		if (room.startsWith("#") == false) {
+			gui.rawError(this,
+					"Была произведена попытка отправить чатовое сообщение в приват.");
+		} else {
+			super.sendMessage(room, message);
+			gui.chatReceived(
+					this, room, getMyName(),
+					message.replaceAll("ACTION", "***"),
+					null
+					);
+		}
 	}
 
 	public void sendPrivateMsg(
@@ -1105,6 +1117,9 @@ public class ServerPointsxt
 		String fullTargetName = nicknameManager.getIrcNick(target);
 		if (fullTargetName != null) {
 			super.sendMessage(fullTargetName, message);
+		} else {
+			gui.rawError(this,
+					"Не удалось отправить приватное сообщение пользователю " + target);
 		}
 	}
 

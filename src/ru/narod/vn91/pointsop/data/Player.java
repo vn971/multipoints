@@ -63,23 +63,9 @@ public class Player {
 		changeListenerList.add(changeListener);
 	}
 
-	public int getRatingFailsafe() {
-		return (this.rating != null) ? this.rating : 0;
-	}
-
-	public String getStatusFailsafe() {
-		return (this.status != null) ? this.status : "";
-	}
-
-	private static int ratingsDiff(Player p1, Player p2) {
-		int rank1 = (p1.rating == null) ? 0 : p1.rating;
-		int rank2 = (p2.rating == null) ? 0 : p2.rating;
-		return rank1 - rank2;
-	}
-
 	public static int compare(Player p1, Player p2) {
-		if (ratingsDiff(p1, p2) != 0) {
-			return ratingsDiff(p1, p2);
+		if (p1.rating - p2.rating != 0) {
+			return p1.rating - p2.rating;
 		} else {
 			String p1Short = p1.guiName.
 					replaceFirst("\\*", "").replaceFirst("\\^", "");

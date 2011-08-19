@@ -28,9 +28,10 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void init() {
-		gui.subscribedGame("", this,
-				ai.getName(), "Me",
-				"", false, "", true, true, true);
+		gui.subscribedGame(
+				this,
+				"",
+				ai.getName(), "Me",true,true,false);
 		ai.init();
 	}
 
@@ -50,7 +51,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	public void receiveMessage(String message) {
 		if ((message != null) && (message.equals("") == false)) {
-			gui.chatReceived(this, "", ai.getName(), message);
+			gui.chatReceived(this, "", ai.getName(), message, null);
 		}
 	}
 

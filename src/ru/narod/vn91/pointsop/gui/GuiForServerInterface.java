@@ -24,6 +24,16 @@ public interface GuiForServerInterface {
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status);
 
+	public abstract void addGameInfo(
+			ServerInterface server, String id,
+			String redId, String blueId,
+			Boolean isRated, Integer handicapRed,
+			Integer freeTemporalTime,
+			Integer additionalAccumulatingTime,
+			Integer startingTime,
+			Integer periodLength
+			);
+
 	public abstract void userJoinedRoom(
 			ServerInterface server,
 			String room,
@@ -46,13 +56,13 @@ public interface GuiForServerInterface {
 			boolean isServersMainRoom);
 
 	public abstract void subscribedGame(
-			String roomNameOnServer,
 			ServerInterface server,
-			String idRed,
-			String idBlue,
-			String timeLimits,
-			boolean isRated,
-			String startingPosition,
+			String roomId,
+			String redId,
+			String blueId,
+//			String timeLimits,
+//			boolean isRated,
+//			String startingPosition,
 			boolean chatReadOnly,
 			boolean amIPlaying,
 			boolean amIRed);
@@ -69,7 +79,8 @@ public interface GuiForServerInterface {
 			ServerInterface server,
 			String room,
 			String user,
-			String message);
+			String message,
+			Long time);
 
 	public abstract void privateMessageReceived(
 			ServerInterface server,

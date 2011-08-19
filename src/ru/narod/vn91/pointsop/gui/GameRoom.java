@@ -1,5 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
+import ru.narod.vn91.pointsop.data.GameInfo;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
@@ -24,18 +25,12 @@ import java.util.Date;
 
 public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
-	ServerInterface server;
-	private String nameOnServer;
 	GuiForServerInterface centralGuiController;
-	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
-//	String userFirst, userSecond;
-//	int rank1, rank2;
+	GameInfo gameInfo;
 	Player playerRed, playerBlue;
-	String timeLimits;
-	boolean isRated;
-	String startingPosition;
-	int mousePosX, mousePosY, redScore, blueScore;
 	boolean amIPlaying, amIRed, redStopped = false, blueStopped = false;
+	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
+	int mousePosX, mousePosY, redScore, blueScore;
 	boolean isRedTurnNow = true;
 	Sgf.GameResult gameResult = Sgf.GameResult.UNFINISHED;
 	Paper paper;
@@ -70,16 +65,16 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public ServerInterface getServer() {
-		return server;
+		return gameInfo.server;
 	}
 
 	public String getRoomNameOnServer() {
-		return nameOnServer;
+		return gameInfo.id;
 	}
 
 	public boolean userAsksClose() {
-		if (server != null) {
-			server.unsubscribeRoom(nameOnServer);
+		if (gameInfo.server != null) {
+			gameInfo.server.unsubscribeRoom(gameInfo.id);
 			return false;
 		} else {
 			return true;
@@ -149,7 +144,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 									&&moveListSize == moveList.size()) {
 //								System.out.println("moveListSize = " + moveListSize);
 //								System.out.println("moveList.size() = " + moveList.size());
-								server.makeMove(nameOnServer, mousePosX, mousePosY);
+								gameInfo.server.makeMove(gameInfo.id, mousePosX, mousePosY);
 							}
 						}
 
@@ -196,16 +191,16 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			@Override
 			public void run() {
 				String eidokropkiLink = "";
-				if ((isRated == true) && (wantToSave == true)) {
+				if ((gameInfo.isRated == true) && (wantToSave == true)) {
 					eidokropkiLink = PhpBackupServer.sendToEidokropki(
-							playerRed.guiName, playerBlue.guiName, playerRed.getRatingFailsafe(), playerBlue.getRatingFailsafe(), 39, 32,
-							timeLimits, gameResult, moveList);
-					getServer().sendChat(server.getMainRoom(),
+							playerRed.guiName, playerBlue.guiName, playerRed.rating, playerBlue.rating, 39, 32,
+							gameInfo.getTimeAsString(), gameResult, moveList);
+					getServer().sendChat(gameInfo.server.getMainRoom(),
 							"Закончена игра " + playerRed.guiName + "-" + playerBlue.guiName
 							+ " ( " + eidokropkiLink + " ), победитель - " + whoWon + ". Поздравляем!");
 				}
 				PhpBackupServer.sendToPointsgt(playerRed.guiName, playerBlue.guiName,
-						isRated, timeLimits, isRedLooser, moveList,
+						gameInfo.isRated, gameInfo.getTimeAsString(), isRedLooser, moveList,
 						eidokropkiLink);
 			}
 		}.start();
@@ -218,7 +213,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			MouseEvent evt) {
 		if (amIPlaying && evt.getButton() == MouseEvent.BUTTON1) {
 			if (isOnlineGame()) {
-				server.makeMove(nameOnServer, x, y);
+				gameInfo.server.makeMove(gameInfo.id, x, y);
 			} else {
 				makeMove(false, x, y, isRedTurnNow, !isRedTurnNow, 1800, 1800);
 				isRedTurnNow = !isRedTurnNow;
@@ -235,7 +230,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	private boolean isOnlineGame() {
-		return server!=null;
+		return gameInfo.server!=null;
 	}
 
 	private void showScoreAndCursor() {
@@ -256,27 +251,19 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	/** Creates new form ContainerRoom_Game */
 	public GameRoom(
-			ServerInterface server,
-			String nameOnServer,
-			GuiController centralGuiController,
+			GameInfo gameInfo,
 			Player playerRed,
 			Player playerBlue,
-			String timeLimits,
-			boolean isRated,
-			String startingPosition,
+			GuiController centralGuiController,
 			boolean chatReadOnly,
 			boolean amIPlaying,
 			boolean amIRed) {
 		this.amIPlaying = amIPlaying;
 		this.amIRed = amIRed;
-		this.server = server;
-		this.nameOnServer = nameOnServer;
 		this.centralGuiController = centralGuiController;
+		this.gameInfo = gameInfo;
 		this.playerRed = playerRed;
 		this.playerBlue = playerBlue;
-		this.timeLimits = timeLimits;
-		this.isRated = isRated;
-		this.startingPosition = startingPosition;
 		paper = new Paper() {
 
 			@Override
@@ -559,8 +546,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		String[] extensions = {".sgf", ".sgftochki"};
 		String sgfData = Sgf.constructSgf(
 				playerRed.guiName, playerBlue.guiName,
-				playerRed.getRatingFailsafe(), playerBlue.getRatingFailsafe(), 39, 32,
-				timeLimits, gameResult, 0,
+				playerRed.rating, playerBlue.rating, 39, 32,
+				gameInfo.getTimeAsString(), gameResult, 0,
 				moveList, true);
 
 		try {

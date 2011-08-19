@@ -36,14 +36,16 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	}
 
 	void addChat(String user,
-			String message) {
+			String message, Long time) {
+		Date date = (time!=null) ? new Date(time) : new Date();
+		String formattedDate = GlobalGuiSettings.myTimeFormat.format(date);
 		try {
 			if (user.equals(userFirst)) {
 				StyleConstants.setForeground(GlobalGuiSettings.playerNameRed,
 						Memory.getPlayer1Color());
 
 				document.insertString(document.getLength(),
-						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+						"" + formattedDate + " ",
 						GlobalGuiSettings.chatIncoming);
 				document.insertString(document.getLength(), user
 						+ ":", GlobalGuiSettings.playerNameRed);
@@ -55,7 +57,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 						Memory.getPlayer2Color());
 
 				document.insertString(document.getLength(),
-						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+						"" + formattedDate + " ",
 						GlobalGuiSettings.chatIncoming);
 				document.insertString(document.getLength(), user
 						+ ":", GlobalGuiSettings.playerNameBlue);
@@ -65,7 +67,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 						GlobalGuiSettings.chatIncoming);
 			} else if (user.equals(roomInterface.getServer().getMyName())) {
 				document.insertString(document.getLength(),
-						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+						"" + formattedDate + " ",
 						GlobalGuiSettings.chatOutgoing);
 				document.insertString(document.getLength(), user
 						+ ":", GlobalGuiSettings.playerNameOutgoing);
@@ -73,7 +75,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 						+ "\n", GlobalGuiSettings.chatOutgoing);
 			} else {
 				document.insertString(document.getLength(),
-						"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
+						"" + formattedDate + " ",
 						GlobalGuiSettings.chatIncoming);
 				document.insertString(document.getLength(), user
 						+ ":", GlobalGuiSettings.playerNameIncoming);
