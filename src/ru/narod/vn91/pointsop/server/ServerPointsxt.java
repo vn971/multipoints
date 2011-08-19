@@ -18,6 +18,7 @@ import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 import ru.narod.vn91.pointsop.data.Dot;
+import ru.narod.vn91.pointsop.data.GameInfo.GameState;
 import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
@@ -206,13 +207,11 @@ public class ServerPointsxt
 					roomName,
 					commandCommonPrefix + commandAcceptOpponent + myGame.getOpponentIrcName()
 			);
-			this.setPointsxtNickname(roomName.substring(4)
-					, true, true);
+			this.setPointsxtNickname(roomName.substring(4), true, true);
 
 			gui.subscribedGame(
 					this, roomName,
-					getMyName(), newOpponent,
-					true, true/*i am playing*/, myGame.amIRed);
+					true, true/* i am playing */, myGame.amIRed);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
 				gui.userJoinedRoom(this, roomName, nicknameManager.getOrCreateShortNick(ircNick), true);
@@ -296,15 +295,9 @@ public class ServerPointsxt
 					defaultChannel.equals(roomName)
 			);
 		} else {
-			GameInfoAbstract gameInfoAbstract = getGameInfoFromRoomName(roomName);
-			if (gameInfoAbstract != null) {
-				gui.subscribedGame(
-						this,
-						roomName,
-						gameInfoAbstract.userFirst, gameInfoAbstract.userSecond,
-						true, false /*i'm spectator*/,
-						true);
-			}
+			gui.subscribedGame(this, roomName,
+					true, false /*i'm spectator*/,
+					true);
 		}
 
 		if (roomName.equals("#pointsxt")) {
@@ -432,7 +425,10 @@ public class ServerPointsxt
 			String login,
 			String hostname,
 			String newNick) {
-		clearCreatedGames_PointsxtStyle(oldNick);
+		if (getPlayerRoom(oldNick).equals("") == false &&
+				getPlayerRoom(oldNick).equals(getPlayerRoom(newNick)) == false) {
+			clearCreatedGames_PointsxtStyle(oldNick);
+		}
 		nicknameManager.changeIrcNick(oldNick, newNick);
 //		if (nicknameManager.getOrCreateShortNick(newNick).
 //				equals(nicknameManager.getOrCreateShortNick(oldNick)) == false) {
@@ -470,8 +466,9 @@ public class ServerPointsxt
 //				return;
 			} else if (myGame.isSearching() == false) {
 			} else {
-				gui.gameRequestReceived(
-						this, myGame.roomName, nicknameManager.getOrCreateShortNick(sender));
+				gui.gameInviteReceived(
+						this, myGame.roomName,
+						nicknameManager.getOrCreateShortNick(sender));
 			}
 		}
 		// catch game-invite
@@ -485,7 +482,7 @@ public class ServerPointsxt
 						sender
 				);
 //				System.out.println("received Op-game request");
-				gui.gameRequestReceived(this, channel, opponentNick);
+				gui.gameInviteReceived(this, channel, opponentNick);
 			} else if (message.startsWith(commandCommonPrefix
 					+ commandAcceptOpponent + myNickOnServ
 					) && isPointsopSameVersionNickname(sender)) {
@@ -503,10 +500,7 @@ public class ServerPointsxt
 				myGame.moveList = new ArrayList<SimpleMove>();
 				myGame.opponentName = nick;
 				myGame.roomName = channel;
-				gui.subscribedGame(
-						this,
-						channel,
-						nick, getMyName(),
+				gui.subscribedGame(this, channel,
 						true, true /*i'm playing*/, myGame.amIRed);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
@@ -591,7 +585,7 @@ public class ServerPointsxt
 								"(Это системное сообщение.)"
 						);
 			} else {
-				gui.gameRequestReceived(
+				gui.gameInviteReceived(
 								this, myGame.roomName, nicknameManager
 										.getOrCreateShortNick(sender));
 //			tryInvitePointsxt(sender, true);
@@ -607,9 +601,9 @@ public class ServerPointsxt
 			//			}
 		} else if (message.startsWith("/PointsXTAccept ")) {
 			String room = getPlayerRoom(sender);
-			String roomNumber = getPlayerRoomNumber(sender);
+			String roomNumber = room.replaceFirst(".pxt", "");
 			if (isGamerNickname(sender)
-					&& (getPlayerRoomNumber(sender).equals("")) == false) {
+					&& (room.equals("")) == false) {
 				if (myGame.isPlaying()) {
 					super.sendMessage(
 							sender,
@@ -634,8 +628,6 @@ public class ServerPointsxt
 					gui.subscribedGame(
 							this,
 							room,
-							getMyName(),
-							nicknameManager.getOrCreateShortNick(sender),
 							false,true /*I'm playing*/,myGame.amIRed
 					);
 					for (User user : super.getUsers(room)) {
@@ -747,66 +739,6 @@ public class ServerPointsxt
 		}
 	}
 
-	private String getPlayerRoomNumber(String nick) {
-		if (isGamerNickname(nick) == false) {
-			return "";
-		} else {
-			String roomSuffix =
-					nick.substring(nick.length() - 11, nick.length() - 6);
-			if (roomSuffix.equals("00000")) {
-				return "";
-			} else {
-				return roomSuffix;
-			}
-		}
-	}
-
-	GameInfoAbstract getGameInfoFromIrcNick(String ircNick) {
-		return getGameInfoFromRoomName(getPlayerRoom(ircNick));
-	}
-
-	GameInfoAbstract getGameInfoFromRoomName(String roomName) {
-		GameInfoAbstract gameInfoAbstract = new GameInfoAbstract();
-		User[] users = super.getUsers(defaultChannel);
-		for (User user : users) {
-			String userIrcName = user.getNick();
-			if (getPlayerRoom(userIrcName).equals(roomName)) {
-				String pxtGameInfo = userIrcName.substring(
-						userIrcName.length() - 5, userIrcName.length() - 1
-				);
-				gameInfoAbstract.isRated = pxtGameInfo.startsWith("1", 2);
-				gameInfoAbstract.timeLimits = pxtGameInfo.startsWith(
-						"1", 3
-				) ? "5sec/turn" : "180sec/5turns";
-				if (pxtGameInfo.startsWith("1", 1)) {
-					gameInfoAbstract.userFirst = nicknameManager.getOrCreateShortNick(
-							userIrcName
-					);
-					gameInfoAbstract.rank1 = getPlayerRank(userIrcName);
-				} else {
-					gameInfoAbstract.userSecond = nicknameManager.getOrCreateShortNick(
-							userIrcName
-					);
-					gameInfoAbstract.rank2 = getPlayerRank(userIrcName);
-				}
-				gameInfoAbstract.startingPosition = "";
-				//				with this code you can connect even if 1 player disconnects from the public chat.
-				//				if (gameInfoAbstract.userFirst==null) {
-				//					gameInfoAbstract.userFirst="";
-				//				}
-				//				if (gameInfoAbstract.userSecond==null) {
-				//					gameInfoAbstract.userSecond="";
-				//				}
-			}
-		}
-		if ((gameInfoAbstract.userFirst != null) &&
-				(gameInfoAbstract.userSecond != null)) {
-			return gameInfoAbstract;
-		} else {
-			return null;
-		}
-	}
-
 	private int getPlayerRank(String ircNick) {
 		if (isGamerNickname(ircNick)) {
 			String rankAsString = ircNick.substring(
@@ -819,6 +751,32 @@ public class ServerPointsxt
 		}
 	}
 
+	private Boolean isRated(String userIrcName) {
+		String pxtGameInfo = userIrcName.substring(
+				userIrcName.length() - 5, userIrcName.length() - 1
+				);
+		if (pxtGameInfo.startsWith("1", 2)) {
+			return true;
+		} else if (pxtGameInfo.startsWith("0", 2)) {
+			return false;
+		} else {
+			return null;
+		}
+	}
+
+	private Boolean isBlitz(String userIrcName) {
+		String pxtGameInfo = userIrcName.substring(
+				userIrcName.length() - 5, userIrcName.length() - 1
+				);
+		if (pxtGameInfo.startsWith("1", 3)) {
+			return true;
+		} else if (pxtGameInfo.startsWith("0", 3)) {
+			return false;
+		} else {
+			return null;
+		}
+	}
+
 	private String extractUserStatus(String nick) {
 		if (isGamerNickname(nick)) {
 			String stateType = nick.substring(
@@ -828,7 +786,7 @@ public class ServerPointsxt
 			if (stateType.equals("free")) {
 				return " ";
 			} else if (stateType.equals("away")) {
-				return "*";
+				return "";
 			} else {
 				return "!";
 			}
@@ -836,6 +794,52 @@ public class ServerPointsxt
 			return "";
 		}
 	}
+
+//	GameInfoAbstract getGameInfoFromIrcNick(String ircNick) {
+//		return getGameInfoFromRoomName(getPlayerRoom(ircNick));
+//	}
+
+//	GameInfoAbstract getGameInfoFromRoomName(String roomName) {
+//		GameInfoAbstract gameInfoAbstract = new GameInfoAbstract();
+//		User[] users = super.getUsers(defaultChannel);
+//		for (User user : users) {
+//			String userIrcName = user.getNick();
+//			if (getPlayerRoom(userIrcName).equals(roomName)) {
+//				String pxtGameInfo = userIrcName.substring(
+//						userIrcName.length() - 5, userIrcName.length() - 1
+//				);
+//				gameInfoAbstract.isRated = pxtGameInfo.startsWith("1", 2);
+//				gameInfoAbstract.timeLimits = pxtGameInfo.startsWith(
+//						"1", 3
+//				) ? "5sec/turn" : "180sec/5turns";
+//				if (pxtGameInfo.startsWith("1", 1)) {
+//					gameInfoAbstract.userFirst = nicknameManager.getOrCreateShortNick(
+//							userIrcName
+//					);
+//					gameInfoAbstract.rank1 = getPlayerRank(userIrcName);
+//				} else {
+//					gameInfoAbstract.userSecond = nicknameManager.getOrCreateShortNick(
+//							userIrcName
+//					);
+//					gameInfoAbstract.rank2 = getPlayerRank(userIrcName);
+//				}
+//				gameInfoAbstract.startingPosition = "";
+//				//				with this code you can connect even if 1 player disconnects from the public chat.
+//				//				if (gameInfoAbstract.userFirst==null) {
+//				//					gameInfoAbstract.userFirst="";
+//				//				}
+//				//				if (gameInfoAbstract.userSecond==null) {
+//				//					gameInfoAbstract.userSecond="";
+//				//				}
+//			}
+//		}
+//		if ((gameInfoAbstract.userFirst != null) &&
+//				(gameInfoAbstract.userSecond != null)) {
+//			return gameInfoAbstract;
+//		} else {
+//			return null;
+//		}
+//	}
 
 	private void setPointsxtNickname(
 			String roomName,
@@ -866,13 +870,13 @@ public class ServerPointsxt
 		super.changeNick(result);
 	}
 
-	private String getPlayerGameType(String nick) {
-		if (isGamerNickname(nick)) {
-			return getGameInfoFromIrcNick(nick).getTimeAndIsRated();
-		} else {
-			return "";
-		}
-	}
+//	private String getPlayerGameType(String nick) {
+//		if (isGamerNickname(nick)) {
+//			return getGameInfoFromIrcNick(nick).getTimeAndIsRated();
+//		} else {
+//			return "";
+//		}
+//	}
 
 	private int getPlayerIngameNumber(String fullNick) {
 		if (isGamerNickname(fullNick)) {
@@ -929,6 +933,7 @@ public class ServerPointsxt
 		if (room.equals(defaultChannel)) {
 			String newRoom = getPlayerRoom(ircNick);
 			if (newRoom.length() > 0) {
+				// searching opponent
 				User[] users = getUsers(defaultChannel);
 				String opponent = "";
 				for (User user : users) {
@@ -944,44 +949,32 @@ public class ServerPointsxt
 					}
 				}
 				if (opponent.length() > 0) {
+					String playerFirst = null, playerSecond = null;
 					if (getPlayerIngameNumber(ircNick) == 1) {
-						boolean isBlitz = getPlayerGameType(ircNick).startsWith("5");
-						boolean isRated = getGameInfoFromIrcNick(ircNick).isRated;
-						gui.addGameInfo(
-								this, newRoom,
-								pointsxtNick, opponent,
-								isRated,0,
-								isBlitz ? 5 : 180, 0, 0, isBlitz ? 1 : 5);
-						gui.gameCreated(
-								this, defaultChannel, newRoom,
-								pointsxtNick, opponent, getPlayerGameType(
-										ircNick
-						)
-						);
+						playerFirst = pointsxtNick;
+						playerSecond = opponent;
 					} else if (getPlayerIngameNumber(ircNick) == 2) {
-						boolean isBlitz = getPlayerGameType(ircNick).startsWith("5");
-						boolean isRated = getGameInfoFromIrcNick(ircNick).isRated;
-						gui.addGameInfo(
-								this, newRoom,
-								opponent, pointsxtNick,
-								isRated, 0,
-								isBlitz ? 5 : 180, 0, 0, isBlitz ? 1 : 5);
-						gui.gameCreated(
-								this, defaultChannel, newRoom,
-								opponent, pointsxtNick, getPlayerGameType(
-										ircNick)
-						);
+						playerFirst = opponent;
+						playerSecond = pointsxtNick;
 					} else {
-						throw new UnsupportedOperationException(
-								"error creating a game"
-						);
+						gui.raw(this, "IRC: player number not in bounds 1..2");
 					}
+
+					gui.addGameInfo(
+							this, newRoom,
+							defaultChannel, playerFirst, playerSecond,
+							GameState.Playing, isRated(ircNick), 0,
+							isBlitz(ircNick) ? 5 : 180, 0, 0, isBlitz(ircNick) ? 1 : 5);
+
+					gui.gameRowCreated(this, defaultChannel, newRoom);
 				} else if (isPointsopNickname(ircNick)) {
 					// no opponent found of a pointsOp player
-					gui.gameVacancyCreated(
-							this, defaultChannel, newRoom,
-							pointsxtNick, "" + myGame.getDefaultTime() + "сек/ ход"
-					);
+					gui.addGameInfo(
+							this, newRoom,
+							defaultChannel, pointsxtNick, null,
+							GameState.SearchingOpponent, false, 0,
+							myGame.getDefaultTime(), 0, 0, myGame.periodLength);
+					gui.gameRowCreated(this, defaultChannel, newRoom);
 				}
 			}
 		}
@@ -1003,7 +996,7 @@ public class ServerPointsxt
 //				System.out.println("userShort = " + userShort);
 //				System.out.println("myNickOnServ = " + myNickOnServ);
 				if (userShort.equals(getMyName())) {
-					gui.unsubsribedGame(this, room);
+					gui.unsubsribedRoom(this, room);
 				} else {
 					gui.userLeftRoom(
 							this, room,
@@ -1022,7 +1015,7 @@ public class ServerPointsxt
 
 	public void clearCreatedGames_PointsxtStyle(String user) {
 		if (getPlayerRoom(user).length() > 0) {
-			gui.gameDestroyed(this, defaultChannel, getPlayerRoom(user));
+			gui.gameRowDestroyed(this, getPlayerRoom(user));
 		}
 	}
 
@@ -1218,7 +1211,8 @@ public class ServerPointsxt
 		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
 		Thread lastTimeoutThread = null;
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
-		int timeAllowedPerTurn = 36;
+		final int timeAllowedPerTurn = 36;
+		final int periodLength = 1;
 
 		public String getOpponentIrcName() {
 			return nicknameManager.getIrcNick(opponentName);
@@ -1284,9 +1278,7 @@ public class ServerPointsxt
 				ServerPointsxt.this.partChannel(roomNameCopy);
 				clear();
 				if (isGuiVisible) {
-					ServerPointsxt.this.gui.unsubsribedGame(
-							ServerPointsxt.this, roomNameCopy
-							);
+					ServerPointsxt.this.gui.unsubsribedRoom(ServerPointsxt.this, roomNameCopy);
 				}
 			}
 		}

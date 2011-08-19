@@ -19,7 +19,7 @@ public class RoomPart_Userlist
 	final static int COLUMN_STATUS = 2;
 	ArrayList<Player> playerList = new ArrayList<Player>();
 
-	private Player getSelectedUser() {
+	synchronized private Player getSelectedUser() {
 		int index = jTable_UserList.getSelectedRow();
 		if ((index >= 0)
 				&& (index < jTable_UserList.getRowCount())) {
@@ -37,7 +37,7 @@ public class RoomPart_Userlist
 		return row;
 	}
 
-	void userJoined(Player playerNew) {
+	synchronized void userJoined(Player playerNew) {
 		for (Player player2 : playerList) {
 			if (playerNew == player2) {
 				return;
@@ -87,7 +87,7 @@ public class RoomPart_Userlist
 		});
 	}
 
-	void userLeave(Player playerLeaving) {
+	synchronized void userLeave(Player playerLeaving) {
 		DefaultTableModel tableModel = ((DefaultTableModel) jTable_UserList.getModel());
 		int position=0;
 		for (Player player2 : playerList) {

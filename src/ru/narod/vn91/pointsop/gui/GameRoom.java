@@ -27,7 +27,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	GuiForServerInterface centralGuiController;
 	GameInfo gameInfo;
-	Player playerRed, playerBlue;
 	boolean amIPlaying, amIRed, redStopped = false, blueStopped = false;
 	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
 	int mousePosX, mousePosY, redScore, blueScore;
@@ -158,7 +157,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public void stopGame(boolean isRedPlayer) {
-		String whoPressedStop = (isRedPlayer) ? playerRed.guiName : playerBlue.guiName;
+		String whoPressedStop = (isRedPlayer) ? gameInfo.first.guiName : gameInfo.second.guiName;
 		if (isRedPlayer) {
 			redStopped = true;
 		} else {
@@ -182,8 +181,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	public void gameLost(final boolean isRedLooser,
 			final boolean wantToSave) {
 		gameResult = (isRedLooser) ? Sgf.GameResult.BLUE_WON_BY_RESIGN : Sgf.GameResult.RED_WON_BY_RESIGN;
-		final String whoWon = (isRedLooser) ? playerBlue.guiName : playerRed.guiName;
-		String whoLost = (isRedLooser) ? playerRed.guiName : playerBlue.guiName;
+		final String whoWon = (isRedLooser) ? gameInfo.second.guiName : gameInfo.first.guiName;
+		String whoLost = (isRedLooser) ? gameInfo.first.guiName : gameInfo.second.guiName;
 		roomPart_Chat.addServerNotice(
 				"" + whoLost + " сдался... Победитель - " + whoWon + ".");
 		new Thread() {
@@ -193,15 +192,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				String eidokropkiLink = "";
 				if ((gameInfo.isRated == true) && (wantToSave == true)) {
 					eidokropkiLink = PhpBackupServer.sendToEidokropki(
-							playerRed.guiName, playerBlue.guiName, playerRed.rating, playerBlue.rating, 39, 32,
+							gameInfo.first.guiName, gameInfo.second.guiName, gameInfo.first.rating, gameInfo.second.rating, 39, 32,
 							gameInfo.getTimeAsString(), gameResult, moveList);
 					getServer().sendChat(gameInfo.server.getMainRoom(),
-							"Закончена игра " + playerRed.guiName + "-" + playerBlue.guiName
+							"Закончена игра " + gameInfo.first.guiName + "-" + gameInfo.second.guiName
 							+ " ( " + eidokropkiLink + " ), победитель - " + whoWon + ". Поздравляем!");
 				}
-				PhpBackupServer.sendToPointsgt(playerRed.guiName, playerBlue.guiName,
-						gameInfo.isRated, gameInfo.getTimeAsString(), isRedLooser, moveList,
-						eidokropkiLink);
+//				PhpBackupServer.sendToPointsgt(gameInfo.first.guiName, gameInfo.second.guiName,
+//						gameInfo.isRated, gameInfo.getTimeAsString(), isRedLooser, moveList,
+//						eidokropkiLink);
 			}
 		}.start();
 
@@ -252,8 +251,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	/** Creates new form ContainerRoom_Game */
 	public GameRoom(
 			GameInfo gameInfo,
-			Player playerRed,
-			Player playerBlue,
 			GuiController centralGuiController,
 			boolean chatReadOnly,
 			boolean amIPlaying,
@@ -262,8 +259,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		this.amIRed = amIRed;
 		this.centralGuiController = centralGuiController;
 		this.gameInfo = gameInfo;
-		this.playerRed = playerRed;
-		this.playerBlue = playerBlue;
 		paper = new Paper() {
 
 			@Override
@@ -296,7 +291,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jPanel_Tree.setVisible(false);
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
-		roomPart_Chat.initChat(this, playerRed.guiName, playerBlue.guiName);
+		roomPart_Chat.initChat(this, gameInfo.first.guiName, gameInfo.second.guiName);
 //		if (amIPlaying == false) {
 //		jButton_AdditionalActions.setVisible(false);
 		jButton_EndGame.setVisible(false);
@@ -545,8 +540,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
 		String[] extensions = {".sgf", ".sgftochki"};
 		String sgfData = Sgf.constructSgf(
-				playerRed.guiName, playerBlue.guiName,
-				playerRed.rating, playerBlue.rating, 39, 32,
+				gameInfo.first.guiName, gameInfo.second.guiName,
+				gameInfo.first.rating, gameInfo.second.rating, 39, 32,
 				gameInfo.getTimeAsString(), gameResult, 0,
 				moveList, true);
 

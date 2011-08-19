@@ -20,7 +20,7 @@ public class GamePool {
 		}
 	}
 
-	public void remove(ServerInterface server, String id) {
+	public void remove(ServerInterface server, String id, String masterRoomId) {
 		GameShort gameShort = new GameShort(server, id);
 		map.remove(gameShort);
 	}
@@ -28,13 +28,11 @@ public class GamePool {
 	class GameShort {
 		ServerInterface server;
 		String id;
-
 		public GameShort(ServerInterface server, String id) {
 			super();
 			this.server = server;
 			this.id = id;
 		}
-
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -45,7 +43,6 @@ public class GamePool {
 					+ ((this.server == null) ? 0 : this.server.hashCode());
 			return result;
 		}
-
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -69,9 +66,9 @@ public class GamePool {
 				return false;
 			return true;
 		}
-
 		private GamePool getOuterType() {
 			return GamePool.this;
 		}
 	}
+
 }

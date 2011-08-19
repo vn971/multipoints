@@ -1,67 +1,143 @@
 package ru.narod.vn91.pointsop.gui;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.table.DefaultTableModel;
+
+import ru.narod.vn91.pointsop.data.GameInfo;
+import ru.narod.vn91.pointsop.data.GameInfoListener;
+import ru.narod.vn91.pointsop.data.GameInfo.GameState;
 
 public class RoomPart_GameList extends javax.swing.JPanel {
 
-	RoomInterface containerRoom;
+	RoomInterface room;
 	GuiController guiController;
-	private ArrayList<GameRoomData> gameList = new ArrayList<GameRoomData>();
+	private List<GameInfo> gameList = new ArrayList<GameInfo>();
 
-	void gameCreated(String roomName,
-			String user1,
-			String user2,
-			String settings,
-			boolean placeOnTop) {
-		int rowNumb = 0;
-		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(
-				roomName) == false)) {
-			++rowNumb;
-		}
-		if (rowNumb < gameList.size()) {
-			// equal found
-			gameList.remove(rowNumb);
-//			gameList.set(rowNumb, new GameRoomData(roomName, user1, user2, gameList.size()));
-			DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
-			tableModel.removeRow(rowNumb);
-//			String[] row = {user1, user2, settings};
-//			tableModel.insertRow(rowNumb, row);
-		} else {
-			// creating a new one
-//			gameList.add(new GameRoomData(roomName, user1, user2, gameList.size()));
-//			DefaultTableModel tableModel = ((DefaultTableModel) jTable1.getModel());
-//			String[] row = {user1, user2, settings};
-//			tableModel.addRow(row);
-		}
-		if (placeOnTop) {
-			rowNumb = 0;
-		}
-		gameList.add(
-				rowNumb,
-				new GameRoomData(roomName, user1, user2, rowNumb));
-		DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
-		String[] row = {user1, user2, settings};
-		tableModel.insertRow(rowNumb, row);
+	synchronized static Object[] createRow(GameInfo gameInfo) {
+		String row1, row2, row3;
+		String firstAsString = (gameInfo.first == null || gameInfo.first.guiName == null)
+				? "" : gameInfo.first.guiName;
+		String secondAsString = (gameInfo.second == null || gameInfo.second.guiName == null)
+				? "" : gameInfo.second.guiName;
+		boolean isSearching = (gameInfo.state == GameState.SearchingOpponent);
+		row1 = String.format("%s%s%s",
+				isSearching ? "<html><b>" : "",
+						firstAsString,
+						isSearching ? "</b></html>" : "");
+		row2 = String.format("%s%s%s",
+				isSearching ? "<html><b>" : "",
+				secondAsString,
+				isSearching ? "</b></html>" : "");
+		row3 = String.format("%s%s, %s%s",
+				isSearching ? "<html><b>" : "",
+				gameInfo.isRated ? "R" : "F",
+				gameInfo.getTimeAsString(),
+				isSearching ? "</b></html>" : "");
+		Object[] result = { row1, row2, row3 };
+		return result;
 	}
 
-	void gameDestroyed(String roomName) {
-		int rowNumb = 0;
-		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(
-				roomName) == false)) {
-			++rowNumb;
+	synchronized void gameCreated(
+			GameInfo gameInfo) {
+		for (GameInfo info2 : gameList) {
+			if (info2 == gameInfo) {
+				return;
+			}
 		}
-		if (rowNumb < gameList.size()) {
-			DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
-			tableModel.removeRow(rowNumb);
-			gameList.remove(rowNumb);
-		}
+		gameList.add(gameInfo);
+
+		final DefaultTableModel tableModel = ((DefaultTableModel) jTable1
+				.getModel());
+		Object[] row = createRow(gameInfo);
+		tableModel.addRow(row);
+
+		gameInfo.addChangeListener(new GameInfoListener() {
+
+			@Override
+			public void onChange(GameInfo gameInfo) {
+				int position = 0;
+				for (GameInfo info2 : gameList) {
+					if (info2 == gameInfo) {
+						Object[] row = createRow(gameInfo);
+						int columnNumber = 0;
+						for (Object object : row) {
+							tableModel.setValueAt(object, position, columnNumber);
+							columnNumber += 1;
+						}
+					} else {
+						position += 1;
+					}
+				}
+			}
+		});
+
+		// int rowNumb = 0;
+		// while ((rowNumb < gameList.size()) &&
+		// (gameList.get(rowNumb).roomName.equals(
+		// Gam) == false)) {
+		// ++rowNumb;
+		// }
+		// if (rowNumb < gameList.size()) {
+		// // equal found
+		// gameList.remove(rowNumb);
+		// // gameList.set(rowNumb, new GameRoomData(roomName, user1, user2,
+		// gameList.size()));
+		// DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
+		// tableModel.removeRow(rowNumb);
+		// // String[] row = {user1, user2, settings};
+		// // tableModel.insertRow(rowNumb, row);
+		// } else {
+		// // creating a new one
+		// // gameList.add(new GameRoomData(roomName, user1, user2,
+		// gameList.size()));
+		// // DefaultTableModel tableModel = ((DefaultTableModel)
+		// jTable1.getModel());
+		// // String[] row = {user1, user2, settings};
+		// // tableModel.addRow(row);
+		// }
+		// if (placeOnTop) {
+		// rowNumb = 0;
+		// }
+		// gameList.add(
+		// rowNumb,
+		// new GameRoomData(roomName, user1, user2, rowNumb));
+		// DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
+		// String[] row = {user1, user2, settings};
+		// tableModel.insertRow(rowNumb, row);
 	}
 
-	public void initRoomPart(RoomInterface containerRoom,
+	void gameDestroyed(
+			GameInfo gameInfo) {
+		int position = 0;
+		for (GameInfo info2 : gameList) {
+			if (gameInfo==info2) {
+				gameList.remove(position);
+				DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
+				tableModel.removeRow(position);
+			} else {
+				position+=1;
+			}
+		}
+
+//		int rowNumb = 0;
+//		while ((rowNumb < gameList.size()) && (gameList.get(rowNumb).roomName.equals(
+//				roomName) == false)) {
+//			++rowNumb;
+//		}
+//		if (rowNumb < gameList.size()) {
+//			DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
+//			tableModel.removeRow(rowNumb);
+//			gameList.remove(rowNumb);
+//		}
+	}
+
+	public void initRoomPart(
+			RoomInterface containerRoom,
 			GuiController guiController) {
 		this.guiController = guiController;
-		this.containerRoom = containerRoom;
+		this.room = containerRoom;
 	}
 
 	/** Creates new form RoomPart_GameList */
@@ -130,19 +206,21 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 		if (evt.getClickCount() == 2) {
 			int row = jTable1.getSelectedRow();
 			if (row >= 0) {
-				String roomName = gameList.get(row).roomName;
-				if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
-						row).user2))
-						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
-						row).user1))
-						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
-						row).user2))) {
-					containerRoom.getServer().requestPlay(roomName);
-				} else {
-					guiController.activateGameRoom(containerRoom.getServer(),
-							roomName);
-					containerRoom.getServer().subscribeRoom(roomName);
-				}
+				gameList.get(row).server.subscribeRoom(gameList.get(row).id);
+				// TODO
+//				String roomName = gameList.get(row).roomName;
+//				if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
+//						row).user2))
+//						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
+//						row).user1))
+//						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
+//						row).user2))) {
+//					containerRoom.getServer().requestPlay(roomName);
+//				} else {
+//					guiController.activateGameRoom(containerRoom.getServer(),
+//							roomName);
+//					containerRoom.getServer().subscribeRoom(roomName);
+//				}
 			}
 		}
 		if (jTable1.getRowCount() >= 1) {
@@ -157,17 +235,17 @@ public class RoomPart_GameList extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 }
 
-class GameRoomData {
-
-	String roomName, user1, user2;
-	int rowNumber;
-
-	public GameRoomData(String roomName,
-			String user1,
-			String user2,
-			int rowNumber) {
-		this.roomName = roomName;
-		this.user1 = user1;
-		this.user2 = user2;
-	}
-}
+//class GameRoomData {
+//
+//	String roomName, user1, user2;
+//	int rowNumber;
+//
+//	public GameRoomData(String roomName,
+//			String user1,
+//			String user2,
+//			int rowNumber) {
+//		this.roomName = roomName;
+//		this.user1 = user1;
+//		this.user2 = user2;
+//	}
+//}

@@ -2,6 +2,7 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Image;
 
+import ru.narod.vn91.pointsop.data.GameInfo;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public interface GuiForServerInterface {
@@ -18,16 +19,22 @@ public interface GuiForServerInterface {
 	 */
 	public abstract void serverClosed(ServerInterface server);
 
+	/*
+	 * if something is unknown yet -- null may be passed
+	 */
 	public abstract void addUserInfo(
 			ServerInterface server, String id,
 			String guiName, Image image,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status);
 
+	/*
+	 * if something is unknown yet -- null may be passed
+	 */
 	public abstract void addGameInfo(
-			ServerInterface server, String id,
+			ServerInterface server, String id, String masterRoomId,
 			String redId, String blueId,
-			Boolean isRated, Integer handicapRed,
+			GameInfo.GameState gameState, Boolean isRated, Integer handicapRed,
 			Integer freeTemporalTime,
 			Integer additionalAccumulatingTime,
 			Integer startingTime,
@@ -58,11 +65,6 @@ public interface GuiForServerInterface {
 	public abstract void subscribedGame(
 			ServerInterface server,
 			String roomId,
-			String redId,
-			String blueId,
-//			String timeLimits,
-//			boolean isRated,
-//			String startingPosition,
 			boolean chatReadOnly,
 			boolean amIPlaying,
 			boolean amIRed);
@@ -71,9 +73,14 @@ public interface GuiForServerInterface {
 			ServerInterface server,
 			String room);
 
-	public abstract void unsubsribedGame(
+	public abstract void gameRowCreated(
 			ServerInterface server,
-			String room);
+			String masterRoom,
+			String newRoom);
+
+	public abstract void gameRowDestroyed(
+			ServerInterface server,
+			String oldRoom);
 
 	public abstract void chatReceived(
 			ServerInterface server,
@@ -96,50 +103,18 @@ public interface GuiForServerInterface {
 			String room,
 			String message);
 
-	public abstract void gameCreated(
-			ServerInterface server,
-			String masterRoom,
-			String newRoom,
-			String user1,
-			String user2,
-			String settings);
-
-	public abstract void gameVacancyCreated(
-			ServerInterface server,
-			String masterRoom,
-			String newRoom,
-			String user,
-			String settings);
-
-	public abstract void gameVacancyDestroyed(
-			ServerInterface server,
-			String masterRoom,
-			String oldRoom);
-
-	public abstract void gameRequestReceived(
+	public abstract void gameInviteReceived(
 			ServerInterface server,
 			String room,
 			String possibleOpponent);
 
-	/**
-	 * game is destroyed from list of games (NOT tabs of Lang-rooms!)
-	 *
-	 * @param server
-	 * @param masterRoom
-	 * @param oldRoom
-	 */
-	public abstract void gameDestroyed(
-			ServerInterface server,
-			String masterRoom,
-			String oldRoom);
-
 	public abstract void makedMove(
 			ServerInterface server,
-			String room,
+			String roomId,
 			boolean silent,
 			int x,
 			int y,
-			boolean isRed,
+			boolean wasRed,
 			boolean nowPlays,
 			int timeLeftRed, int timeLeftBlue);
 

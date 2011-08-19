@@ -82,9 +82,10 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void addGameInfo(ServerInterface server, String id,
+	public void addGameInfo(
+			ServerInterface server, String id, String masterRoomId,
 			String redId, String blueId,
-			Boolean isRated, Integer handicapRed,
+			GameInfo.GameState gameState, Boolean isRated, Integer handicapRed,
 			Integer freeTemporalTime,
 			Integer additionalAccumulatingTime,
 			Integer startingTime,
@@ -93,9 +94,9 @@ public class GuiController implements GuiForServerInterface {
 		Player redP = playerPool.get(server, redId);
 		Player blueP = playerPool.get(server, blueId);
 		GameInfo updateInstance = new GameInfo(
-				server, id,
+				server, id, masterRoomId,
 				redP, blueP,
-				isRated, handicapRed,
+				gameState, isRated, handicapRed,
 				freeTemporalTime,
 				additionalAccumulatingTime,
 				startingTime,
@@ -228,17 +229,13 @@ public class GuiController implements GuiForServerInterface {
 	@Override
 	public void subscribedGame(
 			ServerInterface server, String roomId,
-			String redId, String blueId,
 			boolean chatReadOnly, boolean amIPlaying, boolean amIRed) {
-		Player red = playerPool.get(server, redId);
-		Player blue = playerPool.get(server, blueId);
 		GameInfo game = gamePool.get(server, roomId);
-
 		if (roomInterfaces.containsKey(new ServerRoom(game.id, server))) {
 			return;
 		}
 		GameRoom containerRoom_Game = new GameRoom(
-				game, red, blue,
+				game,
 				this, chatReadOnly, amIPlaying, amIRed);
 		gameRooms.put(
 				new ServerRoom(game.id, server),
@@ -253,24 +250,17 @@ public class GuiController implements GuiForServerInterface {
 						+ GlobalGuiSettings.getHtmlColor(
 								Memory.getPlayer1Color()
 								)
-						+ ">" + red.guiName
+						+ ">" + game.first.guiName
 						+ "</font><font color=black> - </font><font color="
 						+ GlobalGuiSettings.getHtmlColor(
 								Memory.getPlayer2Color()
 								)
-						+ ">" + blue.guiName + "</font></html>",
+						+ ">" + game.second.guiName + "</font></html>",
 				containerRoom_Game, true
 				);
 		tabbedPane.setSelectedComponent(containerRoom_Game);
-	}
+	};
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedRoom(ru.narod
-	 * .vn91.pointsop.server.ServerInterface, java.lang.String)
-	 */
 	public synchronized void unsubsribedRoom(
 			ServerInterface server,
 			String room) {
@@ -286,36 +276,6 @@ public class GuiController implements GuiForServerInterface {
 		roomInterfaces.remove(new ServerRoom(room, server));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#unsubsribedGame(ru.narod
-	 * .vn91.pointsop.server.ServerInterface, java.lang.String)
-	 */
-	public synchronized void unsubsribedGame(
-			ServerInterface server,
-			String room) {
-		RoomInterface roomInterface = roomInterfaces.get(
-				new ServerRoom(
-						room,
-						server
-				)
-				);
-		if (roomInterface != null) {
-			tabbedPane.remove((Component) roomInterface);
-		}
-		roomInterfaces.remove(new ServerRoom(room, server));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#chatReceived(ru.narod.
-	 * vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
 	public synchronized void chatReceived(
 			ServerInterface server,
 			String room,
@@ -438,105 +398,73 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameCreated(ru.narod.vn91
-	 * .pointsop.server.ServerInterface, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public synchronized void gameCreated(
+	@Override
+	public void gameRowCreated(
 			ServerInterface server,
 			String masterRoom,
-			String newRoom,
-			String user1,
-			String user2,
-			String settings) {
+			String newRoom) {
+		GameInfo gameInfo = gamePool.get(server, newRoom);
 		RoomInterface roomInterface = roomInterfaces.get(
-				new ServerRoom(
-						masterRoom, server
-				)
-				);
+				new ServerRoom(masterRoom, server));
 		if (roomInterface == null) {
 			throw new UnsupportedOperationException(
 					"creating a game with an incorrect MasterRoom");
 		} else {
-			roomInterface.getRoomPart_GameList().
-					gameCreated(newRoom, user1, user2, settings, false);
+			roomInterface.getRoomPart_GameList().gameCreated(gameInfo);
 		}
-	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyCreated(ru.
-	 * narod.vn91.pointsop.server.ServerInterface, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public synchronized void gameVacancyCreated(
-			ServerInterface server,
-			String masterRoom,
-			String newRoom,
-			String user,
-			String settings) {
-		LangRoom langRoom = langRooms.get(new ServerRoom(masterRoom, server));
-		if (langRoom == null) {
-		} else {
-			langRoom.getRoomPart_GameList().gameCreated(
-					newRoom,
-					"<html><b>" + user + "</b></html>", "",
-					"<html><b>" + settings + "</b></html>",
-					true
-					);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameVacancyDestroyed(ru
-	 * .narod.vn91.pointsop.server.ServerInterface, java.lang.String,
-	 * java.lang.String)
-	 */
-	public synchronized void gameVacancyDestroyed(
-			ServerInterface server,
-			String masterRoom,
-			String oldRoom) {
-		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
-		// room.getClass().getInterfaces();
-		if (room == null) {
-		} else {
-			room.getRoomPart_GameList().gameDestroyed(oldRoom);
-		}
 	}
 
 	@Override
-	public void gameRequestReceived(ServerInterface server, String room,
+	public void gameRowDestroyed(
+			ServerInterface server,
+			String oldRoom) {
+		GameInfo gameInfo = gamePool.get(server, oldRoom);
+		if (gameInfo != null) {
+			LangRoom room = langRooms.get(
+					new ServerRoom(gameInfo.masterRoomId, server));
+			if (room != null) {
+				room.getRoomPart_GameList().gameDestroyed(gameInfo);
+			}
+		}
+	}
+//public synchronized void gameDestroyed(
+//ServerInterface server,
+//String masterRoom,
+//String oldRoom) {
+//GameInfo gameInfo = gamePool.get(server, oldRoom, masterRoom);
+//LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
+//if (room == null) {
+//} else {
+//room.getRoomPart_GameList().gameDestroyed(gameInfo);
+//}
+//}
+
+
+//public synchronized void unsubsribedGame(
+//		ServerInterface server,
+//		String room) {
+//	RoomInterface roomInterface = roomInterfaces.get(
+//			new ServerRoom(
+//					room,
+//					server
+//			)
+//			);
+//	if (roomInterface != null) {
+//		tabbedPane.remove((Component) roomInterface);
+//	}
+//	roomInterfaces.remove(new ServerRoom(room, server));
+//}
+
+	@Override
+	public void gameInviteReceived(
+			ServerInterface server,
+			String room,
 			String possibleOpponent) {
 		new Sounds().playAlarmSignal();
 		server.acceptOpponent(room, possibleOpponent);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameDestroyed(ru.narod
-	 * .vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
-	 */
-	public synchronized void gameDestroyed(
-			ServerInterface server,
-			String masterRoom,
-			String oldRoom) {
-		LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
-		if (room == null) {
-		} else {
-			room.getRoomPart_GameList().gameDestroyed(oldRoom);
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
