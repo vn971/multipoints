@@ -33,7 +33,7 @@ public class GuiController implements GuiForServerInterface {
 	HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
 	HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();
 	HashMap<ServerRoom, LangRoom> langRooms = new HashMap<ServerRoom, LangRoom>();
-	HashMap<ServerUserName, PrivateChat> privateChatList = new HashMap<ServerUserName, PrivateChat>();
+	HashMap<Player, PrivateChat> privateChatList = new HashMap<Player, PrivateChat>();
 	PlayerPool playerPool = new PlayerPool();
 	GamePool gamePool = new GamePool();
 
@@ -162,23 +162,11 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#userDisconnected(ru.narod
-	 * .vn91.pointsop.server.ServerInterface, java.lang.String)
-	 */
 	public synchronized void userDisconnected(
 			ServerInterface server,
 			String id) {
 		Player player = playerPool.get(server, id);
-		PrivateChat privateChat = privateChatList.get(
-				new ServerUserName(
-						player.id,
-						server
-				)
-				);
+		PrivateChat privateChat = privateChatList.get(player);
 		if ((privateChat != null) && (tabbedPane.
 				indexOfComponent(privateChat) >= 0)) {
 			privateChat.addChat("server", player.guiName + " вышел из игры...", true);
@@ -186,14 +174,6 @@ public class GuiController implements GuiForServerInterface {
 		playerPool.remove(server, id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#subscribedLangRoom(java
-	 * .lang.String, ru.narod.vn91.pointsop.server.ServerInterface,
-	 * java.lang.String, boolean)
-	 */
 	public synchronized void subscribedLangRoom(
 			String roomNameOnServer,
 			ServerInterface serverInterface,
@@ -308,24 +288,20 @@ public class GuiController implements GuiForServerInterface {
 	 */
 	public synchronized void privateMessageReceived(
 			ServerInterface server,
-			String user,
+			String userId,
 			String message) {
-		PrivateChat privateChat = privateChatList.get(
-				new ServerUserName(
-						user,
-						server
-				)
-				);
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
 			// creating new panel
-			privateChat = new PrivateChat(server, this, user);
-			privateChatList.put(new ServerUserName(user, server), privateChat);
-			tabbedPane.addTab(user, privateChat, true);
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
 			tabbedPane.makeBold(privateChat);
 		} else {
 			if (tabbedPane.indexOfComponent(privateChat) == -1) {
 				tabbedPane.addTab(
-						user, privateChat, true
+						player.guiName, privateChat, true
 						); // resurrecting a closed panel
 				tabbedPane.makeBold(privateChat);
 			} else {
@@ -333,7 +309,7 @@ public class GuiController implements GuiForServerInterface {
 				tabbedPane.makeBold(privateChat);
 			}
 		}
-		privateChat.addChat(user, message, false);
+		privateChat.addChat(player.guiName, message, false);
 	}
 
 	@Override
@@ -342,43 +318,23 @@ public class GuiController implements GuiForServerInterface {
 		new Sounds().playAlarmSignal();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#createPrivateChatWindow
-	 * (ru.narod.vn91.pointsop.server.ServerInterface, java.lang.String)
-	 */
 	public synchronized void createPrivateChatWindow(
-			ServerInterface server,
-			String user) {
-		PrivateChat privateChat = privateChatList.get(
-				new ServerUserName(
-						user,
-						server
-				)
-				);
+			Player player
+			) {
+		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
-			privateChat = new PrivateChat(server, this, user);
-			privateChatList.put(new ServerUserName(user, server), privateChat);
-			tabbedPane.addTab(user, privateChat, true);
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
 			tabbedPane.setSelectedComponent(privateChat);
 		} else {
 			if (tabbedPane.indexOfComponent(privateChat) == -1) {
-				tabbedPane.addTab(user, privateChat, true);
+				tabbedPane.addTab(player.guiName, privateChat, true);
 			}
 			tabbedPane.setSelectedComponent(privateChat);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverNoticeReceived(ru
-	 * .narod.vn91.pointsop.server.ServerInterface, java.lang.String,
-	 * java.lang.String)
-	 */
 	public synchronized void serverNoticeReceived(
 			ServerInterface server,
 			String room,
@@ -564,7 +520,6 @@ public class GuiController implements GuiForServerInterface {
 		} catch (Exception ignored) {
 		}
 	}
-
 }
 
 class ServerRoom {
@@ -609,47 +564,47 @@ class ServerRoom {
 	}
 }
 
-class ServerUserName {
-
-	String userName;
-	ServerInterface serverInterface;
-
-	public ServerUserName(
-			String userName,
-			ServerInterface serverInterface) {
-		this.userName = userName;
-		this.serverInterface = serverInterface;
-	}
-
-	@Override
-	public boolean equals(Object compareToObject) {
-		if (compareToObject instanceof ServerUserName == false) {
-			return false;
-			// avoid this stupid NetBeans hint...
-		}
-		if ((compareToObject == null)
-				|| (getClass().isInstance(compareToObject) == false)) {
-			return false;
-		}
-		ServerUserName compareTo = getClass().cast(compareToObject);
-		boolean userNameEquals = (userName == null)
-				? compareTo.userName == null
-				: userName.equals(compareTo.userName);
-		boolean serverEquals = (serverInterface == null)
-				? compareTo.serverInterface == null
-				: serverInterface.equals(compareTo.serverInterface);
-		return userNameEquals && serverEquals;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 3;
-		hash = 29 * hash + (this.userName != null ? this.userName.hashCode() : 0);
-		hash = 29 * hash
-				+ (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
-		return hash;
-	}
-}
+//class ServerUserName {
+//
+//	String userName;
+//	ServerInterface serverInterface;
+//
+//	public ServerUserName(
+//			String userName,
+//			ServerInterface serverInterface) {
+//		this.userName = userName;
+//		this.serverInterface = serverInterface;
+//	}
+//
+//	@Override
+//	public boolean equals(Object compareToObject) {
+//		if (compareToObject instanceof ServerUserName == false) {
+//			return false;
+//			// avoid this stupid NetBeans hint...
+//		}
+//		if ((compareToObject == null)
+//				|| (getClass().isInstance(compareToObject) == false)) {
+//			return false;
+//		}
+//		ServerUserName compareTo = getClass().cast(compareToObject);
+//		boolean userNameEquals = (userName == null)
+//				? compareTo.userName == null
+//				: userName.equals(compareTo.userName);
+//		boolean serverEquals = (serverInterface == null)
+//				? compareTo.serverInterface == null
+//				: serverInterface.equals(compareTo.serverInterface);
+//		return userNameEquals && serverEquals;
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		int hash = 3;
+//		hash = 29 * hash + (this.userName != null ? this.userName.hashCode() : 0);
+//		hash = 29 * hash
+//				+ (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
+//		return hash;
+//	}
+//}
 
 class JTabbedPaneMod
 		extends JTabbedPane {

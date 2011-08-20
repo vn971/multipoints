@@ -10,8 +10,10 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
@@ -195,7 +197,7 @@ public class ServerPointsxt
 		// if (opponentName.equals("") == false) {
 		// return;
 		// } this protection is already done earlier
-		String ircOpponentName = nicknameManager.getIrcNick(newOpponent);
+		String ircOpponentName = nicknameManager.id2irc(newOpponent);
 		if (ircOpponentName == null) {
 			// do nothing
 		} else if (isPointsXTNickname(ircOpponentName)) {
@@ -214,7 +216,7 @@ public class ServerPointsxt
 					true, true/* i am playing */, myGame.amIRed);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
-				gui.userJoinedRoom(this, roomName, nicknameManager.getOrCreateShortNick(ircNick), true);
+				gui.userJoinedRoom(this, roomName, nicknameManager.irc2id(ircNick), true);
 			}
 		}
 	}
@@ -222,7 +224,7 @@ public class ServerPointsxt
 	@Override
 	public void rejectOpponent(String roomName, String notWantedOpponent) {
 		super.sendMessage(
-				nicknameManager.getIrcNick(notWantedOpponent),
+				nicknameManager.id2irc(notWantedOpponent),
 				"Приглашение на игру отклонено.");
 	}
 
@@ -413,7 +415,7 @@ public class ServerPointsxt
 			userDisconnected_PointsxtStyle(channelName, sourceNick);
 		}
 		gui.userDisconnected(
-				this, nicknameManager.getOrCreateShortNick(
+				this, nicknameManager.irc2id(
 				sourceNick
 		)
 		);
@@ -425,10 +427,10 @@ public class ServerPointsxt
 			String login,
 			String hostname,
 			String newNick) {
-		if (getPlayerRoom(oldNick).equals("") == false &&
-				getPlayerRoom(oldNick).equals(getPlayerRoom(newNick)) == false) {
+//		if (getPlayerRoom(oldNick).equals("") == false &&
+//				getPlayerRoom(oldNick).equals(getPlayerRoom(newNick)) == false) {
 			clearCreatedGames_PointsxtStyle(oldNick);
-		}
+//		}
 		nicknameManager.changeIrcNick(oldNick, newNick);
 //		if (nicknameManager.getOrCreateShortNick(newNick).
 //				equals(nicknameManager.getOrCreateShortNick(oldNick)) == false) {
@@ -441,7 +443,7 @@ public class ServerPointsxt
 		if ((rankNew != rankOld) && (rankOld != 0) && (rankNew != 0)) {
 			gui.serverNoticeReceived(
 					this, defaultChannel,
-					"" + nicknameManager.getOrCreateShortNick(newNick)
+					"" + nicknameManager.irc2id(newNick)
 							+ " " + rankOld + " -> " + rankNew
 			);
 		}
@@ -468,17 +470,17 @@ public class ServerPointsxt
 			} else {
 				gui.gameInviteReceived(
 						this, myGame.roomName,
-						nicknameManager.getOrCreateShortNick(sender));
+						nicknameManager.irc2id(sender));
 			}
 		}
 		// catch game-invite
-		String nick = nicknameManager.getOrCreateShortNick(sender);
+		String nick = nicknameManager.irc2id(sender);
 		int playerNumb = getPlayerIngameNumber(sender);
 		if (message.startsWith(commandCommonPrefix)) {
 			if ((message.startsWith(commandCommonPrefix + commandIWantJoinGame))
 					&& (channel.equals(myGame.roomName))
 					&& (myGame.isPlaying() == false)) {
-				String opponentNick = nicknameManager.getOrCreateShortNick(
+				String opponentNick = nicknameManager.irc2id(
 						sender
 				);
 //				System.out.println("received Op-game request");
@@ -504,7 +506,7 @@ public class ServerPointsxt
 						true, true /*i'm playing*/, myGame.amIRed);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
-					gui.userJoinedRoom(this, channel, nicknameManager.getOrCreateShortNick(ircNick), true);
+					gui.userJoinedRoom(this, channel, nicknameManager.irc2id(ircNick), true);
 				}
 			}
 			return; /* "if I won't take it - no one will."
@@ -575,9 +577,9 @@ public class ServerPointsxt
 //			);
 
 			if (isPointsopNickname(sender)) {
-				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
+				gui.soundReceived(this, nicknameManager.irc2id(sender));
 			} else if (myGame.isSearching() == false) {
-				gui.soundReceived(this, nicknameManager.getOrCreateShortNick(sender));
+				gui.soundReceived(this, nicknameManager.irc2id(sender));
 				super.sendMessage(
 						sender,
 						"На игру можно вызывать только игрока " +
@@ -587,7 +589,7 @@ public class ServerPointsxt
 			} else {
 				gui.gameInviteReceived(
 								this, myGame.roomName, nicknameManager
-										.getOrCreateShortNick(sender));
+										.irc2id(sender));
 //			tryInvitePointsxt(sender, true);
 			}
 		} else if (message.equals("/GetTehGame")) {
@@ -623,7 +625,7 @@ public class ServerPointsxt
 					myGame.amIRed = true;
 					myGame.engine = new SingleGameEngine(39, 32);
 					myGame.moveList = new ArrayList<SimpleMove>();
-					myGame.opponentName = nicknameManager.getOrCreateShortNick(sender);
+					myGame.opponentName = nicknameManager.irc2id(sender);
 					myGame.roomName = room;
 					gui.subscribedGame(
 							this,
@@ -632,7 +634,7 @@ public class ServerPointsxt
 					);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
-						gui.userJoinedRoom(this, room, nicknameManager.getOrCreateShortNick(ircNick), true);
+						gui.userJoinedRoom(this, room, nicknameManager.irc2id(ircNick), true);
 					}
 				}
 			}
@@ -700,7 +702,7 @@ public class ServerPointsxt
 		} else if (message.equals("/GameMinimaze")) {
 		} else if (message.equals("/GameMaximaze")) {
 		} else {
-			String nick = nicknameManager.getOrCreateShortNick(sender);
+			String nick = nicknameManager.irc2id(sender);
 			gui.privateMessageReceived(
 					this, nick, message.replaceAll(
 					pointsxtTail_RegExp, ""
@@ -916,10 +918,10 @@ public class ServerPointsxt
 			String room,
 			String ircNick,
 			boolean silent) {
-		String pointsxtNick = nicknameManager.getOrCreateShortNick(ircNick);
+		String pointsxtNick = nicknameManager.irc2id(ircNick);
 		gui.addUserInfo(
 				this, pointsxtNick,
-				pointsxtNick, null, getPlayerRank(ircNick),
+				nicknameManager.getGuiNick(ircNick), null, getPlayerRank(ircNick),
 				0, 0, 0, extractUserStatus(ircNick));
 		if (room.equals(defaultChannel)) {
 			// join Lang room
@@ -939,11 +941,11 @@ public class ServerPointsxt
 				for (User user : users) {
 					String possibleOpponent = user.getNick();
 					if ((getPlayerRoom(possibleOpponent).equals(newRoom))
-							&& (! nicknameManager.getOrCreateShortNick(
+							&& (! nicknameManager.irc2id(
 							possibleOpponent
 					).
 							equals(pointsxtNick))) {
-						opponent = nicknameManager.getOrCreateShortNick(
+						opponent = nicknameManager.irc2id(
 								possibleOpponent
 						);
 					}
@@ -986,13 +988,13 @@ public class ServerPointsxt
 		if (room.equals(defaultChannel)) {
 			gui.userLeftRoom(
 					this, room,
-					nicknameManager.getOrCreateShortNick(user)
+					nicknameManager.irc2id(user)
 			);
 			clearCreatedGames_PointsxtStyle(user);
 			nicknameManager.removeIrcNick(user);
 		} else {
 			if (user.equalsIgnoreCase("podbot") == false) {
-				String userShort = nicknameManager.getOrCreateShortNick(user);
+				String userShort = nicknameManager.irc2id(user);
 //				System.out.println("userShort = " + userShort);
 //				System.out.println("myNickOnServ = " + myNickOnServ);
 				if (userShort.equals(getMyName())) {
@@ -1107,7 +1109,7 @@ public class ServerPointsxt
 	public void sendPrivateMsg(
 			String target,
 			String message) {
-		String fullTargetName = nicknameManager.getIrcNick(target);
+		String fullTargetName = nicknameManager.id2irc(target);
 		if (fullTargetName != null) {
 			super.sendMessage(fullTargetName, message);
 		} else {
@@ -1215,7 +1217,7 @@ public class ServerPointsxt
 		final int periodLength = 1;
 
 		public String getOpponentIrcName() {
-			return nicknameManager.getIrcNick(opponentName);
+			return nicknameManager.id2irc(opponentName);
 		}
 
 		public String getOpponentShortName() {
@@ -1343,54 +1345,63 @@ public class ServerPointsxt
 
 class IrcNicknameManager {
 
-	Map<String, String> ShortNick2IrcNick = new HashMap<String, String>();
-	Map<String, String> IrcNick2ShortNick = new HashMap<String, String>();
+	Map<String, String> id2Irc = new LinkedHashMap<String, String>();
+	Map<String, String> irc2Id = new LinkedHashMap<String, String>();
 
-	String getOrCreateShortNick(String ircNick) {
+	String irc2id(String ircNick) {
 		// inDI_X220111123511[g101]
-		if (IrcNick2ShortNick.get(ircNick) != null) {
+		if (irc2Id.get(ircNick) != null) {
 			// we already had him
-			return IrcNick2ShortNick.get(ircNick);
+			return irc2Id.get(ircNick);
 		} else {
 			String shortBasic = ircNick.replaceAll(
 					ServerPointsxt.pointsxtTail_RegExp, ""
 			);
 			String shortResult;
-			if (ShortNick2IrcNick.containsKey(shortBasic)) {
+			if (id2Irc.containsKey(shortBasic)) {
 				int i = 2;
-				while (ShortNick2IrcNick.containsKey(shortBasic + "(" + i + ")")) {
+				while (id2Irc.containsKey(shortBasic + "(" + i + ")")) {
 					i += 1;
 				}
 				shortResult = shortBasic + "(" + i + ")";
 			} else {
 				shortResult = shortBasic;
 			}
-			ShortNick2IrcNick.put(shortResult, ircNick);
-			IrcNick2ShortNick.put(ircNick, shortResult);
+			id2Irc.put(shortResult, ircNick);
+			irc2Id.put(ircNick, shortResult);
 			return shortResult;
 		}
 	}
 
-	String getIrcNick(String s) {
-		String result = ShortNick2IrcNick.get(s);
+	String id2irc(String id) {
+		String result = id2Irc.get(id);
 		return (result == null) ? "" : result;
 	}
 
 	void changeIrcNick(
 			String oldIrcNick,
 			String newIrcNick) {
-		String shortNick = IrcNick2ShortNick.get(oldIrcNick);
-		IrcNick2ShortNick.put(newIrcNick, shortNick);
-		IrcNick2ShortNick.remove(oldIrcNick);
+		String shortNick = irc2Id.get(oldIrcNick);
+		irc2Id.put(newIrcNick, shortNick);
+//		irc2Id.remove(oldIrcNick); we point both irc nicks to the Id
 
-		ShortNick2IrcNick.put(shortNick, newIrcNick); // overwrite the old
+		id2Irc.put(shortNick, newIrcNick); // overwrite the old
 	}
 
 	void removeIrcNick(String ircNick) {
-		String shortNick = IrcNick2ShortNick.get(ircNick);
-		ShortNick2IrcNick.remove(shortNick);
-		IrcNick2ShortNick.remove(ircNick);
+		String shortNick = irc2Id.get(ircNick);
+		id2Irc.remove(shortNick);
+		for (Entry<String,String> mapEntry : irc2Id.entrySet()) {
+			if (mapEntry.getValue().equals(shortNick)) {
+				id2Irc.remove(mapEntry.getKey());
+			}
+		}
 	}
+
+	public String getGuiNick(String ircNick) {
+		return ircNick.replaceAll(ServerPointsxt.pointsxtTail_RegExp, "");
+	}
+
 }
 
 class SimpleMove {

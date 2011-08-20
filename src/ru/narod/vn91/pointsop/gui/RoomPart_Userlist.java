@@ -223,9 +223,9 @@ public class RoomPart_Userlist
 	private void jTable_UserListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_UserListMouseClicked
 		if (evt.getClickCount() == 2) {
 			Player player = getSelectedUser();
-			centralGuiController.createPrivateChatWindow(
-					roomInterface.getServer(), player.guiName
-			);
+			centralGuiController.createPrivateChatWindow(player);
+//					roomInterface.getServer(), player.id, player.guiName
+//			);
 		} else if (evt.getButton() == MouseEvent.BUTTON1) {
 			Point p = evt.getPoint();
 			if (jTable_UserList.getCellRect(0, 0, true).contains(p)) {
