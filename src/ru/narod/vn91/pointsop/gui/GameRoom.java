@@ -291,7 +291,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jPanel_Tree.setVisible(false);
 
 		roomPart_Chat.setReadOnly(chatReadOnly);
-		roomPart_Chat.initChat(this, gameInfo.first.guiName, gameInfo.second.guiName);
+		roomPart_Chat.initChat(this,
+				(gameInfo.first==null) ? "" : gameInfo.first.guiName,
+				(gameInfo.second==null) ? "" : gameInfo.second.guiName);
 //		if (amIPlaying == false) {
 //		jButton_AdditionalActions.setVisible(false);
 		jButton_EndGame.setVisible(false);
