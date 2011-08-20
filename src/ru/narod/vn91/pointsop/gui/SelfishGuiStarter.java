@@ -306,7 +306,7 @@ public class SelfishGuiStarter {
 
 				{
 					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak AI - запуск 1.08");
+							new JMenuItem("Priymak AI - запуск 1.10");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -320,36 +320,7 @@ public class SelfishGuiStarter {
 													);
 											aiWrapper
 													.setAi(
-													new com.google.sites.priymakpoints.pointsai.pointsAI_1_08.PointsAIEngine(
-															aiWrapper, 39, 32
-													)
-													);
-											aiWrapper.init();
-										}
-									}.start();
-								}
-							}
-					);
-					jMenu_AI.add(jMenuItem);
-				}
-
-				{
-					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak AI - запуск 1.07");
-					jMenuItem.addActionListener(
-							new ActionListener() {
-
-								public void actionPerformed(ActionEvent e) {
-									new Thread() {
-										@Override
-										public void run() {
-											AiVirtualServer aiWrapper =
-													new AiVirtualServer(
-															guiController
-													);
-											aiWrapper
-													.setAi(
-													new com.google.sites.priymakpoints.pointsai.pointsAI_1_07.PointsAIEngine(
+													new com.google.sites.priymakpoints.pointsai.pointsAI_1_10.PointsAIEngine(
 															aiWrapper, 39, 32
 													)
 													);

@@ -1,13 +1,14 @@
-package com.google.sites.priymakpoints.pointsai.pointsAI_1_07;
+package com.google.sites.priymakpoints.pointsai.pointsAI_1_10;
 
 public enum DotType {
 	
-	ANY,NULL,OUT,LAND,BLUE,RED,RED_EMPTY,BLUE_EMPTY,BLUE_TARGET,
+	GLOBAL,ANY,NULL,OUT,LAND,BLUE,RED,RED_EMPTY,BLUE_EMPTY,BLUE_TARGET,
 	RED_NORMAL,RED_ATTACK,RED_PROTECTION,RED_GROUND,RED_CAPTURE,RED_DEFENCE,
-	BLUE_NORMAL;
+	BLUE_NORMAL,MAKROS_BLUE,MAKROS_RED;
 
 	public String toString() {
 		switch (this) {
+			case GLOBAL:return "G";
 			case ANY:return "A";
 			case NULL:return "N";
 			case OUT:return "O";
@@ -24,6 +25,8 @@ public enum DotType {
 			case RED_GROUND:return "4";
 			case RED_DEFENCE:return "5";
 			case BLUE_NORMAL:return "6";
+			case MAKROS_BLUE:return "7";
+			case MAKROS_RED:return "8";
 			default:return "$";
 		}
 	}

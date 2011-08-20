@@ -1,28 +1,25 @@
-package com.google.sites.priymakpoints.pointsai.pointsAI_1_08;
+package com.google.sites.priymakpoints.pointsai.pointsAI_1_10;
 
 import java.awt.Point;
 
 public class Template implements Variables{
 	
-	private int index=0;//,sizeX=13,sizeY=9;
+	private int index=0;
 	private TemplateType type=null;
 	private String template,template90,template180,template270,templateVert,templateGor,templateVert90,templateGor90;
 	private String templateWithoutTargets,template90WithoutTargets,template180WithoutTargets,template270WithoutTargets,
 		templateVertWithoutTargets,templateGorWithoutTargets,templateVert90WithoutTargets,templateGor90WithoutTargets;
-	private String strTemplate="";
 	private boolean isDeleted=false,isSquare=false,isSide=false;
-	public String targetRotate;
+	public String targetRotateTemplate;
+	public RotationType targetRotateType;
 
 public Template(String strTemplate){
-	this.strTemplate=strTemplate;
 	
 	index=new Integer(strTemplate.substring(117,122)).intValue();
 	type=TemplateType.getTemplateType(strTemplate.substring(122,125));
-	//getTemplateSize(type);
 	isSquare=type.isSquare();isSide=type.isSide();
 	
 	template=strTemplate.substring(0, 117);
-	//System.out.println(template.replaceAll("O", "").length());
 	template180=RotationType.getTransform(RotationType.r180,template);
 	templateGor=RotationType.getTransform(RotationType.GORIZONTAL,template);
 	templateVert=RotationType.getTransform(RotationType.VERTICAL,template);
@@ -57,10 +54,10 @@ public TemplateType getTemplateType(){return type;}
 public int getTemplateIndex(){return index;}
 public void setDelete(boolean delete){isDeleted=delete;}
 public boolean isDelete(){return isDeleted;}
-public String toString(){return strTemplate;}
+public String toString(){return template+index+type;}//strTemplate;}
 public String getTemplate(){return template;}
-public Point getMoveAI(){//if(getTemplateIndex()==10208)System.out.println("targ "+targetRotate);
-	return getAIcoordinates(targetRotate,DotType.RED_NORMAL);}
+public Point getMoveAI(){
+	return getPointCoordinates(targetRotateTemplate,DotType.RED_NORMAL);}
 
 public String getRotateTemplate(RotationType type){
 	if(type==RotationType.r0)return template;
@@ -76,56 +73,60 @@ public String getRotateTemplate(RotationType type){
 
 boolean isEqualsWithTargets(String str,String type){
 	if(!this.getTemplateType().toString().equals(type))return false;
-	if(str.equals(template)){return true;}//������� � ���� ����
-	if(str.equals(template180)){return true;}//������� � ���� ����
-	if(str.equals(templateGor)){return true;}//������� � ���� ����
-	if(str.equals(templateVert)){return true;}//������� � ���� ����
-	if(str.equals(template90)){return true;}//������� � ���� ����
-	if(str.equals(template270)){return true;}//������� � ���� ����
-	if(str.equals(templateGor90)){return true;}//������� � ���� ����
-	if(str.equals(templateVert90)){return true;}//������� � ���� ����
+	if(str.equals(template)){return true;}
+	if(str.equals(template180)){return true;}
+	if(str.equals(templateGor)){return true;}
+	if(str.equals(templateVert)){return true;}
+	if(str.equals(template90)){return true;}
+	if(str.equals(template270)){return true;}
+	if(str.equals(templateGor90)){return true;}
+	if(str.equals(templateVert90)){return true;}
 	return false;
 }
 
 boolean isEqualsWithoutTargets(String str,String type){
 	if(!this.getTemplateType().toString().equals(type))return false;
 	str=getTemplateWithoutTargets(str);
-	if(str.equals(templateWithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(template180WithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(templateGorWithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(templateVertWithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(template90WithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(template270WithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(templateGor90WithoutTargets)){return true;}//������� � ���� ����
-	if(str.equals(templateVert90WithoutTargets)){return true;}//������� � ���� ����
+	if(str.equals(templateWithoutTargets)){return true;}
+	if(str.equals(template180WithoutTargets)){return true;}
+	if(str.equals(templateGorWithoutTargets)){return true;}
+	if(str.equals(templateVertWithoutTargets)){return true;}
+	if(str.equals(template90WithoutTargets)){return true;}
+	if(str.equals(template270WithoutTargets)){return true;}
+	if(str.equals(templateGor90WithoutTargets)){return true;}
+	if(str.equals(templateVert90WithoutTargets)){return true;}
 	return false;
 }
 
 public boolean isEqualsLikeArea(String str,TemplateType type){
 	if(this.type!=type)return false;
-	str=getTemplateWithoutTargetsExceptE(str);
-	//System.out.print("+");
-	
+	try{str=getTemplateWithoutTargetsExceptE(str);}catch(Exception e){
+		System.out.println("occured error string result: "+str);
+		System.out.println("occured error on template type: "+type.toString());
+		e.printStackTrace();
+		//System.exit(-1);
+	}
+		
 	if(!isSide){
-		if(isEquals(str,templateWithoutTargets)){targetRotate=template;return true;}//������� � ���� ����
-		if(isEquals(str,template180WithoutTargets)){targetRotate=template180;return true;}//������� � ���� ����
-		if(isEquals(str,templateGorWithoutTargets)){targetRotate=templateGor;return true;}//������� � ���� ����
-		if(isEquals(str,templateVertWithoutTargets)){targetRotate=templateVert;return true;}//������� � ���� ����
-		if(isEquals(str,template90WithoutTargets)){targetRotate=template90;return true;}//������� � ���� ����
-		if(isEquals(str,template270WithoutTargets)){targetRotate=template270;return true;}//������� � ���� ����
-		if(isEquals(str,templateGor90WithoutTargets)){targetRotate=templateGor90;return true;}//������� � ���� ����
-		if(isEquals(str,templateVert90WithoutTargets)){targetRotate=templateVert90;return true;}//������� � ���� ����
+		if(isEquals(str,templateWithoutTargets)){targetRotateTemplate=template;targetRotateType=RotationType.r0;return true;}//������� � ���� ����
+		if(isEquals(str,template180WithoutTargets)){targetRotateTemplate=template180;targetRotateType=RotationType.r180;return true;}//������� � ���� ����
+		if(isEquals(str,templateGorWithoutTargets)){targetRotateTemplate=templateGor;targetRotateType=RotationType.GORIZONTAL;return true;}//������� � ���� ����
+		if(isEquals(str,templateVertWithoutTargets)){targetRotateTemplate=templateVert;targetRotateType=RotationType.VERTICAL;return true;}//������� � ���� ����
+		if(isEquals(str,template90WithoutTargets)){targetRotateTemplate=template90;targetRotateType=RotationType.r90;return true;}//������� � ���� ����
+		if(isEquals(str,template270WithoutTargets)){targetRotateTemplate=template270;targetRotateType=RotationType.r270;return true;}//������� � ���� ����
+		if(isEquals(str,templateGor90WithoutTargets)){targetRotateTemplate=templateGor90;targetRotateType=RotationType.GORIZONTAL90;return true;}//������� � ���� ����
+		if(isEquals(str,templateVert90WithoutTargets)){targetRotateTemplate=templateVert90;targetRotateType=RotationType.VERTICAL90;return true;}//������� � ���� ����
 	}
 	
 	if(isSide){
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(template))){targetRotate=template;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(template180))){targetRotate=template180;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateGor))){targetRotate=templateGor;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateVert))){targetRotate=templateVert;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(template90))){targetRotate=template90;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(template270))){targetRotate=template270;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateGor90))){targetRotate=templateGor90;return true;}//������� � ���� ����
-		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateVert90))){targetRotate=templateVert90;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(template))){targetRotateTemplate=template;targetRotateType=RotationType.r0;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(template180))){targetRotateTemplate=template180;targetRotateType=RotationType.r180;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateGor))){targetRotateTemplate=templateGor;targetRotateType=RotationType.GORIZONTAL;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateVert))){targetRotateTemplate=templateVert;targetRotateType=RotationType.VERTICAL;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(template90))){targetRotateTemplate=template90;targetRotateType=RotationType.r90;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(template270))){targetRotateTemplate=template270;targetRotateType=RotationType.r270;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateGor90))){targetRotateTemplate=templateGor90;targetRotateType=RotationType.GORIZONTAL90;return true;}//������� � ���� ����
+		if(isEquals(str,getTemplateWithoutTargetsExceptE(templateVert90))){targetRotateTemplate=templateVert90;targetRotateType=RotationType.VERTICAL90;return true;}//������� � ���� ����
 	}
 	
 	return false;
@@ -161,8 +162,8 @@ boolean isEquals(String str,String template){try{
 	return false;
 }catch(Exception e){return false;}}
 
-private Point getAIcoordinates(String content,DotType dot){
-	for(int i=0;i<content.length();i++)if(content.substring(i, i+1).equals(dot.toString())){return new Point(i%13,i/13);}
+public Point getPointCoordinates(String content,DotType dot){
+	for(int i=0;i<content.length();i++)if(content.substring(i, i+1).equals(dot.toString())){return new Point(i%sizeX_TE,i/sizeX_TE);}
 	return null;
 }
 

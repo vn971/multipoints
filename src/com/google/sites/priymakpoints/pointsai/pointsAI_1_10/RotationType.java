@@ -1,16 +1,15 @@
-package com.google.sites.priymakpoints.pointsai.pointsAI_1_07;
+package com.google.sites.priymakpoints.pointsai.pointsAI_1_10;
 
 public enum RotationType implements Variables{
 
 	r0,r90,r180,r270,GORIZONTAL,VERTICAL,GORIZONTAL90,VERTICAL90,ERROR;
 	
 	public static String getTransform(RotationType type,String str) {
-		String str1="";//String str2=""; //int sizeX=13,sizeY=9;
+		String str1="";
 		boolean isSquare=isSquareTemplate(str);
 		switch (type) {
 		case r0:return str;
 		case r90:
-			//System.out.println(str);
 			if(!isSquare)return str;
 			str=str.replaceAll("O", "");
 			for(int i=0;i<9;i++){for(int j=9-1;j>=0;j--)str1+=str.substring(9*j+i,9*j+i+1);str1+="OOOO";};

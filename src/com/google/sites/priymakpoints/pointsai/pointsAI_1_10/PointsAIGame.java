@@ -1,22 +1,16 @@
-package com.google.sites.priymakpoints.pointsai.pointsAI_1_07;
+package com.google.sites.priymakpoints.pointsai.pointsAI_1_10;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 
 public class PointsAIGame implements Variables{
 
-	private int moves;//����� ����� � ����
+	private int moves;
 	int last_x;
 	int last_y;
-	private SingleGameEngine singleGameEngine;//������ �������� ����
-	private boolean is_hod_human;//������������� ���� �������� � ��
+	private SingleGameEngine singleGameEngine;
+	private boolean is_hod_human;
 	
 PointsAIGame(){newGame();}
 
