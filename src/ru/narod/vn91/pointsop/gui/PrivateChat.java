@@ -113,7 +113,7 @@ public class PrivateChat extends javax.swing.JPanel {
 			jTextPane_Chat.setSelectionStart(jTextPane_Chat.getText().length());
 			jTextPane_Chat.setSelectionEnd(jTextPane_Chat.getText().length());
 			if (silent == false) {
-				new Sounds().playReceiveChat();
+				Sounds.playReceiveChat();
 			}
 		}
 	}
@@ -303,7 +303,7 @@ public class PrivateChat extends javax.swing.JPanel {
 
 			player.server.sendPrivateMsg(player.id, message);
 			addChat(player.server.getMyName(), message, true);
-			new Sounds().playSendChat();
+			Sounds.playSendChat();
 			jTextField_Chat.setText("");
 		}
 }//GEN-LAST:event_jTextField_ChatKeyPressed

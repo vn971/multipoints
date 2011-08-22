@@ -209,15 +209,9 @@ public class ServerPointsxt
 					roomName,
 					commandCommonPrefix + commandAcceptOpponent + myGame.getOpponentIrcName()
 			);
-			this.setPointsxtNickname(roomName.substring(4), true, true);
-
-			gui.updateGameInfo(
-					this, roomName,
-					null, null, null, null, null, null,
-					true,
-					null, null, null, null, null, null, null, null, null, null);
+			this.setPointsxtNickname(roomName, true, true);
 			gui.subscribedGame(
-					this, roomName);
+				this, roomName);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
 				gui.userJoinedRoom(this, roomName, nicknameManager.irc2id(ircNick), true);
@@ -491,7 +485,7 @@ public class ServerPointsxt
 					+ commandAcceptOpponent + myNickOnServ
 					) && isPointsopSameVersionNickname(sender)) {
 				this.setPointsxtNickname(
-						channel.substring(4),
+						channel,
 						true, false);
 //				super.changeNick(
 //						String.format(
@@ -504,11 +498,6 @@ public class ServerPointsxt
 				myGame.moveList = new ArrayList<SimpleMove>();
 				myGame.opponentName = nick;
 				myGame.roomName = channel;
-				gui.updateGameInfo(
-						this, channel,
-						null, null, null, null, null, null,
-						true,
-						null, null, null, null, null, null, null, null, null, null);
 				gui.subscribedGame(this, channel);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
@@ -609,8 +598,8 @@ public class ServerPointsxt
 			//			}
 		} else if (message.startsWith("/PointsXTAccept ")) {
 			String room = getPlayerRoom(sender);
-			String roomNumber = room.replaceFirst(".pxt", "");
-			if (isGamerNickname(sender)
+//			String roomNumber = room.replaceFirst(".pxt", "");
+			if (isPointsXTNickname(sender)
 					&& (room.equals("")) == false) {
 				if (myGame.isPlaying()) {
 					super.sendMessage(
@@ -619,7 +608,7 @@ public class ServerPointsxt
 					);
 				} else {
 					super.partChannel(myGame.roomName);
-					this.setPointsxtNickname(roomNumber, true, true);
+					this.setPointsxtNickname(room, true, true);
 //					super.changeNick(
 //							String.format(
 //									"%s_X" + pointsxtVersion + "0000%s[g101]",
@@ -633,11 +622,6 @@ public class ServerPointsxt
 					myGame.moveList = new ArrayList<SimpleMove>();
 					myGame.opponentName = nicknameManager.irc2id(sender);
 					myGame.roomName = room;
-					gui.updateGameInfo(
-							this, room,
-							null, null, null, null, null, null,
-							true,
-							null, null, null, null, null, null, null, null, null, null);
 					gui.subscribedGame(
 							this,
 							room);
@@ -865,6 +849,7 @@ public class ServerPointsxt
 //		result += String.format("%03d", programVersion);
 		result += pointsxtVersion;
 		result += "0000";
+		roomName.replaceAll(".pxt", "");
 		while (roomName.length() < 5) {
 			roomName = "0" + roomName;
 		}
@@ -1347,7 +1332,6 @@ public class ServerPointsxt
 			}
 		}
 
-
 		public void surrender(String roomName) {
 			if (roomName.equals(this.roomName)
 					&& isMyMoveNow()) {
@@ -1398,7 +1382,6 @@ class IrcNicknameManager {
 		String shortNick = irc2Id.get(oldIrcNick);
 		irc2Id.put(newIrcNick, shortNick);
 //		irc2Id.remove(oldIrcNick); we point both irc nicks to the Id
-
 		id2Irc.put(shortNick, newIrcNick); // overwrite the old
 	}
 

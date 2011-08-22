@@ -210,23 +210,31 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 
 	private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
 		if (evt.getClickCount() == 2) {
-			int row = jTable1.getSelectedRow();
-			if (row >= 0) {
-				gameList.get(row).server.subscribeRoom(gameList.get(row).id);
+			synchronized (gameList) {
+				int row = jTable1.getSelectedRow();
+				if (row >= 0) {
+					GameOuterInfo gameInfo = gameList.get(row);
+					if (gameInfo.state == GameState.SearchingOpponent) {
+						gameInfo.server.requestPlay(gameInfo.id);
+					} else {
+						guiController.activateGameRoom(gameInfo.server, gameInfo.id);
+						gameInfo.server.subscribeRoom(gameInfo.id);
+					}
+				}
 				// TODO
-//				String roomName = gameList.get(row).roomName;
-//				if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
-//						row).user2))
-//						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
-//						row).user1))
-//						&& (!containerRoom.getServer().getMyName().equals(gameList.get(
-//						row).user2))) {
-//					containerRoom.getServer().requestPlay(roomName);
-//				} else {
-//					guiController.activateGameRoom(containerRoom.getServer(),
-//							roomName);
-//					containerRoom.getServer().subscribeRoom(roomName);
-//				}
+				// String roomName = gameList.get(row).roomName;
+				// if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
+				// row).user2))
+				// && (!containerRoom.getServer().getMyName().equals(gameList.get(
+				// row).user1))
+				// && (!containerRoom.getServer().getMyName().equals(gameList.get(
+				// row).user2))) {
+				// containerRoom.getServer().requestPlay(roomName);
+				// } else {
+				// guiController.activateGameRoom(containerRoom.getServer(),
+				// roomName);
+				// containerRoom.getServer().subscribeRoom(roomName);
+				// }
 			}
 		}
 		if (jTable1.getRowCount() >= 1) {

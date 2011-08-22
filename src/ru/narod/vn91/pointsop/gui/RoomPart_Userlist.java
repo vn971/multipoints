@@ -50,6 +50,8 @@ public class RoomPart_Userlist
 		for (Player player2 : playerList) {
 			if (Player.compare(playerNew, player2) <= 0) {
 				position += 1;
+			} else {
+				break;
 			}
 		}
 		playerList.add(position, playerNew);

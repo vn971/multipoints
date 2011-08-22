@@ -11,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
@@ -84,9 +83,7 @@ public class SelfishGuiStarter {
 		}
 
 		final JTabbedPaneMod tabbedPane = new JTabbedPaneMod();
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		frame.add(tabbedPane);
-		tabbedPane.setFocusable(false);
+		frame.add(tabbedPane.getComponent());
 
 		final GuiController guiController = new GuiController(tabbedPane);
 
@@ -94,7 +91,6 @@ public class SelfishGuiStarter {
 		tabbedPane.addTab("Привет!", roomWelcome, false);
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
-
 		//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
 		//				"", 1, 1, "", false, "", true, true));
 		//		tabbedPane.addTab(
@@ -410,6 +406,7 @@ public class SelfishGuiStarter {
 /**
  * @see {@link WelcomePanel.LinkedLabel}
  */
+@SuppressWarnings("serial")
 class JMenuItemWithLink extends JMenuItem {
 
 	@Override

@@ -268,7 +268,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 	}//GEN-LAST:event_jRadioButton_PointsClick_InAllGamesStateChanged
 
 	private void jButton_PointClickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PointClickActionPerformed
-		new Sounds().playMakeMove(true);
+		Sounds.playMakeMove(true);
 	}//GEN-LAST:event_jButton_PointClickActionPerformed
 
 	private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged

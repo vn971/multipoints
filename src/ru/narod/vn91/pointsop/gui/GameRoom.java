@@ -119,7 +119,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						"#" + moveList.size() + " " + colorName + " " + x + ":" + y + " " + eatInformation);
 
 				showScoreAndCursor();
-				new Sounds().playMakeMove(gameOuterInfo.amIPlaying());
+				Sounds.playMakeMove(gameOuterInfo.amIPlaying());
 				timerLabel_Red.setRemainingTime(remainingTimeRed, isNowRed);
 				timerLabel_Blue.setRemainingTime(remainingTimeBlue, !isNowRed);
 

@@ -21,14 +21,14 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	GuiForServerInterface gui;
 	Gui2Ai_Interface ai;
-//	String userSecond;
 
 	public AiVirtualServer(GuiForServerInterface gui) {
 		this.gui = gui;
 	}
 
 	public void init() {
-		gui.updateGameInfo(this, "", "", ai.getName(), "Me",
+		gui.updateUserInfo(this, getMyName(), null, null, null, null, null, null, null);
+		gui.updateGameInfo(this, "", "", ai.getName(), this.getMyName(),
 				null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		gui.subscribedGame(
 				this,

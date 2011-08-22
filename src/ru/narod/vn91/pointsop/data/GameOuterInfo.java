@@ -3,6 +3,8 @@ package ru.narod.vn91.pointsop.data;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -50,7 +52,7 @@ public class GameOuterInfo {
 	// period in turns. See above.
 	public Integer periodLength = 0;
 
-	private Collection<GameInfoListener> changeListenerList = new ArrayList<GameInfoListener>();
+	private Set<GameInfoListener> changeListenerList = new LinkedHashSet<GameInfoListener>();
 
 	public GameOuterInfo(ServerInterface server, String id) {
 		super();
@@ -130,13 +132,15 @@ public class GameOuterInfo {
 	}
 
 	public boolean amIPlaying() {
-		boolean amIRed = first != null &&
+		boolean amIFirst = first != null &&
 				server != null &&
 				server.getMyName().equals(first.id);
-		boolean amIBlue = first != null &&
+		boolean amISecond = second != null &&
 				server != null &&
-				server.getMyName().equals(first.id);
-		return amIRed || amIBlue;
+				server.getMyName().equals(second.id);
+//		System.out.println("amIRed || amIBlue = "
+//				+ (amIRed || amIBlue));
+		return amIFirst || amISecond;
 	}
 
 	public Boolean amIRed() {

@@ -89,7 +89,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		if (message.toLowerCase().contains(
 				roomInterface.getServer().getMyName().
 				replaceAll("\\^", "").toLowerCase())) {
-			new Sounds().playNameMentioned();
+			Sounds.playNameMentioned();
 		}
 	}
 
