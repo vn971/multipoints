@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
-class TimerLabel extends JLabel {
+public class TimerLabel extends JLabel {
 
 	TimerThread thread = null;
 	Object synchronization_SetText = new Object();

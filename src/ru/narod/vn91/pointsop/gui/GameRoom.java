@@ -1,6 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
-import ru.narod.vn91.pointsop.data.GameInfo;
+import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
@@ -26,8 +26,8 @@ import java.util.Date;
 public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	GuiForServerInterface centralGuiController;
-	GameInfo gameInfo;
-	boolean amIPlaying, amIRed, redStopped = false, blueStopped = false;
+	GameOuterInfo gameOuterInfo;
+	boolean redStopped = false, blueStopped = false;
 	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
 	int mousePosX, mousePosY, redScore, blueScore;
 	boolean isRedTurnNow = true;
@@ -64,16 +64,16 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public ServerInterface getServer() {
-		return gameInfo.server;
+		return gameOuterInfo.server;
 	}
 
 	public String getRoomNameOnServer() {
-		return gameInfo.id;
+		return gameOuterInfo.id;
 	}
 
 	public boolean userAsksClose() {
-		if (gameInfo.server != null) {
-			gameInfo.server.unsubscribeRoom(gameInfo.id);
+		if (gameOuterInfo.server != null) {
+			gameOuterInfo.server.unsubscribeRoom(gameOuterInfo.id);
 			return false;
 		} else {
 			return true;
@@ -119,7 +119,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						"#" + moveList.size() + " " + colorName + " " + x + ":" + y + " " + eatInformation);
 
 				showScoreAndCursor();
-				new Sounds().playMakeMove(amIPlaying);
+				new Sounds().playMakeMove(gameOuterInfo.amIPlaying());
 				timerLabel_Red.setRemainingTime(remainingTimeRed, isNowRed);
 				timerLabel_Blue.setRemainingTime(remainingTimeBlue, !isNowRed);
 
@@ -127,8 +127,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 //				System.out.println("maked move. #" + moveList.size());
 				if (isOnlineGame()
 						&& Memory.isDebug() == true
-						&& amIPlaying == true
-						&& isNowRed == amIRed) {
+						&& gameOuterInfo.amIPlaying() == true
+						&& isNowRed == gameOuterInfo.amIRed()) {
 					final int moveListSize = moveList.size();
 					timedAction.o = new TimedAction() {
 
@@ -143,12 +143,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 									&&moveListSize == moveList.size()) {
 //								System.out.println("moveListSize = " + moveListSize);
 //								System.out.println("moveList.size() = " + moveList.size());
-								gameInfo.server.makeMove(gameInfo.id, mousePosX, mousePosY);
+								gameOuterInfo.server.makeMove(gameOuterInfo.id, mousePosX, mousePosY);
 							}
 						}
 
 					};
-					int secondsRemaining = amIRed ? remainingTimeRed : remainingTimeBlue;
+					int secondsRemaining = gameOuterInfo.amIRed() ? remainingTimeRed : remainingTimeBlue;
 					timedAction.o.executeWhen(new Date().getTime()
 							+ secondsRemaining * 1000L - 200);
 				}
@@ -157,7 +157,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public void stopGame(boolean isRedPlayer) {
-		String whoPressedStop = (isRedPlayer) ? gameInfo.first.guiName : gameInfo.second.guiName;
+		String whoPressedStop = (isRedPlayer) ? gameOuterInfo.first.guiName : gameOuterInfo.second.guiName;
 		if (isRedPlayer) {
 			redStopped = true;
 		} else {
@@ -181,8 +181,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	public void gameLost(final boolean isRedLooser,
 			final boolean wantToSave) {
 		gameResult = (isRedLooser) ? Sgf.GameResult.BLUE_WON_BY_RESIGN : Sgf.GameResult.RED_WON_BY_RESIGN;
-		final String whoWon = (isRedLooser) ? gameInfo.second.guiName : gameInfo.first.guiName;
-		String whoLost = (isRedLooser) ? gameInfo.first.guiName : gameInfo.second.guiName;
+		final String whoWon = (isRedLooser) ? gameOuterInfo.second.guiName : gameOuterInfo.first.guiName;
+		String whoLost = (isRedLooser) ? gameOuterInfo.first.guiName : gameOuterInfo.second.guiName;
 		roomPart_Chat.addServerNotice(
 				"" + whoLost + " сдался... Победитель - " + whoWon + ".");
 		new Thread() {
@@ -190,12 +190,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			@Override
 			public void run() {
 				String eidokropkiLink = "";
-				if ((gameInfo.isRated == true) && (wantToSave == true)) {
+				if ((gameOuterInfo.isRated == true) && (wantToSave == true)) {
 					eidokropkiLink = PhpBackupServer.sendToEidokropki(
-							gameInfo.first.guiName, gameInfo.second.guiName, gameInfo.first.rating, gameInfo.second.rating, 39, 32,
-							gameInfo.getTimeAsString(), gameResult, moveList);
-					getServer().sendChat(gameInfo.server.getMainRoom(),
-							"Закончена игра " + gameInfo.first.guiName + "-" + gameInfo.second.guiName
+							gameOuterInfo.first.guiName, gameOuterInfo.second.guiName, gameOuterInfo.first.rating, gameOuterInfo.second.rating, 39, 32,
+							gameOuterInfo.getTimeAsString(), gameResult, moveList);
+					getServer().sendChat(gameOuterInfo.server.getMainRoom(),
+							"Закончена игра " + gameOuterInfo.first.guiName + "-" + gameOuterInfo.second.guiName
 							+ " ( " + eidokropkiLink + " ), победитель - " + whoWon + ". Поздравляем!");
 				}
 //				PhpBackupServer.sendToPointsgt(gameInfo.first.guiName, gameInfo.second.guiName,
@@ -210,9 +210,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int x,
 			int y,
 			MouseEvent evt) {
-		if (amIPlaying && evt.getButton() == MouseEvent.BUTTON1) {
+		if (gameOuterInfo.amIPlaying() && evt.getButton() == MouseEvent.BUTTON1) {
 			if (isOnlineGame()) {
-				gameInfo.server.makeMove(gameInfo.id, x, y);
+				gameOuterInfo.server.makeMove(gameOuterInfo.id, x, y);
 			} else {
 				makeMove(false, x, y, isRedTurnNow, !isRedTurnNow, 1800, 1800);
 				isRedTurnNow = !isRedTurnNow;
@@ -229,7 +229,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	private boolean isOnlineGame() {
-		return gameInfo.server!=null;
+		return gameOuterInfo.server!=null;
 	}
 
 	private void showScoreAndCursor() {
@@ -250,15 +250,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	/** Creates new form ContainerRoom_Game */
 	public GameRoom(
-			GameInfo gameInfo,
-			GuiController centralGuiController,
-			boolean chatReadOnly,
-			boolean amIPlaying,
-			boolean amIRed) {
-		this.amIPlaying = amIPlaying;
-		this.amIRed = amIRed;
+			GameOuterInfo gameOuterInfo,
+			GuiController centralGuiController) {
 		this.centralGuiController = centralGuiController;
-		this.gameInfo = gameInfo;
+		this.gameOuterInfo = gameOuterInfo;
 		paper = new Paper() {
 
 			@Override
@@ -290,10 +285,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		initComponents();
 		jPanel_Tree.setVisible(false);
 
-		roomPart_Chat.setReadOnly(chatReadOnly);
+		roomPart_Chat.setReadOnly(false);
 		roomPart_Chat.initChat(this,
-				(gameInfo.first==null) ? "" : gameInfo.first.guiName,
-				(gameInfo.second==null) ? "" : gameInfo.second.guiName);
+				(gameOuterInfo.first==null) ? "" : gameOuterInfo.first.guiName,
+				(gameOuterInfo.second==null) ? "" : gameOuterInfo.second.guiName);
 //		if (amIPlaying == false) {
 //		jButton_AdditionalActions.setVisible(false);
 		jButton_EndGame.setVisible(false);
@@ -542,9 +537,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
 		String[] extensions = {".sgf", ".sgftochki"};
 		String sgfData = Sgf.constructSgf(
-				gameInfo.first.guiName, gameInfo.second.guiName,
-				gameInfo.first.rating, gameInfo.second.rating, 39, 32,
-				gameInfo.getTimeAsString(), gameResult, 0,
+				gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
+				gameOuterInfo.first.rating, gameOuterInfo.second.rating, 39, 32,
+				gameOuterInfo.getTimeAsString(), gameResult, 0,
 				moveList, true);
 
 		try {

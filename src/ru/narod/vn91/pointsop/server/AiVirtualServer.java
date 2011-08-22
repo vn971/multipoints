@@ -28,12 +28,11 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void init() {
-		gui.addGameInfo(this, "", "", ai.getName(), "Me", null, null, null, null, null, null, null);
+		gui.updateGameInfo(this, "", "", ai.getName(), "Me",
+				null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		gui.subscribedGame(
 				this,
-				"",
-				true,true,false);
-//		ai.getName(), "Me",
+				"");
 		ai.init();
 	}
 

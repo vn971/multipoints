@@ -9,6 +9,22 @@ public class Memory {
 	static Preferences memory = Preferences.userRoot().node(
 			"ru.narod.ru.pointsop.userdata");
 
+	public static boolean isShowJoinPart() {
+		return memory.getBoolean("isShowJoinPart", true);
+	}
+
+	public static void setShowJoinPart(boolean isShowJoinPart) {
+		memory.putBoolean("isShowJoinPart", isShowJoinPart);
+	}
+
+	public static boolean isRestoreSize() {
+		return memory.getBoolean("isRestoreSize", true);
+	}
+
+	public static void setRestoreSize(boolean isRestoreSize) {
+		memory.putBoolean("isRestoreSize", isRestoreSize);
+	}
+
 	public static int getVersion() {
 		return memory.getInt("version", newestVersion);
 	}

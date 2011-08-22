@@ -10,15 +10,15 @@ import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ru.narod.vn91.pointsop.data.GameInfo;
+import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.GamePool;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerPool;
+import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.Memory;
-import ru.narod.vn91.pointsop.gui.GameRoom;
 
 public class GuiController implements GuiForServerInterface {
 
@@ -70,7 +70,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void addUserInfo(
+	public void updateUserInfo(
 			ServerInterface server, String id,
 			String guiName, Image image,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
@@ -82,26 +82,25 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void addGameInfo(
+	public void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
-			String redId, String blueId,
-			GameInfo.GameState gameState, Boolean isRated, Integer handicapRed,
-			Integer freeTemporalTime,
-			Integer additionalAccumulatingTime,
-			Integer startingTime,
-			Integer periodLength) {
-		GameInfo gameInfo = gamePool.get(server, id);
-		Player redP = playerPool.get(server, redId);
-		Player blueP = playerPool.get(server, blueId);
-		GameInfo updateInstance = new GameInfo(
-				server, id, masterRoomId,
-				redP, blueP,
-				gameState, isRated, handicapRed,
-				freeTemporalTime,
-				additionalAccumulatingTime,
-				startingTime,
-				periodLength);
-		gameInfo.updateFrom(updateInstance);
+			String firstId, String secondId, Integer sizeX, Integer sizeY,
+			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
+			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
+			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
+			Integer additionalAccumulatingTime, Integer startingTime,
+			Integer periodLength
+			) {
+	GameOuterInfo gameOuterInfo = gamePool.get(server, id);
+	Player first = playerPool.get(server, firstId);
+	Player second = playerPool.get(server, secondId);
+
+		GameOuterInfo updateInstance = new GameOuterInfo(
+				server, secondId, masterRoomId, first, second, sizeX, sizeY,
+				isRedFirst, isRated, handicapRed, instantWin,
+				manualEnclosings, stopEnabled, isEmptyScored, state, freeTemporalTime,
+				additionalAccumulatingTime, startingTime, periodLength);
+	gameOuterInfo.updateFrom(updateInstance);
 	}
 
 	@Override
@@ -208,15 +207,14 @@ public class GuiController implements GuiForServerInterface {
 
 	@Override
 	public void subscribedGame(
-			ServerInterface server, String roomId,
-			boolean chatReadOnly, boolean amIPlaying, boolean amIRed) {
-		GameInfo game = gamePool.get(server, roomId);
+			ServerInterface server, String roomId) {
+		GameOuterInfo game = gamePool.get(server, roomId);
 		if (roomInterfaces.containsKey(new ServerRoom(game.id, server))) {
 			return;
 		}
 		GameRoom containerRoom_Game = new GameRoom(
 				game,
-				this, chatReadOnly, amIPlaying, amIRed);
+				this);
 		gameRooms.put(
 				new ServerRoom(game.id, server),
 				containerRoom_Game
@@ -238,6 +236,7 @@ public class GuiController implements GuiForServerInterface {
 						+ ">" + game.second.guiName + "</font></html>",
 				containerRoom_Game, true
 				);
+
 		tabbedPane.setSelectedComponent(containerRoom_Game);
 	};
 
@@ -359,14 +358,14 @@ public class GuiController implements GuiForServerInterface {
 			ServerInterface server,
 			String masterRoom,
 			String newRoom) {
-		GameInfo gameInfo = gamePool.get(server, newRoom);
+		GameOuterInfo gameOuterInfo = gamePool.get(server, newRoom);
 		RoomInterface roomInterface = roomInterfaces.get(
 				new ServerRoom(masterRoom, server));
 		if (roomInterface == null) {
 			throw new UnsupportedOperationException(
 					"creating a game with an incorrect MasterRoom");
 		} else {
-			roomInterface.getRoomPart_GameList().gameCreated(gameInfo);
+			roomInterface.getRoomPart_GameList().gameCreated(gameOuterInfo);
 		}
 
 	}
@@ -375,12 +374,12 @@ public class GuiController implements GuiForServerInterface {
 	public void gameRowDestroyed(
 			ServerInterface server,
 			String oldRoom) {
-		GameInfo gameInfo = gamePool.get(server, oldRoom);
-		if (gameInfo != null) {
+		GameOuterInfo gameOuterInfo = gamePool.get(server, oldRoom);
+		if (gameOuterInfo != null) {
 			LangRoom room = langRooms.get(
-					new ServerRoom(gameInfo.masterRoomId, server));
+					new ServerRoom(gameOuterInfo.masterRoomId, server));
 			if (room != null) {
-				room.getRoomPart_GameList().gameDestroyed(gameInfo);
+				room.getRoomPart_GameList().gameDestroyed(gameOuterInfo);
 			}
 		}
 	}

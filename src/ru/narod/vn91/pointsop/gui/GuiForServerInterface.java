@@ -2,7 +2,8 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Image;
 
-import ru.narod.vn91.pointsop.data.GameInfo;
+import ru.narod.vn91.pointsop.data.Player;
+import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public interface GuiForServerInterface {
@@ -20,26 +21,26 @@ public interface GuiForServerInterface {
 	public abstract void serverClosed(ServerInterface server);
 
 	/*
-	 * if something is unknown yet -- null may be passed
+	 * fields initialized by null will not be updated
 	 */
-	public abstract void addUserInfo(
+	public abstract void updateUserInfo(
 			ServerInterface server, String id,
 			String guiName, Image image,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status);
 
 	/*
-	 * if something is unknown yet -- null may be passed
+	 * fields initialized by null will not be updated
 	 */
-	public abstract void addGameInfo(
+	public abstract void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
-			String redId, String blueId,
-			GameInfo.GameState gameState, Boolean isRated, Integer handicapRed,
-			Integer freeTemporalTime,
-			Integer additionalAccumulatingTime,
-			Integer startingTime,
+			String firstId, String secondId, Integer sizeX, Integer sizeY,
+			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
+			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
+			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
+			Integer additionalAccumulatingTime, Integer startingTime,
 			Integer periodLength
-			);
+);
 
 	public abstract void userJoinedRoom(
 			ServerInterface server,
@@ -64,10 +65,8 @@ public interface GuiForServerInterface {
 
 	public abstract void subscribedGame(
 			ServerInterface server,
-			String roomId,
-			boolean chatReadOnly,
-			boolean amIPlaying,
-			boolean amIRed);
+			String roomId
+			);
 
 	public abstract void unsubsribedRoom(
 			ServerInterface server,

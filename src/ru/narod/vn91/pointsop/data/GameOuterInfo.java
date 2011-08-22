@@ -7,9 +7,9 @@ import java.util.Collection;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 /**
- * representation of a game on the server
+ * information about the game that can be achieved not joining the game itself
  **/
-public class GameInfo {
+public class GameOuterInfo {
 
 	public final ServerInterface server;
 	public final String id;
@@ -18,9 +18,17 @@ public class GameInfo {
 	public Player first;
 	public Player second;
 
-	public GameState state = GameState.Playing;
+	public Integer sizeX = 30, sizeY = 30;
+	public Boolean isRedFirst = true;
 	public Boolean isRated = false;
+//	public Boolean iAmPlaying = false;
 	public Integer handicapRed = 0;
+	public Integer instantWin = 0;
+	public Boolean manualEnclosings = false;
+	public Boolean stopEnabled = true;
+	public Boolean isEmptyScored = false;
+
+	public GameState state = GameState.Playing;
 
 	// time is given in seconds
 	//
@@ -44,26 +52,38 @@ public class GameInfo {
 
 	private Collection<GameInfoListener> changeListenerList = new ArrayList<GameInfoListener>();
 
-	public GameInfo(ServerInterface server, String id) {
+	public GameOuterInfo(ServerInterface server, String id) {
 		super();
 		this.server = server;
 		this.id = id;
 	}
 
-	public GameInfo(ServerInterface server, String id, String masterRoomId,
-			Player red, Player blue, GameState state, Boolean isRated,
-			Integer handicapRed, Integer freeTemporalTime,
+
+
+
+	public GameOuterInfo(ServerInterface server, String id, String masterRoomId,
+			Player first, Player second, Integer sizeX, Integer sizeY,
+			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
+			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
+			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
 			Integer additionalAccumulatingTime, Integer startingTime,
 			Integer periodLength) {
 		super();
 		this.server = server;
 		this.id = id;
 		this.masterRoomId = masterRoomId;
-		this.first = red;
-		this.second = blue;
-		this.state = state;
+		this.first = first;
+		this.second = second;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+		this.isRedFirst = isRedFirst;
 		this.isRated = isRated;
 		this.handicapRed = handicapRed;
+		this.instantWin = instantWin;
+		this.manualEnclosings = manualEnclosings;
+		this.stopEnabled = stopEnabled;
+		this.isEmptyScored = isEmptyScored;
+		this.state = state;
 		this.freeTemporalTime = freeTemporalTime;
 		this.additionalAccumulatingTime = additionalAccumulatingTime;
 		this.startingTime = startingTime;
@@ -71,7 +91,9 @@ public class GameInfo {
 	}
 
 
-	public void updateFrom(GameInfo g) {
+
+
+	public void updateFrom(GameOuterInfo g) {
 		for (Field field : g.getClass().getFields()) {
 			try {
 				if (field.get(g) != null) {
@@ -89,7 +111,7 @@ public class GameInfo {
 		changeListenerList.add(changeListener);
 	}
 
-	public static int compare(GameInfo game1, GameInfo game2) {
+	public static int compare(GameOuterInfo game1, GameOuterInfo game2) {
 		return 1; // game 1 is always bigger
 	}
 
@@ -104,6 +126,26 @@ public class GameInfo {
 			return String.format("start=%s add=%s period=%s free=%s",
 					startingTime, additionalAccumulatingTime,
 					periodLength, freeTemporalTime);
+		}
+	}
+
+	public boolean amIPlaying() {
+		boolean amIRed = first != null &&
+				server != null &&
+				server.getMyName().equals(first.id);
+		boolean amIBlue = first != null &&
+				server != null &&
+				server.getMyName().equals(first.id);
+		return amIRed || amIBlue;
+	}
+
+	public Boolean amIRed() {
+		if (amIPlaying() == false) {
+			return null;
+		} else if (server.getMyName().equals(first.id)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

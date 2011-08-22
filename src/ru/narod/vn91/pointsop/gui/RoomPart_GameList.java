@@ -5,23 +5,23 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
-import ru.narod.vn91.pointsop.data.GameInfo;
+import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.GameInfoListener;
-import ru.narod.vn91.pointsop.data.GameInfo.GameState;
+import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 
 public class RoomPart_GameList extends javax.swing.JPanel {
 
 	RoomInterface room;
 	GuiController guiController;
-	private List<GameInfo> gameList = new ArrayList<GameInfo>();
+	private List<GameOuterInfo> gameList = new ArrayList<GameOuterInfo>();
 
-	synchronized static Object[] createRow(GameInfo gameInfo) {
+	static Object[] createRow(GameOuterInfo gameOuterInfo) {
 		String row1, row2, row3;
-		String firstAsString = (gameInfo.first == null || gameInfo.first.guiName == null)
-				? "" : gameInfo.first.guiName;
-		String secondAsString = (gameInfo.second == null || gameInfo.second.guiName == null)
-				? "" : gameInfo.second.guiName;
-		boolean isSearching = (gameInfo.state == GameState.SearchingOpponent);
+		String firstAsString = (gameOuterInfo.first == null || gameOuterInfo.first.guiName == null)
+				? "" : gameOuterInfo.first.guiName;
+		String secondAsString = (gameOuterInfo.second == null || gameOuterInfo.second.guiName == null)
+				? "" : gameOuterInfo.second.guiName;
+		boolean isSearching = (gameOuterInfo.state == GameState.SearchingOpponent);
 		row1 = String.format("%s%s%s",
 				isSearching ? "<html><b>" : "",
 						firstAsString,
@@ -32,46 +32,49 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 				isSearching ? "</b></html>" : "");
 		row3 = String.format("%s%s, %s%s",
 				isSearching ? "<html><b>" : "",
-				gameInfo.isRated ? "R" : "F",
-				gameInfo.getTimeAsString(),
+				gameOuterInfo.isRated ? "R" : "F",
+				gameOuterInfo.getTimeAsString(),
 				isSearching ? "</b></html>" : "");
 		Object[] result = { row1, row2, row3 };
 		return result;
 	}
 
-	synchronized void gameCreated(
-			GameInfo gameInfo) {
-		for (GameInfo info2 : gameList) {
-			if (info2 == gameInfo) {
-				return;
-			}
-		}
-		gameList.add(gameInfo);
-
-		final DefaultTableModel tableModel = ((DefaultTableModel) jTable1
-				.getModel());
-		Object[] row = createRow(gameInfo);
-		tableModel.addRow(row);
-
-		gameInfo.addChangeListener(new GameInfoListener() {
-
-			@Override
-			public void onChange(GameInfo gameInfo) {
-				int position = 0;
-				for (GameInfo info2 : gameList) {
-					if (info2 == gameInfo) {
-						Object[] row = createRow(gameInfo);
-						int columnNumber = 0;
-						for (Object object : row) {
-							tableModel.setValueAt(object, position, columnNumber);
-							columnNumber += 1;
-						}
-					} else {
-						position += 1;
-					}
+	void gameCreated(
+			GameOuterInfo gameOuterInfo) {
+		synchronized (gameList) {
+			for (GameOuterInfo info2 : gameList) {
+				if (info2 == gameOuterInfo) {
+					return;
 				}
 			}
-		});
+			gameList.add(gameOuterInfo);
+
+			final DefaultTableModel tableModel = ((DefaultTableModel) jTable1
+					.getModel());
+			Object[] row = createRow(gameOuterInfo);
+			tableModel.addRow(row);
+
+			gameOuterInfo.addChangeListener(new GameInfoListener() {
+
+				@Override
+				public void onChange(GameOuterInfo gameOuterInfo) {
+					int position = 0;
+					for (GameOuterInfo info2 : gameList) {
+						if (info2 == gameOuterInfo) {
+							Object[] row = createRow(gameOuterInfo);
+							int columnNumber = 0;
+							for (Object object : row) {
+								tableModel.setValueAt(object, position, columnNumber);
+								columnNumber += 1;
+							}
+							break;
+						} else {
+							position += 1;
+						}
+					}
+				}
+			});
+		}
 
 		// int rowNumb = 0;
 		// while ((rowNumb < gameList.size()) &&
@@ -109,15 +112,18 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 	}
 
 	void gameDestroyed(
-			GameInfo gameInfo) {
-		int position = 0;
-		for (GameInfo info2 : gameList) {
-			if (gameInfo==info2) {
-				gameList.remove(position);
-				DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
-				tableModel.removeRow(position);
-			} else {
-				position+=1;
+			GameOuterInfo gameOuterInfo) {
+		synchronized (gameList) {
+			int position = 0;
+			for (GameOuterInfo info2 : gameList) {
+				if (gameOuterInfo==info2) {
+					gameList.remove(position);
+					DefaultTableModel tableModel = ((DefaultTableModel)jTable1.getModel());
+					tableModel.removeRow(position);
+					break;
+				} else {
+					position+=1;
+				}
 			}
 		}
 

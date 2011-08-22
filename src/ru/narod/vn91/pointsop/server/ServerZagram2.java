@@ -225,7 +225,7 @@ public class ServerZagram2 implements ServerInterface {
 				.replaceAll("&#60;", "<")
 				.replaceAll("&#62;", ">")
 				.replaceAll("&#39;", "'")
-				.replaceAll("&#34;", "\\")
+				.replaceAll("&#34;", "\"")
 				.replaceAll("&#45;", "-");
 	}
 
@@ -318,10 +318,14 @@ public class ServerZagram2 implements ServerInterface {
 							int sizeX = Integer.parseInt(hellishString.substring(0, 2));
 							int sizeY = Integer.parseInt(hellishString.substring(2, 4));
 							String rulesAsString = hellishString.substring(4, 8);
+							boolean manualEnclosings = rulesAsString.matches("terr");
+							boolean stopEnabled = rulesAsString.matches("noT4|noT1");
+							boolean isEmptyScored = rulesAsString.matches("terr");
 							boolean isRated = !(hellishString.substring(8, 9).equals("F"));
-							boolean instantWin = hellishString.substring(9, 10).equals("1");
-							gui.addGameInfo(ServerZagram2.this, roomId, currentRoom, player1,
-									player2, null, isRated, 0, 0, addTime, startingTime, 1);
+							Integer instantWin = Integer.parseInt(hellishString.substring(9));
+							gui.updateGameInfo(
+									ServerZagram2.this, roomId, currentRoom, player1,
+									player2, sizeX, sizeY,false,isRated, 0, instantWin, manualEnclosings, stopEnabled, isEmptyScored, null, 0, addTime, startingTime, 1);
 						} catch (NumberFormatException e) {
 							gui.raw(ServerZagram2.this,
 									"unknown game description: "
@@ -334,10 +338,19 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("ga")||message.startsWith("gr")) {
 						// player joined
 						String[] dotSplitted = message.substring("ga".length())
-								.split("\\.");
+						.split("\\.");
 						for (String gameId : dotSplitted) {
 							if (gameId.length() != 0) {
 								gui.gameRowCreated(ServerZagram2.this, currentRoom, gameId);
+							}
+						}
+					} else if (message.startsWith("gd")) {
+						// player joined
+						String[] dotSplitted = message.substring("gd".length())
+								.split("\\.");
+						for (String gameId : dotSplitted) {
+							if (gameId.length() != 0) {
+								gui.gameRowDestroyed(ServerZagram2.this, gameId);
 							}
 						}
 					} else if (message.startsWith("i")) {
@@ -360,7 +373,7 @@ public class ServerZagram2 implements ServerInterface {
 							} catch (NumberFormatException e) {
 							}
 						}
-						gui.addUserInfo(ServerZagram2.this, player, player, null, rating,
+						gui.updateUserInfo(ServerZagram2.this, player, player, null, rating,
 								winCount, lossCount, drawCount, myStatus);
 					} else if (message.startsWith("pa") || message.startsWith("pr")) {
 						// player joined
@@ -390,26 +403,35 @@ public class ServerZagram2 implements ServerInterface {
 									"общий чат: zagram",
 									true);
 						} else {
-							gui.subscribedGame(ServerZagram2.this, currentRoom, false, false,
-									false);
-							// game room not handled yet
+							gui.subscribedGame(ServerZagram2.this, currentRoom);
 						}
-					} else if (message.matches("u.undo")) {
+					} else if (message.matches("sa;|sr\\(;")) {
+						String usefulPart = message.replaceFirst("sa;|sr\\(;", "");
+						String[] semiSplitted = message.split(";");
+						for (String sgfNode : semiSplitted) {
+							if (sgfNode.matches("U(B|W)\\[..\\]")) {
+							} else if (sgfNode.matches("U(B|W)\\[..\\]")) {
+							} else {
+							}
+						}
+					}
+					else if (message.matches("u.undo")) {
 						boolean isRed = message.charAt(1) == '1';
 						String playerAsString = isRed ? "red" : "blue";
-						gui
-								.chatReceived(
-										ServerZagram2.this,
-										currentRoom,
-										"",
-										"player "
-												+ playerAsString
-												+ " Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(",
-										null);
+						gui.chatReceived(
+							ServerZagram2.this,
+							currentRoom,
+							"",
+							"player "
+									+ playerAsString
+									+
+									" Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(",
+							null
+								);
 					} else if (message.startsWith("vg")) {
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", "");
-						String gameDescription = usefulPart.replaceFirst("[^.].", "");
+						String gameDescription = usefulPart.replaceFirst("[^.]*\\.", "");
 						gui
 								.privateMessageReceived(
 										ServerZagram2.this,

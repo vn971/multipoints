@@ -7,14 +7,14 @@ import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public class GamePool {
 
-	Map<GameShort, GameInfo> map = new HashMap<GameShort, GameInfo>();
+	Map<GameShort, GameOuterInfo> map = new HashMap<GameShort, GameOuterInfo>();
 
-	public GameInfo get(ServerInterface server, String id) {
+	public GameOuterInfo get(ServerInterface server, String id) {
 		GameShort gameShort = new GameShort(server, id);
 		if (map.get(gameShort) != null) {
 			return map.get(gameShort);
 		} else {
-			GameInfo newGame = new GameInfo(server, id);
+			GameOuterInfo newGame = new GameOuterInfo(server, id);
 			map.put(gameShort, newGame);
 			return newGame;
 		}

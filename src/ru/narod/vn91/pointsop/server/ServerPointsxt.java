@@ -20,7 +20,7 @@ import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 import ru.narod.vn91.pointsop.data.Dot;
-import ru.narod.vn91.pointsop.data.GameInfo.GameState;
+import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
@@ -211,9 +211,13 @@ public class ServerPointsxt
 			);
 			this.setPointsxtNickname(roomName.substring(4), true, true);
 
-			gui.subscribedGame(
+			gui.updateGameInfo(
 					this, roomName,
-					true, true/* i am playing */, myGame.amIRed);
+					null, null, null, null, null, null,
+					true,
+					null, null, null, null, null, null, null, null, null, null);
+			gui.subscribedGame(
+					this, roomName);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
 				gui.userJoinedRoom(this, roomName, nicknameManager.irc2id(ircNick), true);
@@ -297,9 +301,7 @@ public class ServerPointsxt
 					defaultChannel.equals(roomName)
 			);
 		} else {
-			gui.subscribedGame(this, roomName,
-					true, false /*i'm spectator*/,
-					true);
+			gui.subscribedGame(this, roomName);
 		}
 
 		if (roomName.equals("#pointsxt")) {
@@ -502,8 +504,12 @@ public class ServerPointsxt
 				myGame.moveList = new ArrayList<SimpleMove>();
 				myGame.opponentName = nick;
 				myGame.roomName = channel;
-				gui.subscribedGame(this, channel,
-						true, true /*i'm playing*/, myGame.amIRed);
+				gui.updateGameInfo(
+						this, channel,
+						null, null, null, null, null, null,
+						true,
+						null, null, null, null, null, null, null, null, null, null);
+				gui.subscribedGame(this, channel);
 				for (User user : super.getUsers(channel)) {
 					String ircNick = user.getNick();
 					gui.userJoinedRoom(this, channel, nicknameManager.irc2id(ircNick), true);
@@ -627,11 +633,14 @@ public class ServerPointsxt
 					myGame.moveList = new ArrayList<SimpleMove>();
 					myGame.opponentName = nicknameManager.irc2id(sender);
 					myGame.roomName = room;
+					gui.updateGameInfo(
+							this, room,
+							null, null, null, null, null, null,
+							true,
+							null, null, null, null, null, null, null, null, null, null);
 					gui.subscribedGame(
 							this,
-							room,
-							false,true /*I'm playing*/,myGame.amIRed
-					);
+							room);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
 						gui.userJoinedRoom(this, room, nicknameManager.irc2id(ircNick), true);
@@ -919,7 +928,7 @@ public class ServerPointsxt
 			String ircNick,
 			boolean silent) {
 		String pointsxtNick = nicknameManager.irc2id(ircNick);
-		gui.addUserInfo(
+		gui.updateUserInfo(
 				this, pointsxtNick,
 				nicknameManager.getGuiNick(ircNick), null, getPlayerRank(ircNick),
 				0, 0, 0, extractUserStatus(ircNick));
@@ -962,19 +971,22 @@ public class ServerPointsxt
 						gui.raw(this, "IRC: player number not in bounds 1..2");
 					}
 
-					gui.addGameInfo(
+					gui.updateGameInfo(
 							this, newRoom,
 							defaultChannel, playerFirst, playerSecond,
-							GameState.Playing, isRated(ircNick), 0,
+							39, 32, true, isRated(ircNick),
+							0, 0, false, true, false,
+							GameState.Playing,
 							isBlitz(ircNick) ? 5 : 180, 0, 0, isBlitz(ircNick) ? 1 : 5);
 
 					gui.gameRowCreated(this, defaultChannel, newRoom);
 				} else if (isPointsopNickname(ircNick)) {
 					// no opponent found of a pointsOp player
-					gui.addGameInfo(
+					gui.updateGameInfo(
 							this, newRoom,
 							defaultChannel, pointsxtNick, null,
-							GameState.SearchingOpponent, false, 0,
+							39, 32, true, false, 0, 0, false, true, false,
+							GameState.SearchingOpponent,
 							myGame.getDefaultTime(), 0, 0, myGame.periodLength);
 					gui.gameRowCreated(this, defaultChannel, newRoom);
 				}
@@ -1093,16 +1105,18 @@ public class ServerPointsxt
 	public void sendChat(
 			String room,
 			String message) {
-		if (room.startsWith("#") == false) {
-			gui.rawError(this,
-					"Была произведена попытка отправить чатовое сообщение в приват.");
-		} else {
+		if (room.equals(defaultChannel)) {
 			super.sendMessage(room, message);
 			gui.chatReceived(
 					this, room, getMyName(),
 					message.replaceAll("ACTION", "***"),
 					null
-					);
+			);
+		} else if (room.startsWith("#")) {
+			gui.rawError(this, "IRC не пожжерживает сообщений в игровых комнатах");
+		} else {
+			gui.rawError(this,
+					"Была произведена попытка отправить публичное чатовое сообщение в приват.");
 		}
 	}
 
