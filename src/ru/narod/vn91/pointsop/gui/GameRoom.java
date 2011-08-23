@@ -24,7 +24,7 @@ import java.util.Date;
 public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	GuiForServerInterface centralGuiController;
-	GameOuterInfo gameOuterInfo;
+	final GameOuterInfo gameOuterInfo;
 	boolean redStopped = false, blueStopped = false;
 	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
 	int mousePosX, mousePosY, redScore, blueScore;
@@ -86,8 +86,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			boolean isNowRed,
 			int remainingTimeRed,
 			int remainingTimeBlue) {
+		int yInGui = gameOuterInfo.yAxisInverted ? gameOuterInfo.sizeY + 1 - y : y;
 		timedAction.o = null;
-		MoveResult moveResult = paper.makeMove(silent, x, y, isRed);
+		MoveResult moveResult = paper.makeMove(silent, x, yInGui, isRed);
 		if (moveResult != MoveResult.ERROR) {
 			MoveInfoAbstract moveInfoAbstract = new MoveInfoAbstract();
 			moveInfoAbstract.coordX = x;
@@ -127,7 +128,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						&& Memory.isDebug() == true
 						&& gameOuterInfo.amIPlaying() == true
 						&& isNowRed == gameOuterInfo.amIRed()) {
-					final int moveListSize = moveList.size();
+//					final int moveListSize = moveList.size();
 					timedAction.o = new TimedAction() {
 
 						@Override
@@ -250,7 +251,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	/** Creates new form ContainerRoom_Game */
 	public GameRoom(
-			GameOuterInfo gameOuterInfo,
+			final GameOuterInfo gameOuterInfo,
 			GuiController centralGuiController) {
 		this.centralGuiController = centralGuiController;
 		this.gameOuterInfo = gameOuterInfo;
@@ -260,14 +261,20 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			public void paperClick(int x,
 					int y,
 					MouseEvent evt) {
-				GameRoom.this.paperClick(x, y, evt);
+				int yInGui = gameOuterInfo.yAxisInverted
+					? gameOuterInfo.sizeY + 1 - y
+					: y;
+				GameRoom.this.paperClick(x, yInGui, evt);
 			}
 
 			@Override
 			public void paperMouseMove(int x,
 					int y,
 					MouseEvent evt) {
-				GameRoom.this.paperMouseMove(x, y, evt);
+				int yInGui = gameOuterInfo.yAxisInverted
+				? gameOuterInfo.sizeY + 1 - y
+					: y;
+				GameRoom.this.paperMouseMove(x, yInGui, evt);
 			}
 		};
 		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY);

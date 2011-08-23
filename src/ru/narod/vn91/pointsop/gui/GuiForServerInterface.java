@@ -2,6 +2,7 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Image;
 
+import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -34,12 +35,12 @@ public interface GuiForServerInterface {
 	public abstract void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
 			String firstId, String secondId, Integer sizeX, Integer sizeY,
-			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
-			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
-			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
-			Integer additionalAccumulatingTime, Integer startingTime,
-			Integer periodLength
-);
+			Boolean yAxisInverted, Boolean isRedFirst, Boolean isRated,
+			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
+			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
+			Integer freeTemporalTime, Integer additionalAccumulatingTime,
+			Integer startingTime, Integer periodLength
+			);
 
 	public abstract void userJoinedRoom(
 			ServerInterface server,

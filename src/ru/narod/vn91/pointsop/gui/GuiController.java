@@ -80,20 +80,21 @@ public class GuiController implements GuiForServerInterface {
 
   @Override
   public void updateGameInfo(
-      ServerInterface server, String id, String masterRoomId,
-      String firstId, String secondId, Integer sizeX, Integer sizeY,
-      Boolean isRedFirst, Boolean isRated, Integer handicapRed,
-      Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
-      Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
-      Integer additionalAccumulatingTime, Integer startingTime,
-      Integer periodLength
+			ServerInterface server, String id, String masterRoomId,
+			String firstId, String secondId, Integer sizeX, Integer sizeY,
+			Boolean yAxisInverted, Boolean isRedFirst, Boolean isRated,
+			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
+			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
+			Integer freeTemporalTime, Integer additionalAccumulatingTime,
+			Integer startingTime, Integer periodLength
       ) {
   GameOuterInfo gameOuterInfo = gamePool.get(server, id);
   Player first = playerPool.get(server, firstId);
   Player second = playerPool.get(server, secondId);
 
     GameOuterInfo updateInstance = new GameOuterInfo(
-        server, secondId, masterRoomId, first, second, sizeX, sizeY,
+        server, secondId, masterRoomId, first, second,
+        sizeX, sizeY, yAxisInverted,
         isRedFirst, isRated, handicapRed, instantWin,
         manualEnclosings, stopEnabled, isEmptyScored, state, freeTemporalTime,
         additionalAccumulatingTime, startingTime, periodLength);
@@ -300,6 +301,7 @@ public class GuiController implements GuiForServerInterface {
       ServerInterface server,
       String userId,
       String message) {
+
     Player player = playerPool.get(server, userId);
     PrivateChat privateChat = privateChatList.get(player);
     if (privateChat == null) {
@@ -307,18 +309,16 @@ public class GuiController implements GuiForServerInterface {
       privateChat = new PrivateChat(player);
       privateChatList.put(player, privateChat);
       tabbedPane.addTab(player.guiName, privateChat, true);
-      tabbedPane.makeBold(privateChat);
     } else {
       if (tabbedPane.contains(privateChat) == false) {
         tabbedPane.addTab(
             player.guiName, privateChat, true
             ); // resurrecting a closed panel
-        tabbedPane.makeBold(privateChat);
       } else {
         // updating an old and not closed panel
-        tabbedPane.makeBold(privateChat);
       }
     }
+    tabbedPane.makeBold(privateChat);
     privateChat.addChat(player.guiName, message, false);
   }
 
@@ -430,31 +430,22 @@ public class GuiController implements GuiForServerInterface {
     server.acceptOpponent(room, possibleOpponent);
   }
 
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * ru.narod.vn91.pointsop.gui.GuiForServerInterface#makedMove(ru.narod.vn91
-   * .pointsop.server.ServerInterface, java.lang.String, boolean, int, int,
-   * boolean, int, int)
-   */
-  public synchronized void makedMove(
-      ServerInterface server,
-      String room,
-      boolean silent,
-      int x,
-      int y,
-      boolean isRed,
-      boolean nowPlays,
-      int timeLeftRed, int timeLeftBlue) {
-    GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
-    if (gameRoom != null) {
-      gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed,
-          timeLeftBlue);
-      tabbedPane.makeBold(gameRoom);
-    }
-  }
+	public synchronized void makedMove(
+			ServerInterface server,
+			String room,
+			boolean silent,
+			int x,
+			int y,
+			boolean isRed,
+			boolean nowPlays,
+			int timeLeftRed, int timeLeftBlue) {
+		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
+		if (gameRoom != null) {
+			gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed,
+					timeLeftBlue);
+			tabbedPane.makeBold(gameRoom);
+		}
+	}
 
   public synchronized void gameStop(
       ServerInterface server,
@@ -605,6 +596,10 @@ class JTabbedPaneMod {
 		return tabbedPane.indexOfComponent(component) >= 0;
 	}
 
+	public boolean isSelected(Component component) {
+		return tabbedPane.getSelectedComponent().equals(component);
+	}
+
 	public void setSelectedComponent(Component component) {
 		tabbedPane.setSelectedComponent(component);
 	}
@@ -614,32 +609,32 @@ class JTabbedPaneMod {
 		tabbedPane.remove(component);
 	}
 
-	private String getNotBold(String s) {
+	private String getNotBoldNotHtml(String s) {
 		s = s.
 				replaceAll("<b>", "").replaceAll("</b>", "").
 				replaceAll("<html>", "").replaceAll("</html>", "").
 				replaceAll("\\*\\*\\*", "");
-		// replaceAll("<font size=\\+1>", "").replaceAll("</font>", "")
-		s = "<html>" + s + "</html>";
 		return s;
 	}
 
-	private String getBold(String s) {
-		return "<html>***" + s + "</html>";
+	private String getNotBold(String s) {
+		return "<html>" + getNotBoldNotHtml(s) + "</html>";
 	}
 
-  public void makeBold(Component component) {
-    int tabIndex = tabbedPane.indexOfComponent(component);
+	private String getBold(String s) {
+		return "<html>***" + getNotBoldNotHtml(s) + "</html>";
+	}
+
+	public void makeBold(Component component) {
+		int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0 &&
 				tabIndex != tabbedPane.getSelectedIndex()) {
 			Component panel = tabbedPane.getTabComponentAt(tabIndex);
 			// try {
 			TabCloseable tab = TabCloseable.class.cast(panel);
-			String initial = tab.getText();
-			String notBold = getNotBold(initial);
-			String bold = getBold(notBold);
-			if (notBold.equals(initial) == false) {
-				tab.setText(bold);
+			String newTitle = getBold(tab.getText());
+			if (newTitle.equals(tab.getText()) == false) {
+				tab.setText(newTitle);
 			}
 			// } catch (ClassCastException e) {
 			// }

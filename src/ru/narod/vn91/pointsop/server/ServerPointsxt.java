@@ -893,7 +893,8 @@ public class ServerPointsxt
 				gui.updateGameInfo(
 					this, newRoom,
 					defaultChannel, null, null,
-					39, 32, true, null, 0, 0, false, true, false, null,
+					39, 32, false,
+					true, null, 0, 0, false, true, false, null,
 					null, 0, 0, null);
 				// searching his opponent in the list
 				User[] users = getUsers(defaultChannel);
@@ -922,7 +923,8 @@ public class ServerPointsxt
 					gui.updateGameInfo(
 							this, newRoom,
 							defaultChannel, playerFirst, playerSecond,
-							39, 32, true, isRated(ircNick),
+							39, 32, false,
+							true, isRated(ircNick),
 							0, 0, false, true, false,
 							GameState.Playing,
 							isBlitz(ircNick) ? 5 : 180, 0, 0, isBlitz(ircNick) ? 1 : 5);
@@ -933,7 +935,8 @@ public class ServerPointsxt
 					gui.updateGameInfo(
 							this, newRoom,
 							defaultChannel, pointsxtNick, null,
-							39, 32, true, false, 0, 0, false, true, false,
+							39, 32, false,
+							true, false, 0, 0, false, true, false,
 							GameState.SearchingOpponent,
 							myGame.getDefaultTime(), 0, 0, myGame.periodLength);
 					gui.gameRowCreated(this, defaultChannel, newRoom);
@@ -1305,54 +1308,54 @@ public class ServerPointsxt
 
 class IrcNicknameManager {
 
-	Map<String, String> id2Irc = new LinkedHashMap<String, String>();
-	Map<String, String> irc2Id = new LinkedHashMap<String, String>();
+	Map<String, String> fromId = new LinkedHashMap<String, String>();
+	Map<String, String> fromIrc = new LinkedHashMap<String, String>();
 
 	String irc2id(String ircNick) {
 		// inDI_X220111123511[g101]
-		if (irc2Id.get(ircNick) != null) {
+		if (fromIrc.get(ircNick) != null) {
 			// we already had him
-			return irc2Id.get(ircNick);
+			return fromIrc.get(ircNick);
 		} else {
 			String shortBasic = ircNick.replaceAll(
 					ServerPointsxt.pointsxtTail_RegExp, ""
 			);
 			String shortResult;
-			if (id2Irc.containsKey(shortBasic)) {
+			if (fromId.containsKey(shortBasic)) {
 				int i = 2;
-				while (id2Irc.containsKey(shortBasic + "(" + i + ")")) {
+				while (fromId.containsKey(shortBasic + "(" + i + ")")) {
 					i += 1;
 				}
 				shortResult = shortBasic + "(" + i + ")";
 			} else {
 				shortResult = shortBasic;
 			}
-			id2Irc.put(shortResult, ircNick);
-			irc2Id.put(ircNick, shortResult);
+			fromId.put(shortResult, ircNick);
+			fromIrc.put(ircNick, shortResult);
 			return shortResult;
 		}
 	}
 
 	String id2irc(String id) {
-		String result = id2Irc.get(id);
+		String result = fromId.get(id);
 		return (result == null) ? "" : result;
 	}
 
 	void changeIrcNick(
 			String oldIrcNick,
 			String newIrcNick) {
-		String shortNick = irc2Id.get(oldIrcNick);
-		irc2Id.put(newIrcNick, shortNick);
+		String shortNick = fromIrc.get(oldIrcNick);
+		fromIrc.put(newIrcNick, shortNick);
 //		irc2Id.remove(oldIrcNick); we point both irc nicks to the Id
-		id2Irc.put(shortNick, newIrcNick); // overwrite the old
+		fromId.put(shortNick, newIrcNick); // overwrite the old
 	}
 
 	void removeIrcNick(String ircNick) {
-		String shortNick = irc2Id.get(ircNick);
-		id2Irc.remove(shortNick);
-		for (Entry<String,String> mapEntry : irc2Id.entrySet()) {
+		String shortNick = fromIrc.get(ircNick);
+		fromId.remove(shortNick);
+		for (Entry<String,String> mapEntry : fromIrc.entrySet()) {
 			if (mapEntry.getValue().equals(shortNick)) {
-				id2Irc.remove(mapEntry.getKey());
+				fromIrc.remove(mapEntry.getKey());
 			}
 		}
 	}

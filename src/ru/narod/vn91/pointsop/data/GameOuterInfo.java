@@ -19,6 +19,7 @@ public class GameOuterInfo {
 	public Player second;
 
 	public Integer sizeX = 30, sizeY = 30;
+	public Boolean yAxisInverted = false;
 	public Boolean isRedFirst = true;
 	public Boolean isRated = false;
 //	public Boolean iAmPlaying = false;
@@ -60,13 +61,17 @@ public class GameOuterInfo {
 		this.second = new Player(server, "second"); // avoid nulls
 	}
 
-	public GameOuterInfo(ServerInterface server, String id, String masterRoomId,
+
+
+	public GameOuterInfo(
+			ServerInterface server, String id, String masterRoomId,
 			Player first, Player second, Integer sizeX, Integer sizeY,
-			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
-			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
-			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
-			Integer additionalAccumulatingTime, Integer startingTime,
-			Integer periodLength) {
+			Boolean yAxisInverted, Boolean isRedFirst, Boolean isRated,
+			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
+			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
+			Integer freeTemporalTime, Integer additionalAccumulatingTime,
+			Integer startingTime, Integer periodLength
+			) {
 		super();
 		this.server = server;
 		this.id = id;
@@ -75,6 +80,7 @@ public class GameOuterInfo {
 		this.second = second;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+		this.yAxisInverted = yAxisInverted;
 		this.isRedFirst = isRedFirst;
 		this.isRated = isRated;
 		this.handicapRed = handicapRed;
@@ -88,6 +94,8 @@ public class GameOuterInfo {
 		this.startingTime = startingTime;
 		this.periodLength = periodLength;
 	}
+
+
 
 	public void updateFrom(GameOuterInfo g) {
 		for (Field field : g.getClass().getFields()) {

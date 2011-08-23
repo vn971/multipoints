@@ -355,8 +355,12 @@ public class ServerZagram2 implements ServerInterface {
 							boolean isRated = !(hellishString.substring(8, 9).equals("F"));
 							Integer instantWin = Integer.parseInt(hellishString.substring(9));
 							gui.updateGameInfo(
-									server, roomId, currentRoom, player1,
-									player2, sizeX, sizeY,false,isRated, 0, instantWin, manualEnclosings, stopEnabled, isEmptyScored, null, 0, addTime, startingTime, 1);
+									server, roomId,
+									currentRoom, player1, player2,
+									sizeX, sizeY, true,
+									false, isRated, 0, instantWin,
+									manualEnclosings, stopEnabled, isEmptyScored, null,
+									0, addTime, startingTime, 1);
 						} catch (NumberFormatException e) {
 							gui.raw(server,
 									"unknown game description: "
@@ -473,6 +477,7 @@ public class ServerZagram2 implements ServerInterface {
 									}
 								}
 							}
+							gui.makedMove(server, currentRoom, false, -1, -1, true, false, 0, 0);
 						} catch (FatalGameRoomError e) {
 							server.unsubscribeRoom(currentRoom);
 							gui.raw(server, "fatal error in game room: " +
