@@ -221,7 +221,6 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 						gameInfo.server.subscribeRoom(gameInfo.id);
 					}
 				}
-				// TODO
 				// String roomName = gameList.get(row).roomName;
 				// if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
 				// row).user2))

@@ -111,9 +111,13 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		}
 	}
 
-	void addUserLeftNotice(String user) {
+	void addUserLeftNotice(String user, String reason) {
 		if (jCheckBoxMenuItem_ShowUserJoin.isSelected()) {
-			addServerNotice(user + " вышел(а) из комнаты");
+			String messageToAdd = user + " вышел(а) из комнаты";
+			if (reason != null && "".equals(reason) == false) {
+				messageToAdd += " (" + reason + ")";
+			}
+			addServerNotice(messageToAdd);
 		}
 	}
 

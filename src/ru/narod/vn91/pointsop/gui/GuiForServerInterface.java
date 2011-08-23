@@ -2,7 +2,6 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Image;
 
-import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -50,12 +49,14 @@ public interface GuiForServerInterface {
 
 	public abstract void userLeftRoom(
 			ServerInterface server,
-			String room,
-			String id);
+			String roomId,
+			String userId,
+			String reason);
 
 	public abstract void userDisconnected(
 			ServerInterface server,
-			String user);
+			String user,
+			String additionalMessage);
 
 	public abstract void subscribedLangRoom(
 			String roomNameOnServer,
@@ -68,7 +69,7 @@ public interface GuiForServerInterface {
 			String roomId
 			);
 
-	public abstract void unsubsribedRoom(
+	public abstract void unsubscribedRoom(
 			ServerInterface server,
 			String room);
 

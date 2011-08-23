@@ -1,7 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
-import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
@@ -21,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
+@SuppressWarnings("serial")
 public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 	GuiForServerInterface centralGuiController;
@@ -137,12 +137,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 						@Override
 						public void run() {
-							if (paper.getEngine().getDotType(mousePosX, mousePosY).isEmpty()
-									&&moveListSize == moveList.size()) {
-//								System.out.println("moveListSize = " + moveListSize);
-//								System.out.println("moveList.size() = " + moveList.size());
-								gameOuterInfo.server.makeMove(gameOuterInfo.id, mousePosX, mousePosY);
-							}
+//							if (paper.getEngine().getDotType(mousePosX, mousePosY).isEmpty()
+//									&&moveListSize == moveList.size()) {
+////								System.out.println("moveListSize = " + moveListSize);
+////								System.out.println("moveList.size() = " + moveList.size());
+//								gameOuterInfo.server.makeMove(gameOuterInfo.id, mousePosX, mousePosY);
+//							}
 						}
 
 					};
@@ -190,7 +190,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				String eidokropkiLink = "";
 				if ((gameOuterInfo.isRated == true) && (wantToSave == true)) {
 					eidokropkiLink = PhpBackupServer.sendToEidokropki(
-							gameOuterInfo.first.guiName, gameOuterInfo.second.guiName, gameOuterInfo.first.rating, gameOuterInfo.second.rating, 39, 32,
+							gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
+							gameOuterInfo.first.rating, gameOuterInfo.second.rating,
+							gameOuterInfo.sizeX, gameOuterInfo.sizeY,
 							gameOuterInfo.getTimeAsString(), gameResult, moveList);
 					getServer().sendChat(gameOuterInfo.server.getMainRoom(),
 							"Закончена игра " + gameOuterInfo.first.guiName + "-" + gameOuterInfo.second.guiName
@@ -268,17 +270,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				GameRoom.this.paperMouseMove(x, y, evt);
 			}
 		};
-		paper.initPaper(39, 32);
+		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY);
 		timerLabel_Red = new TimerLabel();
 		timerLabel_Blue = new TimerLabel();
-
-//		if (amIPlaying) {
-//			стартовая позиция скрест
-//			paper.makeMove(19, 16, false);
-//			paper.makeMove(19, 17, true);
-//			paper.makeMove(20, 16, true);
-//			paper.makeMove(20, 17, false);
-//		}
 
 		initComponents();
 		jPanel_Tree.setVisible(false);
@@ -293,11 +287,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jButton_Pass.setVisible(false);
 		jButton_Stop.setVisible(false);
 //		}
-		{
+
 			// netbeans debug
 			GameRoom this_copy = this;
 			roomPart_UserList.initRoomPart(this_copy, centralGuiController);
-		}
 	}
 
 	/** This method is called from within the constructor to

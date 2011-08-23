@@ -45,13 +45,6 @@ public class GuiController implements GuiForServerInterface {
     this.tabbedPane = tabbedPane;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * ru.narod.vn91.pointsop.gui.GuiForServerInterface#serverClosed(ru.narod.
-   * vn91.pointsop.server.ServerInterface)
-   */
   public synchronized void serverClosed(ServerInterface server) {
     if (server == pointsxt_ircworldru_server) {
       pointsxt_ircworldru_server.disconnectServer();
@@ -134,21 +127,16 @@ public class GuiController implements GuiForServerInterface {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * ru.narod.vn91.pointsop.gui.GuiForServerInterface#userLeavedRoom(ru.narod
-   * .vn91.pointsop.server.ServerInterface, java.lang.String, java.lang.String)
-   */
+  @Override
   public synchronized void userLeftRoom(
       ServerInterface server,
-      String room,
-      String id) {
-    Player player = playerPool.get(server, id);
+      String roomId,
+      String userId,
+      String reason) {
+    Player player = playerPool.get(server, userId);
     RoomInterface roomInterface = roomInterfaces.get(
         new ServerRoom(
-            room,
+            roomId,
             server
         )
         );
@@ -160,19 +148,26 @@ public class GuiController implements GuiForServerInterface {
       }
       RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
       if (chat != null) {
-        chat.addUserLeftNotice(player.guiName);
+        chat.addUserLeftNotice(player.guiName, reason);
       }
     }
   }
 
   public synchronized void userDisconnected(
       ServerInterface server,
-      String id) {
+      String id,
+      String additionalMessage) {
     Player player = playerPool.get(server, id);
     PrivateChat privateChat = privateChatList.get(player);
     if ((privateChat != null) &&
         (tabbedPane.contains(privateChat))) {
-      privateChat.addChat("server", player.guiName + " вышел из игры...", true);
+			if (additionalMessage != null && additionalMessage.equals("") == false) {
+				privateChat.addChat("server",
+					player.guiName + " вышел из игры: " + additionalMessage,
+					true);
+			} else {
+				privateChat.addChat("server", player.guiName + " вышел из игры...", true);
+			}
     }
     playerPool.remove(server, id);
   }
@@ -264,7 +259,7 @@ public class GuiController implements GuiForServerInterface {
 
   };
 
-  public synchronized void unsubsribedRoom(
+  public synchronized void unsubscribedRoom(
       ServerInterface server,
       String room) {
     RoomInterface roomInterface = roomInterfaces.get(
@@ -461,13 +456,6 @@ public class GuiController implements GuiForServerInterface {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameStop(ru.narod.vn91
-   * .pointsop.server.ServerInterface, java.lang.String, boolean)
-   */
   public synchronized void gameStop(
       ServerInterface server,
       String room,
@@ -478,13 +466,6 @@ public class GuiController implements GuiForServerInterface {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * ru.narod.vn91.pointsop.gui.GuiForServerInterface#gameLost(ru.narod.vn91
-   * .pointsop.server.ServerInterface, java.lang.String, boolean, boolean)
-   */
   public synchronized void gameLost(
       ServerInterface server,
       String room,
@@ -505,8 +486,9 @@ public class GuiController implements GuiForServerInterface {
 		if (Memory.isDebug() == true) {
 			System.out.print(add);
 		} else {
-			String oldText = serverOutput.getText();
-			serverOutput.setText(oldText + add);
+			this.privateMessageReceived(server, server.getServerName(), info);
+//			String oldText = serverOutput.getText();
+//			serverOutput.setText(oldText + add);
 		}
 	}
 
@@ -653,10 +635,12 @@ class JTabbedPaneMod {
 			Component panel = tabbedPane.getTabComponentAt(tabIndex);
 			// try {
 			TabCloseable tab = TabCloseable.class.cast(panel);
-			String s = tab.getText();
-			s = getNotBold(s);
-			s = getBold(s);
-			tab.setText(s);
+			String initial = tab.getText();
+			String notBold = getNotBold(initial);
+			String bold = getBold(notBold);
+			if (notBold.equals(initial) == false) {
+				tab.setText(bold);
+			}
 			// } catch (ClassCastException e) {
 			// }
 		}

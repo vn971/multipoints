@@ -56,7 +56,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void endOfGame() {
-		gui.unsubsribedRoom(this, "");
+		gui.unsubscribedRoom(this, "");
 		gui.rawError(this, ai.getName() + "закончил игру.");
 	}
 
@@ -105,7 +105,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void unsubscribeRoom(String name) {
-		gui.unsubsribedRoom(this, "");
+		gui.unsubscribedRoom(this, "");
 		gui.serverClosed(this);
 		ai.dispose();
 	}

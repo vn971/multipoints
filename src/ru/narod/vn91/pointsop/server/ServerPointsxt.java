@@ -41,7 +41,7 @@ public class ServerPointsxt
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
-	String pointsxtVersion;
+	String pointsxtVersion = "167";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
 	static String commandIWantJoinGame = "I want to join this game.";
@@ -91,8 +91,7 @@ public class ServerPointsxt
 			String myName,
 			String ircPassword,
 			String roomPassword,
-			boolean ircAcceptsRussianNicks,
-			String pointsxtVersion
+			boolean ircAcceptsRussianNicks
 	) {
 		super();
 		this.gui = gui;
@@ -101,7 +100,6 @@ public class ServerPointsxt
 		defaultChannel = "#pointsxt";
 		defaultPass = roomPassword;
 		this.ircAcceptsRussianNicks = ircAcceptsRussianNicks;
-		this.pointsxtVersion = pointsxtVersion;
 		defaultServer_Visible = defaultServ;
 
 		String login = "";
@@ -314,7 +312,7 @@ public class ServerPointsxt
 				myGame.leaveGame(true);
 			} else {
 				super.partChannel(roomName);
-				gui.unsubsribedRoom(this, roomName);
+				gui.unsubscribedRoom(this, roomName);
 			}
 		}
 	}
@@ -379,7 +377,7 @@ public class ServerPointsxt
 			String kickerHostname,
 			String recipientNick,
 			String reason) {
-		userDisconnected_PointsxtStyle(channel, recipientNick);
+		userDisconnected_PointsxtStyle(channel, recipientNick, reason);
 	}
 
 	@Override
@@ -388,16 +386,7 @@ public class ServerPointsxt
 			String sender,
 			String login,
 			String hostname) {
-		userDisconnected_PointsxtStyle(channel, sender);
-//		if (nicknameManager.getOrCreateShortNick(sender)
-//				.equals(myGame.getOpponentShortName())
-//				&& channel.equals(myGame.roomName)) {
-//			myGame.leaveGame(false);
-//			//			gui.chatReceived(
-//			//					this, channel,
-//			//					nicknameManager.getOrCreateShortNick(sender),
-//			//					"Ваш оппонент закрыл игру.");
-//		}
+		userDisconnected_PointsxtStyle(channel, sender, null);
 	}
 
 	@Override
@@ -408,13 +397,12 @@ public class ServerPointsxt
 			String reason) {
 		String[] channels = getChannels();
 		for (String channelName : channels) {
-			userDisconnected_PointsxtStyle(channelName, sourceNick);
+			userDisconnected_PointsxtStyle(channelName, sourceNick, reason);
 		}
 		gui.userDisconnected(
-				this, nicknameManager.irc2id(
-				sourceNick
-		)
-		);
+				this, nicknameManager.irc2id(sourceNick),
+				reason.replaceAll(pointsxtTail_RegExp, "")
+				);
 	}
 
 	@Override
@@ -423,10 +411,10 @@ public class ServerPointsxt
 			String login,
 			String hostname,
 			String newNick) {
-//		if (getPlayerRoom(oldNick).equals("") == false &&
-//				getPlayerRoom(oldNick).equals(getPlayerRoom(newNick)) == false) {
+		if (getPlayerRoom(oldNick).equals("") == false &&
+				getPlayerRoom(oldNick).equals(getPlayerRoom(newNick)) == false) {
 			clearCreatedGames_PointsxtStyle(oldNick);
-//		}
+		}
 		nicknameManager.changeIrcNick(oldNick, newNick);
 //		if (nicknameManager.getOrCreateShortNick(newNick).
 //				equals(nicknameManager.getOrCreateShortNick(oldNick)) == false) {
@@ -902,7 +890,12 @@ public class ServerPointsxt
 		if (room.equals(defaultChannel)) {
 			String newRoom = getPlayerRoom(ircNick);
 			if (newRoom.length() > 0) {
-				// searching opponent
+				gui.updateGameInfo(
+					this, newRoom,
+					defaultChannel, null, null,
+					39, 32, true, null, 0, 0, false, true, false, null,
+					null, 0, 0, null);
+				// searching his opponent in the list
 				User[] users = getUsers(defaultChannel);
 				String opponent = "";
 				for (User user : users) {
@@ -951,11 +944,13 @@ public class ServerPointsxt
 
 	public void userDisconnected_PointsxtStyle(
 			String room,
-			String user) {
+			String user,
+			String reason) {
 		if (room.equals(defaultChannel)) {
 			gui.userLeftRoom(
 					this, room,
-					nicknameManager.irc2id(user)
+					nicknameManager.irc2id(user),
+					reason
 			);
 			clearCreatedGames_PointsxtStyle(user);
 			nicknameManager.removeIrcNick(user);
@@ -963,11 +958,12 @@ public class ServerPointsxt
 			if (user.equalsIgnoreCase("podbot") == false) {
 				String userShort = nicknameManager.irc2id(user);
 				if (userShort.equals(getMyName())) {
-					gui.unsubsribedRoom(this, room);
+					gui.unsubscribedRoom(this, room);
 				} else {
 					gui.userLeftRoom(
 							this, room,
-							userShort
+							userShort,
+							reason
 							);
 				}
 				if (userShort.
@@ -1236,11 +1232,16 @@ public class ServerPointsxt
 
 		void leaveGame(boolean isGuiVisible) {
 			if (isPlaying() || isSearching()) {
-				String roomNameCopy = roomName;
-				ServerPointsxt.this.partChannel(roomNameCopy);
-				clear();
-				if (isGuiVisible) {
-					ServerPointsxt.this.gui.unsubsribedRoom(ServerPointsxt.this, roomNameCopy);
+				for (String channel : ServerPointsxt.this.getChannels()) {
+					if (channel.equals(myGame.roomName)) {
+						String roomNameCopy = roomName;
+						ServerPointsxt.this.partChannel(roomNameCopy);
+						clear();
+						if (isGuiVisible) {
+							ServerPointsxt.this.gui.unsubscribedRoom(ServerPointsxt.this, roomNameCopy);
+						}
+						break;
+					}
 				}
 			}
 		}

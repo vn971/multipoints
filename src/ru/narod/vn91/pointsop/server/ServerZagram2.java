@@ -1,5 +1,6 @@
 package ru.narod.vn91.pointsop.server;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
+import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.Wait;
 
 public class ServerZagram2 implements ServerInterface {
@@ -155,7 +157,7 @@ public class ServerZagram2 implements ServerInterface {
 	public void unsubscribeRoom(String room) {
 		String msgToSend = "q" + queue.sizePlusOne() + "." + room + ".";
 		sendCommandToServer(msgToSend);
-		gui.unsubsribedRoom(this, room);
+		gui.unsubscribedRoom(this, room);
 	}
 
 	@Override
@@ -163,7 +165,6 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	private synchronized String getLinkContent(String link) {
-		gui.raw(this, "visiting: " + link);
 		StringBuilder result = new StringBuilder();
 		try {
 			URL url;
@@ -186,7 +187,10 @@ public class ServerZagram2 implements ServerInterface {
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {
 		}
-		gui.raw(this, "received: " + result.toString());
+		if (Memory.isDebug()) {
+			gui.raw(this, "visiting: " + link);
+			gui.raw(this, "received: " + result.toString());
+		}
 		return result.toString();
 	}
 
@@ -204,6 +208,32 @@ public class ServerZagram2 implements ServerInterface {
 
 	private static String coordinatesToString(int x, int y) {
 		return get1SgfCoord(x) + get1SgfCoord(y);
+	}
+
+	private static Integer charToCoordinate(char c) {
+		if (c >= 'a' && c <= 'z') {
+			return Integer.class.cast(c - 'a');
+		} else if (c >= 'A' && c <= 'Z') {
+			return Integer.class.cast(c - 'A' + 27);
+		} else {
+			return null;
+		}
+	}
+
+	private static Point stringToCoordinates(String twoLetterString) {
+		if (twoLetterString.length() >= 2) {
+			try {
+				char xAsChar = twoLetterString.charAt(0);
+				char yAsChar = twoLetterString.charAt(1);
+				return new Point(
+					charToCoordinate(xAsChar),
+					charToCoordinate(yAsChar));
+			} catch (NullPointerException e) {
+				return null;
+			}
+		} else {
+			return null;
+		}
 	}
 
 	private static String getServerEncoded(String s) {
@@ -261,6 +291,7 @@ public class ServerZagram2 implements ServerInterface {
 
 		private void handleText(String text) {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
+			ServerInterface server = ServerZagram2.this;
 			if (text.matches(".*ok/.*") && text.endsWith("/end")) {
 				String[] splitted =
 						text.substring(
@@ -296,13 +327,13 @@ public class ServerZagram2 implements ServerInterface {
 							// String nickType = dotSplitted[2];
 							String chatMessage =
 									getServerDecoded(dotSplitted[3]);
-							gui.chatReceived(ServerZagram2.this,
+							gui.chatReceived(server,
 									currentRoom, nick, chatMessage, time);
 						} catch (NumberFormatException e) {
-							gui.chatReceived(ServerZagram2.this, currentRoom, "server",
+							gui.chatReceived(server, currentRoom, "server",
 									message.substring(2), null);
 						} catch (ArrayIndexOutOfBoundsException e) {
-							gui.chatReceived(ServerZagram2.this, currentRoom, "server",
+							gui.chatReceived(server, currentRoom, "server",
 									message.substring(2), null);
 						}
 					} else if (message.startsWith("d")) {
@@ -324,14 +355,14 @@ public class ServerZagram2 implements ServerInterface {
 							boolean isRated = !(hellishString.substring(8, 9).equals("F"));
 							Integer instantWin = Integer.parseInt(hellishString.substring(9));
 							gui.updateGameInfo(
-									ServerZagram2.this, roomId, currentRoom, player1,
+									server, roomId, currentRoom, player1,
 									player2, sizeX, sizeY,false,isRated, 0, instantWin, manualEnclosings, stopEnabled, isEmptyScored, null, 0, addTime, startingTime, 1);
 						} catch (NumberFormatException e) {
-							gui.raw(ServerZagram2.this,
+							gui.raw(server,
 									"unknown game description: "
 											+ message.substring(1));
 						} catch (ArrayIndexOutOfBoundsException e) {
-							gui.raw(ServerZagram2.this,
+							gui.raw(server,
 									"unknown game description: "
 											+ message.substring(1));
 						}
@@ -341,7 +372,7 @@ public class ServerZagram2 implements ServerInterface {
 						.split("\\.");
 						for (String gameId : dotSplitted) {
 							if (gameId.length() != 0) {
-								gui.gameRowCreated(ServerZagram2.this, currentRoom, gameId);
+								gui.gameRowCreated(server, currentRoom, gameId);
 							}
 						}
 					} else if (message.startsWith("gd")) {
@@ -350,7 +381,7 @@ public class ServerZagram2 implements ServerInterface {
 								.split("\\.");
 						for (String gameId : dotSplitted) {
 							if (gameId.length() != 0) {
-								gui.gameRowDestroyed(ServerZagram2.this, gameId);
+								gui.gameRowDestroyed(server, gameId);
 							}
 						}
 					} else if (message.startsWith("i")) {
@@ -373,7 +404,7 @@ public class ServerZagram2 implements ServerInterface {
 							} catch (NumberFormatException e) {
 							}
 						}
-						gui.updateUserInfo(ServerZagram2.this, player, player, null, rating,
+						gui.updateUserInfo(server, player, player, null, rating,
 								winCount, lossCount, drawCount, myStatus);
 					} else if (message.startsWith("pa") || message.startsWith("pr")) {
 						// player joined
@@ -382,7 +413,7 @@ public class ServerZagram2 implements ServerInterface {
 						for (String player : dotSplitted) {
 							if (player.length() != 0) {
 								gui.userJoinedRoom(
-										ServerZagram2.this, currentRoom, player, false);
+										server, currentRoom, player, false);
 							}
 						}
 					} else if (message.startsWith("pd")) {
@@ -391,7 +422,7 @@ public class ServerZagram2 implements ServerInterface {
 								.split("\\.");
 						for (String player : dotSplitted) {
 							if (player.length() != 0) {
-								gui.userLeftRoom(ServerZagram2.this, currentRoom, player);
+								gui.userLeftRoom(server, currentRoom, player, "");
 							}
 						}
 					} else if (message.startsWith("q")) {
@@ -399,27 +430,61 @@ public class ServerZagram2 implements ServerInterface {
 						if (currentRoom.equals("0")) {
 							gui.subscribedLangRoom(
 									currentRoom,
-									ServerZagram2.this,
+									server,
 									"общий чат: zagram",
 									true);
 						} else {
-							gui.subscribedGame(ServerZagram2.this, currentRoom);
+							gui.subscribedGame(server, currentRoom);
 						}
-					} else if (message.matches("sa;|sr\\(;")) {
-						String usefulPart = message.replaceFirst("sa;|sr\\(;", "");
-						String[] semiSplitted = message.split(";");
-						for (String sgfNode : semiSplitted) {
-							if (sgfNode.matches("U(B|W)\\[..\\]")) {
-							} else if (sgfNode.matches("U(B|W)\\[..\\]")) {
-							} else {
+					} else if (message.matches("sa;.*|sr\\(;.*")) {
+						class FatalGameRoomError extends Exception {
+							public FatalGameRoomError(String s) {
+								super(s);
 							}
+						}
+						try {
+							String usefulPart = message.replaceFirst("sa;|sr\\(;", "");
+							String[] semiSplitted = usefulPart.split(";");
+							for (String sgfNode : semiSplitted) {
+								// ([A-Z]{1,2}\[([^\]|\\\\)*?\])*
+								// ([A-Z]{1,2}\[.*?\])*
+								if (sgfNode.matches("([A-Z]{1,2}\\[.*?\\])*") == false) {
+									gui.raw(server, "unknown sgf node structure: " + sgfNode);
+								} else {
+									String[] sgfPropertyList = sgfNode.split("\\]");
+									for (String sgfProperty : sgfPropertyList) {
+										String propertyName = sgfProperty.replaceAll("\\[.*", "");
+										String propertyValue = sgfProperty.replaceFirst(".*\\[", "");
+										if (propertyName.matches("U(B|W)")) {
+											throw new FatalGameRoomError("can't handle 'Undo black move'.");
+										} else if (propertyName.matches("B|W")) {
+												System.out.println("propertyValue = "
+													+ propertyValue);
+												gui.makedMove(
+													server, currentRoom,
+													message.startsWith("sr"),
+													stringToCoordinates(propertyValue).x,
+													stringToCoordinates(propertyValue).y,
+													propertyName.equals("W"),
+													propertyName.equals("B"),
+													999, 999);
+										} else {
+										}
+									}
+								}
+							}
+						} catch (FatalGameRoomError e) {
+							server.unsubscribeRoom(currentRoom);
+							gui.raw(server, "fatal error in game room: " +
+								e.getMessage() +
+								". Exiting the room....");
 						}
 					}
 					else if (message.matches("u.undo")) {
 						boolean isRed = message.charAt(1) == '1';
 						String playerAsString = isRed ? "red" : "blue";
 						gui.chatReceived(
-							ServerZagram2.this,
+							server,
 							currentRoom,
 							"",
 							"player "
@@ -434,7 +499,7 @@ public class ServerZagram2 implements ServerInterface {
 						String gameDescription = usefulPart.replaceFirst("[^.]*\\.", "");
 						gui
 								.privateMessageReceived(
-										ServerZagram2.this,
+										server,
 										"server",
 										"Игрок '"
 												+ sender
@@ -444,11 +509,11 @@ public class ServerZagram2 implements ServerInterface {
 												// ". The invitation is rejected because MultiPoints couldn't handle the game."
 												". MultiPoints пока не умеет обрабатывать это сообщение -- отослан отказ от игры."
 								);
-						ServerZagram2.this.rejectOpponent(null, sender);
+						server.rejectOpponent(null, sender);
 					}
 				}
 			} else {
-				gui.serverClosed(ServerZagram2.this);
+				gui.serverClosed(server);
 				isDisposed = true;
 			}
 		}
