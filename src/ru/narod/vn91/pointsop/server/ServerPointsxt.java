@@ -590,11 +590,7 @@ public class ServerPointsxt
 			this.sendSpectr(sender);
 			//			}
 		} else if (message.startsWith("/PointsXTAccept ")) {
-			System.out.println("ServerPointsxt.onPrivateMessage()");
-			System.out.println("sender = " + sender);
-			System.out.println("isPointsXTNickname(sender) = " + isPointsXTNickname(sender));
 			String room = getPlayerRoom(sender);
-//			String roomNumber = room.replaceFirst(".pxt", "");
 			if (isPointsXTNickname(sender)
 					&& (room.equals("")) == false) {
 				if (myGame.isPlaying()) {
@@ -611,9 +607,7 @@ public class ServerPointsxt
 					myGame.moveList = new ArrayList<SimpleMove>();
 					myGame.opponentName = nicknameManager.irc2id(sender);
 					myGame.roomName = room;
-					gui.subscribedGame(
-							this,
-							room);
+					gui.subscribedGame(this, room);
 					for (User user : super.getUsers(room)) {
 						String ircNick = user.getNick();
 						gui.userJoinedRoom(this, room, nicknameManager.irc2id(ircNick), true);

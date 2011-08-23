@@ -230,16 +230,14 @@ public class GuiController implements GuiForServerInterface {
 
 		final Functor<GameOuterInfo, String> game2html = new Functor<GameOuterInfo, String>() {
 			public String call(GameOuterInfo input) {
-				return "<html><font color="
-						+ GlobalGuiSettings.getHtmlColor(
-								Memory.getPlayer1Color()
-								)
-						+ ">" + input.first.guiName
-						+ "</font><font color=black> - </font><font color="
-						+ GlobalGuiSettings.getHtmlColor(
-								Memory.getPlayer2Color()
-								)
-						+ ">" + input.second.guiName + "</font></html>";
+				return String.format("<html><font color=%s>%s</font>" +
+						"<font color=black> - </font>" +
+						"<font color=%s>%s</font></html>",
+						GlobalGuiSettings.getHtmlColor(Memory.getPlayer1Color()),
+						input.first.guiName,
+						GlobalGuiSettings.getHtmlColor(Memory.getPlayer2Color()),
+						input.second.guiName
+						);
 			}
 		};
 		tabbedPane.addTab(game2html.call(game), containerRoom_Game, true);

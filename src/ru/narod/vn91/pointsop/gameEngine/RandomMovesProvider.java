@@ -49,11 +49,12 @@ public class RandomMovesProvider {
 	}
 
 	public Dot findEmptyRandomPlace(SingleGameEngineInterface engine) {
-		Dot dot;
+		Dot dot = null;
 		do {
 			dot = getNextDot();
-		} while (dot != null
-				&& engine.getDotType(dot.x, dot.y).notIn(
+		} while (dot != null &&
+				engine!=null &&
+				engine.getDotType(dot.x, dot.y).notIn(
 				DotType.EMPTY, DotType.BLUE_CTRL, DotType.RED_CTRL));
 		return dot;
 	}

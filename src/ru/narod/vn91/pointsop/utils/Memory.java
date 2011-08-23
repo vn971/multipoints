@@ -208,7 +208,7 @@ public class Memory {
 	}
 
 	public static void main(String[] args) {
-		setZagramTest(true);
-		setDebug(false);
+//		setZagramTest(true);
+//		setDebug(true);
 	}
 }

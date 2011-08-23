@@ -1,8 +1,6 @@
 package ru.narod.vn91.pointsop.data;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -58,10 +56,9 @@ public class GameOuterInfo {
 		super();
 		this.server = server;
 		this.id = id;
+		this.first = new Player(server, "first"); // avoid nulls
+		this.second = new Player(server, "second"); // avoid nulls
 	}
-
-
-
 
 	public GameOuterInfo(ServerInterface server, String id, String masterRoomId,
 			Player first, Player second, Integer sizeX, Integer sizeY,
@@ -91,9 +88,6 @@ public class GameOuterInfo {
 		this.startingTime = startingTime;
 		this.periodLength = periodLength;
 	}
-
-
-
 
 	public void updateFrom(GameOuterInfo g) {
 		for (Field field : g.getClass().getFields()) {
