@@ -479,7 +479,6 @@ public class ServerPointsxt
 				String opponentNick = nicknameManager.irc2id(
 						sender
 				);
-//				System.out.println("received Op-game request");
 				gui.gameInviteReceived(this, channel, opponentNick);
 			} else if (message.startsWith(commandCommonPrefix
 					+ commandAcceptOpponent + myNickOnServ
@@ -487,12 +486,6 @@ public class ServerPointsxt
 				this.setPointsxtNickname(
 						channel,
 						true, false);
-//				super.changeNick(
-//						String.format(
-//								"%s_X" + pointsxtVersion + "0000%s[g201]",
-//								getMyName(), channel.substring(4)
-//								)
-//				);
 				myGame.amIRed = false;
 				myGame.engine = new SingleGameEngine(39, 32);
 				myGame.moveList = new ArrayList<SimpleMove>();
@@ -597,6 +590,9 @@ public class ServerPointsxt
 			this.sendSpectr(sender);
 			//			}
 		} else if (message.startsWith("/PointsXTAccept ")) {
+			System.out.println("ServerPointsxt.onPrivateMessage()");
+			System.out.println("sender = " + sender);
+			System.out.println("isPointsXTNickname(sender) = " + isPointsXTNickname(sender));
 			String room = getPlayerRoom(sender);
 //			String roomNumber = room.replaceFirst(".pxt", "");
 			if (isPointsXTNickname(sender)
@@ -609,13 +605,6 @@ public class ServerPointsxt
 				} else {
 					super.partChannel(myGame.roomName);
 					this.setPointsxtNickname(room, true, true);
-//					super.changeNick(
-//							String.format(
-//									"%s_X" + pointsxtVersion + "0000%s[g101]",
-//									getMyName(),
-//									roomNumber
-//									)
-//					);
 					super.joinChannel(room);
 					myGame.amIRed = true;
 					myGame.engine = new SingleGameEngine(39, 32);
@@ -658,8 +647,6 @@ public class ServerPointsxt
 					headerEndsPosition,
 					tailStartsPosition
 			);
-			//			System.out.printf("%s\n", suffPartAsString);
-			//			System.out.printf("full: %s\nsuff: %s\n", message, suffPartAsString);
 			String previousData = spectrGameData.get(targetRoom);
 			if (previousData == null) {
 				previousData = "";
@@ -849,7 +836,7 @@ public class ServerPointsxt
 //		result += String.format("%03d", programVersion);
 		result += pointsxtVersion;
 		result += "0000";
-		roomName.replaceAll(".pxt", "");
+		roomName = roomName.replaceAll(".pxt", "");
 		while (roomName.length() < 5) {
 			roomName = "0" + roomName;
 		}
@@ -865,14 +852,6 @@ public class ServerPointsxt
 		}
 		super.changeNick(result);
 	}
-
-//	private String getPlayerGameType(String nick) {
-//		if (isGamerNickname(nick)) {
-//			return getGameInfoFromIrcNick(nick).getTimeAndIsRated();
-//		} else {
-//			return "";
-//		}
-//	}
 
 	private int getPlayerIngameNumber(String fullNick) {
 		if (isGamerNickname(fullNick)) {
@@ -935,10 +914,7 @@ public class ServerPointsxt
 				for (User user : users) {
 					String possibleOpponent = user.getNick();
 					if ((getPlayerRoom(possibleOpponent).equals(newRoom))
-							&& (! nicknameManager.irc2id(
-							possibleOpponent
-					).
-							equals(pointsxtNick))) {
+							&& (!nicknameManager.irc2id(possibleOpponent).equals(pointsxtNick))) {
 						opponent = nicknameManager.irc2id(
 								possibleOpponent
 						);
@@ -992,8 +968,6 @@ public class ServerPointsxt
 		} else {
 			if (user.equalsIgnoreCase("podbot") == false) {
 				String userShort = nicknameManager.irc2id(user);
-//				System.out.println("userShort = " + userShort);
-//				System.out.println("myNickOnServ = " + myNickOnServ);
 				if (userShort.equals(getMyName())) {
 					gui.unsubsribedRoom(this, room);
 				} else {
@@ -1258,19 +1232,12 @@ public class ServerPointsxt
 		}
 
 		private void clear() {
-//			System.out.println("myGame.clear()");
 			randomMovesProvider = new RandomMovesProvider(39, 32);
 			roomName = "";
 			moveList.clear();
 			opponentName = "";
 			engine = null;
 			ServerPointsxt.this.setPointsxtNickname("", false, false);
-//			ServerPointsxt.this.changeNick(
-//					String.format(
-//							"%s_X" + pointsxtVersion + "000000000[free]",
-//							ServerPointsxt.this.getMyName()
-//					)
-//			);
 		}
 
 		void leaveGame(boolean isGuiVisible) {

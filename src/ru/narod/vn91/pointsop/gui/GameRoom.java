@@ -13,8 +13,6 @@ import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 import ru.narod.vn91.pointsop.utils.TimedAction;
 
-//import javax.jnlp.FileContents;
-//import javax.jnlp.FileOpenService;
 import javax.jnlp.FileSaveService;
 import javax.jnlp.ServiceManager;
 import javax.swing.*;

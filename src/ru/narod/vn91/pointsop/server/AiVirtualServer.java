@@ -27,7 +27,6 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void init() {
-		gui.updateUserInfo(this, getMyName(), null, null, null, null, null, null, null);
 		gui.updateGameInfo(this, "", "", ai.getName(), this.getMyName(),
 				null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		gui.subscribedGame(

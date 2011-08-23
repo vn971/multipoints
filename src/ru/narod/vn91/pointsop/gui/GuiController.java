@@ -1,15 +1,12 @@
 package ru.narod.vn91.pointsop.gui;
 
-import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
 import java.awt.Component;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
@@ -230,19 +227,22 @@ public class GuiController implements GuiForServerInterface {
         new ServerRoom(game.id, server),
         containerRoom_Game
         );
-    tabbedPane.addTab(
-        "<html><font color="
-            + GlobalGuiSettings.getHtmlColor(
-                Memory.getPlayer1Color()
-                )
-            + ">" + game.first.guiName
-            + "</font><font color=black> - </font><font color="
-            + GlobalGuiSettings.getHtmlColor(
-                Memory.getPlayer2Color()
-                )
-            + ">" + game.second.guiName + "</font></html>",
-        containerRoom_Game, true
-        );
+
+		final Functor<GameOuterInfo, String> game2html = new Functor<GameOuterInfo, String>() {
+			public String call(GameOuterInfo input) {
+				return "<html><font color="
+						+ GlobalGuiSettings.getHtmlColor(
+								Memory.getPlayer1Color()
+								)
+						+ ">" + input.first.guiName
+						+ "</font><font color=black> - </font><font color="
+						+ GlobalGuiSettings.getHtmlColor(
+								Memory.getPlayer2Color()
+								)
+						+ ">" + input.second.guiName + "</font></html>";
+			}
+		};
+		tabbedPane.addTab(game2html.call(game), containerRoom_Game, true);
 		tabbedPane.setCloseListener_FalseIfStopClosing(
 			containerRoom_Game,
 			new Functor<Void, Boolean>() {
@@ -251,19 +251,18 @@ public class GuiController implements GuiForServerInterface {
 					return containerRoom_Game.userAsksClose();
 				}
 			});
-    tabbedPane.setSelectedComponent(containerRoom_Game);
-    game.addChangeListener(
-        new GameInfoListener() {
+		tabbedPane.setSelectedComponent(containerRoom_Game);
+		game.addChangeListener(
+			new GameInfoListener() {
 
-          @Override
-          public void onChange(GameOuterInfo gameOuterInfo) {
-            synchronized (GuiController.this) {
-//							int index = tabbedPane.indexOfComponent(containerRoom_Game);
-//							tabbedPane.getTabComponentAt(index).set
-            }
-          }
-        }
-        );
+				@Override
+				public void onChange(GameOuterInfo gameOuterInfo) {
+					synchronized (GuiController.this) {
+						tabbedPane.updateTabText(containerRoom_Game, game2html.call(gameOuterInfo));
+					}
+				}
+			}
+		);
 
   };
 
@@ -317,7 +316,7 @@ public class GuiController implements GuiForServerInterface {
       tabbedPane.addTab(player.guiName, privateChat, true);
       tabbedPane.makeBold(privateChat);
     } else {
-      if (tabbedPane.contains(privateChat)) {
+      if (tabbedPane.contains(privateChat) == false) {
         tabbedPane.addTab(
             player.guiName, privateChat, true
             ); // resurrecting a closed panel
@@ -346,7 +345,7 @@ public class GuiController implements GuiForServerInterface {
       tabbedPane.addTab(player.guiName, privateChat, true);
       tabbedPane.setSelectedComponent(privateChat);
     } else {
-      if (tabbedPane.contains(privateChat)) {
+			if (tabbedPane.contains(privateChat) == false) {
         tabbedPane.addTab(player.guiName, privateChat, true);
       }
       tabbedPane.setSelectedComponent(privateChat);
@@ -502,15 +501,16 @@ public class GuiController implements GuiForServerInterface {
     }
   }
 
-  @Override
-  public synchronized void raw(ServerInterface server, String info) {
-    String add = server.getServerName() + ": " + info + "\n";
-
-    System.out.print(add);
-
-    // String oldText = serverOutput.getText();
-    // serverOutput.setText(oldText + add);
-  }
+	@Override
+	public synchronized void raw(ServerInterface server, String info) {
+		String add = server.getServerName() + ": " + info + "\n";
+		if (Memory.isDebug() == true) {
+			System.out.print(add);
+		} else {
+			String oldText = serverOutput.getText();
+			serverOutput.setText(oldText + add);
+		}
+	}
 
   @Override
   public void rawError(ServerInterface server, String info) {
@@ -659,6 +659,18 @@ class JTabbedPaneMod {
 			s = getNotBold(s);
 			s = getBold(s);
 			tab.setText(s);
+			// } catch (ClassCastException e) {
+			// }
+		}
+	}
+
+	public void updateTabText(Component component, String newTitle) {
+		int tabIndex = tabbedPane.indexOfComponent(component);
+		if (tabIndex >= 0) {
+			Component tabPanel = tabbedPane.getTabComponentAt(tabIndex);
+			// try {
+			TabCloseable tab = TabCloseable.class.cast(tabPanel);
+			tab.setText(newTitle);
 			// } catch (ClassCastException e) {
 			// }
 		}
