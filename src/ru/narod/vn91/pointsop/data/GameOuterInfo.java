@@ -1,10 +1,12 @@
 package ru.narod.vn91.pointsop.data;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 /**
  * information about the game that can be achieved not joining the game itself
@@ -153,6 +155,18 @@ public class GameOuterInfo {
 		} else {
 			return false;
 		}
+	}
+
+	public Color player1Color() {
+		Color red = Memory.getPlayer1Color();
+		Color blue = Memory.getPlayer2Color();
+		return isRedFirst ? red : blue;
+	}
+
+	public Color player2Color() {
+		Color red = Memory.getPlayer1Color();
+		Color blue = Memory.getPlayer2Color();
+		return isRedFirst ? blue : red;
 	}
 
 	public enum GameState {

@@ -229,9 +229,9 @@ public class GuiController implements GuiForServerInterface {
 				return String.format("<html><font color=%s>%s</font>" +
 						"<font color=black> - </font>" +
 						"<font color=%s>%s</font></html>",
-						GlobalGuiSettings.getHtmlColor(Memory.getPlayer1Color()),
+						GlobalGuiSettings.getHtmlColor(input.player1Color()),
 						input.first.guiName,
-						GlobalGuiSettings.getHtmlColor(Memory.getPlayer2Color()),
+						GlobalGuiSettings.getHtmlColor(input.player2Color()),
 						input.second.guiName
 						);
 			}
