@@ -20,6 +20,7 @@ import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 import ru.narod.vn91.pointsop.data.Dot;
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
@@ -377,7 +378,7 @@ public class ServerPointsxt
 			String kickerHostname,
 			String recipientNick,
 			String reason) {
-		userDisconnected_PointsxtStyle(channel, recipientNick, reason);
+		userDisconnected_PointsxtStyle(channel, recipientNick, reason.replaceAll(pointsxtTail_RegExp, ""));
 	}
 
 	@Override
@@ -996,7 +997,12 @@ public class ServerPointsxt
 			if (moveResult != MoveResult.ERROR) {
 				myGame.moveList.add(new SimpleMove(x, y, isRed));
 
-				gui.makedMove(this, room, silent, x, y, isRed, !isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue());
+				gui.makedMove(this, room, silent, x, y, isRed, !isRed
+//					, !isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue()
+					);
+				gui.timeUpdate(this, room, new TimeLeft(
+					myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue(),
+					!isRed, isRed));
 				boolean iHaveMoved = ! myGame.isMyMoveNow();
 				if (iHaveMoved) {
 					myGame.lastTimeoutThread = null;
@@ -1038,7 +1044,12 @@ public class ServerPointsxt
 				}
 			}
 		} else {
-			gui.makedMove(this, room, silent, x, y, isRed, !isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue());
+			gui.makedMove(this, room, silent, x, y, isRed, !isRed
+//				, !isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue()
+				);
+			gui.timeUpdate(this, room, new TimeLeft(
+				myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue(),
+				!isRed, isRed));
 		}
 	}
 

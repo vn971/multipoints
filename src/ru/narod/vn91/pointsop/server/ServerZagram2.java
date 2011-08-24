@@ -16,6 +16,7 @@ import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.Wait;
 
+@SuppressWarnings("serial")
 public class ServerZagram2 implements ServerInterface {
 
 	String myNameOnServer;
@@ -378,15 +379,18 @@ public class ServerZagram2 implements ServerInterface {
 						}
 					} else if (message.startsWith("f")) {
 						try {
+//							System.out.println("message = " + message);
 							String timeLimitsAsString = message.split("_")[1];
+//							System.out.println("timeLimitsAsString = "
+//								+ timeLimitsAsString);
 							if (timeLimitsAsString.equals("")) {
-								gui.timeUpdate(server, currentRoom,
-									new TimeLeft(1800, 1800, false, false));
+//								gui.timeUpdate(server, currentRoom,
+//									new TimeLeft(0, 0, false, false));
 							} else {
 								Integer time1 = Integer.parseInt(
-									timeLimitsAsString.split(".")[0]);
+									timeLimitsAsString.split("\\.")[0]);
 								Integer time2 = Integer.parseInt(
-										timeLimitsAsString.split(".")[1]);
+										timeLimitsAsString.split("\\.")[1]);
 								gui.timeUpdate(server, currentRoom,
 									new TimeLeft(time1, time2, null, null));
 							}
@@ -492,15 +496,17 @@ public class ServerZagram2 implements ServerInterface {
 													message.startsWith("sr"),
 													stringToCoordinates(propertyValue).x,
 													stringToCoordinates(propertyValue).y,
-													propertyName.equals("W"),
-													propertyName.equals("B"),
-													999, 999);
+													propertyName.equals("W"), propertyName.equals("B")
+													//													999, 999
+													);
 										} else {
 										}
 									}
 								}
 							}
-							gui.makedMove(server, currentRoom, false, -1, -1, true, false, 0, 0);
+							gui.makedMove(server, currentRoom, false, -1, -1, true, false
+//								, 0, 0
+								);
 						} catch (FatalGameRoomError e) {
 							server.unsubscribeRoom(currentRoom);
 							gui.raw(server, "fatal error in game room: " +

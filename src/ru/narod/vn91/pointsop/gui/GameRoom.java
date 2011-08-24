@@ -32,8 +32,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	boolean isRedTurnNow = true;
 	Sgf.GameResult gameResult = Sgf.GameResult.UNFINISHED;
 	Paper paper;
-	TimerLabel timerLabel_Red;
-	TimerLabel timerLabel_Blue;
+	TimerLabel timerLabel1;
+	TimerLabel timerLabel2;
 	boolean timer1Freezed = true;
 	boolean timer2Freezed = true;
 	Object synchronizationMakeMoveWhereMouse = new Object();
@@ -86,9 +86,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int x,
 			int y,
 			boolean isRed,
-			boolean isNowRed,
-			int remainingTimeRed,
-			int remainingTimeBlue) {
+			boolean isNowRed
+//			int remainingTimeRed,
+//			int remainingTimeBlue
+			) {
 		int yInGui = gameOuterInfo.yAxisInverted ? gameOuterInfo.sizeY + 1 - y : y;
 		timedAction.value = null;
 		MoveResult moveResult = paper.makeMove(silent, x, yInGui, isRed);
@@ -122,15 +123,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 				showScoreAndCursor();
 				Sounds.playMakeMove(gameOuterInfo.amIPlaying());
-				timerLabel_Red.setRemainingTime(remainingTimeRed, isNowRed);
-				timerLabel_Blue.setRemainingTime(remainingTimeBlue, !isNowRed);
 
 				// make move to current mouse position
-//				System.out.println("maked move. #" + moveList.size());
 				if (isOnlineGame()
 						&& Memory.isDebug() == true
 						&& gameOuterInfo.amIPlaying() == true
-						&& isNowRed == gameOuterInfo.amIRed()) {
+						&& isRed != gameOuterInfo.amIRed()) {
 //					final int moveListSize = moveList.size();
 					timedAction.value = new TimedAction() {
 
@@ -143,31 +141,29 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						public void run() {
 //							if (paper.getEngine().getDotType(mousePosX, mousePosY).isEmpty()
 //									&&moveListSize == moveList.size()) {
-////								System.out.println("moveListSize = " + moveListSize);
-////								System.out.println("moveList.size() = " + moveList.size());
 //								gameOuterInfo.server.makeMove(gameOuterInfo.id, mousePosX, mousePosY);
 //							}
 						}
 
 					};
-					int secondsRemaining = gameOuterInfo.amIRed() ? remainingTimeRed : remainingTimeBlue;
-					timedAction.value.executeWhen(new Date().getTime()
-							+ secondsRemaining * 1000L - 200);
+//					int secondsRemaining = gameOuterInfo.amIRed() ? remainingTimeRed : remainingTimeBlue;
+//					timedAction.value.executeWhen(new Date().getTime()
+//							+ secondsRemaining * 1000L - 200);
 				}
 			}
 		}
 	}
 
 	public void updateTime(TimeLeft timeLeft) {
-		if (timeLeft.countsDown1!=null) {
+		System.out.println("GameRoom.updateTime()");
+		if (timeLeft.countsDown1 != null) {
 			this.timer1Freezed = !timeLeft.countsDown1;
 		}
-		if (timeLeft.countsDown2!=null) {
+		if (timeLeft.countsDown2 != null) {
 			this.timer2Freezed = !timeLeft.countsDown2;
 		}
-		System.out.println("timeLeft = " + timeLeft);
-		timerLabel_Red.setRemainingTime(timeLeft.timeLeft1, timer1Freezed);
-		timerLabel_Blue.setRemainingTime(timeLeft.timeLeft2, timer2Freezed);
+		timerLabel1.setRemainingTime(timeLeft.timeLeft1, timer1Freezed);
+		timerLabel2.setRemainingTime(timeLeft.timeLeft2, timer2Freezed);
 	}
 
 	public void stopGame(boolean isRedPlayer) {
@@ -230,7 +226,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			if (isOnlineGame()) {
 				gameOuterInfo.server.makeMove(gameOuterInfo.id, x, y);
 			} else {
-				makeMove(false, x, y, isRedTurnNow, !isRedTurnNow, 1800, 1800);
+				makeMove(false, x, y, isRedTurnNow, !isRedTurnNow);
 				isRedTurnNow = !isRedTurnNow;
 			}
 		}
@@ -293,8 +289,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			}
 		};
 		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY);
-		timerLabel_Red = new TimerLabel();
-		timerLabel_Blue = new TimerLabel();
+		timerLabel1 = new TimerLabel();
+		timerLabel2 = new TimerLabel();
 
 		initComponents();
 		jPanel_Tree.setVisible(false);
@@ -339,9 +335,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     jButton_Stop = new javax.swing.JButton();
     jButton_EndGame = new javax.swing.JButton();
     jPanel2 = new javax.swing.JPanel();
-    jLabel1 = timerLabel_Red;
+    jLabel_Time2 = timerLabel2;
     jButton1 = new javax.swing.JButton();
-    jLabel2 = timerLabel_Blue;
+    jLabel_Time1 = timerLabel1;
     jPanel_Tree = new javax.swing.JPanel();
 
     jMenuItem_SaveGame.setText("jMenuItem1");
@@ -416,8 +412,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
     jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+2f));
-    jLabel1.setText("00:00");
+    jLabel_Time2.setFont(jLabel_Time2.getFont().deriveFont(jLabel_Time2.getFont().getSize()+2f));
+    jLabel_Time2.setText("00:00");
 
     jButton1.setText("<Время>");
     jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -426,26 +422,26 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
       }
     });
 
-    jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+2f));
-    jLabel2.setText("00:00");
+    jLabel_Time1.setFont(jLabel_Time1.getFont().deriveFont(jLabel_Time1.getFont().getSize()+2f));
+    jLabel_Time1.setText("00:00");
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel2Layout.createSequentialGroup()
-        .addComponent(jLabel2)
+        .addComponent(jLabel_Time1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jButton1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel1))
+        .addComponent(jLabel_Time2))
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+        .addComponent(jLabel_Time1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         .addComponent(jButton1)
-        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+        .addComponent(jLabel_Time2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -528,7 +524,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
 
 	private void jToggleButton_ShowTreeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeStateChanged
-//		System.out.println(timerLabel);
 //		timerLabel.setRemainingTime(5,false);
 		if (jToggleButton_ShowTree.isSelected()) {
 			jToggleButton_ShowTree.setText("v");
@@ -581,9 +576,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
   private javax.swing.JButton jButton_EndGame;
   private javax.swing.JButton jButton_Pass;
   private javax.swing.JButton jButton_Stop;
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel_MouseCoords;
+  private javax.swing.JLabel jLabel_Time1;
+  private javax.swing.JLabel jLabel_Time2;
   private javax.swing.JMenuItem jMenuItem_SaveGame;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;

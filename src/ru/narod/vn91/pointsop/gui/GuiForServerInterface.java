@@ -118,9 +118,10 @@ public interface GuiForServerInterface {
 			boolean silent,
 			int x,
 			int y,
-			boolean wasRed,
-			boolean nowPlays,
-			int timeLeftRed, int timeLeftBlue);
+			boolean isRed,
+			boolean nowPlays
+//			int timeLeftRed, int timeLeftBlue
+			);
 
 	public abstract void gameStop(
 			ServerInterface server,

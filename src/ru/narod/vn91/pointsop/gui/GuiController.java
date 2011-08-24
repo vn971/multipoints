@@ -431,14 +431,27 @@ public class GuiController implements GuiForServerInterface {
 //	roomInterfaces.remove(new ServerRoom(room, server));
 //}
 
-  @Override
-  public void gameInviteReceived(
-      ServerInterface server,
-      String room,
-      String possibleOpponent) {
-    Sounds.playAlarmSignal();
-    server.acceptOpponent(room, possibleOpponent);
-  }
+	@Override
+	public void gameInviteReceived(
+			ServerInterface server,
+			String room,
+			String possibleOpponent) {
+		Sounds.playAlarmSignal();
+		server.acceptOpponent(room, possibleOpponent);
+	}
+
+@Override
+public void makedMove(ServerInterface server, String roomId, boolean silent,
+		int x, int y, boolean isRed, boolean nowPlays) {
+	GameRoom gameRoom = gameRooms.get(new ServerRoom(roomId, server));
+	if (gameRoom != null) {
+		gameRoom.makeMove(silent, x, y, isRed, nowPlays
+//				, nowPlays, timeLeftRed,
+//				timeLeftBlue
+		);
+		tabbedPane.makeBold(gameRoom);
+	}
+}
 
 	public synchronized void makedMove(
 			ServerInterface server,
@@ -449,12 +462,6 @@ public class GuiController implements GuiForServerInterface {
 			boolean isRed,
 			boolean nowPlays,
 			int timeLeftRed, int timeLeftBlue) {
-		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
-		if (gameRoom != null) {
-			gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed,
-					timeLeftBlue);
-			tabbedPane.makeBold(gameRoom);
-		}
 	}
 
 	@Override
@@ -495,13 +502,13 @@ public class GuiController implements GuiForServerInterface {
 	@Override
 	public synchronized void raw(ServerInterface server, String info) {
 		String add = server.getServerName() + ": " + info + "\n";
-//		if (Memory.isDebug() == true) {
-//			System.out.print(add);
-//		} else {
+		if (Memory.isDebug() == true) {
+			System.out.print(add);
+		} else {
 			this.privateMessageReceived(server, server.getServerName(), info);
+		}
 //			String oldText = serverOutput.getText();
 //			serverOutput.setText(oldText + add);
-//		}
 	}
 
 	@Override
