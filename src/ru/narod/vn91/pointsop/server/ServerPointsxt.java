@@ -1099,6 +1099,11 @@ public class ServerPointsxt
 		return defaultServer_Visible;
 	}
 
+	@Override
+	public int getMaximumMessageLength() {
+		return 340;
+	}
+
 	public String int2SpectrGameCharacter(int i) {
 		return Character.toString((char) (i + '0'));
 	}
@@ -1156,7 +1161,7 @@ public class ServerPointsxt
 
 	public void sendSpectr(String targetIrcNick) {
 		String mainSpectrData = getSpectr_MainPart();
-		final int blockStep = 260;
+		final int blockStep = getMaximumMessageLength();
 		int blockStart = 0;
 		while (blockStart < mainSpectrData.length()) {
 			int blockEnd = Math.min(mainSpectrData.length(), blockStart + blockStep);

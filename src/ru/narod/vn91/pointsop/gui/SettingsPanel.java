@@ -11,6 +11,7 @@ import ru.narod.vn91.pointsop.utils.CustomColors;
 import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.Memory.ClickAudibility;
 
+@SuppressWarnings("serial")
 public class SettingsPanel extends javax.swing.JPanel {
 
 	private boolean initPhase = true;
@@ -290,7 +291,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
 				Memory.getPlayer1Color());
 		if (c != null) {
-			Memory.setPlayer1Color(c);
+			Memory.setPlayer1Color(c, true);
 			setColors();
 		}
 	}//GEN-LAST:event_jButton_P1ColorActionPerformed
@@ -299,7 +300,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 		Color c = JColorChooser.showDialog(null, "цвет второго игрока",
 				Memory.getPlayer2Color());
 		if (c != null) {
-			Memory.setPlayer2Color(c);
+			Memory.setPlayer2Color(c, true);
 			setColors();
 		}
 	}//GEN-LAST:event_jButton_P2ColorActionPerformed
@@ -308,7 +309,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
 				Memory.getBackgroundColor());
 		if (c != null) {
-			Memory.setBackgroundColor(c);
+			Memory.setBackgroundColor(c, true);
 			setColors();
 		}
 

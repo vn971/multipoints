@@ -7,11 +7,15 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.undo.CannotRedoException;
@@ -22,6 +26,7 @@ import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.Memory;
 
+@SuppressWarnings("serial")
 public class RoomPart_Chat extends javax.swing.JPanel {
 
 	String userFirst, userSecond;
@@ -132,6 +137,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	/** Creates new form RoomPart_Chat */
 	public RoomPart_Chat() {
 		initComponents();
+		jTextField_Chat.setText("test");
 		jMenuItem_FontIncrease.setVisible(false);
 
 		jButton_ClearChat.setVisible(false);
@@ -139,59 +145,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		jToggleButton_ShowJoinLeave.setVisible(false);
 		jCheckBoxMenuItem_ShowUserJoin.setSelected(false);
 
-		{
-			final UndoManager undo = new UndoManager();
-			Document doc = jTextField_Chat.getDocument();
-
-			// Listen for undo and redo events
-			doc.addUndoableEditListener(new UndoableEditListener() {
-
-				public void undoableEditHappened(UndoableEditEvent evt) {
-					undo.addEdit(evt.getEdit());
-				}
-			});
-
-			// Create an undo action and add it to the text component
-			jTextField_Chat.getActionMap().put("Undo",
-					new AbstractAction("Undo") {
-
-						public void actionPerformed(ActionEvent evt) {
-							try {
-								if (undo.canUndo()) {
-									undo.undo();
-								}
-							} catch (CannotUndoException ignored) {
-							}
-						}
-					});
-
-			// Bind the undo action to ctl-Z
-			jTextField_Chat.getInputMap().put(
-					//					KeyStroke.getKeyStroke("control Z"),
-					KeyStroke.getKeyStroke(KeyEvent.VK_Z,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
-					"Undo");
-
-			// Create a redo action and add it to the text component
-			jTextField_Chat.getActionMap().put("Redo",
-					new AbstractAction("Redo") {
-
-						public void actionPerformed(ActionEvent evt) {
-							try {
-								if (undo.canRedo()) {
-									undo.redo();
-								}
-							} catch (CannotRedoException ignored) {
-							}
-						}
-					});
-
-			// Bind the redo action to ctl-Y
-			jTextField_Chat.getInputMap().put(
-					KeyStroke.getKeyStroke(KeyEvent.VK_Y,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
-					"Redo");
-		}
 	}
 
 	public void initChat(
@@ -201,6 +154,11 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		this.userFirst = userFirst;
 		this.userSecond = userSecond;
 		this.roomInterface = roomInterface;
+
+		Document doc = new JTextField_UndoableLimited(
+			jTextField_Chat,
+			roomInterface.getServer().getMaximumMessageLength());
+		jTextField_Chat.setDocument(doc);
 	}
 
 	/** This method is called from within the constructor to

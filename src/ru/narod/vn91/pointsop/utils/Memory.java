@@ -1,9 +1,14 @@
 package ru.narod.vn91.pointsop.utils;
 
 import java.awt.Color;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.prefs.Preferences;
 
 public class Memory {
+
+	static private Set<Functor<Void, Void>> colorChangeListenerList =
+			new LinkedHashSet<Functor<Void, Void>>();
 
 	static public int newestVersion = 4;
 	static Preferences memory = Preferences.userRoot().node(
@@ -170,28 +175,56 @@ public class Memory {
 		return new Color(r, g, b);
 	}
 
-	public static void setPlayer1Color(Color c) {
+	public static void setPlayer1Color(Color c, boolean notifyAll) {
 		memory.putInt("1Red", c.getRed());
 		memory.putInt("1Green", c.getGreen());
 		memory.putInt("1Blue", c.getBlue());
+		if (notifyAll) {
+			notifyColorChange();
+		}
 	}
 
-	public static void setPlayer2Color(Color c) {
+	public static void setPlayer2Color(Color c, boolean notifyAll) {
 		memory.putInt("2Red", c.getRed());
 		memory.putInt("2Green", c.getGreen());
 		memory.putInt("2Blue", c.getBlue());
+		if (notifyAll) {
+			notifyColorChange();
+		}
 	}
 
-	public static void setBackgroundColor(Color c) {
+	public static void setBackgroundColor(Color c, boolean notifyAll) {
 		memory.putInt("BRed", c.getRed());
 		memory.putInt("BGreen", c.getGreen());
 		memory.putInt("BBlue", c.getBlue());
+		if (notifyAll) {
+			notifyColorChange();
+		}
 	}
 
 	public static void resetColors() {
-		setPlayer1Color(defaultColor1);
-		setPlayer2Color(defaultColor2);
-		setBackgroundColor(defaultColorBackground);
+		setPlayer1Color(defaultColor1, false);
+		setPlayer2Color(defaultColor2, false);
+		setBackgroundColor(defaultColorBackground, false);
+		notifyColorChange();
+	}
+
+	private static void notifyColorChange() {
+		for (Functor<Void, Void> listener : colorChangeListenerList) {
+			try {
+				listener.call(null);
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public static void AddColorsChangeListener(Functor<Void, Void> listener) {
+		colorChangeListenerList.add(listener);
+	}
+
+	public static void main(String[] args) {
+//		setZagramTest(false);
+//		setDebug(false);
 	}
 
 	public enum ClickAudibility {
@@ -207,8 +240,4 @@ public class Memory {
 		}
 	}
 
-	public static void main(String[] args) {
-//		setZagramTest(true);
-		setDebug(false);
-	}
 }

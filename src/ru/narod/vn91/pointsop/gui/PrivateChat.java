@@ -14,13 +14,9 @@ import javax.swing.text.StyledDocument;
 
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
-import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
-/**
- *
- * @author vasya
- */
+@SuppressWarnings("serial")
 public class PrivateChat extends javax.swing.JPanel {
 
 	final Player player;
@@ -174,6 +170,10 @@ public class PrivateChat extends javax.swing.JPanel {
 		jButton_StartNewGame.setVisible(false);
 		jPanel_Paper.setVisible(false);
 		jTextField_Chat.requestFocusInWindow();
+		jTextField_Chat.setDocument(
+				new JTextField_UndoableLimited(
+					jTextField_Chat,
+					player.server.getMaximumMessageLength()));
 	}
 
 	/** This method is called from within the constructor to

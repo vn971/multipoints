@@ -66,9 +66,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void disconnectServer() {
-		throw new UnsupportedOperationException();
-//		gui.unsubsribedGame(this, "");
-//		gui.serverClosed(this);
+		ai.dispose();
 	}
 
 	public void makeMove(String roomName,
@@ -78,32 +76,33 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	public void searchOpponent() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public void requestPlay(String gameRoomName) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public void acceptOpponent(String roomName,
 			String name) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	@Override
 	public void rejectOpponent(String roomName, String notWantedOpponent) {
+		gui.raw(this, "Not supported");
 	}
 
 	public void stopSearchingOpponent() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public void surrender(String roomName) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public void subscribeRoom(String name) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public void unsubscribeRoom(String name) {
@@ -114,12 +113,12 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	public void sendChat(String room,
 			String message) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public void sendPrivateMsg(String target,
 			String message) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		gui.raw(this, "Not supported");
 	}
 
 	public String getMyName() {
@@ -132,5 +131,10 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	public String getServerName() {
 		return "human vs. computer game";
+	}
+
+	@Override
+	public int getMaximumMessageLength() {
+		return 10;
 	}
 }

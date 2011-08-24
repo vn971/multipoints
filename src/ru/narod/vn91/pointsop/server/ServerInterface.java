@@ -36,5 +36,7 @@ public interface ServerInterface {
 	String getMainRoom();
 
 	String getServerName();
+
+	int getMaximumMessageLength();
 }
 

@@ -73,7 +73,7 @@ public class ServerZagram2 implements ServerInterface {
 				String authorization = getLinkContent(
 						"http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
 								secretId + "&opis=" +
-								getServerEncoded(myNameOnServer) + "&lang=ru");
+								getServerEncoded(myNameOnServer) + "&lang=en");
 				if (authorization.equals("")) {
 					gui.raw(ServerZagram2.this, "Авторизовался. Подключаюсь к основной комнате...");
 				} else {
@@ -111,6 +111,11 @@ public class ServerZagram2 implements ServerInterface {
 	@Override
 	public String getServerName() {
 		return "zagram.org";
+	}
+
+	@Override
+	public int getMaximumMessageLength() {
+		return 100;
 	}
 
 	@Override

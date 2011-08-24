@@ -208,7 +208,7 @@ public class GuiController implements GuiForServerInterface {
   @Override
   public synchronized void subscribedGame(
       ServerInterface server, String roomId) {
-    GameOuterInfo game = gamePool.get(server, roomId);
+    final GameOuterInfo game = gamePool.get(server, roomId);
     if (roomInterfaces.containsKey(new ServerRoom(game.id, server))) {
       return;
     }
@@ -224,19 +224,20 @@ public class GuiController implements GuiForServerInterface {
         containerRoom_Game
         );
 
-		final Functor<GameOuterInfo, String> game2html = new Functor<GameOuterInfo, String>() {
-			public String call(GameOuterInfo input) {
+		final Functor<Void, String> game2html = new Functor<Void, String>() {
+			@Override
+			public String call(Void input) {
 				return String.format("<html><font color=%s>%s</font>" +
-						"<font color=black> - </font>" +
-						"<font color=%s>%s</font></html>",
-						GlobalGuiSettings.getHtmlColor(input.player1Color()),
-						input.first.guiName,
-						GlobalGuiSettings.getHtmlColor(input.player2Color()),
-						input.second.guiName
-						);
+					"<font color=black> - </font>" +
+					"<font color=%s>%s</font></html>",
+					GlobalGuiSettings.getHtmlColor(game.player1Color()),
+					game.first.guiName,
+					GlobalGuiSettings.getHtmlColor(game.player2Color()),
+					game.second.guiName
+					);
 			}
 		};
-		tabbedPane.addTab(game2html.call(game), containerRoom_Game, true);
+		tabbedPane.addTab(game2html.call(null), containerRoom_Game, true);
 		tabbedPane.setCloseListener_FalseIfStopClosing(
 			containerRoom_Game,
 			new Functor<Void, Boolean>() {
@@ -246,17 +247,25 @@ public class GuiController implements GuiForServerInterface {
 				}
 			});
 		tabbedPane.setSelectedComponent(containerRoom_Game);
+		Memory.AddColorsChangeListener(new Functor<Void, Void>() {
+			@Override
+			public Void call(Void input) {
+				synchronized (GuiController.this) {
+					tabbedPane.updateTabText(containerRoom_Game, game2html.call(null));
+				}
+				return null;
+			}
+		});
 		game.addChangeListener(
-			new GameInfoListener() {
-
-				@Override
-				public void onChange(GameOuterInfo gameOuterInfo) {
-					synchronized (GuiController.this) {
-						tabbedPane.updateTabText(containerRoom_Game, game2html.call(gameOuterInfo));
+				new GameInfoListener() {
+					@Override
+					public void onChange(GameOuterInfo gameOuterInfo) {
+						synchronized (GuiController.this) {
+							tabbedPane.updateTabText(containerRoom_Game, game2html.call(null));
+						}
 					}
 				}
-			}
-		);
+				);
 
   };
 
@@ -474,25 +483,29 @@ public class GuiController implements GuiForServerInterface {
 	@Override
 	public synchronized void raw(ServerInterface server, String info) {
 		String add = server.getServerName() + ": " + info + "\n";
-		if (Memory.isDebug() == true) {
-			System.out.print(add);
-		} else {
+//		if (Memory.isDebug() == true) {
+//			System.out.print(add);
+//		} else {
 			this.privateMessageReceived(server, server.getServerName(), info);
 //			String oldText = serverOutput.getText();
 //			serverOutput.setText(oldText + add);
-		}
+//		}
 	}
 
-  @Override
-  public void rawError(ServerInterface server, String info) {
-    this.raw(server, info);
-    JOptionPane.showMessageDialog(
-        null,
-        info,
-        "Error: " + info,
-        JOptionPane.ERROR_MESSAGE
-        );
-  }
+	@Override
+	public void rawError(ServerInterface server, final String info) {
+		this.raw(server, info);
+		new Thread() {
+			public void run() {
+				JOptionPane.showMessageDialog(
+					null,
+					info,
+					"Error: " + info,
+					JOptionPane.ERROR_MESSAGE
+				);
+			};
+		}.start();
+	}
 
   public synchronized void activateGameRoom(
       ServerInterface server,
