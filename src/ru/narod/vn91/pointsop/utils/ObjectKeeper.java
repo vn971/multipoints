@@ -5,5 +5,12 @@ package ru.narod.vn91.pointsop.utils;
  */
 public class ObjectKeeper<T> {
 
-	public volatile T o;
+	public volatile T value;
+
+	public ObjectKeeper(T o) {
+		this.value = o;
+	}
+
+	public ObjectKeeper() {
+	}
 }

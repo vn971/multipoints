@@ -75,4 +75,11 @@ public class Player {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return (guiName != null && guiName.equals("") == false)
+			? guiName
+			: "id:" + id;
+	}
+
 }

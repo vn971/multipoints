@@ -2,6 +2,7 @@ package ru.narod.vn91.pointsop.gui;
 
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.Sgf;
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
@@ -33,6 +34,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	Paper paper;
 	TimerLabel timerLabel_Red;
 	TimerLabel timerLabel_Blue;
+	boolean timer1Freezed = true;
+	boolean timer2Freezed = true;
 	Object synchronizationMakeMoveWhereMouse = new Object();
 	final ObjectKeeper<TimedAction> timedAction = new ObjectKeeper<TimedAction>();
 //	long timeLastTurnHappend;
@@ -87,7 +90,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int remainingTimeRed,
 			int remainingTimeBlue) {
 		int yInGui = gameOuterInfo.yAxisInverted ? gameOuterInfo.sizeY + 1 - y : y;
-		timedAction.o = null;
+		timedAction.value = null;
 		MoveResult moveResult = paper.makeMove(silent, x, yInGui, isRed);
 		if (moveResult != MoveResult.ERROR) {
 			MoveInfoAbstract moveInfoAbstract = new MoveInfoAbstract();
@@ -129,11 +132,11 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						&& gameOuterInfo.amIPlaying() == true
 						&& isNowRed == gameOuterInfo.amIRed()) {
 //					final int moveListSize = moveList.size();
-					timedAction.o = new TimedAction() {
+					timedAction.value = new TimedAction() {
 
 						@Override
 						public boolean isAlive() {
-							return timedAction.o == this;
+							return timedAction.value == this;
 						}
 
 						@Override
@@ -148,11 +151,23 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 					};
 					int secondsRemaining = gameOuterInfo.amIRed() ? remainingTimeRed : remainingTimeBlue;
-					timedAction.o.executeWhen(new Date().getTime()
+					timedAction.value.executeWhen(new Date().getTime()
 							+ secondsRemaining * 1000L - 200);
 				}
 			}
 		}
+	}
+
+	public void updateTime(TimeLeft timeLeft) {
+		if (timeLeft.countsDown1!=null) {
+			this.timer1Freezed = !timeLeft.countsDown1;
+		}
+		if (timeLeft.countsDown2!=null) {
+			this.timer2Freezed = !timeLeft.countsDown2;
+		}
+		System.out.println("timeLeft = " + timeLeft);
+		timerLabel_Red.setRemainingTime(timeLeft.timeLeft1, timer1Freezed);
+		timerLabel_Blue.setRemainingTime(timeLeft.timeLeft2, timer2Freezed);
 	}
 
 	public void stopGame(boolean isRedPlayer) {

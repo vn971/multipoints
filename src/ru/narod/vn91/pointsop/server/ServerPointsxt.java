@@ -41,7 +41,7 @@ public class ServerPointsxt
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
-	String pointsxtVersion = "167";
+	String pointsxtVersion = "171";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
 	static String commandIWantJoinGame = "I want to join this game.";

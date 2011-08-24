@@ -1,8 +1,11 @@
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Image;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.narod.vn91.pointsop.data.Player;
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -129,6 +132,12 @@ public interface GuiForServerInterface {
 			String room,
 			boolean isRedLooser,
 			boolean wantToSave);
+
+	public abstract void timeUpdate(
+			ServerInterface server,
+			String room,
+			TimeLeft t
+	);
 
 	public abstract void raw(
 			ServerInterface server,

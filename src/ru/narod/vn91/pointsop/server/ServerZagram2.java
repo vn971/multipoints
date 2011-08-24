@@ -11,6 +11,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.Wait;
@@ -375,6 +376,22 @@ public class ServerZagram2 implements ServerInterface {
 									"unknown game description: "
 											+ message.substring(1));
 						}
+					} else if (message.startsWith("f")) {
+						try {
+							String timeLimitsAsString = message.split("_")[1];
+							if (timeLimitsAsString.equals("")) {
+								gui.timeUpdate(server, currentRoom,
+									new TimeLeft(1800, 1800, false, false));
+							} else {
+								Integer time1 = Integer.parseInt(
+									timeLimitsAsString.split(".")[0]);
+								Integer time2 = Integer.parseInt(
+										timeLimitsAsString.split(".")[1]);
+								gui.timeUpdate(server, currentRoom,
+									new TimeLeft(time1, time2, null, null));
+							}
+						} catch (Exception e) {
+						}
 					} else if (message.startsWith("ga")||message.startsWith("gr")) {
 						// player joined
 						String[] dotSplitted = message.substring("ga".length())
@@ -387,12 +404,14 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("gd")) {
 						// player joined
 						String[] dotSplitted = message.substring("gd".length())
-								.split("\\.");
+						.split("\\.");
 						for (String gameId : dotSplitted) {
 							if (gameId.length() != 0) {
 								gui.gameRowDestroyed(server, gameId);
 							}
 						}
+					} else if (message.startsWith("h")) {
+						// player joined
 					} else if (message.startsWith("i")) {
 						// player left
 						String[] dotSplitted = message.substring("i".length()).split("\\.");
@@ -445,20 +464,21 @@ public class ServerZagram2 implements ServerInterface {
 						} else {
 							gui.subscribedGame(server, currentRoom);
 						}
-					} else if (message.matches("sa;.*|sr\\(;.*")) {
+					} else if (message.matches("sa.*|sr.*")) {
+						message = message.replaceAll("\\(|\\)", "");
 						class FatalGameRoomError extends Exception {
 							public FatalGameRoomError(String s) {
 								super(s);
 							}
 						}
 						try {
-							String usefulPart = message.replaceFirst("sa;|sr\\(;", "");
+							String usefulPart = message.replaceFirst("sa;|sr;", "");
 							String[] semiSplitted = usefulPart.split(";");
 							for (String sgfNode : semiSplitted) {
 								// ([A-Z]{1,2}\[([^\]|\\\\)*?\])*
 								// ([A-Z]{1,2}\[.*?\])*
 								if (sgfNode.matches("([A-Z]{1,2}\\[.*?\\])*") == false) {
-									gui.raw(server, "unknown sgf node structure: " + sgfNode);
+									gui.raw(server, "unknown message structure: " + message);
 								} else {
 									String[] sgfPropertyList = sgfNode.split("\\]");
 									for (String sgfProperty : sgfPropertyList) {
@@ -467,8 +487,6 @@ public class ServerZagram2 implements ServerInterface {
 										if (propertyName.matches("U(B|W)")) {
 											throw new FatalGameRoomError("can't handle 'Undo black move'.");
 										} else if (propertyName.matches("B|W")) {
-												System.out.println("propertyValue = "
-													+ propertyValue);
 												gui.makedMove(
 													server, currentRoom,
 													message.startsWith("sr"),
@@ -507,18 +525,13 @@ public class ServerZagram2 implements ServerInterface {
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", "");
 						String gameDescription = usefulPart.replaceFirst("[^.]*\\.", "");
-						gui
-								.privateMessageReceived(
-										server,
-										"server",
-										"Игрок '"
-												+ sender
-												+ "' вызвал(а) тебя на игру: "
-												+ gameDescription
-												+
-												// ". The invitation is rejected because MultiPoints couldn't handle the game."
-												". MultiPoints пока не умеет обрабатывать это сообщение -- отослан отказ от игры."
-								);
+						gui.raw(server, String.format(
+							"Игрок '%s' вызвал(а) тебя на игру: %s. " +
+								"MultiPoints пока не умеет обрабатывать это сообщение -- " +
+								"отослан отказ от игры.",
+							sender,
+							gameDescription
+								));
 						server.rejectOpponent(null, sender);
 					}
 				}

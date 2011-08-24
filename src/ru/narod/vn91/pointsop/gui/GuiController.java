@@ -17,6 +17,7 @@ import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.GamePool;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerPool;
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
@@ -453,6 +454,17 @@ public class GuiController implements GuiForServerInterface {
 			gameRoom.makeMove(silent, x, y, isRed, nowPlays, timeLeftRed,
 					timeLeftBlue);
 			tabbedPane.makeBold(gameRoom);
+		}
+	}
+
+	@Override
+	public void timeUpdate(
+			ServerInterface server,
+			String room,
+			TimeLeft t) {
+		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
+		if (gameRoom != null) {
+			gameRoom.updateTime(t);
 		}
 	}
 

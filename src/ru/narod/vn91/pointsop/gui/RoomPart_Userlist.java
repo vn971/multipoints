@@ -8,9 +8,10 @@ import javax.swing.table.*;
 
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerChangeListener;
+import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 
-public class RoomPart_Userlist
-		extends javax.swing.JPanel {
+@SuppressWarnings("serial")
+public class RoomPart_Userlist extends javax.swing.JPanel {
 
 	RoomInterface roomInterface;
 	GuiController centralGuiController;
@@ -37,7 +38,8 @@ public class RoomPart_Userlist
 		return row;
 	}
 
-	synchronized void userJoined(Player playerNew) {
+
+	synchronized void userJoined(Player playerNew, boolean addListener) {
 		for (Player player2 : playerList) {
 			if (playerNew == player2) {
 				return;
@@ -65,28 +67,48 @@ public class RoomPart_Userlist
 		}
 		jTable_UserList.clearSelection(); // java seems to be buggy
 
-		playerNew.addChangeListener(new PlayerChangeListener() {
+		final ObjectKeeper<Integer> playerRatingBeforeChange =
+			new ObjectKeeper<Integer>(playerNew.rating);
 
-			@Override
-			public void onChange(Player player) {
-				int position = 0;
-				for (Player player2 : playerList) {
-					if (player == player2) {
+//		final int playerRatingBeforeChange = playerNew.rating;
 
-						Object[] row = constructRow(player);
-						int columnNumber = 0;
-						for (Object object : row) {
-							tableModel.setValueAt(object, position, columnNumber);
-							columnNumber+=1;
-						}
-
-						break;
+		if (addListener) {
+			playerNew.addChangeListener(new PlayerChangeListener() {
+				@Override
+				public void onChange(Player player) {
+					if (player.rating!= playerRatingBeforeChange.value) {
+						System.out.println("hard user rejoin executed: " +
+							player + " " +
+							playerRatingBeforeChange.value +
+							"->" + player.rating);
+						playerRatingBeforeChange.value = player.rating;
+						userLeave(player);
+						userJoined(player, false);
 					} else {
-						position+=1;
+						int position = 0;
+						for (Player player2 : playerList) {
+							if (player == player2) {
+
+								Object[] row = constructRow(player);
+								int columnNumber = 0;
+								for (Object object : row) {
+									tableModel.setValueAt(object, position, columnNumber);
+									columnNumber += 1;
+								}
+
+								break;
+							} else {
+								position += 1;
+							}
+						}
 					}
 				}
-			}
-		});
+			});
+		}
+	}
+
+	synchronized void userJoined(Player playerNew) {
+		userJoined(playerNew, true);
 	}
 
 	synchronized void userLeave(Player playerLeaving) {
