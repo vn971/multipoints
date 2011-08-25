@@ -67,17 +67,22 @@ public class GuiController implements GuiForServerInterface {
     }
   }
 
-  @Override
-  public void updateUserInfo(
-      ServerInterface server, String id,
-      String guiName, Image image,
-      Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
-      String status) {
-    Player player = playerPool.get(server, id);
-    Player updateInstance = new Player(server, id, guiName, rating, winCount,
-          lossCount, drawCount, image, status);
-    player.updateFrom(updateInstance);
-  }
+	@Override
+	public void updateUserInfo(
+			ServerInterface server, String id,
+			String guiName, Image image,
+			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
+			String status) {
+		Player player = playerPool.get(server, id);
+		int previousRating = player.rating;
+		Player updateInstance = new Player(server, id, guiName, rating, winCount,
+					lossCount, drawCount, image, status);
+		player.updateFrom(updateInstance);
+		if (previousRating != rating && previousRating != 0) {
+			this.serverNoticeReceived(server, server.getMainRoom(),
+				player.guiName + " " + previousRating + " -> " + rating);
+		}
+	}
 
   @Override
   public void updateGameInfo(
@@ -505,10 +510,10 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 		if (Memory.isDebug() == true) {
 			System.out.print(add);
 		} else {
-			this.privateMessageReceived(server, server.getServerName(), info);
+//			this.privateMessageReceived(server, server.getServerName(), info);
+			String oldText = serverOutput.getText();
+			serverOutput.setText(oldText + add);
 		}
-//			String oldText = serverOutput.getText();
-//			serverOutput.setText(oldText + add);
 	}
 
 	@Override

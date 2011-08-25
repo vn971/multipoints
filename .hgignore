@@ -1,6 +1,7 @@
 syntax: glob
 *.class
 *.jar
+*.svn/*
 bin/*
 dist/*
 build\nb-jws.ks

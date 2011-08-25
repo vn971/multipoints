@@ -308,24 +308,27 @@ public class ServerZagram2 implements ServerInterface {
 				String currentRoom = "";
 				for (String message : splitted) {
 					if (message.startsWith("m")) { // message numbers info
-						try {
-							String tail = message.substring(1);
-							String[] dotSplitted = tail.split("\\.");
-							String a1 = dotSplitted.length >= 1 ? dotSplitted[0] : "";
-							String a2 = dotSplitted.length >= 2 ? dotSplitted[1] : "";
-							String a3 = dotSplitted.length >= 3 ? dotSplitted[2] : "";
-							int i1 = Integer.parseInt(a1);
-							int i2 = Integer.parseInt(a2);
-							int i3 = Integer.parseInt(a3);
-							if (i1 > lastServerMessageNumber + 1) {
-								break;
-							}
-							lastServerMessageNumber = i2;
-							lastSentCommandNumber = i3;
-						} catch (Exception ignore) {
+					// try {
+						String tail = message.substring(1);
+						String[] dotSplitted = tail.split("\\.");
+						String a1 = dotSplitted.length >= 1 ? dotSplitted[0] : "";
+						String a2 = dotSplitted.length >= 2 ? dotSplitted[1] : "";
+						String a3 = dotSplitted.length >= 3 ? dotSplitted[2] : "";
+						int i1 = Integer.parseInt(a1);
+						int i2 = Integer.parseInt(a2);
+						int i3 = Integer.parseInt(a3);
+						if (i1 > lastServerMessageNumber + 1) {
+							break;
 						}
-					} else if (message.startsWith("ca") || message.startsWith("cr")) {
-						// new chat
+						lastServerMessageNumber = i2;
+						lastSentCommandNumber = i3;
+						// } catch (IndexOutOfBoundsException ignore) {
+						// } catch (NumberFormatException e) {
+						// }
+						// don't catch anything.
+						// If an exception would be thrown then we are completely
+						// unfamiliar with this server protocol.
+					} else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
 						String[] dotSplitted = message.substring("ca".length())
 								.split("\\.", 4);
 						try {
@@ -337,14 +340,11 @@ public class ServerZagram2 implements ServerInterface {
 							gui.chatReceived(server,
 									currentRoom, nick, chatMessage, time);
 						} catch (NumberFormatException e) {
-							gui.chatReceived(server, currentRoom, "server",
-									message.substring(2), null);
+							gui.raw(server, "unkown chat: "+message.substring(2));
 						} catch (ArrayIndexOutOfBoundsException e) {
-							gui.chatReceived(server, currentRoom, "server",
-									message.substring(2), null);
+							gui.raw(server, "unknown chat: "+message.substring(2));
 						}
-					} else if (message.startsWith("d")) {
-						// player left
+					} else if (message.startsWith("d")) { // game description
 						String[] dotSplitted = message.substring("d".length()).split("\\.");
 						try {
 							String roomId = dotSplitted[0];
@@ -377,15 +377,10 @@ public class ServerZagram2 implements ServerInterface {
 									"unknown game description: "
 											+ message.substring(1));
 						}
-					} else if (message.startsWith("f")) {
+					} else if (message.startsWith("f")) { // flags
 						try {
-//							System.out.println("message = " + message);
 							String timeLimitsAsString = message.split("_")[1];
-//							System.out.println("timeLimitsAsString = "
-//								+ timeLimitsAsString);
 							if (timeLimitsAsString.equals("")) {
-//								gui.timeUpdate(server, currentRoom,
-//									new TimeLeft(0, 0, false, false));
 							} else {
 								Integer time1 = Integer.parseInt(
 									timeLimitsAsString.split("\\.")[0]);
@@ -396,8 +391,7 @@ public class ServerZagram2 implements ServerInterface {
 							}
 						} catch (Exception e) {
 						}
-					} else if (message.startsWith("ga")||message.startsWith("gr")) {
-						// player joined
+					} else if (message.startsWith("ga") || message.startsWith("gr")) { // +game
 						String[] dotSplitted = message.substring("ga".length())
 						.split("\\.");
 						for (String gameId : dotSplitted) {
@@ -405,8 +399,7 @@ public class ServerZagram2 implements ServerInterface {
 								gui.gameRowCreated(server, currentRoom, gameId);
 							}
 						}
-					} else if (message.startsWith("gd")) {
-						// player joined
+					} else if (message.startsWith("gd")) { // - game
 						String[] dotSplitted = message.substring("gd".length())
 						.split("\\.");
 						for (String gameId : dotSplitted) {
@@ -414,10 +407,8 @@ public class ServerZagram2 implements ServerInterface {
 								gui.gameRowDestroyed(server, gameId);
 							}
 						}
-					} else if (message.startsWith("h")) {
-						// player joined
-					} else if (message.startsWith("i")) {
-						// player left
+					} else if (message.startsWith("h")) { // additional flags
+					} else if (message.startsWith("i")) { // player info
 						String[] dotSplitted = message.substring("i".length()).split("\\.");
 						String player = null, status = null, language = null, myStatus = null;
 						Integer rating = null, winCount = null, lossCount = null, drawCount = null;
@@ -438,8 +429,7 @@ public class ServerZagram2 implements ServerInterface {
 						}
 						gui.updateUserInfo(server, player, player, null, rating,
 								winCount, lossCount, drawCount, myStatus);
-					} else if (message.startsWith("pa") || message.startsWith("pr")) {
-						// player joined
+					} else if (message.startsWith("pa") || message.startsWith("pr")) { // +player
 						String[] dotSplitted = message.substring("pa".length())
 								.split("\\.");
 						for (String player : dotSplitted) {
@@ -448,8 +438,7 @@ public class ServerZagram2 implements ServerInterface {
 										server, currentRoom, player, false);
 							}
 						}
-					} else if (message.startsWith("pd")) {
-						// player left
+					} else if (message.startsWith("pd")) { // - player
 						String[] dotSplitted = message.substring("pd".length())
 								.split("\\.");
 						for (String player : dotSplitted) {
@@ -457,7 +446,7 @@ public class ServerZagram2 implements ServerInterface {
 								gui.userLeftRoom(server, currentRoom, player, "");
 							}
 						}
-					} else if (message.startsWith("q")) {
+					} else if (message.startsWith("q")) { // current room
 						currentRoom = message.substring(1);
 						if (currentRoom.equals("0")) {
 							gui.subscribedLangRoom(
@@ -468,7 +457,7 @@ public class ServerZagram2 implements ServerInterface {
 						} else {
 							gui.subscribedGame(server, currentRoom);
 						}
-					} else if (message.matches("sa.*|sr.*")) {
+					} else if (message.matches("sa.*|sr.*")) { // game actions
 						message = message.replaceAll("\\(|\\)", "");
 						class FatalGameRoomError extends Exception {
 							public FatalGameRoomError(String s) {
@@ -527,7 +516,7 @@ public class ServerZagram2 implements ServerInterface {
 									" Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(",
 							null
 								);
-					} else if (message.startsWith("vg")) {
+					} else if (message.startsWith("vg")) { // game invite
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", "");
 						String gameDescription = usefulPart.replaceFirst("[^.]*\\.", "");
@@ -541,6 +530,8 @@ public class ServerZagram2 implements ServerInterface {
 						server.rejectOpponent(null, sender);
 					}
 				}
+			} else if (text.equals("")) {
+				// we got an empty result. Well, let's treat that as normal.
 			} else {
 				gui.serverClosed(server);
 				isDisposed = true;

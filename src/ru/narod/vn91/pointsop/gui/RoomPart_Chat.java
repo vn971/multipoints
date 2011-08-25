@@ -1,26 +1,14 @@
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Date;
-import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
-import javax.swing.text.PlainDocument;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoManager;
 
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.sounds.Sounds;
@@ -105,7 +93,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 					GlobalGuiSettings.serverNotice);
 			document.insertString(document.getLength(), " " + message
 					+ "\n", GlobalGuiSettings.serverNotice);
-		} catch (Exception ignored) {
+		} catch (BadLocationException ignored) {
 		}
 		scrollDown();
 	}
@@ -143,7 +131,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		jButton_ClearChat.setVisible(false);
 		jToggleButton_ScrollDown.setVisible(false);
 		jToggleButton_ShowJoinLeave.setVisible(false);
-		jCheckBoxMenuItem_ShowUserJoin.setSelected(false);
+		jCheckBoxMenuItem_ShowUserJoin.setSelected(true);
 
 	}
 

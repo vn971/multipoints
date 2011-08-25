@@ -42,7 +42,7 @@ public class ServerPointsxt
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
-	String pointsxtVersion = "171";
+	String pointsxtVersion = "173";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
 	static String commandIWantJoinGame = "I want to join this game.";
@@ -423,15 +423,15 @@ public class ServerPointsxt
 //		}
 		userConnected_PointsxtStyle(defaultChannel, newNick, /*silent*/ true);
 
-		int rankOld = getPlayerRank(oldNick);
-		int rankNew = getPlayerRank(newNick);
-		if ((rankNew != rankOld) && (rankOld != 0) && (rankNew != 0)) {
-			gui.serverNoticeReceived(
-					this, defaultChannel,
-					"" + nicknameManager.irc2id(newNick)
-							+ " " + rankOld + " -> " + rankNew
-			);
-		}
+//		int rankOld = getPlayerRank(oldNick);
+//		int rankNew = getPlayerRank(newNick);
+//		if ((rankNew != rankOld) && (rankOld != 0) && (rankNew != 0)) {
+//			gui.serverNoticeReceived(
+//					this, defaultChannel,
+//					"" + nicknameManager.irc2id(newNick)
+//							+ " " + rankOld + " -> " + rankNew
+//			);
+//		}
 	}
 
 	@Override
