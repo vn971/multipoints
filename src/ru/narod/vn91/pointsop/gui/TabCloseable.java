@@ -19,15 +19,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import ru.narod.vn91.pointsop.utils.Functor;
+import ru.narod.vn91.pointsop.utils.Function;
 
 @SuppressWarnings("serial")
 public class TabCloseable extends JPanel {
 
 	final CloseButton closeButton;
 	final JLabel label;
-	Set<Functor<TabCloseable, Void>> closeListenerSet =
-			new LinkedHashSet<Functor<TabCloseable, Void>>();
+	Set<Function<TabCloseable, Void>> closeListenerSet =
+			new LinkedHashSet<Function<TabCloseable, Void>>();
 
 	public TabCloseable(String title, boolean isCloseable) {
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -61,7 +61,7 @@ public class TabCloseable extends JPanel {
 		return label.getText();
 	}
 
-	public void addCloseListener(Functor<TabCloseable, Void> closeListener) {
+	public void addCloseListener(Function<TabCloseable, Void> closeListener) {
 		closeListenerSet.add(closeListener);
 	}
 
@@ -89,7 +89,7 @@ public class TabCloseable extends JPanel {
 			super.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					for (Functor<TabCloseable, Void> closeListener : closeListenerSet) {
+					for (Function<TabCloseable, Void> closeListener : closeListenerSet) {
 						closeListener.call(TabCloseable.this);
 					}
 				}

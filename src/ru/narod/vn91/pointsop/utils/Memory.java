@@ -7,8 +7,8 @@ import java.util.prefs.Preferences;
 
 public class Memory {
 
-	static private Set<Functor<Void, Void>> colorChangeListenerList =
-			new LinkedHashSet<Functor<Void, Void>>();
+	static private Set<Function<Void, Void>> colorChangeListenerList =
+			new LinkedHashSet<Function<Void, Void>>();
 
 	static public int newestVersion = 4;
 	static Preferences memory = Preferences.userRoot().node(
@@ -210,7 +210,7 @@ public class Memory {
 	}
 
 	private static void notifyColorChange() {
-		for (Functor<Void, Void> listener : colorChangeListenerList) {
+		for (Function<Void, Void> listener : colorChangeListenerList) {
 			try {
 				listener.call(null);
 			} catch (Exception e) {
@@ -218,7 +218,7 @@ public class Memory {
 		}
 	}
 
-	public static void AddColorsChangeListener(Functor<Void, Void> listener) {
+	public static void AddColorsChangeListener(Function<Void, Void> listener) {
 		colorChangeListenerList.add(listener);
 	}
 

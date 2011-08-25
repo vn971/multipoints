@@ -132,7 +132,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		jToggleButton_ScrollDown.setVisible(false);
 		jToggleButton_ShowJoinLeave.setVisible(false);
 		jCheckBoxMenuItem_ShowUserJoin.setSelected(true);
-
 	}
 
 	public void initChat(

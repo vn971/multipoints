@@ -28,6 +28,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
+import ru.narod.vn91.pointsop.utils.Function;
 
 public class ServerPointsxt
 		extends PircBot
@@ -58,23 +59,44 @@ public class ServerPointsxt
 
 					@Override
 					public void run() {
-						try {
-							gui.raw(
-									ServerPointsxt.this,
-									"Cоединение с сервером " + defaultServ
-											+ ". Пожалуйста, подождите... (примерно 30 секунд)"
-							);
-							connect(defaultServ, 6667, ircPassword);
-							myNickOnServ = getNick();
-							ServerPointsxt.super.sendMessage(
-									"podbot",
-									"!opConnect0423"
-							);
-							//					subscribeRoom(defaultChannel);
-						} catch (NickAlreadyInUseException ignored) {
-						} catch (IOException ignored) {
-						} catch (IrcException ignored) {
+						Function<Integer, Boolean> connector = new Function<Integer, Boolean>() {
+							@Override
+							public Boolean call(Integer port) {
+								try {
+									gui.raw(
+											ServerPointsxt.this,
+											"Cоединение с сервером " + defaultServ
+													+ ":"+port+". Пожалуйста, подождите... (примерно 30 секунд)"
+									);
+									connect(defaultServ, port, ircPassword);
+									myNickOnServ = getNick();
+									ServerPointsxt.super.sendMessage(
+											"podbot",
+											"!opConnect0423"
+									);
+								} catch (NickAlreadyInUseException ignored) {
+									gui.raw(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
+								} catch (IrcException ignored) {
+								} catch (IOException ignored) {
+									return false;
+								}
+								return true;
+							}
+						};
+
+						// let's make the code unreadable, yeah!
+						// in reality, I just try out FP methods
+						// like "foreach" and others :)
+						for (int port : new int[] { 6667, 46175 }) {
+							if (connector.call(port) == true) {
+								break;
+							}
 						}
+						// the same written in a classical way:
+						//
+						// if (connector.call(6667) == false) {
+						// connector.call(46175);
+						// }
 					}
 				}
 		);

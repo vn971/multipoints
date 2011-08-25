@@ -22,7 +22,7 @@ import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
-import ru.narod.vn91.pointsop.utils.Functor;
+import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Memory;
 
 public class GuiController implements GuiForServerInterface {
@@ -230,7 +230,7 @@ public class GuiController implements GuiForServerInterface {
         containerRoom_Game
         );
 
-		final Functor<Void, String> game2html = new Functor<Void, String>() {
+		final Function<Void, String> game2html = new Function<Void, String>() {
 			@Override
 			public String call(Void input) {
 				return String.format("<html><font color=%s>%s</font>" +
@@ -246,14 +246,14 @@ public class GuiController implements GuiForServerInterface {
 		tabbedPane.addTab(game2html.call(null), containerRoom_Game, true);
 		tabbedPane.setCloseListener_FalseIfStopClosing(
 			containerRoom_Game,
-			new Functor<Void, Boolean>() {
+			new Function<Void, Boolean>() {
 				@Override
 				public Boolean call(Void input) {
 					return containerRoom_Game.userAsksClose();
 				}
 			});
 		tabbedPane.setSelectedComponent(containerRoom_Game);
-		Memory.AddColorsChangeListener(new Functor<Void, Void>() {
+		Memory.AddColorsChangeListener(new Function<Void, Void>() {
 			@Override
 			public Void call(Void input) {
 				synchronized (GuiController.this) {
@@ -594,8 +594,8 @@ class JTabbedPaneMod {
 
 	JTabbedPane tabbedPane = new JTabbedPane();
 
-	Map<Component, Functor<Void, Boolean>> closeListeners =
-			new HashMap<Component, Functor<Void, Boolean>>();
+	Map<Component, Function<Void, Boolean>> closeListeners =
+			new HashMap<Component, Function<Void, Boolean>>();
 
 	public Component getComponent() {
 		return Component.class.cast(tabbedPane);
@@ -607,10 +607,10 @@ class JTabbedPaneMod {
 			boolean isCloseable) {
 		tabbedPane.addTab("", component);
 		TabCloseable tabCloseable = new TabCloseable(title, isCloseable);
-		tabCloseable.addCloseListener(new Functor<TabCloseable, Void>() {
+		tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
 			@Override
 			public Void call(TabCloseable input) {
-				Functor<Void, Boolean> closeListener = closeListeners.get(component);
+				Function<Void, Boolean> closeListener = closeListeners.get(component);
 				if (closeListener != null &&
 						closeListener.call(null) == Boolean.FALSE) {
 					// do nothing. Calling listeners is enough.
@@ -625,7 +625,7 @@ class JTabbedPaneMod {
 
 	public void setCloseListener_FalseIfStopClosing(
 			Component component,
-			Functor<Void, Boolean> closeListener) {
+			Function<Void, Boolean> closeListener) {
 		closeListeners.put(component, closeListener);
 	}
 
