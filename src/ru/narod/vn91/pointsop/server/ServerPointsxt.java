@@ -87,7 +87,7 @@ public class ServerPointsxt
 						// let's make the code unreadable, yeah!
 						// in reality, I just try out FP methods
 						// like "foreach" and others :)
-						for (int port : new int[] { 6667, 46175 }) {
+						for (int port : new int[] { 6667, 5190, 46175 }) {
 							if (connector.call(port) == true) {
 								break;
 							}
@@ -95,7 +95,8 @@ public class ServerPointsxt
 						// the same written in a classical way:
 						//
 						// if (connector.call(6667) == false) {
-						// connector.call(46175);
+						//   if (connector.call(46175)==false) {
+						//     connector.call(5190);
 						// }
 					}
 				}
