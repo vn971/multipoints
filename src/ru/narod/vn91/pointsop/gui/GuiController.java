@@ -32,7 +32,6 @@ public class GuiController implements GuiForServerInterface {
   ServerInterface pointsxt_tochkiorg_server;
   ServerInterface pointsxt_ircworldru_server;
   ServerInterface pointsxt_vn91_server;
-  ServerInterface zagramTwo_server;
   ServerInterface zagram_server;
   ServerInterface pointsopServer;
   HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
@@ -46,26 +45,26 @@ public class GuiController implements GuiForServerInterface {
     this.tabbedPane = tabbedPane;
   }
 
-  public synchronized void serverClosed(ServerInterface server) {
-    if (server == pointsxt_ircworldru_server) {
-      pointsxt_ircworldru_server.disconnectServer();
-      pointsxt_ircworldru_server = null;
-    } else if (server == pointsxt_tochkiorg_server) {
-      pointsxt_tochkiorg_server.disconnectServer();
-      pointsxt_tochkiorg_server = null;
-    } else if (server == pointsopServer) {
-      pointsopServer.disconnectServer();
-      pointsopServer = null;
-    }
-    if (!(server instanceof AiVirtualServer)) {
-      rawError(
-          server,
-          "Отключился от сервера... \n"
-              + "К сожалению, переподключиться в \"тихом\" режиме "
-              + "пока-что невозможно. \n"
-              + "Чтобы подключиться, закройте приложение и откройте его заново.");
-    }
-  }
+	public synchronized void serverClosed(ServerInterface server) {
+		if (server == pointsxt_ircworldru_server) {
+			pointsxt_ircworldru_server.disconnectServer();
+			pointsxt_ircworldru_server = null;
+		} else if (server == pointsxt_tochkiorg_server) {
+			pointsxt_tochkiorg_server.disconnectServer();
+			pointsxt_tochkiorg_server = null;
+		} else if (server == zagram_server) {
+			zagram_server.disconnectServer();
+			zagram_server = null;
+		}
+		if (!(server instanceof AiVirtualServer)) {
+			rawError(
+					server,
+					"Отключился от сервера... \n"
+							+ "К сожалению, переподключиться в \"тихом\" режиме "
+							+ "пока-что невозможно. \n"
+							+ "Чтобы подключиться, закройте приложение и откройте его заново.");
+		}
+	}
 
 	@Override
 	public void updateUserInfo(
@@ -78,7 +77,11 @@ public class GuiController implements GuiForServerInterface {
 		Player updateInstance = new Player(server, id, guiName, rating, winCount,
 					lossCount, drawCount, image, status);
 		player.updateFrom(updateInstance);
-		if (previousRating != rating && previousRating != 0) {
+		if (rating!=null &&
+				previousRating != rating &&
+				previousRating != 0) {
+			System.out.println("server.getMainRoom() = " + server.getMainRoom());
+			System.out.println("player.guiName = " + player.guiName);
 			this.serverNoticeReceived(server, server.getMainRoom(),
 				player.guiName + " " + previousRating + " -> " + rating);
 		}

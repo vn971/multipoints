@@ -69,7 +69,7 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void connect() {
-		new Thread() {
+		Thread thread = new Thread() {
 			public void run() {
 				gui.raw(ServerZagram2.this, "Подключение...");
 				String authorization = getLinkContent(
@@ -90,7 +90,11 @@ public class ServerZagram2 implements ServerInterface {
 				});
 				new ThreadMain().start();
 			};
-		}.start();
+		};
+		thread.setDaemon(true);
+		thread.setPriority(Thread.MIN_PRIORITY);
+		thread.setName("zagramThread");
+		thread.start();
 	}
 
 	@Override

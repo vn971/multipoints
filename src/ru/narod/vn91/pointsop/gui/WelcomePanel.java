@@ -23,9 +23,9 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	private void connectToZagram() {
 		updateNick();
-		if (guiController.zagramTwo_server == null) {
-			guiController.zagramTwo_server = new ServerZagram2(nick, guiController);
-			guiController.zagramTwo_server.connect();
+		if (guiController.zagram_server == null) {
+			guiController.zagram_server = new ServerZagram2(nick, guiController);
+			guiController.zagram_server.connect();
 		}
 	}
 
