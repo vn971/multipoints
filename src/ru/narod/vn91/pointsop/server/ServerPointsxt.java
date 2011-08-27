@@ -29,6 +29,8 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.utils.Function;
+import ru.narod.vn91.pointsop.utils.Function2;
+import ru.narod.vn91.pointsop.utils.Memory;
 
 public class ServerPointsxt
 		extends PircBot
@@ -54,54 +56,56 @@ public class ServerPointsxt
 	MyGame myGame = new MyGame();
 
 	public void connect() {
-		Thread thread = new Thread(
-				new Runnable() {
-
+		new Thread() {
+			public void run() {
+				Function<Integer, Boolean> connector = new Function<Integer, Boolean>() {
 					@Override
-					public void run() {
-						Function<Integer, Boolean> connector = new Function<Integer, Boolean>() {
-							@Override
-							public Boolean call(Integer port) {
-								try {
-									gui.raw(
+					public Boolean call(Integer port) {
+						try {
+							gui.raw(
 											ServerPointsxt.this,
 											"Cоединение с сервером " + defaultServ
-													+ ":"+port+". Пожалуйста, подождите... (примерно 30 секунд)"
-									);
-									connect(defaultServ, port, ircPassword);
-									myNickOnServ = getNick();
-									ServerPointsxt.super.sendMessage(
+													+ ":" + port
+												+ ". Пожалуйста, подождите... (примерно 30 секунд)"
+											);
+							connect(defaultServ, port, ircPassword);
+							myNickOnServ = getNick();
+							ServerPointsxt.super.sendMessage(
 											"podbot",
 											"!opConnect0423"
-									);
-								} catch (NickAlreadyInUseException ignored) {
-									gui.raw(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
-								} catch (IrcException ignored) {
-								} catch (IOException ignored) {
-									return false;
-								}
-								return true;
-							}
-						};
-
-						// let's make the code unreadable, yeah!
-						// in reality, I just try out FP methods
-						// like "foreach" and others :)
-						for (int port : new int[] { 6667, 5190, 46175 }) {
-							if (connector.call(port) == true) {
-								break;
-							}
+											);
+						} catch (NickAlreadyInUseException ignored) {
+							gui.raw(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
+						} catch (IrcException ignored) {
+						} catch (IOException ignored) {
+							return false;
 						}
-						// the same written in a classical way:
-						//
-						// if (connector.call(6667) == false) {
-						//   if (connector.call(46175)==false) {
-						//     connector.call(5190);
-						// }
+						return true;
+					}
+				};
+
+				// let's make the code unreadable, yeah!
+				// in reality, I just try out FP methods
+				// like "foreach" and others :)
+				int[] portList = {Memory.getIrcPort(),6667,6029,7029,46175};
+				for (int port : portList) {
+					if (connector.call(port) == true) {
+						Memory.setIrcPort(port);
+						break;
+					} else {
+						gui.raw(ServerPointsxt.this,
+										"Не удалось соединиться с " + defaultServ + ":" + port);
 					}
 				}
-		);
-		thread.start();
+				// the same written in a classical way:
+				//
+				// if (connector.call(6667) == false) {
+				// if (connector.call(46175)==false) {
+				// connector.call(5190);
+				// }
+				// }
+			};
+		}.start();
 	}
 
 	public void disconnectServer() {
@@ -360,12 +364,26 @@ public class ServerPointsxt
 		userConnected_PointsxtStyle(channel, sender, /*not silent*/ false);
 // other code is executed only when user joins a channel, not changes his nick.
 		if ((channel.equals(defaultChannel)) && (sender.equals(myNickOnServ))) {
-			gui.raw(
-					this,
-					"Успешно подключился к основной комнате.");
+			gui.raw(this, "Успешно подключился к основной комнате.");
 		}
 		if (channel.equals(myGame.roomName) && myGame.amIRed) {
 			this.sendSpectr(sender);
+		}
+
+		Function2<User[], String, Boolean> amIOp = new Function2<User[], String, Boolean>() {
+			@Override
+			public Boolean call(User[] users, String me) {
+				for (User user : users) {
+					if (user.getNick().equals(me) && user.isOp()) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+		if (sender.equalsIgnoreCase("podbot") &&
+				amIOp.call(getUsers(defaultChannel), getNick())) {
+			super.op(defaultChannel, "podbot");
 		}
 	}
 

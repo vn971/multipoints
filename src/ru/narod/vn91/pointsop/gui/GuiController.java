@@ -3,6 +3,7 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Component;
 import java.awt.Image;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -509,7 +510,7 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 
 	@Override
 	public synchronized void raw(ServerInterface server, String info) {
-		String add = server.getServerName() + ": " + info + "\n";
+		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
 		if (Memory.isDebug() == true) {
 			System.out.print(add);
 		} else {

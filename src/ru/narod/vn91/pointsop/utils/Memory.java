@@ -14,6 +14,14 @@ public class Memory {
 	static Preferences memory = Preferences.userRoot().node(
 			"ru.narod.ru.pointsop.userdata");
 
+	public static int getIrcPort() {
+		return memory.getInt("ircPort", 6667);
+	}
+
+	public static void setIrcPort(int port) {
+		memory.putInt("ircPort", port);
+	}
+
 	public static boolean isShowJoinPart() {
 		return memory.getBoolean("isShowJoinPart", true);
 	}

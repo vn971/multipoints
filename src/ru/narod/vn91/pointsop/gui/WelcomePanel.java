@@ -123,7 +123,7 @@ public class WelcomePanel extends javax.swing.JPanel {
     jLabel_Links.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     jTextPane_ServerOutput.setEditable(false);
-    jTextPane_ServerOutput.setText("Cоединение:\n----------------------------------------------------------------------------\n");
+    jTextPane_ServerOutput.setText("Если  ваш интернет блокирует некоторые порты, то соединение может занять некоторое время. В этом случае статус будет обновляться в этом окошке раз в ~~3 минуты. После первого успешного подключения задержек не будет.\n\nCоединение:\n----------------------------------------------------------------------------\n");
     jScrollPane_ServerOutput.setViewportView(jTextPane_ServerOutput);
 
     javax.swing.GroupLayout jPanel_RightLayout = new javax.swing.GroupLayout(jPanel_Right);

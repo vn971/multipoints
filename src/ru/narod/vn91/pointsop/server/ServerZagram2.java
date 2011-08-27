@@ -434,12 +434,11 @@ public class ServerZagram2 implements ServerInterface {
 						gui.updateUserInfo(server, player, player, null, rating,
 								winCount, lossCount, drawCount, myStatus);
 					} else if (message.startsWith("pa") || message.startsWith("pr")) { // +player
-						String[] dotSplitted = message.substring("pa".length())
-								.split("\\.");
+						String[] dotSplitted = message.substring("pa".length()).split("\\.");
 						for (String player : dotSplitted) {
 							if (player.length() != 0) {
 								gui.userJoinedRoom(
-										server, currentRoom, player, false);
+										server, currentRoom, player, message.startsWith("pr"));
 							}
 						}
 					} else if (message.startsWith("pd")) { // - player
