@@ -439,7 +439,7 @@ public class ServerPointsxt
 			String reason) {
 		String[] channels = getChannels();
 		for (String channelName : channels) {
-			userDisconnected_PointsxtStyle(channelName, sourceNick, reason);
+			userDisconnected_PointsxtStyle(channelName, sourceNick, reason.replaceAll(pointsxtTail_RegExp, ""));
 		}
 		gui.userDisconnected(
 				this, nicknameManager.irc2id(sourceNick),

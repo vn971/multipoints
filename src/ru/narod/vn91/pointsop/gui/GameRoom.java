@@ -101,25 +101,25 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			moveList.add(moveInfoAbstract);
 			if (silent == false) {
 				// add a corresponding chat message
-				String eatInformation = "";
-				switch (moveResult) {
-					case BAD:
-						eatInformation = " + "
-								+ "игрок попался в ловушку и был сожран:) "
-								+ "ОСТОРОЖНЕЙ, если это произошло "
-								+ "после нажатия кнопки СТОП, "
-								+ "то из-за различных правил игры в pointsxt и pointsOp "
-								+ "поле может выглядеть по-разному!";
-						break;
-					case GOOD:
-						eatInformation = "+ :)";
-						break;
-					default:
-						break;
-				}
-				String colorName = isRed ? "кр" : "сн";
-				roomPart_Chat.addServerNotice(
-						"#" + moveList.size() + " " + colorName + " " + x + ":" + y + " " + eatInformation);
+//				String eatInformation = "";
+//				switch (moveResult) {
+//					case BAD:
+//						eatInformation = " + "
+//								+ "игрок попался в ловушку и был сожран:) "
+//								+ "ОСТОРОЖНЕЙ, если это произошло "
+//								+ "после нажатия кнопки СТОП, "
+//								+ "то из-за различных правил игры в pointsxt и pointsOp "
+//								+ "поле может выглядеть по-разному!";
+//						break;
+//					case GOOD:
+//						eatInformation = "+ :)";
+//						break;
+//					default:
+//						break;
+//				}
+//				String colorName = isRed ? "кр" : "сн";
+//				roomPart_Chat.addServerNotice(
+//						"#" + moveList.size() + " " + colorName + " " + x + ":" + y + " " + eatInformation);
 
 				showScoreAndCursor();
 				Sounds.playMakeMove(gameOuterInfo.amIPlaying());
@@ -296,9 +296,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jPanel_Tree.setVisible(false);
 
 		roomPart_Chat.setReadOnly(false);
-		roomPart_Chat.initChat(this,
-				(gameOuterInfo.first==null) ? "" : gameOuterInfo.first.guiName,
-				(gameOuterInfo.second==null) ? "" : gameOuterInfo.second.guiName);
+		roomPart_Chat.initChat(this,gameOuterInfo);
+//				(gameOuterInfo.first==null) ? "" : gameOuterInfo.first.guiName,
+//				(gameOuterInfo.second==null) ? "" : gameOuterInfo.second.guiName);
 //		if (amIPlaying == false) {
 //		jButton_AdditionalActions.setVisible(false);
 		jButton_EndGame.setVisible(false);

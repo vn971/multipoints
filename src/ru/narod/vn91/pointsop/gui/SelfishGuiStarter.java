@@ -426,13 +426,18 @@ class JMenuItemWithLink extends JMenuItem {
 		this.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				boolean doAsk = false;
-				int userConfirmation = JOptionPane.showConfirmDialog(
+				boolean doOpen = true;
+				{
+					int userConfirmation = JOptionPane.showConfirmDialog(
 						null,
 						"Открываем ссылку: \n" + url,
 						"pointsOp - открытие ссылки",
 						JOptionPane.OK_CANCEL_OPTION);
-				if (doAsk == true && userConfirmation == JOptionPane.OK_OPTION) {
+					if (userConfirmation != JOptionPane.OK_OPTION) {
+						doOpen = false;
+					}
+				}
+				if (doOpen) {
 					try {
 						java.awt.Desktop.getDesktop().browse(new URI(url));
 					} catch (Exception ignored) {

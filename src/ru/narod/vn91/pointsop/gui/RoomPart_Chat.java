@@ -4,20 +4,21 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.sounds.Sounds;
-import ru.narod.vn91.pointsop.utils.Memory;
 
 @SuppressWarnings("serial")
 public class RoomPart_Chat extends javax.swing.JPanel {
 
-	String userFirst, userSecond;
+//	String userFirst, userSecond;
+	GameOuterInfo gameInfo;
 	RoomInterface roomInterface;
 	private StyledDocument document = new DefaultStyledDocument();
 
@@ -32,50 +33,23 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 			String message, Long time) {
 		Date date = (time!=null) ? new Date(time) : new Date();
 		String formattedDate = GlobalGuiSettings.myTimeFormat.format(date);
+		AttributeSet playerAttributes;
+		if (gameInfo != null && gameInfo.first.guiName.equals(user)) {
+			playerAttributes = GlobalGuiSettings.getAttributeSet(true, gameInfo.player1Color());
+		} else if (gameInfo != null && gameInfo.second.guiName.equals(user)) {
+			playerAttributes = GlobalGuiSettings.getAttributeSet(true, gameInfo.player2Color());
+		} else if (user.equals(roomInterface.getServer().getMyName())) {
+			playerAttributes = GlobalGuiSettings.playerNameOutgoing;
+		} else {
+			playerAttributes = GlobalGuiSettings.playerNameIncoming;
+		}
 		try {
-			if (user.equals(userFirst)) {
-				StyleConstants.setForeground(GlobalGuiSettings.playerNameRed,
-						Memory.getPlayer1Color());
-
-				document.insertString(document.getLength(),
-						"" + formattedDate + " ",
-						GlobalGuiSettings.chatIncoming);
-				document.insertString(document.getLength(), user
-						+ ":", GlobalGuiSettings.playerNameRed);
-				document.insertString(document.getLength(),
-						" " + message + "\n",
-						GlobalGuiSettings.chatIncoming);
-			} else if (user.equals(userSecond)) {
-				StyleConstants.setForeground(GlobalGuiSettings.playerNameBlue,
-						Memory.getPlayer2Color());
-
-				document.insertString(document.getLength(),
-						"" + formattedDate + " ",
-						GlobalGuiSettings.chatIncoming);
-				document.insertString(document.getLength(), user
-						+ ":", GlobalGuiSettings.playerNameBlue);
-				document.insertString(
-						document.getLength(),
-						" " + message + "\n",
-						GlobalGuiSettings.chatIncoming);
-			} else if (user.equals(roomInterface.getServer().getMyName())) {
-				document.insertString(document.getLength(),
-						"" + formattedDate + " ",
-						GlobalGuiSettings.chatOutgoing);
-				document.insertString(document.getLength(), user
-						+ ":", GlobalGuiSettings.playerNameOutgoing);
-				document.insertString(document.getLength(), " " + message
-						+ "\n", GlobalGuiSettings.chatOutgoing);
-			} else {
-				document.insertString(document.getLength(),
-						"" + formattedDate + " ",
-						GlobalGuiSettings.chatIncoming);
-				document.insertString(document.getLength(), user
-						+ ":", GlobalGuiSettings.playerNameIncoming);
-				document.insertString(document.getLength(), " " + message
-						+ "\n", GlobalGuiSettings.chatIncoming);
-			}
-		} catch (Exception ignored) {
+			document.insertString(document.getLength(), "" + formattedDate + " ",
+				GlobalGuiSettings.chatIncoming);
+			document.insertString(document.getLength(), user + ":", playerAttributes);
+			document.insertString(document.getLength(), " " + message + "\n",
+				GlobalGuiSettings.chatIncoming);
+		} catch (BadLocationException ignored) {
 		}
 		scrollDown();
 
@@ -136,11 +110,9 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 
 	public void initChat(
 			RoomInterface roomInterface,
-			String userFirst,
-			String userSecond) {
-		this.userFirst = userFirst;
-		this.userSecond = userSecond;
+			GameOuterInfo gameInfo) {
 		this.roomInterface = roomInterface;
+		this.gameInfo = gameInfo;
 
 		Document doc = new JTextField_UndoableLimited(
 			jTextField_Chat,

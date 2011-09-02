@@ -59,7 +59,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 		initComponents();
 
 //		System.out.println("LangRoom.LangRoom()2");
-		roomPart_Chat1.initChat(this, null, null);
+		roomPart_Chat1.initChat(this, null);
 //		System.out.println("LangRoom.LangRoom()3");
 		roomPart_UserList1.initRoomPart(this, centralGuiController);
 //		System.out.println("LangRoom.LangRoom()4");
