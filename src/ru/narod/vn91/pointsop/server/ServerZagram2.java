@@ -71,15 +71,15 @@ public class ServerZagram2 implements ServerInterface {
 	public void connect() {
 		Thread thread = new Thread() {
 			public void run() {
-				gui.raw(ServerZagram2.this, "Подключение...");
+				gui.rawConnectionState(ServerZagram2.this, "Подключение...");
 				String authorization = getLinkContent(
 						"http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
 								secretId + "&opis=" +
 								getServerEncoded(myNameOnServer) + "&lang=en");
 				if (authorization.equals("")) {
-					gui.raw(ServerZagram2.this, "Авторизовался. Подключаюсь к основной комнате...");
+					gui.rawConnectionState(ServerZagram2.this, "Авторизовался. Подключаюсь к основной комнате...");
 				} else {
-					gui.raw(ServerZagram2.this, "Ошибка авторизации!");
+					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации!");
 				}
 
 				Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -295,6 +295,7 @@ public class ServerZagram2 implements ServerInterface {
 				String text = getLinkContent(
 						"http://zagram.org/a.kropki?playerId=" +
 								secretId + "&co=getMsg&msgNo=" +
+								// betBMsg
 								lastServerMessageNumber + "&msgFromClient=" + commands);
 				handleText(text);
 			}
@@ -332,6 +333,12 @@ public class ServerZagram2 implements ServerInterface {
 						// don't catch anything.
 						// If an exception would be thrown then we are completely
 						// unfamiliar with this server protocol.
+//					} else if (message.startsWith("b")) { // player in tables
+//						String playerId = message.replaceAll("\\..*", "");
+//						String[] roomList = message.replaceFirst(".*\\.", "").split("\\.");
+//						for (String roomId : roomList) {
+//							gui.userJoinedRoom(server, roomId, playerId, false);
+//						}
 					} else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
 						String[] dotSplitted = message.substring("ca".length())
 								.split("\\.", 4);

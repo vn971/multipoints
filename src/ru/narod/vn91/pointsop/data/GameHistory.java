@@ -31,6 +31,6 @@ public class GameHistory {
 		}
 	}
 
-	public class Unto extends Entry {
+	public class Undo extends Entry {
 	}
 }

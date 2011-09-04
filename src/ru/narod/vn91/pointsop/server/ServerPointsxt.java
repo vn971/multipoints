@@ -62,7 +62,7 @@ public class ServerPointsxt
 					@Override
 					public Boolean call(Integer port) {
 						try {
-							gui.raw(
+							gui.rawConnectionState(
 											ServerPointsxt.this,
 											"Cоединение с сервером " + defaultServ
 													+ ":" + port
@@ -75,7 +75,7 @@ public class ServerPointsxt
 											"!opConnect0423"
 											);
 						} catch (NickAlreadyInUseException ignored) {
-							gui.raw(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
+							gui.rawConnectionState(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
 						} catch (IrcException ignored) {
 						} catch (IOException ignored) {
 							return false;
@@ -93,7 +93,7 @@ public class ServerPointsxt
 						Memory.setIrcPort(port);
 						break;
 					} else {
-						gui.raw(ServerPointsxt.this,
+						gui.rawConnectionState(ServerPointsxt.this,
 										"Не удалось соединиться с " + defaultServ + ":" + port);
 					}
 				}
@@ -348,7 +348,7 @@ public class ServerPointsxt
 	@Override
 	protected void onConnect() {
 		if (super.isConnected()) {
-			gui.raw(
+			gui.rawConnectionState(
 					this,
 					"Удалось соединиться с " + defaultServ
 					+ ", пытаюсь подключиться к основной комнате...");
@@ -364,7 +364,7 @@ public class ServerPointsxt
 		userConnected_PointsxtStyle(channel, sender, /*not silent*/ false);
 // other code is executed only when user joins a channel, not changes his nick.
 		if ((channel.equals(defaultChannel)) && (sender.equals(myNickOnServ))) {
-			gui.raw(this, "Успешно подключился к основной комнате.");
+			gui.rawConnectionState(this, "Успешно подключился к основной комнате.");
 		}
 		if (channel.equals(myGame.roomName) && myGame.amIRed) {
 			this.sendSpectr(sender);

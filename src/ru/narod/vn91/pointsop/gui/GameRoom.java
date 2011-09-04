@@ -162,8 +162,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		if (timeLeft.countsDown2 != null) {
 			this.timer2Freezed = !timeLeft.countsDown2;
 		}
+		if (timeLeft.timeLeft1!=null) {
 		timerLabel1.setRemainingTime(timeLeft.timeLeft1, timer1Freezed);
-		timerLabel2.setRemainingTime(timeLeft.timeLeft2, timer2Freezed);
+		}
+		if (timeLeft.timeLeft2!=null) {
+			timerLabel2.setRemainingTime(timeLeft.timeLeft2, timer2Freezed);
+		}
 	}
 
 	public void stopGame(boolean isRedPlayer) {

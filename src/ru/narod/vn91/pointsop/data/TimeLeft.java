@@ -1,11 +1,9 @@
 package ru.narod.vn91.pointsop.data;
 
-import ru.narod.vn91.pointsop.utils.ObjectKeeper;
-
 public class TimeLeft {
 
-	public final int timeLeft1;
-	public final int timeLeft2;
+	public final Integer timeLeft1;
+	public final Integer timeLeft2;
 
 	public final Boolean countsDown1;
 	public final Boolean countsDown2;
@@ -27,5 +25,4 @@ public class TimeLeft {
 			timeLeft2,
 			countsDown2 ? "" : "(p)");
 	}
-
 }

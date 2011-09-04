@@ -148,4 +148,7 @@ public interface GuiForServerInterface {
 			ServerInterface server,
 			String info);
 
+	public abstract void rawConnectionState(
+			ServerInterface server,
+			String info);
 }

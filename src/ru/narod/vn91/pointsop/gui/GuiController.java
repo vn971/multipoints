@@ -514,9 +514,7 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 		if (Memory.isDebug() == true) {
 			System.out.print(add);
 		} else {
-//			this.privateMessageReceived(server, server.getServerName(), info);
-			String oldText = serverOutput.getText();
-			serverOutput.setText(oldText + add);
+			this.privateMessageReceived(server, server.getServerName(), info);
 		}
 	}
 
@@ -533,6 +531,17 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 				);
 			};
 		}.start();
+	}
+
+	@Override
+	public void rawConnectionState(ServerInterface server, String info) {
+		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
+		if (Memory.isDebug() == true) {
+			System.out.print(add);
+		} else {
+			String oldText = serverOutput.getText();
+			serverOutput.setText(oldText + add);
+		}
 	}
 
   public synchronized void activateGameRoom(
