@@ -12,22 +12,26 @@ public class TreeNode {
 	Set<TreeNode> children = new LinkedHashSet<TreeNode>();
 	Collection<TreeNodeProperty> propertyList = new ArrayList<TreeNodeProperty>();
 
-	public TreeNode(TreeNode parent, Set<TreeNode> children,
-			Collection<TreeNodeProperty> propertyList) {
+	public TreeNode( TreeNode parent ) {
 		this.parent = parent;
-		this.children = children;
-		this.propertyList = propertyList;
 	}
 }
 
 class TreeNodeProperty {
-	public final String property;
+	public final String key;
 	public final String value;
 
-	public TreeNodeProperty(String property, String value) {
-		super();
-		this.property = property;
+	public TreeNodeProperty(String key, String value) {
+		this.key = key;
 		this.value = value;
 	}
 
+	public boolean keyIn(String... keyList) {
+		for (String keyInList : keyList) {
+			if (this.key.equals(keyInList)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

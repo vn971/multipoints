@@ -223,7 +223,7 @@ public class ServerZagram2 implements ServerInterface {
 
 	private static Integer charToCoordinate(char c) {
 		if (c >= 'a' && c <= 'z') {
-			return Integer.class.cast(c - 'a');
+			return Integer.class.cast(c - 'a' + 1);
 		} else if (c >= 'A' && c <= 'Z') {
 			return Integer.class.cast(c - 'A' + 27);
 		} else {
@@ -489,13 +489,13 @@ public class ServerZagram2 implements ServerInterface {
 										String propertyValue = sgfProperty.replaceFirst(".*\\[", "");
 										if (propertyName.matches("U(B|W)")) {
 											throw new FatalGameRoomError("can't handle 'Undo black move'.");
-										} else if (propertyName.matches("B|W")) {
+										} else if (propertyName.matches("B|W|AB|AW")) {
 												gui.makedMove(
 													server, currentRoom,
 													message.startsWith("sr"),
 													stringToCoordinates(propertyValue).x,
 													stringToCoordinates(propertyValue).y,
-													propertyName.equals("W"), propertyName.equals("B")
+													propertyName.matches("W|AW"), propertyName.equals("B|AB")
 													//													999, 999
 													);
 										} else {

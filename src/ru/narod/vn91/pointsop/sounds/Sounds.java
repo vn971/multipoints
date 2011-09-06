@@ -15,18 +15,18 @@ public class Sounds {
 	private static void playInNewThread(final String fileName) {
 		new Thread() {
 			public void run() {
-
 				AudioClip audioClip;
-				if (clips.get(fileName) != null) {
-					audioClip = clips.get(fileName);
-				} else {
-					audioClip = Applet.newAudioClip(
-						getClass().getClassLoader(). getResource(
-								"ru/narod/vn91/pointsop/sounds/" + fileName));
-					clips.put(fileName, audioClip);
+				synchronized (clips) {
+					if (clips.get(fileName) != null) {
+						audioClip = clips.get(fileName);
+					} else {
+						audioClip = Applet.newAudioClip(
+								getClass().getClassLoader().getResource(
+									"ru/narod/vn91/pointsop/sounds/" + fileName));
+						clips.put(fileName, audioClip);
+					}
 				}
 				audioClip.play();
-
 			};
 		}.start();
 	}
