@@ -1,6 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
 import java.util.Date;
@@ -604,6 +605,8 @@ class ServerRoom {
 class JTabbedPaneMod {
 
 	JTabbedPane tabbedPane = new JTabbedPane();
+	final Color boldColor = Color.GRAY;
+	final Color normalColor = tabbedPane.getBackground();
 
 	Map<Component, Function<Void, Boolean>> closeListeners =
 			new HashMap<Component, Function<Void, Boolean>>();
@@ -677,13 +680,14 @@ class JTabbedPaneMod {
 		int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0 &&
 				tabIndex != tabbedPane.getSelectedIndex()) {
-			Component panel = tabbedPane.getTabComponentAt(tabIndex);
+			tabbedPane.setBackgroundAt(tabIndex, boldColor);
+			// Component panel = tabbedPane.getTabComponentAt(tabIndex);
 			// try {
-			TabCloseable tab = TabCloseable.class.cast(panel);
-			String newTitle = getBold(tab.getText());
-			if (newTitle.equals(tab.getText()) == false) {
-				tab.setText(newTitle);
-			}
+			// TabCloseable tab = TabCloseable.class.cast(panel);
+			// String newTitle = getBold(tab.getText());
+			// if (newTitle.equals(tab.getText()) == false) {
+			// tab.setText(newTitle);
+			// }
 			// } catch (ClassCastException e) {
 			// }
 		}
@@ -708,15 +712,16 @@ class JTabbedPaneMod {
 
 			public void stateChanged(ChangeEvent e) {
 				int selectedIndex = tabbedPane.getSelectedIndex();
-				Component panel = tabbedPane.getTabComponentAt(selectedIndex);
-				try {
-					TabCloseable tab = TabCloseable.class.cast(panel);
-					String s = tab.getText();
-					s = getNotBold(s);
-					tab.setText(s);
-				} catch (ClassCastException ex) {
-				} catch (NullPointerException ex) {
-				}
+				tabbedPane.setBackgroundAt(selectedIndex, normalColor);
+				// Component panel = tabbedPane.getTabComponentAt(selectedIndex);
+				// try {
+				// TabCloseable tab = TabCloseable.class.cast(panel);
+				// String s = tab.getText();
+				// s = getNotBold(s);
+				// tab.setText(s);
+				// } catch (ClassCastException ex) {
+				// } catch (NullPointerException ex) {
+				// }
 			}
 		});
 	}

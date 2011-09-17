@@ -1373,7 +1373,7 @@ public class ServerPointsxt
 
 	@Override
 	public boolean isIncomingYInverted() {
-		return true;
+		return false;
 	}
 
 	@Override

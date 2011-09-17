@@ -57,10 +57,6 @@ public class TabCloseable extends JPanel {
 		label.setText(text);
 	}
 
-	public String getText() {
-		return label.getText();
-	}
-
 	public void addCloseListener(Function<TabCloseable, Void> closeListener) {
 		closeListenerSet.add(closeListener);
 	}
@@ -70,6 +66,8 @@ public class TabCloseable extends JPanel {
 
 		public CloseButton() {
 			setUI(new BasicButtonUI());
+			setBackground(Color.BLACK);
+			setForeground(Color.WHITE);
 			setPreferredSize(new Dimension(size, size));
 			setFocusable(false);
 			setOpaque(false);
