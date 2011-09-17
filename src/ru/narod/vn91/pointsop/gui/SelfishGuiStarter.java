@@ -431,7 +431,7 @@ class JMenuItemWithLink extends JMenuItem {
 					int userConfirmation = JOptionPane.showConfirmDialog(
 						null,
 						"Открываем ссылку: \n" + url,
-						"pointsOp - открытие ссылки",
+						"MultiPoints - открытие ссылки",
 						JOptionPane.OK_CANCEL_OPTION);
 					if (userConfirmation != JOptionPane.OK_OPTION) {
 						doOpen = false;

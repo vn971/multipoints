@@ -21,10 +21,10 @@ public class GameOuterInfo {
 	public Player second;
 
 	public Integer sizeX = 30, sizeY = 30;
-	public Boolean yAxisInverted = false;
+	// public Boolean invertIncomingY = false;
 	public Boolean isRedFirst = true;
 	public Boolean isRated = false;
-//	public Boolean iAmPlaying = false;
+	// public Boolean iAmPlaying = false;
 	public Integer handicapRed = 0;
 	public Integer instantWin = 0;
 	public Boolean manualEnclosings = false;
@@ -63,17 +63,13 @@ public class GameOuterInfo {
 		this.second = new Player(server, "second"); // avoid nulls
 	}
 
-
-
-	public GameOuterInfo(
-			ServerInterface server, String id, String masterRoomId,
+	public GameOuterInfo(ServerInterface server, String id, String masterRoomId,
 			Player first, Player second, Integer sizeX, Integer sizeY,
-			Boolean yAxisInverted, Boolean isRedFirst, Boolean isRated,
-			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
-			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
-			Integer freeTemporalTime, Integer additionalAccumulatingTime,
-			Integer startingTime, Integer periodLength
-			) {
+			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
+			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
+			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
+			Integer additionalAccumulatingTime, Integer startingTime,
+			Integer periodLength) {
 		super();
 		this.server = server;
 		this.id = id;
@@ -82,7 +78,6 @@ public class GameOuterInfo {
 		this.second = second;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-		this.yAxisInverted = yAxisInverted;
 		this.isRedFirst = isRedFirst;
 		this.isRated = isRated;
 		this.handicapRed = handicapRed;
@@ -96,8 +91,6 @@ public class GameOuterInfo {
 		this.startingTime = startingTime;
 		this.periodLength = periodLength;
 	}
-
-
 
 	public void updateFrom(GameOuterInfo g) {
 		for (Field field : g.getClass().getFields()) {
@@ -124,26 +117,26 @@ public class GameOuterInfo {
 	public String getTimeAsString() {
 		if (additionalAccumulatingTime == 0 && startingTime == 0) {
 			return String.format("%ss / %st",
-					freeTemporalTime, periodLength);
+				freeTemporalTime, periodLength);
 		} else if (freeTemporalTime == 0 && periodLength == 1) {
 			return String.format("%s + *%s",
-					startingTime, additionalAccumulatingTime);
+				startingTime, additionalAccumulatingTime);
 		} else {
 			return String.format("start=%s add=%s period=%s free=%s",
-					startingTime, additionalAccumulatingTime,
-					periodLength, freeTemporalTime);
+				startingTime, additionalAccumulatingTime,
+				periodLength, freeTemporalTime);
 		}
 	}
 
 	public boolean amIPlaying() {
 		boolean amIFirst = first != null &&
-				server != null &&
-				server.getMyName().equals(first.id);
+			server != null &&
+			server.getMyName().equals(first.id);
 		boolean amISecond = second != null &&
-				server != null &&
-				server.getMyName().equals(second.id);
-//		System.out.println("amIRed || amIBlue = "
-//				+ (amIRed || amIBlue));
+			server != null &&
+			server.getMyName().equals(second.id);
+		// System.out.println("amIRed || amIBlue = "
+		// + (amIRed || amIBlue));
 		return amIFirst || amISecond;
 	}
 

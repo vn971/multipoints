@@ -26,11 +26,8 @@ public interface ServerInterface {
 
 	void sendChat(String room, String message);
 
-	public void sendPrivateMsg(String target, String message);
+	void sendPrivateMsg(String target, String message);
 
-	/**
-	 * @return my name on the server
-	 */
 	String getMyName();
 
 	String getMainRoom();
@@ -38,5 +35,11 @@ public interface ServerInterface {
 	String getServerName();
 
 	int getMaximumMessageLength();
+
+	boolean isIncomingYInverted();
+	
+	boolean isGuiYInverted();
+	
+	String coordinateToString(int x, int y);
 }
 

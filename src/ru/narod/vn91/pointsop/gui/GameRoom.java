@@ -87,10 +87,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			int y,
 			boolean isRed,
 			boolean isNowRed
-//			int remainingTimeRed,
-//			int remainingTimeBlue
 			) {
-		int yInGui = gameOuterInfo.yAxisInverted ? gameOuterInfo.sizeY + 1 - y : y;
+		int yInGui = gameOuterInfo.server.isIncomingYInverted()
+			? gameOuterInfo.sizeY + 1 - y
+			: y;
 		timedAction.value = null;
 		MoveResult moveResult = paper.makeMove(silent, x, yInGui, isRed);
 		if (moveResult != MoveResult.ERROR) {
@@ -100,27 +100,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			moveInfoAbstract.moveType = (isRed) ? MoveType.RED : MoveType.BLUE;
 			moveList.add(moveInfoAbstract);
 			if (silent == false) {
-				// add a corresponding chat message
-//				String eatInformation = "";
-//				switch (moveResult) {
-//					case BAD:
-//						eatInformation = " + "
-//								+ "игрок попался в ловушку и был сожран:) "
-//								+ "ОСТОРОЖНЕЙ, если это произошло "
-//								+ "после нажатия кнопки СТОП, "
-//								+ "то из-за различных правил игры в pointsxt и pointsOp "
-//								+ "поле может выглядеть по-разному!";
-//						break;
-//					case GOOD:
-//						eatInformation = "+ :)";
-//						break;
-//					default:
-//						break;
-//				}
-//				String colorName = isRed ? "кр" : "сн";
-//				roomPart_Chat.addServerNotice(
-//						"#" + moveList.size() + " " + colorName + " " + x + ":" + y + " " + eatInformation);
-
 				showScoreAndCursor();
 				Sounds.playMakeMove(gameOuterInfo.amIPlaying());
 
@@ -155,7 +134,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public void updateTime(TimeLeft timeLeft) {
-		System.out.println("GameRoom.updateTime()");
 		if (timeLeft.countsDown1 != null) {
 			this.timer1Freezed = !timeLeft.countsDown1;
 		}
@@ -251,9 +229,13 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void showScoreAndCursor() {
 		String result = "<html>";
 		if (mousePosX != -1) {
-			result += String.format("<b>[%02d:%02d] </b>"
-					+ "<font size=-1>(pxt%02d:%02d)</font>, ",
-					mousePosX, mousePosY, mousePosX - 1, 32 - mousePosY);
+			int xGui = mousePosX;
+			int yGui = gameOuterInfo.server.isGuiYInverted()
+			? gameOuterInfo.sizeY + 1 - mousePosY
+				: mousePosY;
+			result += "<b>[";
+			result += gameOuterInfo.server.coordinateToString(xGui, yGui);
+			result += "]</b> ";
 		}
 		result += String.format("счёт <b><font color=red>%s</font>"
 				+ "-<font color=blue>%s</font></b>", paper.getRedScore(),
@@ -276,7 +258,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			public void paperClick(int x,
 					int y,
 					MouseEvent evt) {
-				int yInGui = gameOuterInfo.yAxisInverted
+				int yInGui = gameOuterInfo.server.isIncomingYInverted()
 					? gameOuterInfo.sizeY + 1 - y
 					: y;
 				GameRoom.this.paperClick(x, yInGui, evt);
@@ -286,10 +268,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			public void paperMouseMove(int x,
 					int y,
 					MouseEvent evt) {
-				int yInGui = gameOuterInfo.yAxisInverted
-				? gameOuterInfo.sizeY + 1 - y
-					: y;
-				GameRoom.this.paperMouseMove(x, yInGui, evt);
+//				int yInGui = gameOuterInfo.yAxisInverted
+//				? gameOuterInfo.sizeY + 1 - y
+//					: y;
+				GameRoom.this.paperMouseMove(x, y, evt);
 			}
 		};
 		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY);

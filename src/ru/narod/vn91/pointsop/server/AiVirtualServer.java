@@ -29,7 +29,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public void init() {
 		gui.updateGameInfo(this, "", "",
 			ai.getName(), this.getMyName(),
-			39, 32, false,
+			39, 32,
 			null, null, null, null, null, null, null, null, null, null, null, null);
 		gui.subscribedGame(
 				this,
@@ -139,4 +139,20 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public int getMaximumMessageLength() {
 		return 10;
 	}
+
+	@Override
+	public String coordinateToString(int x, int y) {
+		return String.format("%02d:%02d", x, y);
+	}
+
+	@Override
+	public boolean isIncomingYInverted() {
+		return false;
+	}
+
+	@Override
+	public boolean isGuiYInverted() {
+		return false;
+	}
+	
 }

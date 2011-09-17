@@ -38,7 +38,7 @@ public interface GuiForServerInterface {
 	public abstract void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
 			String firstId, String secondId, Integer sizeX, Integer sizeY,
-			Boolean yAxisInverted, Boolean isRedFirst, Boolean isRated,
+			Boolean isRedFirst, Boolean isRated,
 			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
 			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
 			Integer freeTemporalTime, Integer additionalAccumulatingTime,

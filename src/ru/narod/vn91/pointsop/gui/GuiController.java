@@ -92,7 +92,7 @@ public class GuiController implements GuiForServerInterface {
   public void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
 			String firstId, String secondId, Integer sizeX, Integer sizeY,
-			Boolean yAxisInverted, Boolean isRedFirst, Boolean isRated,
+			Boolean isRedFirst, Boolean isRated,
 			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
 			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
 			Integer freeTemporalTime, Integer additionalAccumulatingTime,
@@ -104,7 +104,7 @@ public class GuiController implements GuiForServerInterface {
 
     GameOuterInfo updateInstance = new GameOuterInfo(
         server, secondId, masterRoomId, first, second,
-        sizeX, sizeY, yAxisInverted,
+        sizeX, sizeY,
         isRedFirst, isRated, handicapRed, instantWin,
         manualEnclosings, stopEnabled, isEmptyScored, state, freeTemporalTime,
         additionalAccumulatingTime, startingTime, periodLength);
@@ -177,7 +177,7 @@ public class GuiController implements GuiForServerInterface {
 					player.guiName + " вышел из игры: " + additionalMessage,
 					true);
 			} else {
-				privateChat.addChat("server", player.guiName + " вышел из игры...", true);
+				privateChat.addChat("server", player.guiName + " вышел из игры.", true);
 			}
     }
     playerPool.remove(server, id);
@@ -455,8 +455,6 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 	GameRoom gameRoom = gameRooms.get(new ServerRoom(roomId, server));
 	if (gameRoom != null) {
 		gameRoom.makeMove(silent, x, y, isRed, nowPlays
-//				, nowPlays, timeLeftRed,
-//				timeLeftBlue
 		);
 		tabbedPane.makeBold(gameRoom);
 	}
