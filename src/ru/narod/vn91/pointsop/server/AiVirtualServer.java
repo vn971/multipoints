@@ -141,10 +141,18 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	@Override
-	public String coordinateToString(int x, int y) {
-		return String.format("%02d:%02d", x, y);
+	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
+		if (xOrNull != null && yOrNull != null) {
+			return String.format("%02d:%02d", xOrNull, yOrNull);
+		} else if (xOrNull != null) {
+			return String.format("%02d", xOrNull);
+		} else if (yOrNull != null) {
+			return String.format("%02d", yOrNull);
+		} else {
+			return "";
+		}
 	}
-
+	
 	@Override
 	public boolean isIncomingYInverted() {
 		return false;

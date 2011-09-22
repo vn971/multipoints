@@ -1365,12 +1365,19 @@ public class ServerPointsxt
 		}
 	}
 
-
 	@Override
-	public String coordinateToString(int x, int y) {
-		return String.format("%02d-%02d", x - 1, y-1);
+	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
+		if (xOrNull != null && yOrNull != null) {
+			return String.format("%02d:%02d", xOrNull - 1, yOrNull - 1);
+		} else if (xOrNull != null) {
+			return String.format("%02d", xOrNull - 1);
+		} else if (yOrNull != null) {
+			return String.format("%02d", yOrNull - 1);
+		} else {
+			return "";
+		}
 	}
-
+	
 	@Override
 	public boolean isIncomingYInverted() {
 		return false;

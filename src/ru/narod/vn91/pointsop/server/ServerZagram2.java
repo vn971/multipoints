@@ -565,10 +565,18 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public String coordinateToString(int x, int y) {
-		return String.format("%s%s", get1SgfCoord(x), y);
+	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
+		if (xOrNull != null && yOrNull != null) {
+			return String.format("%s:%s", get1SgfCoord(xOrNull), yOrNull);
+		} else if (xOrNull != null) {
+			return String.format("%s", get1SgfCoord(xOrNull));
+		} else if (yOrNull != null) {
+			return String.format("%s", yOrNull);
+		} else {
+			return "";
+		}
 	}
-
+	
 	@Override
 	public boolean isIncomingYInverted() {
 		return true;

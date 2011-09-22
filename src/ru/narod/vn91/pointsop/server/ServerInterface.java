@@ -40,6 +40,11 @@ public interface ServerInterface {
 	
 	boolean isGuiYInverted();
 	
-	String coordinateToString(int x, int y);
+	String coordinatesToString(Integer xOrNull, Integer yOrNull);
+//	CoordinatesFormatter getCoordinatesFormatter();
+	
+//	interface CoordinatesFormatter {
+//		String format(Integer xOrNull, Integer yOrNull);
+//	}
 }
 

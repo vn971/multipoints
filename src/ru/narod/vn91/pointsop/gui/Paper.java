@@ -22,6 +22,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.utils.CustomColors;
+import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Memory;
 
 @SuppressWarnings("serial")
@@ -29,6 +30,20 @@ public abstract class Paper extends JPanel {
 
 	static boolean doAnimation = true;
 	private SingleGameEngineInterface engine;
+	private Function2<Integer, Integer, String> coordinatesFormatter = new Function2<Integer, Integer, String>() {
+		@Override
+		public String call(Integer a, Integer b) {
+			if (a != null && b != null) {
+				return String.format("%02d:%02d", a, b);
+			} else if (a != null) {
+				return String.format("%02d", a);
+			} else if (b != null) {
+				return String.format("%02d", b);
+			} else {
+				return "";
+			}
+		}
+	};
 	Point cursorDot = null;
 	int surroundingsAlreadyDrawed = 0;
 	private double dotWidth = 0.5;
@@ -204,6 +219,10 @@ public abstract class Paper extends JPanel {
 				}
 		);
 	}
+	
+	public void setCoordinatesFormatter(Function2<Integer, Integer, String> coordinatesFormatter) {
+		this.coordinatesFormatter = coordinatesFormatter;
+	}
 
 	public abstract void paperClick(
 			int x,
@@ -253,35 +272,35 @@ public abstract class Paper extends JPanel {
 		}
 		Graphics graphics = super.getGraphics();
 		{
-			float fontSize = squareSize * 0.5f;
-			if (fontSize >= 7) {
-				Font font = graphics.getFont();
-				font = font.deriveFont(fontSize);
+//			float fontSize = squareSize * 0.5f;
+//			if (fontSize >= 7) {
 				// if FONT < ....
-				graphics.setFont(font);
-				graphics.setColor(Color.BLACK);
-				super.setBackground(Color.ORANGE);
-				((Graphics2D) graphics).setBackground(Color.black);
-				{
-					String string = "" + (x);
-					int stringWidth = graphics.getFontMetrics().stringWidth(
-							string
-					);
-					Point pixel = getPixel(x, -0.1);
-					pixel.translate(-stringWidth / 2, 0);
-					graphics.drawString(string, pixel.x, pixel.y);
-				}
-				{
-					String string = "" + (y);
-					int stringWidth = graphics.getFontMetrics().stringWidth(
-							string
-					);
-					int stringHeight = graphics.getFontMetrics().getHeight();
-					Point pixel = getPixel(.25, y);
-					pixel.translate(-stringWidth, +stringHeight / 2);
-					graphics.drawString(string, pixel.x, pixel.y);
-				}
-			}
+//				Font font = graphics.getFont();
+//				font = font.deriveFont(fontSize);
+//				graphics.setFont(font);
+//				graphics.setColor(Color.BLACK);
+//				super.setBackground(Color.ORANGE);
+//				((Graphics2D) graphics).setBackground(Color.black);
+//				{
+//					String string = "" + (x);
+//					int stringWidth = graphics.getFontMetrics().stringWidth(
+//							string
+//					);
+//					Point pixel = getPixel(x, -0.1);
+//					pixel.translate(-stringWidth / 2, 0);
+//					graphics.drawString(string, pixel.x, pixel.y);
+//				}
+//				{
+//					String string = "" + (y);
+//					int stringWidth = graphics.getFontMetrics().stringWidth(
+//							string
+//					);
+//					int stringHeight = graphics.getFontMetrics().getHeight();
+//					Point pixel = getPixel(.25, y);
+//					pixel.translate(-stringWidth, +stringHeight / 2);
+//					graphics.drawString(string, pixel.x, pixel.y);
+//				}
+//			}
 		}
 
 		graphics.setColor(colorBackground);
@@ -744,7 +763,8 @@ public abstract class Paper extends JPanel {
 //				graphics.setColor(CustomColors.getContrastColor(Memory.getBackgroundColor()));
 				graphics.setColor(Color.BLACK);
 				for (int x = 1; x <= engineSizeX; x++) {
-					String string = "" + (x);
+					String string = coordinatesFormatter.call(x, null);
+//					String string = "" + (x);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
 							string
 					);
@@ -753,7 +773,8 @@ public abstract class Paper extends JPanel {
 					graphics.drawString(string, pixel.x, pixel.y);
 				}
 				for (int y = 1; y <= engineSizeY; y++) {
-					String string = "" + (y);
+					String string = coordinatesFormatter.call(null, y);
+//					String string = "" + (y);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
 							string
 					);
@@ -844,6 +865,7 @@ public abstract class Paper extends JPanel {
 				pointRadius * 2, pointRadius * 2
 		);
 	}
+
 	class LastMoveDrawer extends Thread {
 
 		public void run() {

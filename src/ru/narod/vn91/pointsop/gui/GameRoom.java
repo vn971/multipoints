@@ -9,6 +9,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 import ru.narod.vn91.pointsop.php.PhpBackupServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
+import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 import ru.narod.vn91.pointsop.utils.TimedAction;
@@ -231,10 +232,11 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		if (mousePosX != -1) {
 			int xGui = mousePosX;
 			int yGui = gameOuterInfo.server.isGuiYInverted()
-			? gameOuterInfo.sizeY + 1 - mousePosY
+				? gameOuterInfo.sizeY + 1 - mousePosY
 				: mousePosY;
 			result += "<b>[";
-			result += gameOuterInfo.server.coordinateToString(xGui, yGui);
+			result += gameOuterInfo.server.coordinatesToString(xGui, yGui);
+//			result += gameOuterInfo.server.coordinateToString(xGui, yGui);
 			result += "]</b> ";
 		}
 		result += String.format("счёт <b><font color=red>%s</font>"
@@ -274,6 +276,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				GameRoom.this.paperMouseMove(x, y, evt);
 			}
 		};
+		paper.setCoordinatesFormatter(new Function2<Integer, Integer, String>() {
+			@Override
+			public String call(Integer a, Integer b) {
+				return gameOuterInfo.server.coordinatesToString(a, b);
+			}
+		});
 		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY);
 		timerLabel1 = new TimerLabel();
 		timerLabel2 = new TimerLabel();
