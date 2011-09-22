@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
+import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.Wait;
 
@@ -566,10 +567,32 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
+		Function<Integer, String> getGuiX = new Function<Integer, String>() {
+			@Override
+			public String call(Integer i) {
+				if (i <= 8) {
+					// "a" .. "h"
+					return Character.toString((char) ('a' + i - 1));
+				} else if (i > 8 && i <= 25) {
+					// "j" .. "z"
+					// letter "i" is skipped in zagram coordinates
+					return Character.toString((char) ('a' + i));
+				} else if (i > 25 && i <= 25 + 8) {
+					// "A" .. "H"
+					return Character.toString((char) ('A' + i - 26));
+				} else if (i > 25 + 8) {
+					// "J" .. "Z"
+					return Character.toString((char) ('A' + i - 26 + 1));
+				} else {
+					return "";
+				}
+			}
+		};
+
 		if (xOrNull != null && yOrNull != null) {
-			return String.format("%s:%s", get1SgfCoord(xOrNull), yOrNull);
+			return String.format("%s%s", getGuiX.call(xOrNull), yOrNull);
 		} else if (xOrNull != null) {
-			return String.format("%s", get1SgfCoord(xOrNull));
+			return String.format("%s", getGuiX.call(xOrNull));
 		} else if (yOrNull != null) {
 			return String.format("%s", yOrNull);
 		} else {

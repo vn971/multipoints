@@ -636,7 +636,8 @@ public abstract class Paper extends JPanel {
 			int paperSizeY = this.getHeight();
 			double squareKoefficientX = paperSizeX / (engineSizeX + .5d + borderXcoeffecient);
 			double squareKoefficientY = paperSizeY / (engineSizeY + .5d + borderYcoeffecient);
-			squareSize = (int) Math.min(squareKoefficientX, squareKoefficientY);
+			squareSize = Math.max(1,
+				(int) Math.min(squareKoefficientX, squareKoefficientY));
 			offsetX = (int) (paperSizeX - squareSize * (engineSizeX + borderXcoeffecient)) / 2;
 			offsetY = (int) (paperSizeY - squareSize * (engineSizeY + borderYcoeffecient)) / 2;
 			graphics.setColor(colorBackground);
