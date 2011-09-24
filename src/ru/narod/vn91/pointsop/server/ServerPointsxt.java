@@ -45,7 +45,7 @@ public class ServerPointsxt
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
 	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
-	String pointsxtVersion = "173";
+	String pointsxtVersion = "187";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
 	static String commandIWantJoinGame = "I want to join this game.";
@@ -202,7 +202,7 @@ public class ServerPointsxt
 		{
 			// chat notify...
 			 String notifyMessage =
-			 "оставил(а) заявку на игру";
+			 "оставил(а) заявку на БЛИЦ";
 			 super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
 			 gui.chatReceived(
 			 this,
@@ -283,8 +283,8 @@ public class ServerPointsxt
 //			return;
 //		} else
 
-//		super.sendMessage(target, "/PointsXTStart NotRait Blits Chisto");
-		super.sendMessage(target, "/PointsXTStart NotRait Normal Chisto");
+		super.sendMessage(target, "/PointsXTStart NotRait Blits Chisto");
+//		super.sendMessage(target, "/PointsXTStart NotRait Normal Chisto");
 	}
 
 	public static String getAllowedNick(
@@ -876,7 +876,7 @@ public class ServerPointsxt
 			result += amIRed ? "1" : "2";
 //			result += isRanked ? "1" : "0";
 //			result += isBlits ? "1" : "0";
-			result += "00]";
+			result += "01]";
 		}
 		super.changeNick(result);
 	}
@@ -1239,8 +1239,8 @@ public class ServerPointsxt
 		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
 		Thread lastTimeoutThread = null;
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
-		final int timeAllowedPerTurn = 36;
-		final int periodLength = 1;
+		final int timeAllowedPerTurn = 5;
+		final int periodLength = 1; // not working yet.
 
 		public String getOpponentIrcName() {
 			return nicknameManager.id2irc(opponentName);

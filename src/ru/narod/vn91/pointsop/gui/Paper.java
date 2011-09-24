@@ -44,6 +44,8 @@ public abstract class Paper extends JPanel {
 			}
 		}
 	};
+	boolean isGuiYInverted;
+
 	Point cursorDot = null;
 	int surroundingsAlreadyDrawed = 0;
 	private double dotWidth = 0.5;
@@ -254,8 +256,10 @@ public abstract class Paper extends JPanel {
 
 	public void initPaper(
 			int sizeX,
-			int sizeY) {
+			int sizeY,
+			boolean isGuiYInverted) {
 		engine = new SingleGameEngine(sizeX, sizeY);
+		this.isGuiYInverted = isGuiYInverted;
 		repaint();
 	}
 
@@ -774,7 +778,10 @@ public abstract class Paper extends JPanel {
 					graphics.drawString(string, pixel.x, pixel.y);
 				}
 				for (int y = 1; y <= engineSizeY; y++) {
-					String string = coordinatesFormatter.call(null, y);
+					int yGui = isGuiYInverted
+							? engineSizeY + 1 - y
+							: y;
+					String string = coordinatesFormatter.call(null, yGui);
 //					String string = "" + (y);
 					int stringWidth = graphics.getFontMetrics().stringWidth(
 							string

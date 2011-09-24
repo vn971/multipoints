@@ -278,11 +278,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		};
 		paper.setCoordinatesFormatter(new Function2<Integer, Integer, String>() {
 			@Override
-			public String call(Integer a, Integer b) {
-				return gameOuterInfo.server.coordinatesToString(a, b);
+			public String call(Integer x, Integer y) {
+//				int xGui = x;
+//				int yGui = gameOuterInfo.server.isGuiYInverted()
+//						? gameOuterInfo.sizeY + 1 - y
+//						: y;
+				return gameOuterInfo.server.coordinatesToString(x, y);
 			}
 		});
-		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY);
+		paper.initPaper(gameOuterInfo.sizeX, gameOuterInfo.sizeY, gameOuterInfo.server.isGuiYInverted());
 		timerLabel1 = new TimerLabel();
 		timerLabel2 = new TimerLabel();
 

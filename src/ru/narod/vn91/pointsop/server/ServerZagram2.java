@@ -54,7 +54,7 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void acceptOpponent(String roomName, String newOpponent) {
-		gui.raw(this, "невозможно оставлять заявки на игру на этом сервере");
+		gui.raw(this, "MultiPoints пока-что не умеет оставлять заявки на игру на этом сервере..");
 	}
 
 	@Override

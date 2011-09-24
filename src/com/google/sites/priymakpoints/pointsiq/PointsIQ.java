@@ -194,6 +194,6 @@ private String getSgfCoord(int i) {
 
 int getMouseClickX(MouseEvent me){return (int)(((double)me.getX()-4-(double)((offsetX-1)*squareSize))/(double)squareSize);};
 int getMouseClickY(MouseEvent me){return 21-(int)(((double)me.getY()-8-(double)((offsetY-1)*squareSize))/(double)squareSize);};
-void newGame(){paper.initPaper(20, 20);}	
+void newGame(){paper.initPaper(20, 20, false);}	
 MoveResult makeMove(int x, int y,boolean isRed){return paper.makeMove(x,y,isRed);}
 }

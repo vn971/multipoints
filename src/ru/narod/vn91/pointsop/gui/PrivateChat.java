@@ -75,7 +75,7 @@ public class PrivateChat extends javax.swing.JPanel {
 			} catch (Exception e) {
 			}
 			if ((x > 0) && (y > 0) && (x < 50) && (y < 50)) {
-				paper.initPaper(x, y);
+				paper.initPaper(x, y, false);
 				addChat("", "Началась новая игра, размеры поля: " + x + ":" + y,
 						false);
 				lastMoveWasMine = player.server.getMyName().compareTo(player.id) > 0;
@@ -163,7 +163,7 @@ public class PrivateChat extends javax.swing.JPanel {
 					MouseEvent evt) {
 			}
 		};
-		paper.initPaper(30, 30);
+		paper.initPaper(30, 30, false);
 		initComponents();
 //		if (companionNick.startsWith("^") == false) {
 //		}
@@ -337,7 +337,7 @@ public class PrivateChat extends javax.swing.JPanel {
 		} catch (Exception e) {
 		}
 		if ((x > 0) && (y > 0) && (x < 50) && (y < 50)) {
-			paper.initPaper(x, y);
+			paper.initPaper(x, y, false);
 			addChat("", "Началась новая игра, размеры поля: " + x + ":" + y,
 					true);
 			lastMoveWasMine = player.server.getMyName().compareTo(player.id) > 0;
