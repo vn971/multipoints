@@ -232,7 +232,7 @@ public class Memory {
 
 	public static void main(String[] args) {
 //		setZagramTest(false);
-		setDebug(true);
+		setDebug(false);
 	}
 
 	public enum ClickAudibility {

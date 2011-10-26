@@ -13,11 +13,14 @@ public class Wait {
 			synchronized (o) {
 				try {
 					o.wait(remaining);
+					remaining = timeout - new Date().getTime();
 				} catch (InterruptedException e) {
+//					e.printStackTrace();
+					// exit the loop
+					remaining = 0;
 				}
 			}
 
-			remaining = timeout - new Date().getTime();
 		}
 	}
 

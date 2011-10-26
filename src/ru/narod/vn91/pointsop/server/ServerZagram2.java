@@ -83,12 +83,22 @@ public class ServerZagram2 implements ServerInterface {
 					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации!");
 				}
 
-				Runtime.getRuntime().addShutdownHook(new Thread() {
+				final Thread disconnectThread = new Thread() {
 					@Override
 					public void run() {
 						disconnectServer();
 					}
-				});
+				};
+				Thread killUltimatively = new Thread() {
+					public void run() {
+						// give the "disconnectThread" a little time, and after that kill it
+						Wait.waitExactly(1000L);
+						disconnectThread.interrupt();
+					};
+				};
+				killUltimatively.setDaemon(true);
+				Runtime.getRuntime().addShutdownHook(disconnectThread);
+				Runtime.getRuntime().addShutdownHook(killUltimatively);
 				new ThreadMain().start();
 			};
 		};

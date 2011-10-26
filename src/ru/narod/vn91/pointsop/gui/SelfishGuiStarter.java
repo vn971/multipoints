@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import java.util.prefs.Preferences;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -11,6 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
@@ -20,6 +24,18 @@ import ru.narod.vn91.pointsop.utils.Memory;
 public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
+		// try {
+		// for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		// if ("Nimbus".equals(info.getName())) {
+		// UIManager.setLookAndFeel(info.getClassName());
+		// break;
+		// }
+		// }
+		// } catch (Exception e) {
+		// // If Nimbus is not available, you can set the GUI to another look and
+		// // feel.
+		// }
+
 		if (Memory.getVersion() <= 1
 				&& Memory.getKeijKvantttAiPath().equals("keijkvantttai")) {
 			Memory.setKeijKvantttAiPath("");
@@ -28,7 +44,7 @@ public class SelfishGuiStarter {
 			Memory.resetColors();
 		}
 		Memory.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 1.8.7");
+		final JFrame frame = new JFrame("Точки - MultiPoints 1.8.9");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());

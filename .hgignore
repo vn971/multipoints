@@ -1,28 +1,18 @@
 syntax: glob
+*.iml
+*.iws
+.idea/*
+bin/*
+build/*
+dist/*
+lib/*
+nbproject/*
+.classpath
+.project
+
 *.class
 *.jar
 *.svn/*
-bin/*
-dist/*
-build\nb-jws.ks
-build/built-jar.properties
-*.iws
-.idea/workspace.xml
-.classpath
+*.orig
+help-files/*
 
-syntax: regexp
-
-\.orig$
-\.orig\..*$
-\.chg\..*$
-\.rej$
-\.conflict\~$
-
-glob:help-files/op-77-232-28-15.sh
-glob:help-files/chmod+x.sh
-glob:help-files/*.jnlp
-glob:.classpath
-glob:.recommenders*
-glob:.project
-glob:build/classes/*
-glob:nbproject/private/private.properties
