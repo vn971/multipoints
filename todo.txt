@@ -1,0 +1,15 @@
+actions -> - - - - - - - -
+
+... generating tree ...
+
+a-b-c-d-a-a
+      |
+      a-a
+
+
+onNodeChange(newNode)
+onSurround
+onDot
+onActivePlayerChange
+
+

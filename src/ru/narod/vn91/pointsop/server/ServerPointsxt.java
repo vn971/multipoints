@@ -87,7 +87,7 @@ public class ServerPointsxt
 				// let's make the code unreadable, yeah!
 				// in reality, I just try out FP methods
 				// like "foreach" and others :)
-				int[] portList = {Memory.getIrcPort(),6667,6029,7029,46175};
+				int[] portList = { Memory.getIrcPort(), 6667, 6029, 7029, 46175 };
 				for (int port : portList) {
 					if (connector.call(port) == true) {
 						Memory.setIrcPort(port);
@@ -1120,11 +1120,10 @@ public class ServerPointsxt
 					null
 			);
 		} else if (room.startsWith("#")) {
-			gui.rawError(this, "IRC не пожжерживает сообщений в игровых комнатах");
+			gui.rawError(this, "IRC не поддерживает сообщений в игровых комнатах");
 		} else {
-			gui.rawError(this,
-					"Была произведена попытка отправить публичное чатовое сообщение в приват.");
-		}
+			gui.rawError(this, "Была произведена попытка отправить публичное чатовое сообщение в приват.");
+	}
 	}
 
 	public void sendPrivateMsg(

@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -19,6 +20,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
+import ru.narod.vn91.pointsop.server.MockServerForGui;
 import ru.narod.vn91.pointsop.utils.Memory;
 
 public class SelfishGuiStarter {
@@ -44,7 +46,7 @@ public class SelfishGuiStarter {
 			Memory.resetColors();
 		}
 		Memory.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 1.8.9");
+		final JFrame frame = new JFrame("Точки - MultiPoints 1.9.0");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
@@ -107,6 +109,9 @@ public class SelfishGuiStarter {
 		tabbedPane.addTab("Привет!", roomWelcome, false);
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
+
+		if (Memory.isDebug()) {
+			tabbedPane.addTab("комната", new LangRoom(new MockServerForGui(), "", guiController), true);
 		//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
 		//				"", 1, 1, "", false, "", true, true));
 		//		tabbedPane.addTab(
@@ -114,6 +119,7 @@ public class SelfishGuiStarter {
 		//				false
 		//		);
 		//		tabbedPane.addTab("Ai test", new AiRoom().panel1, true);
+		}
 
 		{
 			JMenuBar jMenuBar = new JMenuBar();

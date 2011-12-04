@@ -11,7 +11,7 @@
         <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem_Autoscroll">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="&#x2193; &#x430;&#x432;&#x442;&#x43e;&#x43f;&#x440;&#x43e;&#x43a;&#x440;&#x443;&#x442;&#x43a;&#x430; &#x447;&#x430;&#x442;&#x430; &#x432;&#x43d;&#x438;&#x437;"/>
+            <Property name="text" type="java.lang.String" value="&#x21a7; &#x43a;&#x440;&#x443;&#x442;&#x438;&#x442;&#x44c; &#x447;&#x430;&#x442; &#x432;&#x43d;&#x438;&#x437; &#x43f;&#x440;&#x438; &#x43d;&#x43e;&#x432;&#x44b;&#x445; &#x441;&#x43e;&#x43e;&#x431;&#x449;&#x435;&#x43d;&#x438;&#x44f;&#x445;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMenuItem_AutoscrollActionPerformed"/>
@@ -22,7 +22,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/ru/narod/vn91/pointsop/gui/eraser.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&#x43e;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44c; &#x43e;&#x43a;&#x43d;&#x43e; &#x447;&#x430;&#x442;&#x430;"/>
+            <Property name="text" type="java.lang.String" value="&#x43e;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44c; &#x447;&#x430;&#x442;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_EraseChatActionPerformed"/>
@@ -31,8 +31,11 @@
         <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem_ShowUserJoin">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="&#x43f;&#x43e;&#x43a;&#x430;&#x437;&#x44b;&#x432;&#x430;&#x442;&#x44c; &#x432;&#x445;&#x43e;&#x434;-&#x432;&#x44b;&#x445;&#x43e;&#x434; &#x438;&#x433;&#x440;&#x43e;&#x43a;&#x43e;&#x432; &#x432; &#x447;&#x430;&#x442;"/>
+            <Property name="text" type="java.lang.String" value="&#x21c6; &#x43f;&#x43e;&#x43a;&#x430;&#x437;&#x44b;&#x432;&#x430;&#x442;&#x44c; &#x432;&#x445;&#x43e;&#x434;-&#x432;&#x44b;&#x445;&#x43e;&#x434; &#x438;&#x433;&#x440;&#x43e;&#x43a;&#x43e;&#x432;"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMenuItem_ShowUserJoinActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_FontIncrease">
           <Properties>
@@ -46,6 +49,13 @@
       </SubComponents>
     </Container>
   </NonVisualComponents>
+  <Properties>
+    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+      <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+        <EmptyBorder/>
+      </Border>
+    </Property>
+  </Properties>
   <Events>
     <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="formComponentShown"/>
     <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="formFocusGained"/>
@@ -66,41 +76,33 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jButton_ClearChat" alignment="0" max="32767" attributes="1"/>
-                  <Component id="jToggleButton_ShowJoinLeave" alignment="0" max="32767" attributes="1"/>
-                  <Component id="jToggleButton_ScrollDown" alignment="0" max="32767" attributes="1"/>
-              </Group>
+              <Component id="jTextField_Chat" pref="460" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="jTextField_Chat" pref="442" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton_Help" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jScrollPane_Chat" pref="468" max="32767" attributes="0"/>
-              </Group>
+              <Component id="jToggleButton_ShowJoinLeave" min="-2" max="-2" attributes="1"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jToggleButton_ScrollDown" min="-2" max="-2" attributes="1"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jButton_ClearChat" min="-2" max="-2" attributes="1"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jButton_Help" min="-2" max="-2" attributes="0"/>
           </Group>
+          <Component id="jScrollPane_Chat" alignment="1" pref="572" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jScrollPane_Chat" pref="315" max="32767" attributes="0"/>
+              <Component id="jScrollPane_Chat" pref="67" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jTextField_Chat" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton_Help" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                      <Component id="jTextField_Chat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jToggleButton_ScrollDown" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jToggleButton_ShowJoinLeave" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jButton_Help" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton_ClearChat" min="-2" max="-2" attributes="0"/>
               </Group>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jToggleButton_ScrollDown" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jToggleButton_ShowJoinLeave" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jButton_ClearChat" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="225" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -153,20 +155,32 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="jToggleButton_ScrollDown">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x2193;"/>
+        <Property name="text" type="java.lang.String" value="&#x21a7;"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x21a7; &#x43a;&#x440;&#x443;&#x442;&#x438;&#x442;&#x44c; &#x447;&#x430;&#x442; &#x432;&#x43d;&#x438;&#x437; &#x43f;&#x440;&#x438; &#x43d;&#x43e;&#x432;&#x44b;&#x445; &#x441;&#x43e;&#x43e;&#x431;&#x449;&#x435;&#x43d;&#x438;&#x44f;&#x445;"/>
       </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jToggleButton_ScrollDownStateChanged"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="jToggleButton_ShowJoinLeave">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x1564;"/>
+        <Property name="text" type="java.lang.String" value="&#x21c6;"/>
+        <Property name="toolTipText" type="java.lang.String" value="&#x21c6; &#x43f;&#x43e;&#x43a;&#x430;&#x437;&#x44b;&#x432;&#x430;&#x442;&#x44c; &#x432;&#x445;&#x43e;&#x434;-&#x432;&#x44b;&#x445;&#x43e;&#x434; &#x438;&#x433;&#x440;&#x43e;&#x43a;&#x43e;&#x432;"/>
       </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jToggleButton_ShowJoinLeaveStateChanged"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_ClearChat">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/ru/narod/vn91/pointsop/gui/eraser.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="&#x43e;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44c; &#x447;&#x430;&#x442;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_ClearChatActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

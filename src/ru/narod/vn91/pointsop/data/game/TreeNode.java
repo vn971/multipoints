@@ -1,7 +1,9 @@
 package ru.narod.vn91.pointsop.data.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,6 +28,8 @@ class TreeNodeProperty {
 		this.value = value;
 	}
 
+//	Collections.
+	
 	public boolean keyIn(String... keyList) {
 		for (String keyInList : keyList) {
 			if (this.key.equals(keyInList)) {

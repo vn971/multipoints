@@ -32,19 +32,27 @@ public class Sounds {
 	}
 
 	public static void playReceiveChat() {
-		playInNewThread("receiveChat.wav");
+		if (Memory.getOtherSounds()) {
+			playInNewThread("receiveChat.wav");
+		}
 	}
 
 	public static void playSendChat() {
-		playInNewThread("sendChat.wav");
+		if (Memory.getOtherSounds()) {
+			playInNewThread("sendChat.wav");
+		}
 	}
 
 	public static void playNameMentioned() {
-		playInNewThread("nameMentioned.wav");
+		if (Memory.getOtherSounds()) {
+			playInNewThread("nameMentioned.wav");
+		}
 	}
 
 	public static void playAlarmSignal() {
-		playInNewThread("alarmSignal.wav");
+		if (Memory.getOtherSounds()) {
+			playInNewThread("alarmSignal.wav");
+		}
 	}
 
 	public static void playMakeMove(boolean isInMyGame) {

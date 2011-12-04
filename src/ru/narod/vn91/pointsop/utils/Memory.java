@@ -111,8 +111,16 @@ public class Memory {
 				memory.get("ClickAudibility", ""));
 	}
 
+	public static boolean getOtherSounds() {
+		return memory.getBoolean("OtherSounds", true);
+	}
+
 	public static void setClickAudibility(ClickAudibility clickAudibility) {
 		memory.put("ClickAudibility", clickAudibility.name());
+	}
+
+	public static void setOtherSounds(boolean otherSounds) {
+		memory.putBoolean("OtherSounds", otherSounds);
 	}
 
 	public static void setClickAudibility(String s) {
