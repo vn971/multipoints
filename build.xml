@@ -7,10 +7,42 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="PointsOnPaper" default="jar" basedir=".">
-    <description>Builds, tests, and runs the project PointsOnPaper.</description>
-    <import file="nbproject/build-impl.xml"/>
-    <!--
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="MultiPoints" default="jar" basedir=".">
+	<description>Builds, tests, and runs the project MultiPoints.</description>
+
+	<property name="project.org" value="ru.ya.vn91" />
+	<property name="project.name" value="multipoints" />
+	<property name="project.version" value="1.0.0" />
+	<property name="ivy.organisation" value="${project.org}" />
+	<property name="ivy.module" value="${project.name}" />
+	<property name="ivy.revision" value="${project.version}" />
+
+	<import file="nbproject/build-impl.xml" />
+
+	<target name="jar-without-sign">
+		<delete dir="build" />
+
+		<mkdir dir="build/classes" />
+		<mkdir dir="build/lib"/>
+		<javac srcdir="src" destdir="build/classes" target="1.6" />
+
+		<mkdir dir="build/jar" />
+		<copy todir="build/jar">
+			<fileset dir="build/classes" />
+			<fileset dir="src" />
+		</copy>
+		<jar destfile="build/${project.name}-${project.version}.jar" basedir="build/jar" />
+	</target>
+
+	<target name="publish" depends="jar-without-sign">
+		<ivy:resolve />
+		<ivy:publish resolver="local" overwrite="true">
+			<artifacts pattern="build/[artifact]-[revision].[ext]" />
+		</ivy:publish>
+	</target>
+
+
+	<!--
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 

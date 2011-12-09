@@ -1,5 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -91,13 +93,13 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
     roomPart_UserList1 = new ru.narod.vn91.pointsop.gui.RoomPart_Userlist();
     jPanel1 = new javax.swing.JPanel();
     jToggleButton_LeaveZayavka = new javax.swing.JToggleButton();
+    jButton2 = new javax.swing.JButton();
 
     jButton1.setText("!топ");
     jButton1.setFocusable(false);
     jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
     jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-    setPreferredSize(new java.awt.Dimension(20, 20));
     addComponentListener(new java.awt.event.ComponentAdapter() {
       public void componentShown(java.awt.event.ComponentEvent evt) {
         formComponentShown(evt);
@@ -117,10 +119,21 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 
     jToggleButton_LeaveZayavka.setText("[] заявка на игру");
     jToggleButton_LeaveZayavka.setFocusable(false);
-    jToggleButton_LeaveZayavka.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
     jToggleButton_LeaveZayavka.addChangeListener(new javax.swing.event.ChangeListener() {
       public void stateChanged(javax.swing.event.ChangeEvent evt) {
         jToggleButton_LeaveZayavkaStateChanged(evt);
+      }
+    });
+    jToggleButton_LeaveZayavka.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jToggleButton_LeaveZayavkaActionPerformed(evt);
+      }
+    });
+
+    jButton2.setText(".?");
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton2ActionPerformed(evt);
       }
     });
 
@@ -129,12 +142,14 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-        .addContainerGap(390, Short.MAX_VALUE)
+        .addComponent(jButton2)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 499, Short.MAX_VALUE)
         .addComponent(jToggleButton_LeaveZayavka))
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jToggleButton_LeaveZayavka)
+      .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+      .addComponent(jToggleButton_LeaveZayavka, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -143,8 +158,8 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(roomPart_Chat1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
-          .addComponent(roomPart_GameList1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+          .addComponent(roomPart_Chat1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+          .addComponent(roomPart_GameList1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
           .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(roomPart_UserList1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -156,8 +171,8 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(roomPart_Chat1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, Short.MAX_VALUE))
-      .addComponent(roomPart_UserList1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+        .addComponent(roomPart_Chat1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
+      .addComponent(roomPart_UserList1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -170,9 +185,23 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 	}//GEN-LAST:event_formComponentShown
 
 private void jToggleButton_LeaveZayavkaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_LeaveZayavkaStateChanged
+
+}//GEN-LAST:event_jToggleButton_LeaveZayavkaStateChanged
+
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+	JOptionPane.showMessageDialog(null, 
+					"Ваши предложения, что сюда добавить?\n"
+					+ "\n"
+					+ "Для PointsXT - может быть команды?\n"
+					+ "Для zagram - может быть фильтрация заявок на игру (автоприём, автоотказ) ?\n"
+					+ "\n"
+					+ "http://pointsgame.net/forum/");
+}//GEN-LAST:event_jButton2ActionPerformed
+
+private void jToggleButton_LeaveZayavkaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_LeaveZayavkaActionPerformed
 	if (jToggleButton_LeaveZayavka.isSelected()) {
 		jToggleButton_LeaveZayavka.setText("убрать заявку на игру");
-		jToggleButton_LeaveZayavka.setIcon(null);
+		jToggleButton_LeaveZayavka.setIcon(new ImageIcon());
 		server.searchOpponent();
 	} else {
 		jToggleButton_LeaveZayavka.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png")));
@@ -181,10 +210,11 @@ private void jToggleButton_LeaveZayavkaStateChanged(javax.swing.event.ChangeEven
 			server.stopSearchingOpponent();
 		}
 	}
-}//GEN-LAST:event_jToggleButton_LeaveZayavkaStateChanged
+}//GEN-LAST:event_jToggleButton_LeaveZayavkaActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;
+  private javax.swing.JButton jButton2;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JToggleButton jToggleButton_LeaveZayavka;
   private ru.narod.vn91.pointsop.gui.RoomPart_Chat roomPart_Chat1;
