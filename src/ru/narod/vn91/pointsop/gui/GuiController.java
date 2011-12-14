@@ -514,8 +514,8 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 		if (Memory.isDebug() == true) {
 			System.out.print(add);
 		} else {
-			this.privateMessageReceived(server, server.getServerName(), info);
 		}
+			this.privateMessageReceived(server, server.getServerName(), info);
 	}
 
 	@Override
@@ -539,9 +539,9 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 		if (Memory.isDebug() == true) {
 			System.out.print(add);
 		} else {
-			String oldText = serverOutput.getText();
-			serverOutput.setText(oldText + add);
 		}
+		String oldText = serverOutput.getText();
+		serverOutput.setText(oldText + add);
 	}
 
   public synchronized void activateGameRoom(

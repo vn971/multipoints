@@ -79,6 +79,7 @@ public class ServerZagram2 implements ServerInterface {
 	@Override
 	public void connect() {
 		Thread thread = new Thread() {
+			@Override
 			public void run() {
 				gui.rawConnectionState(ServerZagram2.this, "Подключение...");
 				String authorization = getLinkContent(
@@ -98,6 +99,7 @@ public class ServerZagram2 implements ServerInterface {
 					}
 				};
 				Thread killUltimatively = new Thread() {
+					@Override
 					public void run() {
 						// give the "disconnectThread" a little time, and after that kill it
 						Wait.waitExactly(1000L);
