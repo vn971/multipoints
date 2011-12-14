@@ -10,6 +10,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.ImageIcon;
 
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
@@ -26,6 +30,8 @@ public class ServerZagram2 implements ServerInterface {
 	String secretId;
 	volatile boolean isDisposed = false;
 	MessageQueue queue = new MessageQueue(5);
+	
+	Map<String,String> avatars = new HashMap<String, String>();
 
 	public ServerZagram2(String myNameOnServer, GuiForServerInterface gui) {
 		super();
@@ -449,10 +455,11 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("h")) { // additional flags
 					} else if (message.startsWith("i")) { // player info
 						String[] dotSplitted = message.substring("i".length()).split("\\.");
-						String player = null, status = null, language = null, myStatus = null;
+						String player = null, id = null, status = null, language = null, myStatus = null;
 						Integer rating = null, winCount = null, lossCount = null, drawCount = null;
 						if (dotSplitted.length == 4 || dotSplitted.length == 8) {
 							player = dotSplitted[0];
+							avatars.put(player, dotSplitted[1]);
 							status = dotSplitted[2].equals("F") ? "free" : "";
 							language = dotSplitted[3];
 							myStatus = language + " (" + status + ")";
@@ -508,9 +515,10 @@ public class ServerZagram2 implements ServerInterface {
 							for (String sgfNode : semiSplitted) {
 								// ([A-Z]{1,2}\[([^\]|\\\\)*?\])*
 								// ([A-Z]{1,2}\[.*?\])*
-								if (sgfNode.matches("([A-Z]{1,2}\\[.*?\\])*") == false) {
+								if (sgfNode.matches("([A-Z]{1,2}\\[.*\\])*") == false) {
 									gui.raw(server, "unknown message structure: " + message);
 								} else {
+									String lastMovePropertyName = "";
 									String[] sgfPropertyList = sgfNode.split("\\]");
 									for (String sgfProperty : sgfPropertyList) {
 										String propertyName = sgfProperty.replaceAll("\\[.*", "");
@@ -518,14 +526,16 @@ public class ServerZagram2 implements ServerInterface {
 										if (propertyName.matches("U(B|W)")) {
 											throw new FatalGameRoomError(
 												"can't handle 'Undo black move'.");
-										} else if (propertyName.matches("B|W|AB|AW")) {
+										} else if (propertyName.matches("B|W|AB|AW|")) {
+											boolean isWhite = propertyName.matches("W|AW") 
+													|| (propertyName.equals("") && lastMovePropertyName.matches("A|AW"));
+											lastMovePropertyName = propertyName;
 											gui.makedMove(
 													server, currentRoom,
 													message.startsWith("sr"),
 													stringToCoordinates(propertyValue).x,
 													stringToCoordinates(propertyValue).y,
-													propertyName.matches("W|AW"), propertyName.equals("B|AB")
-													// 999, 999
+													isWhite, !isWhite
 													);
 										} else {
 										}
@@ -618,6 +628,38 @@ public class ServerZagram2 implements ServerInterface {
 	@Override
 	public boolean isGuiYInverted() {
 		return false;
+	}
+
+	@Override
+	public boolean isPrivateChatEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isPingEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isSoundNotifyEnabled() {
+		return false;
+	}
+
+	@Override
+	public void getUserInfo(String user) {
+		try {
+//			http://zagram.org/awatar2.png
+			String urlAsString = (avatars.get(user).equals("")) 
+					? "http://zagram.org/awatar2.png"
+						: "http://zagram.org/awatary/" + avatars.get(user) + ".gif";
+			URL url = new URL(urlAsString);
+			if (url != null) {
+				ImageIcon imageIcon = new ImageIcon(url);
+				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
+			}
+		} catch (MalformedURLException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

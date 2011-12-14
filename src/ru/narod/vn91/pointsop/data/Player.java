@@ -1,9 +1,10 @@
 package ru.narod.vn91.pointsop.data;
 
-import java.awt.Image;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.swing.ImageIcon;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -17,7 +18,7 @@ public class Player {
 	public Integer winCount = 0;
 	public Integer lossCount = 0;
 	public Integer drawCount = 0;
-	public Image image;
+	public ImageIcon imageIcon;
 	public String status = "";
 
 	Collection<PlayerChangeListener> changeListenerList = new ArrayList<PlayerChangeListener>();
@@ -32,7 +33,7 @@ public class Player {
 
 	public Player(ServerInterface server, String id, String guiName,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
-			Image image, String status) {
+			ImageIcon imageIcon, String status) {
 		super();
 		this.server = server;
 		this.id = id;
@@ -41,7 +42,7 @@ public class Player {
 		this.winCount = winCount;
 		this.lossCount = lossCount;
 		this.drawCount = drawCount;
-		this.image = image;
+		this.imageIcon = imageIcon;
 		this.status = status;
 	}
 

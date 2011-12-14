@@ -27,6 +27,8 @@ public interface ServerInterface {
 	void sendChat(String room, String message);
 
 	void sendPrivateMsg(String target, String message);
+	
+	void getUserInfo(String user);
 
 	String getMyName();
 
@@ -37,9 +39,15 @@ public interface ServerInterface {
 	int getMaximumMessageLength();
 
 	boolean isIncomingYInverted();
-	
+
 	boolean isGuiYInverted();
-	
+
+	boolean isPrivateChatEnabled();
+
+	boolean isPingEnabled();
+
+	boolean isSoundNotifyEnabled();
+
 	String coordinatesToString(Integer xOrNull, Integer yOrNull);
 //	CoordinatesFormatter getCoordinatesFormatter();
 	

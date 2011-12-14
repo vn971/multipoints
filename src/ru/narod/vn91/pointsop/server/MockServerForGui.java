@@ -99,4 +99,23 @@ public class MockServerForGui implements ServerInterface{
 	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public boolean isPrivateChatEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isPingEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isSoundNotifyEnabled() {
+		return false;
+	}
+
+	@Override
+	public void getUserInfo(String user) {
+	}
 }

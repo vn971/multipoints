@@ -147,10 +147,10 @@ made subject to such option by the copyright holder.
             </customize>
         </jnlp:extend-manifest>
     </target>
-    <target name="-do-jar-applet" depends="-test-jnlp-type,-init-macrodef-copylibs" if="is.applet+mkdist.available">
+    <target name="-do-jar-applet" depends="-test-jnlp-type" if="is.applet+mkdist.available">
         <j2seproject3:copylibs manifest="${tmp.manifest.file}"/>
     </target>
-    <target name="-do-jar-jnlp-application" depends="-init-filename,-test-jnlp-type,-init-macrodef-copylibs" if="is.application+mkdist.available">
+    <target name="-do-jar-jnlp-application" depends="-init-filename,-test-jnlp-type" if="is.application+mkdist.available">
         <j2seproject3:copylibs manifest="${tmp.manifest.file}">
             <customize>
                 <attribute name="Main-Class" value="${main.class}"/>
@@ -160,7 +160,7 @@ made subject to such option by the copyright holder.
         <property location="${jnlp.dest.dir}/${jnlp.file}" name="jnlp.file.resolved"/>
         <echo>javaws "${jnlp.file.resolved}"</echo>
     </target>
-    <target name="-do-jar-jnlp-component" depends="-test-jnlp-type,-init-macrodef-copylibs" if="is.component+mkdist.available">
+    <target name="-do-jar-jnlp-component" depends="-test-jnlp-type" if="is.component+mkdist.available">
         <j2seproject3:copylibs manifest="${tmp.manifest.file}"/>
     </target>
     <target name="-do-jar-jnlp" depends="-create-tmp-manifest,-copy-tmp-manifest,-add-trusted-only-attribute,-add-trusted-library-attribute,-do-jar-applet,-do-jar-jnlp-application,-do-jar-jnlp-component"/>
@@ -351,15 +351,6 @@ made subject to such option by the copyright holder.
     
     <!-- Running/Debugging -->
     
-    <target name="jws-run" depends="jar,-verify-jnlp-enabled,-verify-codebase,-init-platform" description="Start javaws execution">
-        <exec executable="${platform.home}/bin/javaws">
-            <arg file="${jnlp.dest.dir}/${jnlp.file}"/>
-        </exec>
-    </target>
-    
-    <target name="jws-debug" if="netbeans.home" depends="jar,-verify-jnlp-enabled,-verify-codebase,-debug-start-debugger,-debug-javaws-debuggee" 
-        description="Debug javaws project in IDE"/>
-        
     <target name="-init-debug-args">
         <property name="version-output" value="java version &quot;${ant.java.version}"/>
         <condition property="have-jdk-older-than-1.4">

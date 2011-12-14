@@ -7,6 +7,8 @@ package ru.narod.vn91.pointsop.server;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.swing.ImageIcon;
 
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
@@ -705,6 +709,8 @@ public class ServerPointsxt
 			super.sendMessage(sender, "/Pong");
 		} else if (message.equals("/GameMinimaze")) {
 		} else if (message.equals("/GameMaximaze")) {
+		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith("Игрок")) {
+			gui.privateMessageReceived(this, message.split(" ")[1], message);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
 			gui.privateMessageReceived(
@@ -1376,7 +1382,7 @@ public class ServerPointsxt
 			return "";
 		}
 	}
-	
+
 	@Override
 	public boolean isIncomingYInverted() {
 		return false;
@@ -1385,6 +1391,35 @@ public class ServerPointsxt
 	@Override
 	public boolean isGuiYInverted() {
 		return true;
+	}
+
+	@Override
+	public boolean isPrivateChatEnabled() {
+		return true;
+	}
+
+	@Override
+	public boolean isPingEnabled() {
+		return true;
+	}
+
+	@Override
+	public boolean isSoundNotifyEnabled() {
+		return true;
+	}
+
+	@Override
+	public void getUserInfo(String user) {
+		sendPrivateMsg("Podbot", "!info " + user);
+		try {
+			URL url = new URL("http://pointsgame.net/mp/irc-icons/" + user + ".gif");
+			if (url != null) {
+				ImageIcon imageIcon = new ImageIcon(url);
+				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
+			}
+		} catch (MalformedURLException ex) {
+			ex.printStackTrace();
+		}
 	}
 }
 
@@ -1426,16 +1461,18 @@ class IrcNicknameManager {
 	void changeIrcNick(
 			String oldIrcNick,
 			String newIrcNick) {
-		String shortNick = fromIrc.get(oldIrcNick);
+
+		String id = fromIrc.get(oldIrcNick);
 
 		fromIrc.remove(oldIrcNick); // we point both irc nicks to the Id - no, we don't
-		fromIrc.put(newIrcNick, shortNick);
+		fromIrc.put(newIrcNick, id);
 
-		fromId.remove(shortNick);
-		fromId.put(shortNick, newIrcNick); // overwrite the old
+		fromId.remove(id);
+		fromId.put(id, newIrcNick); // overwrite the old
 	}
 
 	void removeIrcNick(String ircNick) {
+		ircNick = ircNick.toLowerCase();
 		String shortNick = fromIrc.get(ircNick);
 		fromId.remove(shortNick);
 		for (Entry<String,String> mapEntry : fromIrc.entrySet()) {

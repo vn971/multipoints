@@ -62,20 +62,15 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 			ServerInterface server,
 			String nameOnServer,
 			GuiController centralGuiController) {
-//		System.out.println("LangRoom.LangRoom()");
 		this.nameOnServer = nameOnServer;
 		this.centralGuiController = centralGuiController;
 		initComponents();
-		jToggleButton_LeaveZayavkaStateChanged(null);
+		jToggleButton_LeaveZayavkaActionPerformed(null);
 		this.server = server;
 
-//		System.out.println("LangRoom.LangRoom()2");
 		roomPart_Chat1.initChat(this, null);
-//		System.out.println("LangRoom.LangRoom()3");
 		roomPart_UserList1.initRoomPart(this, centralGuiController);
-//		System.out.println("LangRoom.LangRoom()4");
 		roomPart_GameList1.initRoomPart(this, centralGuiController);
-//		System.out.println("LangRoom.LangRoom()5");
 	}
 
 	/** This method is called from within the constructor to
@@ -202,7 +197,9 @@ private void jToggleButton_LeaveZayavkaActionPerformed(java.awt.event.ActionEven
 	if (jToggleButton_LeaveZayavka.isSelected()) {
 		jToggleButton_LeaveZayavka.setText("убрать заявку на игру");
 		jToggleButton_LeaveZayavka.setIcon(new ImageIcon());
-		server.searchOpponent();
+		if (evt != null && server != null) {
+			server.searchOpponent();
+		}
 	} else {
 		jToggleButton_LeaveZayavka.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png")));
 		jToggleButton_LeaveZayavka.setText("оставить заявку на игру");

@@ -6,13 +6,12 @@
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.Date;
-import javax.swing.JOptionPane;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.StyledDocument;
 
 import ru.narod.vn91.pointsop.data.Player;
+import ru.narod.vn91.pointsop.data.PlayerChangeListener;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
@@ -115,65 +114,33 @@ public class PrivateChat extends javax.swing.JPanel {
 	}
 
 	/** Creates new form PrivateChat */
-	public PrivateChat(
-			Player p
-//			final ServerInterface server,
-//			GuiForServerInterface guiController,
-//			final String companionId
-			) {
+	public PrivateChat(final Player p) {
+		System.out.println("p.toString() = " + p.toString());
 		this.player = p;
-//		this.server = server;
-//		this.companionNick = companionId;
-		if (player.server != null) {
-			lastMoveWasMine = player.server.getMyName().compareTo(player.id) > 0;
-		} else {
-			lastMoveWasMine = false;
-		}
-//		this.guiController = guiController;
-		paper = new Paper() {
-
-			@Override
-			public void paperClick(int x,
-					int y,
-					MouseEvent evt) {
-				if (player.id.startsWith("^")) {
-					if (lastMoveWasMine) {
-						addChat("", "сейчас ход оппонента.", true);
-					} else {
-						boolean myColor = !(player.server.getMyName().compareTo(
-								player.id) > 0);
-						MoveResult moveResult = paper.makeMove(false, x, y,
-								myColor);
-						if (moveResult != MoveResult.ERROR) {
-							player.server.sendPrivateMsg(player.id,
-									prefixPointsop + prefixMakeMove + x + " " + y);
-							lastMoveWasMine = true;
-						}
-					}
-				} else {
-					addChat("server",
-							"Играть пока-что можно только с другими игроками зашедшими через Op.",
-							false);
-				}
-			}
-
-			@Override
-			public void paperMouseMove(int x,
-					int y,
-					MouseEvent evt) {
-			}
-		};
-		paper.initPaper(30, 30, false);
 		initComponents();
-//		if (companionNick.startsWith("^") == false) {
-//		}
-		jButton_StartNewGame.setVisible(false);
-		jPanel_Paper.setVisible(false);
-		jTextField_Chat.requestFocusInWindow();
-		jTextField_Chat.setDocument(
+		if (p.server.isPrivateChatEnabled()) {
+			jTextField_Chat.requestFocusInWindow();
+			jTextField_Chat.setDocument(
 				new JTextField_UndoableLimited(
-					jTextField_Chat,
-					player.server.getMaximumMessageLength()));
+				jTextField_Chat,
+				player.server.getMaximumMessageLength()));
+		} else {
+			jTextField_Chat.setEnabled(false);
+//			jTextField_Chat.setText("чат на этом сервере недоступен");
+			jTextPane_Chat.setEnabled(false);
+			jTextPane_Chat.setText("чат на этом сервере недоступен");
+		}
+		jButton_Ping.setEnabled(p.server.isPingEnabled());
+		jButton_Sound.setEnabled(p.server.isSoundNotifyEnabled());
+		p.addChangeListener(new PlayerChangeListener() {
+			@Override
+			public void onChange(Player player) {
+				System.out.println("p.imageIcon = " + p.imageIcon);
+				System.out.println("p.imageIcon.getIconWidth() = " + p.imageIcon.getIconWidth());
+				jLabel_Userpic.setIcon(p.imageIcon);
+			}
+		});
+		p.server.getUserInfo(p.id);
 	}
 
 	/** This method is called from within the constructor to
@@ -189,11 +156,10 @@ public class PrivateChat extends javax.swing.JPanel {
         jTextPane_Chat = new javax.swing.JTextPane();
         jTextPane_Chat.setDocument(document);
         jTextField_Chat = new javax.swing.JTextField();
-        jButton_Sound = new javax.swing.JButton();
-        jButton_Userinfo = new javax.swing.JButton();
+        jPanel_Info = new javax.swing.JPanel();
         jButton_Ping = new javax.swing.JButton();
-        jPanel_Paper = paper;//(companionNick.startsWith("^")) : new JPanel();
-        jButton_StartNewGame = new javax.swing.JButton();
+        jButton_Sound = new javax.swing.JButton();
+        jLabel_Userpic = new javax.swing.JLabel();
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -221,6 +187,13 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
+        jButton_Ping.setText("померить ping");
+        jButton_Ping.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_PingActionPerformed(evt);
+            }
+        });
+
         jButton_Sound.setText("отправить звук");
         jButton_Sound.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,37 +201,29 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
-        jButton_Userinfo.setText("юзеринфо");
-        jButton_Userinfo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_UserinfoActionPerformed(evt);
-            }
-        });
-
-        jButton_Ping.setText("померять Ping");
-        jButton_Ping.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_PingActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel_PaperLayout = new javax.swing.GroupLayout(jPanel_Paper);
-        jPanel_Paper.setLayout(jPanel_PaperLayout);
-        jPanel_PaperLayout.setHorizontalGroup(
-            jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 43, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel_InfoLayout = new javax.swing.GroupLayout(jPanel_Info);
+        jPanel_Info.setLayout(jPanel_InfoLayout);
+        jPanel_InfoLayout.setHorizontalGroup(
+            jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_InfoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton_Ping, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                    .addComponent(jButton_Sound, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                    .addComponent(jLabel_Userpic, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        jPanel_PaperLayout.setVerticalGroup(
-            jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 34, Short.MAX_VALUE)
+        jPanel_InfoLayout.setVerticalGroup(
+            jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_InfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel_Userpic)
+                .addGap(18, 18, 18)
+                .addComponent(jButton_Ping)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_Sound)
+                .addContainerGap(378, Short.MAX_VALUE))
         );
-
-        jButton_StartNewGame.setText("начать новую игру");
-        jButton_StartNewGame.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_StartNewGameActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -266,33 +231,18 @@ public class PrivateChat extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
-                    .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_StartNewGame, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel_Paper, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Userinfo, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton_Ping, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton_Sound, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                    .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel_Info, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jButton_Userinfo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Ping)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Sound)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_StartNewGame)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel_Paper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField_Chat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel_Info, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -317,35 +267,6 @@ public class PrivateChat extends javax.swing.JPanel {
 		player.server.sendPrivateMsg(player.id, "/Ping");
 	}//GEN-LAST:event_jButton_PingActionPerformed
 
-	private void jButton_UserinfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_UserinfoActionPerformed
-		player.server.sendPrivateMsg("Podbot", "!info " + player.id.replaceAll(
-				"\\(.*\\)", ""));
-		addChat("", "ответ (информацию юзеринфо) Вы получите от имени 'PodBot' "
-				+ "-- так уж всё устроено тут на канале...:)", false);
-	}//GEN-LAST:event_jButton_UserinfoActionPerformed
-
-	private void jButton_StartNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_StartNewGameActionPerformed
-		String userOutput = JOptionPane.showInputDialog(
-				"введите размеры поля по X и по Y через пробел.\n"
-				+ "Размеры не должны быть больше 50-ти.\n"
-				+ "Например, 30 25");
-		int x = -1, y = -1;
-		try {
-			String[] splitted = userOutput.split(" ");
-			x = Integer.parseInt(splitted[0]);
-			y = Integer.parseInt(splitted[1]);
-		} catch (Exception e) {
-		}
-		if ((x > 0) && (y > 0) && (x < 50) && (y < 50)) {
-			paper.initPaper(x, y, false);
-			addChat("", "Началась новая игра, размеры поля: " + x + ":" + y,
-					true);
-			lastMoveWasMine = player.server.getMyName().compareTo(player.id) > 0;
-			player.server.sendPrivateMsg(player.id,
-					prefixPointsop + prefixNewGame + x + " " + y);
-		}
-	}//GEN-LAST:event_jButton_StartNewGameActionPerformed
-
 	private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
 		jTextField_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formComponentShown
@@ -361,9 +282,8 @@ public class PrivateChat extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Ping;
     private javax.swing.JButton jButton_Sound;
-    private javax.swing.JButton jButton_StartNewGame;
-    private javax.swing.JButton jButton_Userinfo;
-    private javax.swing.JPanel jPanel_Paper;
+    private javax.swing.JLabel jLabel_Userpic;
+    private javax.swing.JPanel jPanel_Info;
     private javax.swing.JScrollPane jScrollPane_Chat;
     javax.swing.JTextField jTextField_Chat;
     private javax.swing.JTextPane jTextPane_Chat;

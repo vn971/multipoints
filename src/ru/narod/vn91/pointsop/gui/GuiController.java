@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
@@ -71,13 +72,13 @@ public class GuiController implements GuiForServerInterface {
 	@Override
 	public void updateUserInfo(
 			ServerInterface server, String id,
-			String guiName, Image image,
+			String guiName, ImageIcon imageIcon,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status) {
 		Player player = playerPool.get(server, id);
 		int previousRating = player.rating;
 		Player updateInstance = new Player(server, id, guiName, rating, winCount,
-					lossCount, drawCount, image, status);
+					lossCount, drawCount, imageIcon, status);
 		player.updateFrom(updateInstance);
 		if (rating!=null &&
 				previousRating != rating &&

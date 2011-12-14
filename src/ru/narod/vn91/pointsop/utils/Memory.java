@@ -240,7 +240,7 @@ public class Memory {
 
 	public static void main(String[] args) {
 //		setZagramTest(false);
-//		setDebug(false);
+//		setDebug(true);
 	}
 
 	public enum ClickAudibility {

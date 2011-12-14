@@ -162,5 +162,24 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	public boolean isGuiYInverted() {
 		return false;
 	}
+
+	@Override
+	public boolean isPrivateChatEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isPingEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isSoundNotifyEnabled() {
+		return false;
+	}
+
+	@Override
+	public void getUserInfo(String user) {
+	}
 	
 }

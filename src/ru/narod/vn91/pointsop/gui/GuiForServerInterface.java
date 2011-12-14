@@ -1,10 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.Image;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import ru.narod.vn91.pointsop.data.Player;
+import javax.swing.ImageIcon;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.server.ServerInterface;
@@ -28,7 +24,7 @@ public interface GuiForServerInterface {
 	 */
 	public abstract void updateUserInfo(
 			ServerInterface server, String id,
-			String guiName, Image image,
+			String guiName, ImageIcon imageIcon,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
 			String status);
 
