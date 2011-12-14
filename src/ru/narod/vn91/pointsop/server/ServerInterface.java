@@ -28,7 +28,9 @@ public interface ServerInterface {
 
 	void sendPrivateMsg(String target, String message);
 	
-	void getUserInfo(String user);
+	void getUserInfoText(String user);
+
+	void getUserpic(String user);
 
 	String getMyName();
 

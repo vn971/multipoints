@@ -178,8 +178,10 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		return false;
 	}
 
-	@Override
-	public void getUserInfo(String user) {
+	public void getUserInfoText(String user) {
+	}
+
+	public void getUserpic(String user) {
 	}
 	
 }

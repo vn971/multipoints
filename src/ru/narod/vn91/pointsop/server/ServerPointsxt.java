@@ -36,6 +36,7 @@ import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Memory;
 
+
 public class ServerPointsxt
 		extends PircBot
 		implements ServerInterface {
@@ -1234,7 +1235,6 @@ public class ServerPointsxt
 		}
 	}
 
-
 	class MyGame {
 
 		String roomName = "";
@@ -1408,9 +1408,11 @@ public class ServerPointsxt
 		return true;
 	}
 
-	@Override
-	public void getUserInfo(String user) {
+	public void getUserInfoText(String user) {
 		sendPrivateMsg("Podbot", "!info " + user);
+	}
+
+	public void getUserpic(String user) {
 		try {
 			URL url = new URL("http://pointsgame.net/mp/irc-icons/" + user + ".gif");
 			if (url != null) {
@@ -1422,7 +1424,6 @@ public class ServerPointsxt
 		}
 	}
 }
-
 class IrcNicknameManager {
 
 	Map<String, String> fromId = new LinkedHashMap<String, String>();

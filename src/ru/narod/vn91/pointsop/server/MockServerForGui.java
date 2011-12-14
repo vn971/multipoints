@@ -115,7 +115,9 @@ public class MockServerForGui implements ServerInterface{
 		return false;
 	}
 
-	@Override
-	public void getUserInfo(String user) {
+	public void getUserInfoText(String user) {
+	}
+
+	public void getUserpic(String user) {
 	}
 }

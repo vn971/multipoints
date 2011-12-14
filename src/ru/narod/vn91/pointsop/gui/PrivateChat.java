@@ -115,7 +115,6 @@ public class PrivateChat extends javax.swing.JPanel {
 
 	/** Creates new form PrivateChat */
 	public PrivateChat(final Player p) {
-		System.out.println("p.toString() = " + p.toString());
 		this.player = p;
 		initComponents();
 		if (p.server.isPrivateChatEnabled()) {
@@ -135,12 +134,11 @@ public class PrivateChat extends javax.swing.JPanel {
 		p.addChangeListener(new PlayerChangeListener() {
 			@Override
 			public void onChange(Player player) {
-				System.out.println("p.imageIcon = " + p.imageIcon);
-				System.out.println("p.imageIcon.getIconWidth() = " + p.imageIcon.getIconWidth());
 				jLabel_Userpic.setIcon(p.imageIcon);
 			}
 		});
-		p.server.getUserInfo(p.id);
+		p.server.getUserInfoText(p.id);
+		p.server.getUserpic(p.id);
 	}
 
 	/** This method is called from within the constructor to

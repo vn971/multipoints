@@ -28,14 +28,12 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 
 	void setAutoscroll(boolean newValue){
 		this.autoscroll = newValue;
-		jToggleButton_ScrollDown.setSelected(autoscroll);
 		jCheckBoxMenuItem_Autoscroll.setSelected(autoscroll);
 		scrollDown();
 	}
 
 	void setShowUserJoinLeave(boolean newValue) {
 		this.showUserJoinLeave = newValue;
-		jToggleButton_ShowJoinLeave.setSelected(showUserJoinLeave);
 		jCheckBoxMenuItem_ShowUserJoin.setSelected(showUserJoinLeave);
 	}
 
@@ -146,9 +144,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		jTextField_Chat.setText("test");
 		jMenuItem_FontIncrease.setVisible(false);
 
-		jButton_ClearChat.setVisible(false);
-		jToggleButton_ScrollDown.setVisible(false);
-		jToggleButton_ShowJoinLeave.setVisible(false);
 		setShowUserJoinLeave(true);
 		setAutoscroll(true);
 	}
@@ -185,9 +180,6 @@ public class RoomPart_Chat extends javax.swing.JPanel {
         jTextPane_Chat.setDocument(document);
         jTextField_Chat = new javax.swing.JTextField();
         jButton_Help = new javax.swing.JButton();
-        jToggleButton_ScrollDown = new javax.swing.JToggleButton();
-        jToggleButton_ShowJoinLeave = new javax.swing.JToggleButton();
-        jButton_ClearChat = new javax.swing.JButton();
 
         jMenuItem_SendMessage.setText("Отправить сообщение ( ⏎ Enter )");
         jMenuItem_SendMessage.addActionListener(new java.awt.event.ActionListener() {
@@ -249,7 +241,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
         jTextPane_Chat.setComponentPopupMenu(jPopupMenu1);
         jScrollPane_Chat.setViewportView(jTextPane_Chat);
 
-        jTextField_Chat.setFont(new java.awt.Font("Ubuntu", 0, 16));
+        jTextField_Chat.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
         jTextField_Chat.setComponentPopupMenu(jPopupMenu1);
         jTextField_Chat.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -265,42 +257,12 @@ public class RoomPart_Chat extends javax.swing.JPanel {
             }
         });
 
-        jToggleButton_ScrollDown.setText("↧");
-        jToggleButton_ScrollDown.setToolTipText("↧ крутить чат вниз при новых сообщениях");
-        jToggleButton_ScrollDown.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jToggleButton_ScrollDownStateChanged(evt);
-            }
-        });
-
-        jToggleButton_ShowJoinLeave.setText("⇆");
-        jToggleButton_ShowJoinLeave.setToolTipText("⇆ показывать вход-выход игроков");
-        jToggleButton_ShowJoinLeave.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jToggleButton_ShowJoinLeaveStateChanged(evt);
-            }
-        });
-
-        jButton_ClearChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
-        jButton_ClearChat.setToolTipText("очистить чат");
-        jButton_ClearChat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_ClearChatActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton_ShowJoinLeave)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton_ScrollDown)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_ClearChat)
+                .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_Help))
             .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
@@ -308,15 +270,11 @@ public class RoomPart_Chat extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField_Chat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jToggleButton_ScrollDown)
-                        .addComponent(jToggleButton_ShowJoinLeave))
                     .addComponent(jButton_Help)
-                    .addComponent(jButton_ClearChat)))
+                    .addComponent(jTextField_Chat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -365,24 +323,11 @@ private void jCheckBoxMenuItem_ShowUserJoinActionPerformed(java.awt.event.Action
 	setShowUserJoinLeave(jCheckBoxMenuItem_ShowUserJoin.isSelected());
 }//GEN-LAST:event_jCheckBoxMenuItem_ShowUserJoinActionPerformed
 
-private void jButton_ClearChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearChatActionPerformed
-	tryEraseChat();
-}//GEN-LAST:event_jButton_ClearChatActionPerformed
-
-private void jToggleButton_ScrollDownStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ScrollDownStateChanged
-	setAutoscroll(jToggleButton_ScrollDown.isSelected());
-}//GEN-LAST:event_jToggleButton_ScrollDownStateChanged
-
-private void jToggleButton_ShowJoinLeaveStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ShowJoinLeaveStateChanged
-	setShowUserJoinLeave(jToggleButton_ShowJoinLeave.isSelected());
-}//GEN-LAST:event_jToggleButton_ShowJoinLeaveStateChanged
-
 	private void jMenuItem_SendMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SendMessageActionPerformed
 		sendMessageInChatbox();
 	}//GEN-LAST:event_jMenuItem_SendMessageActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_ClearChat;
     private javax.swing.JButton jButton_Help;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_Autoscroll;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_ShowUserJoin;
@@ -393,7 +338,5 @@ private void jToggleButton_ShowJoinLeaveStateChanged(javax.swing.event.ChangeEve
     private javax.swing.JScrollPane jScrollPane_Chat;
     javax.swing.JTextField jTextField_Chat;
     private javax.swing.JTextPane jTextPane_Chat;
-    private javax.swing.JToggleButton jToggleButton_ScrollDown;
-    private javax.swing.JToggleButton jToggleButton_ShowJoinLeave;
     // End of variables declaration//GEN-END:variables
 }

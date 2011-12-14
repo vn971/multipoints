@@ -21,6 +21,7 @@ import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Memory;
 import ru.narod.vn91.pointsop.utils.Wait;
 
+
 @SuppressWarnings("serial")
 public class ServerZagram2 implements ServerInterface {
 
@@ -30,8 +31,9 @@ public class ServerZagram2 implements ServerInterface {
 	String secretId;
 	volatile boolean isDisposed = false;
 	MessageQueue queue = new MessageQueue(5);
-	
-	Map<String,String> avatars = new HashMap<String, String>();
+
+	Map<String,String> avatarUrls = new HashMap<String, String>();
+	Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
 
 	public ServerZagram2(String myNameOnServer, GuiForServerInterface gui) {
 		super();
@@ -459,7 +461,7 @@ public class ServerZagram2 implements ServerInterface {
 						Integer rating = null, winCount = null, lossCount = null, drawCount = null;
 						if (dotSplitted.length == 4 || dotSplitted.length == 8) {
 							player = dotSplitted[0];
-							avatars.put(player, dotSplitted[1]);
+							avatarUrls.put(player, dotSplitted[1]);
 							status = dotSplitted[2].equals("F") ? "free" : "";
 							language = dotSplitted[3];
 							myStatus = language + " (" + status + ")";
@@ -645,25 +647,28 @@ public class ServerZagram2 implements ServerInterface {
 		return false;
 	}
 
-	@Override
-	public void getUserInfo(String user) {
+	public void getUserInfoText(String user) {
+	}
+
+	public void getUserpic(String user) {
 		try {
-//			http://zagram.org/awatar2.png
-			String urlAsString = (avatars.get(user).equals("")) 
-					? "http://zagram.org/awatar2.png"
-						: "http://zagram.org/awatary/" + avatars.get(user) + ".gif";
-			URL url = new URL(urlAsString);
-			if (url != null) {
+			if (avatarImages.get(user)!=null){
+			} else if (avatarUrls.get(user)!=null 
+					&& !avatarUrls.get(user).equals("")
+					&& !avatarUrls.get(user).equals("0")){
+				URL url = new URL("http://zagram.org/awatary/" + avatarUrls.get(user) + ".gif");
+				ImageIcon imageIcon = new ImageIcon(url);
+				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
+			} else {
+				URL url = new URL("http://zagram.org/awatar2.png");
 				ImageIcon imageIcon = new ImageIcon(url);
 				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
 			}
-		} catch (MalformedURLException ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {
 		}
 	}
 
 }
-
 class MessageQueue {
 	ArrayList<String> stringList;
 	int size = 0;

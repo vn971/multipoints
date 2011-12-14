@@ -50,23 +50,40 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel_ForChat">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+            <EmptyBorder bottom="0" left="0" right="0" top="0"/>
+          </Border>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[246, 99999]"/>
+        </Property>
+      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="roomPart_UserList" alignment="1" pref="252" max="32767" attributes="2"/>
-              <Component id="roomPart_Chat" alignment="0" pref="252" max="32767" attributes="2"/>
-              <Component id="jButton_AdditionalActions" alignment="1" pref="252" max="32767" attributes="0"/>
+              <Component id="roomPart_UserList" alignment="0" pref="246" max="32767" attributes="2"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabel_Player1" pref="121" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel_Player2" pref="119" max="32767" attributes="0"/>
+              </Group>
+              <Component id="roomPart_Chat" alignment="0" pref="246" max="32767" attributes="2"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jButton_AdditionalActions" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="roomPart_UserList" min="-2" pref="203" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="roomPart_Chat" pref="261" max="32767" attributes="0"/>
+                  <Component id="roomPart_UserList" pref="83" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel_Player1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel_Player2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="roomPart_Chat" pref="168" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -76,25 +93,43 @@
         </Component>
         <Component class="ru.narod.vn91.pointsop.gui.RoomPart_Chat" name="roomPart_Chat">
         </Component>
-        <Component class="javax.swing.JButton" name="jButton_AdditionalActions">
+        <Component class="javax.swing.JLabel" name="jLabel_Player1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&#x441;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; &#x438;&#x433;&#x440;&#x443;"/>
-            <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="jPopupMenu_AdditionalActions"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ru/narod/vn91/pointsop/gui/new.png"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="&#x438;&#x433;&#x440;&#x43e;&#x43a;1"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Default Cursor"/>
+            </Property>
+            <Property name="horizontalTextPosition" type="int" value="4"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_AdditionalActionsActionPerformed"/>
-          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_Player2">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ru/narod/vn91/pointsop/gui/new.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x438;&#x433;&#x440;&#x43e;&#x43a;2"/>
+            <Property name="horizontalTextPosition" type="int" value="2"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel_ForGame">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+            <EmptyBorder bottom="0" left="0" right="0" top="0"/>
+          </Border>
+        </Property>
+      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jLabel_MouseCoords" alignment="0" pref="550" max="32767" attributes="0"/>
+              <Component id="jLabel_MouseCoords" alignment="0" pref="344" max="32767" attributes="0"/>
               <Component id="jPanel_Tree" alignment="0" max="32767" attributes="0"/>
               <Component id="jPanel_Paper" alignment="0" max="32767" attributes="0"/>
               <Component id="jPanel_Bottom" alignment="0" max="32767" attributes="0"/>
@@ -123,12 +158,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="550" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="344" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="413" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="173" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -151,13 +186,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jToggleButton_ShowTree" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="92" max="32767" attributes="0"/>
-                      <Component id="jButton_Pass" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton_Stop" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton_EndGame" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton_AdditionalActions" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jPanel_Time" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -166,9 +197,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="jToggleButton_ShowTree" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton_EndGame" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton_Stop" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton_Pass" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton_AdditionalActions" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPanel_Time" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -183,24 +212,6 @@
                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jToggleButton_ShowTreeStateChanged"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton_ShowTreeActionPerformed"/>
               </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton_Pass">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x43f;&#x430;&#x441;&#x441;"/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton_Stop">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x441;&#x442;&#x43e;&#x43f;"/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton_EndGame">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x43a;&#x43e;&#x43d;&#x435;&#x446; &#x438;&#x433;&#x440;&#x44b;..."/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel_Time">
               <Properties>
@@ -270,6 +281,17 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JButton" name="jButton_AdditionalActions">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x441;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c;"/>
+                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jPopupMenu_AdditionalActions"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_AdditionalActionsActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel_Tree">
@@ -284,7 +306,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="538" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="332" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
