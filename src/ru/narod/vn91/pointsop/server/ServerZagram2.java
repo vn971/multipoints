@@ -9,11 +9,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.swing.ImageIcon;
+
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
@@ -26,6 +31,7 @@ import ru.narod.vn91.pointsop.utils.Wait;
 public class ServerZagram2 implements ServerInterface {
 
 	String myNameOnServer;
+	boolean isPassworded;
 	GuiForServerInterface gui;
 	String currentTable = "";
 	String secretId;
@@ -35,8 +41,7 @@ public class ServerZagram2 implements ServerInterface {
 	Map<String,String> avatarUrls = new HashMap<String, String>();
 	Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
 
-	public ServerZagram2(String myNameOnServer, GuiForServerInterface gui) {
-		super();
+	public ServerZagram2(String myNameOnServer, String password, GuiForServerInterface gui) {
 
 		if (myNameOnServer.matches(".*[a-zA-Z].*")) {
 			myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Z0-9 ]", "");
@@ -47,17 +52,65 @@ public class ServerZagram2 implements ServerInterface {
 		} else {
 			myNameOnServer = myNameOnServer.replaceAll("[^0-9 ]", "");
 		}
-		// myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Zёа-яЁА-Яa-żA-Ż0-9]",
-		// "");
-		if (myNameOnServer.equals("")) {
-			myNameOnServer = String.format("Guest%04d", (int) (Math.random() * 9999));
+		isPassworded = !myNameOnServer.equals("") && !password.equals("");
+		if (isPassworded) {
+			this.myNameOnServer = myNameOnServer;
+			this.gui = gui;
+			this.secretId =
+					getBase64ZagramVersion(
+						getSha1(myNameOnServer + "9WB2qGYzzWry1vbVjoSK" + password)).
+							substring(0, 10);
+		} else {
+			if (myNameOnServer.equals("")) {
+				myNameOnServer = String.format("Guest%04d", (int) (Math.random() * 9999));
+			}
+			myNameOnServer = "*" + myNameOnServer;
+			this.myNameOnServer = myNameOnServer;
+			this.gui = gui;
+			Integer secretIdAsInt = (int) (Math.random() * 999999);
+			secretId = secretIdAsInt.toString();
 		}
+	}
 
-		this.myNameOnServer = "*" + myNameOnServer;
-		this.gui = gui;
 
-		Integer secretIdAsInt = (int) (Math.random() * 999999);
-		secretId = secretIdAsInt.toString();
+	private static String getBase64ZagramVersion(String input) {
+		if (input.length() % 3 == 2) {
+			input = input + "0";
+		} else if (input.length() % 3 == 1) {
+			input = input + "00";
+		} else {
+		}
+		byte [] bytes = input.getBytes();
+
+		final char[] base64ZagramStyle = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.".toCharArray();
+
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i + 2 < bytes.length; i = i + 3) {
+			// 111122223333
+			// aaaaaabbbbbb
+			int hex0 = Integer.parseInt(input.substring(i,i+1), 16);
+			int hex1 = Integer.parseInt(input.substring(i+1,i+2), 16);
+			int hex2 = Integer.parseInt(input.substring(i+2,i+3), 16);
+			stringBuilder.append(base64ZagramStyle[hex0 * 4 + hex1 / 4]);
+			stringBuilder.append(base64ZagramStyle[(hex1 & 3) * 16 + hex2]);
+		}
+		return stringBuilder.toString();
+	}
+
+	public static void main(String[] args) {
+		String sha = getSha1("test"+"9WB2qGYzzWry1vbVjoSK"+"1234");
+		System.out.println(sha);
+		System.out.println(getBase64ZagramVersion(sha));
+	}
+	
+	private static String getSha1(String input) {
+		try {
+			MessageDigest sha1 = MessageDigest.getInstance("SHA1");
+			byte[] digest = sha1.digest(input.getBytes());
+			return HexBin.encode(digest);
+		} catch (NoSuchAlgorithmException ex) {
+			return input;
+		}
 	}
 
 	@Override
@@ -82,14 +135,28 @@ public class ServerZagram2 implements ServerInterface {
 			@Override
 			public void run() {
 				gui.rawConnectionState(ServerZagram2.this, "Подключение...");
-				String authorization = getLinkContent(
-						"http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
-								secretId + "&opis=" +
-								getServerEncoded(myNameOnServer) + "&lang=en");
-				if (authorization.equals("")) {
-					gui.rawConnectionState(ServerZagram2.this, "Авторизовался. Подключаюсь к основной комнате...");
+
+				String authorizationURL;
+				if (isPassworded) {
+					authorizationURL = "http://zagram.org/auth.py?co=loguj&opisGracza=" +
+						getServerEncoded(myNameOnServer) +
+						"&idGracza=" +
+						secretId;
 				} else {
-					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации!");
+					authorizationURL = "http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
+						secretId + "&opis=" +
+						getServerEncoded(myNameOnServer) + "&lang=en";
+				}
+
+				String authorizationResult = getLinkContent(authorizationURL);
+				if (authorizationResult.equals("")) {
+					gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
+				} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
+					// avatarUrls.put(myNameOnServer, authorizationResult.split("\\.")[2]);
+					gui.rawConnectionState(ServerZagram2.this,
+						"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
+				} else {
+					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
 				}
 
 				final Thread disconnectThread = new Thread() {
@@ -459,7 +526,7 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("h")) { // additional flags
 					} else if (message.startsWith("i")) { // player info
 						String[] dotSplitted = message.substring("i".length()).split("\\.");
-						String player = null, id = null, status = null, language = null, myStatus = null;
+						String player = null, status = null, language = null, myStatus = null;
 						Integer rating = null, winCount = null, lossCount = null, drawCount = null;
 						if (dotSplitted.length == 4 || dotSplitted.length == 8) {
 							player = dotSplitted[0];

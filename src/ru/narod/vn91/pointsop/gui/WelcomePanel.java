@@ -24,7 +24,8 @@ public class WelcomePanel extends javax.swing.JPanel {
 	private void connectToZagram() {
 		updateNick();
 		if (guiController.zagram_server == null) {
-			guiController.zagram_server = new ServerZagram2(nick, guiController);
+			String password = String.copyValueOf(jPasswordField_Password.getPassword());
+			guiController.zagram_server = new ServerZagram2(nick, password, guiController);
 			guiController.zagram_server.connect();
 		}
 	}
@@ -62,6 +63,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 				jTextField_Username.getText().length(),
 				jTextField_Username.getText().length()
 		);
+		jTextField_Email.setVisible(false);
 	}
 
 	/**
@@ -75,7 +77,6 @@ public class WelcomePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jTextField_Username = new javax.swing.JTextField();
         jPanel_Right = new javax.swing.JPanel();
         jLabel_Logo = new javax.swing.JLabel();
         jLabel_IncontactGroup = new LinkedLabel();
@@ -85,17 +86,13 @@ public class WelcomePanel extends javax.swing.JPanel {
         jLabel_Links = new LinkedLabel();
         jScrollPane_ServerOutput = new javax.swing.JScrollPane();
         jTextPane_ServerOutput = new javax.swing.JTextPane();
+        jPanel1 = new javax.swing.JPanel();
         jPanel_Connections = new javax.swing.JPanel();
         jButton_ConnectToZagram = new javax.swing.JButton();
         jButton_ConnectToPointsxt = new javax.swing.JButton();
-
-        jTextField_Username.setBorder(javax.swing.BorderFactory.createTitledBorder("введите имя"));
-        jTextField_Username.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jTextField_Username.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField_UsernameKeyPressed(evt);
-            }
-        });
+        jTextField_Username = new javax.swing.JTextField();
+        jPasswordField_Password = new javax.swing.JPasswordField();
+        jTextField_Email = new javax.swing.JTextField();
 
         jPanel_Right.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -124,6 +121,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jTextPane_ServerOutput.setEditable(false);
         jTextPane_ServerOutput.setText("Если  ваш интернет блокирует некоторые порты, то поиск соединения может занять время. В этом случае статус будет обновляться в этом окошке раз в ~~3 минуты. После первого успешного подключения задержек не будет.\n\nCоединение:\n----------------------------------------------------------------------------\n");
+        jTextPane_ServerOutput.setDisabledTextColor(new java.awt.Color(254, 254, 254));
         jScrollPane_ServerOutput.setViewportView(jTextPane_ServerOutput);
 
         javax.swing.GroupLayout jPanel_RightLayout = new javax.swing.GroupLayout(jPanel_Right);
@@ -133,13 +131,13 @@ public class WelcomePanel extends javax.swing.JPanel {
             .addGroup(jPanel_RightLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel_Logo, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
+                    .addComponent(jLabel_Logo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel_IncontactGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_Qestions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_GameWishes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_Links, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_ChatWishes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE))
+                    .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel_RightLayout.setVerticalGroup(
@@ -158,9 +156,11 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel_Links, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jPanel_Connections.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "подключиться к:", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP));
 
@@ -186,8 +186,8 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_Connections.setLayout(jPanel_ConnectionsLayout);
         jPanel_ConnectionsLayout.setHorizontalGroup(
             jPanel_ConnectionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton_ConnectToPointsxt, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-            .addComponent(jButton_ConnectToZagram, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+            .addComponent(jButton_ConnectToPointsxt, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+            .addComponent(jButton_ConnectToZagram, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
         );
         jPanel_ConnectionsLayout.setVerticalGroup(
             jPanel_ConnectionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,16 +198,59 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTextField_Username.setBorder(javax.swing.BorderFactory.createTitledBorder("введите имя"));
+        jTextField_Username.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jTextField_Username.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_UsernameKeyPressed(evt);
+            }
+        });
+
+        jPasswordField_Password.setBorder(javax.swing.BorderFactory.createTitledBorder("пароль (необяз.)"));
+
+        jTextField_Email.setBorder(javax.swing.BorderFactory.createTitledBorder("email"));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jTextField_Username, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPasswordField_Password, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTextField_Email, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel_Connections, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPasswordField_Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel_Connections, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
+                .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField_Username)
-                    .addComponent(jPanel_Connections, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -215,13 +258,9 @@ public class WelcomePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel_Connections, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jPanel_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -250,9 +289,12 @@ public class WelcomePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel_Links;
     private javax.swing.JLabel jLabel_Logo;
     private javax.swing.JLabel jLabel_Qestions;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel_Connections;
     private javax.swing.JPanel jPanel_Right;
+    private javax.swing.JPasswordField jPasswordField_Password;
     private javax.swing.JScrollPane jScrollPane_ServerOutput;
+    private javax.swing.JTextField jTextField_Email;
     javax.swing.JTextField jTextField_Username;
     public javax.swing.JTextPane jTextPane_ServerOutput;
     // End of variables declaration//GEN-END:variables
