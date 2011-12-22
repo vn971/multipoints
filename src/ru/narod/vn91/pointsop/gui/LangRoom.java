@@ -198,13 +198,13 @@ private void jToggleButton_LeaveZayavkaActionPerformed(java.awt.event.ActionEven
 		jToggleButton_LeaveZayavka.setText("убрать заявку на игру");
 		jToggleButton_LeaveZayavka.setIcon(new ImageIcon());
 		if (evt != null && server != null) {
-			server.searchOpponent();
+			server.createGameVacancy();
 		}
 	} else {
 		jToggleButton_LeaveZayavka.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png")));
 		jToggleButton_LeaveZayavka.setText("оставить заявку на игру");
 		if (server != null) {
-			server.stopSearchingOpponent();
+			server.stopGameVacancy();
 		}
 	}
 }//GEN-LAST:event_jToggleButton_LeaveZayavkaActionPerformed

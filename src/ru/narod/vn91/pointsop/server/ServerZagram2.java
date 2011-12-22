@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
+import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
@@ -186,12 +187,12 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void acceptOpponent(String roomName, String newOpponent) {
+	public void acceptGameVacancyOpponent(String roomName, String newOpponent) {
 		gui.raw(this, "MultiPoints пока-что не умеет оставлять заявки на игру на этом сервере..");
 	}
 
 	@Override
-	public void rejectOpponent(String roomName, String notWantedOpponent) {
+	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
 		String result =
 				getLinkContent("http://zagram.org/a.kropki?idGracza=" +
 						secretId + "&co=zaproszenieNie");
@@ -309,12 +310,13 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void requestPlay(String gameRoomName) {
-		gui.raw(this, "невозможно оставлять заявки на игру на этом сервере");
+	public void askGameVacancyPlay(String gameRoomName) {
+		throw new UnsupportedOperationException();
+		// gui.raw(this, "пытаюсь присоединиться к комнате " + gameRoomName);
 	}
 
 	@Override
-	public void searchOpponent() {
+	public void createGameVacancy() {
 		gui.rawError(this, "невозможно оставлять заявки на игру на этом сервере");
 	}
 
@@ -331,7 +333,7 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void stopSearchingOpponent() {
+	public void stopGameVacancy() {
 		gui.rawError(this, "невозможно оставлять заявки на игру на этом сервере");
 	}
 
@@ -349,7 +351,7 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void invitePlayer(String playerId, TimeSettings time, int fieldX, int fieldY) {
+	public void askPersonalGame(String playerId, TimeSettings time, int fieldX, int fieldY) {
 		String msgToSend =
 				"v" + queue.sizePlusOne() + "." + "0"/* room# */+ "." +
 					"s." + getServerEncoded(playerId) + "." +
@@ -718,7 +720,8 @@ public class ServerZagram2 implements ServerInterface {
 								sender, null,
 								gameType.fieldX, gameType.FieldY, false,
 								gameType.isRated, 0,
-								gameType.instantWin, false, gameType.isStopEnabled, false, null,
+								gameType.instantWin, false, gameType.isStopEnabled, false,
+								GameState.SearchingOpponent,
 								0, gameType.timeAdditional, gameType.timeStarting, 1,
 								sender + "to YOU");
 							System.out.println("gui.gameRowCreated");

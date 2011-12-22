@@ -270,7 +270,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 						spinnerPeriodTransient.getNumber().intValue(),
 						spinnerPeriodLength.getNumber().intValue(),
 						0);
-		server.invitePlayer(player.id, timeSettings, fieldX, fieldY);
+		server.askPersonalGame(player.id, timeSettings, fieldX, fieldY);
 		this.dispose();
 	}//GEN-LAST:event_jButton_InviteActionPerformed
 

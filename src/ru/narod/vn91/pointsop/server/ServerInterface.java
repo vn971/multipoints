@@ -8,17 +8,19 @@ public interface ServerInterface {
 
 	void disconnectServer();
 
-	void searchOpponent();
+	void createGameVacancy();
 
-	void acceptOpponent(String roomName, String newOpponent);
+	void acceptGameVacancyOpponent(String roomName, String newOpponent);
 
-	void rejectOpponent(String roomName, String notWantedOpponent);
+	void rejectGameVacancyOpponent(String roomName, String notWantedOpponent);
 
-	void requestPlay(String gameRoomName);
+	void askGameVacancyPlay(String gameRoomName);
 
-	void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY);
+	void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY);
+	
+//	void cancelPersonalGame(String playerId);
 
-	public void stopSearchingOpponent();
+	public void stopGameVacancy();
 
 	void makeMove(String roomName, int x, int y);
 
@@ -75,10 +77,6 @@ public interface ServerInterface {
 	TimeSettings getTimeSettingsMinimum();
 
 	String coordinatesToString(Integer xOrNull, Integer yOrNull);
-//	CoordinatesFormatter getCoordinatesFormatter();
-	
-//	interface CoordinatesFormatter {
-//		String format(Integer xOrNull, Integer yOrNull);
-//	}
+
 }
 

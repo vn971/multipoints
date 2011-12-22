@@ -47,12 +47,20 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 					return;
 				}
 			}
-			gameList.add(gameOuterInfo);
+			if (gameOuterInfo.state == GameState.SearchingOpponent) {
+				gameList.add(0, gameOuterInfo);
+			} else {
+				gameList.add(gameOuterInfo); // end of list
+			}
 
 			final DefaultTableModel tableModel = ((DefaultTableModel) jTable1
 					.getModel());
 			Object[] row = createRow(gameOuterInfo);
-			tableModel.addRow(row);
+			if (gameOuterInfo.state==GameState.SearchingOpponent) {
+				tableModel.insertRow(0, row);
+			} else {
+				tableModel.addRow(row); // end of list
+			}
 
 			gameOuterInfo.addChangeListener(new GameInfoListener() {
 
@@ -215,25 +223,12 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 				if (row >= 0) {
 					GameOuterInfo gameInfo = gameList.get(row);
 					if (gameInfo.state == GameState.SearchingOpponent) {
-						gameInfo.server.requestPlay(gameInfo.id);
+						gameInfo.server.askGameVacancyPlay(gameInfo.id);
 					} else {
 						guiController.activateGameRoom(gameInfo.server, gameInfo.id);
 						gameInfo.server.subscribeRoom(gameInfo.id);
 					}
 				}
-				// String roomName = gameList.get(row).roomName;
-				// if (("".equals(gameList.get(row).user1) || "".equals(gameList.get(
-				// row).user2))
-				// && (!containerRoom.getServer().getMyName().equals(gameList.get(
-				// row).user1))
-				// && (!containerRoom.getServer().getMyName().equals(gameList.get(
-				// row).user2))) {
-				// containerRoom.getServer().requestPlay(roomName);
-				// } else {
-				// guiController.activateGameRoom(containerRoom.getServer(),
-				// roomName);
-				// containerRoom.getServer().subscribeRoom(roomName);
-				// }
 			}
 		}
 		if (jTable1.getRowCount() >= 1) {

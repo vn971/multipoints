@@ -15,26 +15,26 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
-	public void searchOpponent() {
+	public void createGameVacancy() {
 	}
 
 	@Override
-	public void acceptOpponent(String roomName, String newOpponent) {
+	public void acceptGameVacancyOpponent(String roomName, String newOpponent) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public void rejectOpponent(String roomName, String notWantedOpponent) {
+	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public void requestPlay(String gameRoomName) {
+	public void askGameVacancyPlay(String gameRoomName) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public void stopSearchingOpponent() {
+	public void stopGameVacancy() {
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
-	public void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 	}
 
 	@Override

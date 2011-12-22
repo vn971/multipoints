@@ -171,7 +171,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public synchronized void searchOpponent() {
+	public synchronized void createGameVacancy() {
 		myGame.leaveGame(false);
 		int roomNumber;
 		String roomAsString;
@@ -220,7 +220,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public void acceptOpponent(
+	public void acceptGameVacancyOpponent(
 			String roomName,
 			String newOpponent) {
 		if (! roomName.equals(myGame.roomName)) {
@@ -252,17 +252,17 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void rejectOpponent(String roomName, String notWantedOpponent) {
+	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
 		super.sendMessage(
 				nicknameManager.id2irc(notWantedOpponent),
 				"Приглашение на игру отклонено.");
 	}
 
-	public void stopSearchingOpponent() {
+	public void stopGameVacancy() {
 		myGame.leaveGame(false);
 	}
 
-	public void requestPlay(String gameRoomName) {
+	public void askGameVacancyPlay(String gameRoomName) {
 		super.joinChannel(gameRoomName);
 		super.sendMessage(
 				gameRoomName,
@@ -1433,7 +1433,7 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -445,7 +445,7 @@ public class GuiController implements GuiForServerInterface {
 			String room,
 			String possibleOpponent) {
 		Sounds.playAlarmSignal();
-		server.acceptOpponent(room, possibleOpponent);
+		server.acceptGameVacancyOpponent(room, possibleOpponent);
 	}
 
 @Override

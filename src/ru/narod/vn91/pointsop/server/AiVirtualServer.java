@@ -78,25 +78,25 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		ai.receiveMove(x, y, true, true, 3000);
 	}
 
-	public void searchOpponent() {
+	public void createGameVacancy() {
 		gui.raw(this, "Not supported");
 	}
 
-	public void requestPlay(String gameRoomName) {
+	public void askGameVacancyPlay(String gameRoomName) {
 		gui.raw(this, "Not supported");
 	}
 
-	public void acceptOpponent(String roomName,
+	public void acceptGameVacancyOpponent(String roomName,
 			String name) {
 		gui.raw(this, "Not supported");
 	}
 
 	@Override
-	public void rejectOpponent(String roomName, String notWantedOpponent) {
+	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
 		gui.raw(this, "Not supported");
 	}
 
-	public void stopSearchingOpponent() {
+	public void stopGameVacancy() {
 		gui.raw(this, "Not supported");
 	}
 
@@ -186,7 +186,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	@Override
-	public void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 		throw new UnsupportedOperationException();
 	}
 
