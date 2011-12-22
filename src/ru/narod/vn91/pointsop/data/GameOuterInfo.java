@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 /**
  * information about the game that can be achieved not joining the game itself
@@ -31,6 +31,7 @@ public class GameOuterInfo {
 	public Boolean stopEnabled = true;
 	public Boolean isEmptyScored = false;
 
+	public String comment = "";
 	public GameState state = GameState.Playing;
 
 	// time is given in seconds
@@ -56,7 +57,6 @@ public class GameOuterInfo {
 	private Set<GameInfoListener> changeListenerList = new LinkedHashSet<GameInfoListener>();
 
 	public GameOuterInfo(ServerInterface server, String id) {
-		super();
 		this.server = server;
 		this.id = id;
 		this.first = new Player(server, "first"); // avoid nulls
@@ -69,8 +69,7 @@ public class GameOuterInfo {
 			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
 			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
 			Integer additionalAccumulatingTime, Integer startingTime,
-			Integer periodLength) {
-		super();
+			Integer periodLength, String comment) {
 		this.server = server;
 		this.id = id;
 		this.masterRoomId = masterRoomId;
@@ -90,6 +89,7 @@ public class GameOuterInfo {
 		this.additionalAccumulatingTime = additionalAccumulatingTime;
 		this.startingTime = startingTime;
 		this.periodLength = periodLength;
+		this.comment = comment;
 	}
 
 	public void updateFrom(GameOuterInfo g) {
@@ -135,8 +135,6 @@ public class GameOuterInfo {
 		boolean amISecond = second != null &&
 			server != null &&
 			server.getMyName().equals(second.id);
-		// System.out.println("amIRed || amIBlue = "
-		// + (amIRed || amIBlue));
 		return amIFirst || amISecond;
 	}
 
@@ -151,14 +149,14 @@ public class GameOuterInfo {
 	}
 
 	public Color player1Color() {
-		Color red = Memory.getPlayer1Color();
-		Color blue = Memory.getPlayer2Color();
+		Color red = Settings.getPlayer1Color();
+		Color blue = Settings.getPlayer2Color();
 		return isRedFirst ? red : blue;
 	}
 
 	public Color player2Color() {
-		Color red = Memory.getPlayer1Color();
-		Color blue = Memory.getPlayer2Color();
+		Color red = Settings.getPlayer1Color();
+		Color blue = Settings.getPlayer2Color();
 		return isRedFirst ? blue : red;
 	}
 

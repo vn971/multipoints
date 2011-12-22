@@ -13,19 +13,21 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
-import javax.activation.UnsupportedDataTypeException;
 import javax.swing.ImageIcon;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
 import ru.narod.vn91.pointsop.data.TimeLeft;
+import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.utils.Function;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Wait;
-
 
 @SuppressWarnings("serial")
 public class ServerZagram2 implements ServerInterface {
@@ -37,6 +39,8 @@ public class ServerZagram2 implements ServerInterface {
 	String secretId;
 	volatile boolean isDisposed = false;
 	MessageQueue queue = new MessageQueue(5);
+	Set<String> personalInvitesOld = new LinkedHashSet<String>();
+	Set<String> personalInvitesNew = new LinkedHashSet<String>();
 
 	Map<String,String> avatarUrls = new HashMap<String, String>();
 	Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
@@ -72,6 +76,74 @@ public class ServerZagram2 implements ServerInterface {
 		}
 	}
 
+	class ZagramGameTyme{
+		final int fieldX, FieldY;
+		final boolean isStopEnabled;
+		final int timeStarting, timeAdditional;
+		final String startingPosition;
+		final boolean isRated;
+		final int instantWin;
+		public ZagramGameTyme(int fieldX, int fieldY, boolean isStopEnabled, int timeStarting, int timeAdditional,
+				String startingPosition, boolean isRated, int instantWin) {
+			this.fieldX = fieldX;
+			this.FieldY = fieldY;
+			this.isStopEnabled = isStopEnabled;
+			this.timeStarting = timeStarting;
+			this.timeAdditional = timeAdditional;
+			this.startingPosition = startingPosition;
+			this.isRated = isRated;
+			this.instantWin = instantWin;
+		}
+	}
+
+	private static String getGameTypeString(
+			int fieldX, int fieldY, int startingTime, int periodAdditionalTime) {
+		return "" + fieldX + fieldY + "stanF0." + startingTime + "." + periodAdditionalTime;
+	}
+
+	ZagramGameTyme getZagramGameTyme(String str) {
+		// 2525noT4R0.180.15
+		String[] dotSplitted = str.split("\\.");
+		try {
+			int startingTime = Integer.parseInt(dotSplitted[1]);
+			int addTime = Integer.parseInt(dotSplitted[2]);
+			String hellishString = dotSplitted[0];
+			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
+			int sizeY = Integer.parseInt(hellishString.substring(2, 4));
+			String rulesAsString = hellishString.substring(4, 8);
+			boolean isStopEnabled = !rulesAsString.matches("terr");
+			// boolean manualEnclosings = rulesAsString.matches("terr");
+			// boolean stopEnabled = rulesAsString.matches("noT4|noT1");
+			// boolean isEmptyScored = rulesAsString.matches("terr");
+			String startingPosition = rulesAsString.replaceAll("no|terr|stan", "");
+			boolean isRated = !(hellishString.substring(8, 9).equals("F"));
+			Integer instantWin = Integer.parseInt(hellishString.substring(9));
+			return new ZagramGameTyme(
+				sizeX, sizeY, isStopEnabled,
+				startingTime, addTime, 
+				startingPosition, 
+				isRated, instantWin);
+//			gui.updateGameInfo(
+//					server, roomId,
+//					currentRoom, player1, player2,
+//					sizeX, sizeY,
+//					false, isRated, 0, instantWin,
+//					manualEnclosings, stopEnabled, isEmptyScored, null,
+//					0, addTime, startingTime, 1);
+		} catch (NumberFormatException e) {
+			return null;
+//			return new ZagramGameTyme(1, 1, false, 1, 1, "", false, 0);
+//			gui.raw(server,
+//					"unknown game description: "
+//							+ message.substring(1));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+//			return new ZagramGameTyme(1, 1, false, 1, 1, "", false, 0);
+//			gui.raw(server,
+//					"unknown game description: "
+//							+ message.substring(1));
+		}
+	}
 
 	private static String getBase64ZagramVersion(String input) {
 		if (input.length() % 3 == 2) {
@@ -80,27 +152,27 @@ public class ServerZagram2 implements ServerInterface {
 			input = input + "00";
 		} else {
 		}
-		byte [] bytes = input.getBytes();
-
 		final char[] base64ZagramStyle = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.".toCharArray();
 
 		StringBuilder stringBuilder = new StringBuilder();
-		for (int i = 0; i + 2 < bytes.length; i = i + 3) {
+		for (int i = 0; i + 2 < input.length(); i = i + 3) {
 			// 111122223333
 			// aaaaaabbbbbb
 			int hex0 = Integer.parseInt(input.substring(i,i+1), 16);
 			int hex1 = Integer.parseInt(input.substring(i+1,i+2), 16);
 			int hex2 = Integer.parseInt(input.substring(i+2,i+3), 16);
-			stringBuilder.append(base64ZagramStyle[hex0 * 4 + hex1 / 4]);
-			stringBuilder.append(base64ZagramStyle[(hex1 & 3) * 16 + hex2]);
+			int base64_1 = hex0 * 4 + hex1 / 4;
+			int base64_2 = (hex1 & 3) * 16 + hex2;
+			stringBuilder.append(base64ZagramStyle[base64_1]);
+			stringBuilder.append(base64ZagramStyle[base64_2]);
 		}
 		return stringBuilder.toString();
 	}
 
 	public static void main(String[] args) {
-		String sha = getSha1("test"+"9WB2qGYzzWry1vbVjoSK"+"1234");
-		System.out.println(sha);
-		System.out.println(getBase64ZagramVersion(sha));
+//		String sha = getSha1("test" + "9WB2qGYzzWry1vbVjoSK" + "1234");
+		// System.out.println(sha);
+		// System.out.println(getBase64ZagramVersion(sha));
 	}
 	
 	private static String getSha1(String input) {
@@ -141,11 +213,12 @@ public class ServerZagram2 implements ServerInterface {
 					authorizationURL = "http://zagram.org/auth.py?co=loguj&opisGracza=" +
 						getServerEncoded(myNameOnServer) +
 						"&idGracza=" +
-						secretId;
+						secretId +
+						"&lang=ru";
 				} else {
 					authorizationURL = "http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
 						secretId + "&opis=" +
-						getServerEncoded(myNameOnServer) + "&lang=en";
+						getServerEncoded(myNameOnServer) + "&lang=ru";
 				}
 
 				String authorizationResult = getLinkContent(authorizationURL);
@@ -276,6 +349,18 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
+	public void invitePlayer(String playerId, TimeSettings time, int fieldX, int fieldY) {
+		String msgToSend =
+				"v" + queue.sizePlusOne() + "." + "0"/* room# */+ "." +
+					"s." + getServerEncoded(playerId) + "." +
+					getGameTypeString(fieldX, fieldY, time.starting, time.periodAdditional);
+		sendCommandToServer(msgToSend);
+		gui.updateGameInfo(this, getMyName()+"@outgoing", getMainRoom(), getMyName(), null, fieldX, fieldY, false, false, 0, 0, false, 
+			false, false, null, 0, time.periodAdditional, time.starting, 1, playerId);
+		gui.askedPlay(this, this.getMyName() + "@outgoing", "");
+	}
+
+	@Override
 	public void surrender(String roomName) {
 	}
 
@@ -302,9 +387,9 @@ public class ServerZagram2 implements ServerInterface {
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {
 		}
-		if (Memory.isDebug()) {
-			gui.raw(this, "visiting: " + link);
-			gui.raw(this, "received: " + result.toString());
+		if (Settings.isDebug()) {
+			System.out.println("visiting: " + link);
+			System.out.println("received: " + result.toString());
 		}
 		return result.toString();
 	}
@@ -383,8 +468,6 @@ public class ServerZagram2 implements ServerInterface {
 		public void run() {
 			while (isDisposed == false) {
 
-				Wait.waitExactly(1000L);
-
 				String commands = "";
 				for (int i = lastSentCommandNumber + 1; i < queue.size() + 1; i++) {
 					// (non-standard interval. Here is: A < x <= B)
@@ -402,6 +485,8 @@ public class ServerZagram2 implements ServerInterface {
 							lastServerMessageNumber + "&msgFromClient=" + commands);
 				// betBMsg
 				handleText(text);
+
+				Wait.waitExactly(1000L);
 			}
 		}
 
@@ -461,38 +546,26 @@ public class ServerZagram2 implements ServerInterface {
 							gui.raw(server, "unknown chat: " + message.substring(2));
 						}
 					} else if (message.startsWith("d")) { // game description
-						String[] dotSplitted = message.substring("d".length()).split("\\.");
-						try {
-							String roomId = dotSplitted[0];
-							int startingTime = Integer.parseInt(dotSplitted[2]);
-							int addTime = Integer.parseInt(dotSplitted[3]);
-							String player1 = dotSplitted[4];
-							String player2 = dotSplitted[5];
-							String hellishString = dotSplitted[1];
-							int sizeX = Integer.parseInt(hellishString.substring(0, 2));
-							int sizeY = Integer.parseInt(hellishString.substring(2, 4));
-							String rulesAsString = hellishString.substring(4, 8);
-							boolean manualEnclosings = rulesAsString.matches("terr");
-							boolean stopEnabled = rulesAsString.matches("noT4|noT1");
-							boolean isEmptyScored = rulesAsString.matches("terr");
-							boolean isRated = !(hellishString.substring(8, 9).equals("F"));
-							Integer instantWin = Integer.parseInt(hellishString.substring(9));
-							gui.updateGameInfo(
-									server, roomId,
-									currentRoom, player1, player2,
-									sizeX, sizeY,
-									false, isRated, 0, instantWin,
-									manualEnclosings, stopEnabled, isEmptyScored, null,
-									0, addTime, startingTime, 1);
-						} catch (NumberFormatException e) {
-							gui.raw(server,
-									"unknown game description: "
-											+ message.substring(1));
-						} catch (ArrayIndexOutOfBoundsException e) {
-							gui.raw(server,
-									"unknown game description: "
-											+ message.substring(1));
-						}
+
+						// first section and last two sections
+						String suffecientPart = message.
+								replaceFirst("[^.]*.", "").
+								replaceFirst("\\.[^.]*$", "").
+								replaceFirst("\\.[^.]*$", "");
+						ZagramGameTyme gameType = getZagramGameTyme(suffecientPart);
+
+						String[] dotSplitted = message.split("\\.");
+						String roomId = dotSplitted[0].replaceFirst("d", "");
+						String player1 = dotSplitted[dotSplitted.length - 2];
+						String player2 = dotSplitted[dotSplitted.length - 1];
+						gui.updateGameInfo(
+							server, roomId,
+							currentRoom, player1, player2,
+							gameType.fieldX, gameType.FieldY,
+							false, gameType.isRated, 0, gameType.instantWin,
+							false, gameType.isStopEnabled, false, null, 0,
+							gameType.timeAdditional, gameType.timeStarting, 1,
+							null);
 					} else if (message.startsWith("f")) { // flags
 						try {
 							String timeLimitsAsString = message.split("_")[1];
@@ -570,6 +643,7 @@ public class ServerZagram2 implements ServerInterface {
 									server,
 									"общий чат: zagram",
 									true);
+//							sendCommandToServer("i0n");
 						} else {
 							gui.subscribedGame(server, currentRoom);
 						}
@@ -635,20 +709,51 @@ public class ServerZagram2 implements ServerInterface {
 								);
 					} else if (message.startsWith("vg")) { // game invite
 						String usefulPart = message.substring(2);
-						String sender = usefulPart.replaceAll("\\..*", "");
-						String gameDescription = usefulPart.replaceFirst("[^.]*\\.", "");
-						gui.raw(server, String.format(
-							"Игрок '%s' вызвал(а) тебя на игру: %s. " +
-								"MultiPoints пока не умеет обрабатывать это сообщение -- " +
-								"отослан отказ от игры.",
-							sender,
-							gameDescription
-								));
-						server.rejectOpponent(null, sender);
+						String sender = usefulPart.replaceAll("\\..*", ""); // first part
+						if (personalInvitesOld.add(sender) == true) {
+							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
+							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
+							gui.updateGameInfo(
+								server, sender + "@incoming", currentRoom,
+								sender, null,
+								gameType.fieldX, gameType.FieldY, false,
+								gameType.isRated, 0,
+								gameType.instantWin, false, gameType.isStopEnabled, false, null,
+								0, gameType.timeAdditional, gameType.timeStarting, 1,
+								sender + "to YOU");
+							System.out.println("gui.gameRowCreated");
+							gui.gameRowCreated(server, currentRoom, sender+"@incoming");
+							gui.raw(server, String.format(
+								"Игрок '%s' вызвал(а) тебя на игру: %s. " +
+										"Дальнейшее поведение MultiPoints пока тестируется (пытаюсь принять заявку).",
+										sender,
+										gameDescription
+									));
+							// server.rejectOpponent(null, sender);
+						}
+						personalInvitesNew.add(sender);
 					}
 				}
+
+				// warning: UGLY CODE
+				// now I have to compare two sets of player invitations
+				// if I don't have a player in the new set -
+				// then the invitation is closed and I should delete it.
+				for (Iterator<String> iterator = personalInvitesOld.iterator(); iterator.hasNext();) {
+					String player = iterator.next();
+					if (personalInvitesNew.contains(player) == false) {
+						// invitation cancelled
+						System.out.println("deleting row");
+						gui.gameRowDestroyed(server, player + "@incoming");
+					}
+				}
+				// now swap old-new and clear the old.
+				personalInvitesOld.clear();
+				Set<String> backup = personalInvitesOld;
+				personalInvitesOld = personalInvitesNew;
+				personalInvitesNew = backup;
 			} else if (text.equals("")) {
-				// we got an empty result. Well, let's treat that as normal.
+				// we got an empty result. Well, lets treat that as normal.
 			} else {
 				gui.serverClosed(server);
 				isDisposed = true;
@@ -737,7 +842,60 @@ public class ServerZagram2 implements ServerInterface {
 		}
 	}
 
+	@Override
+	public boolean isField20x20Allowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isField25x25Allowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isField30x30Allowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isField39x32Allowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isStartingEmptyFieldAllowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isStartingCrossAllowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isStarting4CrossAllowed() {
+		return false;
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMaximum() {
+		return new TimeSettings(99999, 999, 0, 1, 0);
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMinimum() {
+		return new TimeSettings(20, 2, 0, 1, 0);
+	}
+
+
+	@Override
+	public boolean isPrivateGameInviteAllowed() {
+		return true;
+	}
+
 }
+
+
 class MessageQueue {
 	ArrayList<String> stringList;
 	int size = 0;

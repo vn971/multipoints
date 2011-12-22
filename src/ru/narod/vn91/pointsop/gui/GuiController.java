@@ -3,7 +3,6 @@ package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Image;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,7 @@ import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.Function;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 public class GuiController implements GuiForServerInterface {
 
@@ -83,97 +82,95 @@ public class GuiController implements GuiForServerInterface {
 		if (rating!=null &&
 				previousRating != rating &&
 				previousRating != 0) {
-			System.out.println("server.getMainRoom() = " + server.getMainRoom());
-			System.out.println("player.guiName = " + player.guiName);
 			this.serverNoticeReceived(server, server.getMainRoom(),
 				player.guiName + " " + previousRating + " -> " + rating);
 		}
 	}
 
-  @Override
-  public void updateGameInfo(
+	@Override
+	public void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
 			String firstId, String secondId, Integer sizeX, Integer sizeY,
 			Boolean isRedFirst, Boolean isRated,
 			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
 			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
 			Integer freeTemporalTime, Integer additionalAccumulatingTime,
-			Integer startingTime, Integer periodLength
-      ) {
-  GameOuterInfo gameOuterInfo = gamePool.get(server, id);
-  Player first = playerPool.get(server, firstId);
-  Player second = playerPool.get(server, secondId);
+			Integer startingTime, Integer periodLength, String comment
+			) {
+		GameOuterInfo gameOuterInfo = gamePool.get(server, id);
+		Player first = playerPool.get(server, firstId);
+		Player second = playerPool.get(server, secondId);
 
-    GameOuterInfo updateInstance = new GameOuterInfo(
-        server, secondId, masterRoomId, first, second,
-        sizeX, sizeY,
-        isRedFirst, isRated, handicapRed, instantWin,
-        manualEnclosings, stopEnabled, isEmptyScored, state, freeTemporalTime,
-        additionalAccumulatingTime, startingTime, periodLength);
-  gameOuterInfo.updateFrom(updateInstance);
-  }
+		GameOuterInfo updateInstance = new GameOuterInfo(
+			server, secondId, masterRoomId, first, second,
+			sizeX, sizeY,
+			isRedFirst, isRated, handicapRed, instantWin,
+			manualEnclosings, stopEnabled, isEmptyScored, state, freeTemporalTime,
+			additionalAccumulatingTime, startingTime, periodLength, comment);
+		gameOuterInfo.updateFrom(updateInstance);
+	}
 
-  @Override
-  public void userJoinedRoom(ServerInterface server, String room, String id,
-      boolean isStartup) {
-    Player player = playerPool.get(server, id);
-    LangRoom langRoom = langRooms.get(new ServerRoom(room, server));
-    GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
-    if (langRoom != null) {
-      RoomPart_Userlist users = langRoom.getRoomPart_UserList();
-      if (users != null) {
-        users.userJoined(player);
-      }
-      RoomPart_Chat chat = langRoom.getRoomPart_Chat();
-      if ((chat != null) && (isStartup == false)) {
-        chat.addUserJoinedNotice(player);
-      }
-    } else if (gameRoom != null) {
-      RoomPart_Userlist users = gameRoom.getRoomPart_UserList();
-      if (users != null) {
-        users.userJoined(player);
-      }
-      RoomPart_Chat chat = gameRoom.getRoomPart_Chat();
-      if ((chat != null) && (isStartup == false)) {
-        chat.addUserJoinedNotice(player);
-      }
-    }
-  }
+	@Override
+	public void userJoinedRoom(ServerInterface server, String room, String id,
+			boolean isStartup) {
+		Player player = playerPool.get(server, id);
+		LangRoom langRoom = langRooms.get(new ServerRoom(room, server));
+		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
+		if (langRoom != null) {
+			RoomPart_Userlist users = langRoom.getRoomPart_UserList();
+			if (users != null) {
+				users.userJoined(player);
+			}
+			RoomPart_Chat chat = langRoom.getRoomPart_Chat();
+			if ((chat != null) && (isStartup == false)) {
+				chat.addUserJoinedNotice(player);
+			}
+		} else if (gameRoom != null) {
+			RoomPart_Userlist users = gameRoom.getRoomPart_UserList();
+			if (users != null) {
+				users.userJoined(player);
+			}
+			RoomPart_Chat chat = gameRoom.getRoomPart_Chat();
+			if ((chat != null) && (isStartup == false)) {
+				chat.addUserJoinedNotice(player);
+			}
+		}
+	}
 
-  @Override
-  public synchronized void userLeftRoom(
-      ServerInterface server,
-      String roomId,
-      String userId,
-      String reason) {
-    Player player = playerPool.get(server, userId);
-    RoomInterface roomInterface = roomInterfaces.get(
-        new ServerRoom(
-            roomId,
-            server
-        )
-        );
-    if (roomInterface == null) {
-    } else {
-      RoomPart_Userlist users = roomInterface.getRoomPart_UserList();
-      if (users != null) {
-        roomInterface.getRoomPart_UserList().userLeave(player);
-      }
-      RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
-      if (chat != null) {
-        chat.addUserLeftNotice(player.guiName, reason);
-      }
-    }
-  }
+	@Override
+	public synchronized void userLeftRoom(
+			ServerInterface server,
+			String roomId,
+			String userId,
+			String reason) {
+		Player player = playerPool.get(server, userId);
+		RoomInterface roomInterface = roomInterfaces.get(
+				new ServerRoom(
+					roomId,
+					server
+				)
+				);
+		if (roomInterface == null) {
+		} else {
+			RoomPart_Userlist users = roomInterface.getRoomPart_UserList();
+			if (users != null) {
+				roomInterface.getRoomPart_UserList().userLeave(player);
+			}
+			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
+			if (chat != null) {
+				chat.addUserLeftNotice(player.guiName, reason);
+			}
+		}
+	}
 
-  public synchronized void userDisconnected(
-      ServerInterface server,
-      String id,
-      String additionalMessage) {
-    Player player = playerPool.get(server, id);
-    PrivateChat privateChat = privateChatList.get(player);
-    if ((privateChat != null) &&
-        (tabbedPane.contains(privateChat))) {
+	public synchronized void userDisconnected(
+			ServerInterface server,
+			String id,
+			String additionalMessage) {
+		Player player = playerPool.get(server, id);
+		PrivateChat privateChat = privateChatList.get(player);
+		if ((privateChat != null) &&
+			(tabbedPane.contains(privateChat))) {
 			if (additionalMessage != null && additionalMessage.equals("") == false) {
 				privateChat.addChat("server",
 					player.guiName + " вышел из игры: " + additionalMessage,
@@ -181,21 +178,21 @@ public class GuiController implements GuiForServerInterface {
 			} else {
 				privateChat.addChat("server", player.guiName + " вышел из игры.", true);
 			}
-    }
-    playerPool.remove(server, id);
-  }
+		}
+		playerPool.remove(server, id);
+	}
 
-  public synchronized void subscribedLangRoom(
-      String roomNameOnServer,
-      ServerInterface serverInterface,
-      String guiRoomName,
-      boolean isServersMainRoom) {
-    LangRoom langRoom = langRooms.get(
-        new ServerRoom(
-            roomNameOnServer,
-            serverInterface
-        )
-        );
+	public synchronized void subscribedLangRoom(
+			String roomNameOnServer,
+			ServerInterface serverInterface,
+			String guiRoomName,
+			boolean isServersMainRoom) {
+		LangRoom langRoom = langRooms.get(
+				new ServerRoom(
+					roomNameOnServer,
+					serverInterface
+				)
+				);
 
     if (langRoom != null) {
       // nothing
@@ -259,7 +256,7 @@ public class GuiController implements GuiForServerInterface {
 				}
 			});
 		tabbedPane.setSelectedComponent(containerRoom_Game);
-		Memory.AddColorsChangeListener(new Function<Void, Void>() {
+		Settings.AddColorsChangeListener(new Function<Void, Void>() {
 			@Override
 			public Void call(Void input) {
 				synchronized (GuiController.this) {
@@ -443,7 +440,7 @@ public class GuiController implements GuiForServerInterface {
 //}
 
 	@Override
-	public void gameInviteReceived(
+	public void askedPlay(
 			ServerInterface server,
 			String room,
 			String possibleOpponent) {
@@ -511,11 +508,12 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 	@Override
 	public synchronized void raw(ServerInterface server, String info) {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
-		if (Memory.isDebug() == true) {
+
+		this.privateMessageReceived(server, server.getServerName(), info);
+		if (Settings.isDebug() == true) {
 			System.out.print(add);
 		} else {
 		}
-			this.privateMessageReceived(server, server.getServerName(), info);
 	}
 
 	@Override
@@ -536,7 +534,7 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 	@Override
 	public void rawConnectionState(ServerInterface server, String info) {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
-		if (Memory.isDebug() == true) {
+		if (Settings.isDebug() == true) {
 			System.out.print(add);
 		} else {
 		}
@@ -659,22 +657,6 @@ class JTabbedPaneMod {
 	public void remove(Component component) {
 		closeListeners.remove(component);
 		tabbedPane.remove(component);
-	}
-
-	private String getNotBoldNotHtml(String s) {
-		s = s.
-				replaceAll("<b>", "").replaceAll("</b>", "").
-				replaceAll("<html>", "").replaceAll("</html>", "").
-				replaceAll("\\*\\*\\*", "");
-		return s;
-	}
-
-	private String getNotBold(String s) {
-		return "<html>" + getNotBoldNotHtml(s) + "</html>";
-	}
-
-	private String getBold(String s) {
-		return "<html>***" + getNotBoldNotHtml(s) + "</html>";
 	}
 
 	public void makeBold(Component component) {

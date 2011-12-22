@@ -17,7 +17,7 @@ import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.MockServerForGui;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 public class SelfishGuiStarter {
 
@@ -33,31 +33,40 @@ public class SelfishGuiStarter {
 		// // If Nimbus is not available, you can set the GUI to another look and
 		// // feel.
 		// }
+		for (String argument : args) {
+			if (argument.matches("--version|-v|-h|--help")) {
+				System.out.println("MultiPoints. Sorry, no info is aviable here...");
+				System.exit(0);
+			} else if (argument.matches("debug=.*")) {
+				Settings.setDebug(argument.matches("debug=(true|debug|on)"));
+				System.out.println("debug level set to 'true'");
+			}
+		}
 
-		if (Memory.getVersion() <= 1
-				&& Memory.getKeijKvantttAiPath().equals("keijkvantttai")) {
-			Memory.setKeijKvantttAiPath("");
+		if (Settings.getVersion() <= 1
+				&& Settings.getKeijKvantttAiPath().equals("keijkvantttai")) {
+			Settings.setKeijKvantttAiPath("");
 		}
-		if (Memory.getVersion() < 4) {
-			Memory.resetColors();
+		if (Settings.getVersion() < 4) {
+			Settings.resetColors();
 		}
-		Memory.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 1.9.0");
+		Settings.setNewestVersion();
+		final JFrame frame = new JFrame("Точки - MultiPoints 1.9.4");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
 		frame.setSize(925, 670);
 
 		{
-			if (Memory.getFrameWidth() > 0
-					&& Memory.getFrameHeight() > 0) {
+			if (Settings.getFrameWidth() > 0
+					&& Settings.getFrameHeight() > 0) {
 				//					&& Memory.getFrameX() > 0
 				//					&& Memory.getFrameY() > 0
 				frame.setBounds(
-						Memory.getFrameX(),
-						Memory.getFrameY(),
-						Memory.getFrameWidth(),
-						Memory.getFrameHeight()
+						Settings.getFrameX(),
+						Settings.getFrameY(),
+						Settings.getFrameWidth(),
+						Settings.getFrameHeight()
 				);
 				//				frame.setSize(
 				//						Memory.getFrameWidth(),
@@ -72,15 +81,15 @@ public class SelfishGuiStarter {
 						}
 
 						public void componentResized(ComponentEvent e) {
-							Memory.setFrameWidth(frame.getWidth());
-							Memory.setFrameHeight(frame.getHeight());
-							Memory.setFrameX(frame.getX());
-							Memory.setFrameY(frame.getY());
+							Settings.setFrameWidth(frame.getWidth());
+							Settings.setFrameHeight(frame.getHeight());
+							Settings.setFrameX(frame.getX());
+							Settings.setFrameY(frame.getY());
 						}
 
 						public void componentMoved(ComponentEvent e) {
-							Memory.setFrameX(frame.getX());
-							Memory.setFrameY(frame.getY());
+							Settings.setFrameX(frame.getX());
+							Settings.setFrameY(frame.getY());
 						}
 
 						public void componentHidden(ComponentEvent e) {
@@ -106,7 +115,7 @@ public class SelfishGuiStarter {
 		roomWelcome.guiController = guiController;
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
-		if (Memory.isDebug()) {
+		if (Settings.isDebug()) {
 			tabbedPane.addTab("комната", new LangRoom(new MockServerForGui(), "", guiController), true);
 		//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
 		//				"", 1, 1, "", false, "", true, true));
@@ -252,7 +261,7 @@ public class SelfishGuiStarter {
 											new KeijKvantttAi(
 													aiWrapper,
 													39, 32,
-													Memory.getKeijKvantttAiPath()
+													Settings.getKeijKvantttAiPath()
 											)
 									);
 									aiWrapper.init();
@@ -260,7 +269,7 @@ public class SelfishGuiStarter {
 							}
 					);
 					jMenuItem_KeijkvantttaiExecute.setEnabled(
-							! Memory.getKeijKvantttAiPath().equals("")
+							! Settings.getKeijKvantttAiPath().equals("")
 					);
 				}
 
@@ -285,7 +294,7 @@ public class SelfishGuiStarter {
 													"P.S. К сожалению, " +
 													"по политике безопасности java, " +
 													"выбрать файл более привычным способом не получается.",
-											Memory.getKeijKvantttAiPath()
+											Settings.getKeijKvantttAiPath()
 									);
 									if (command != null) {
 										if (command.endsWith("\\")
@@ -293,14 +302,14 @@ public class SelfishGuiStarter {
 												|| command.endsWith(File.pathSeparator)) {
 											command = command + "keijkvantttai.exe";
 										}
-										Memory.setKeijKvantttAiPath(command);
+										Settings.setKeijKvantttAiPath(command);
 										JOptionPane.showMessageDialog(
 												null,
 												"Путь изменён на " + command + " \n" +
 														"Попробуйте теперь запустить ИИ. :)"
 										);
 										jMenuItem_KeijkvantttaiExecute.setEnabled(
-												! Memory.getKeijKvantttAiPath().equals("")
+												! Settings.getKeijKvantttAiPath().equals("")
 										);
 									}
 								}

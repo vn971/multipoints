@@ -16,7 +16,8 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 	BufferedWriter writer;
 	ListenThread listenThread;
 
-	boolean isDisposed = false;
+	volatile boolean isDisposed = false;
+	volatile int messageNumber = 0;
 
 	StringBuffer fullLog = new StringBuffer();
 
@@ -99,61 +100,66 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 
 	@Override
 	public void boardsize(int x, int y) {
-		writeToProcess("1 boardsize " + x + " " + y);
+		writeToProcess((messageNumber += 1) + " boardsize " + x + " " + y);
 	}
 
 	@Override
 	public void genmove(boolean color) {
-		writeToProcess("1 genmove " + getColor(color));
+		writeToProcess((messageNumber += 1) + " genmove " + getColor(color));
 	}
 
 	@Override
 	public void list_commands() {
-		writeToProcess("1 list_commands");
+		writeToProcess((messageNumber += 1) + " list_commands");
 	}
 
 	@Override
 	public void name() {
-		writeToProcess("1 name");
+		writeToProcess((messageNumber += 1) + " name");
 	}
 
 	@Override
 	public void play(int x, int y, boolean color) {
-		writeToProcess("1 play " + x + " " + y + " " + getColor(color));
+		writeToProcess((messageNumber += 1) + " play " + x + " " + y + " " + getColor(color));
 	}
 
 	@Override
 	public void quit() {
 		isDisposed = true;
-		writeToProcess("1 quit");
+		writeToProcess((messageNumber += 1) + " quit");
 		process.destroy();
 	}
 
 	@Override
 	public void reg_genmove(boolean color) {
-		writeToProcess("1 reg_genmove " + getColor(color));
+		writeToProcess((messageNumber += 1) + " reg_genmove " + getColor(color));
 	}
 
 	@Override
 	public void reg_genmove_with_complexity(boolean color, Complexity complexity) {
-		writeToProcess("1 reg_genmove_with_complexity "
+		writeToProcess((messageNumber += 1) + " reg_genmove_with_complexity "
 				+ getColor(color) + " " + complexity);
 	}
 
 	@Override
 	public void reg_genmove_with_time(boolean color, long milliseconds) {
-		writeToProcess("1 reg_genmove_with_time "
+		writeToProcess((messageNumber += 1) + " reg_genmove_with_time "
 				+ getColor(color) + " " + (int) milliseconds);
 	}
 
 	@Override
+	public void set_random_seed(int seed) {
+		writeToProcess((messageNumber += 1) + " set_random_seed " + seed);
+	}
+
+	@Override
 	public void undo() {
-		writeToProcess("1 undo");
+		writeToProcess((messageNumber += 1) + " undo");
 	}
 
 	@Override
 	public void version() {
-		writeToProcess("1 version");
+		writeToProcess((messageNumber += 1) + " version");
 	}
 
 	private void error() {

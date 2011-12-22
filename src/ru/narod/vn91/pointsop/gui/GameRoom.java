@@ -11,7 +11,7 @@ import ru.narod.vn91.pointsop.php.PhpBackupServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.Function2;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 import ru.narod.vn91.pointsop.utils.TimedAction;
 
@@ -108,7 +108,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
 				// make move to current mouse position
 				if (isOnlineGame()
-						&& Memory.isDebug() == true
+						&& Settings.isDebug() == true
 						&& gameOuterInfo.amIPlaying() == true
 						&& isRed != gameOuterInfo.amIRed()) {
 //					final int moveListSize = moveList.size();

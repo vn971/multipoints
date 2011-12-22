@@ -43,13 +43,6 @@ public class TabCloseable extends JPanel {
 			label.setBorder(BorderFactory.createEmptyBorder(
 				0, 0, 0, 6));
 			super.add(closeButton);
-//			addCloseListener(new Functor<TabCloseable, Boolean>() {
-//				@Override
-//				public Boolean call(TabCloseable input) {
-//					System.out.println("TabComponent_New.TabComponent_New().new Functor<TabComponent_New,Void>() {...}.call()");
-//					return true;
-//				}
-//			});
 		}
 	}
 

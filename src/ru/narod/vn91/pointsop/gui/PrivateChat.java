@@ -129,6 +129,7 @@ public class PrivateChat extends javax.swing.JPanel {
 			jTextPane_Chat.setEnabled(false);
 			jTextPane_Chat.setText("чат на этом сервере недоступен");
 		}
+		jButton_GameInvite.setEnabled(p.server.isPrivateGameInviteAllowed());
 		jButton_Ping.setEnabled(p.server.isPingEnabled());
 		jButton_Sound.setEnabled(p.server.isSoundNotifyEnabled());
 		p.addChangeListener(new PlayerChangeListener() {
@@ -158,6 +159,7 @@ public class PrivateChat extends javax.swing.JPanel {
         jButton_Ping = new javax.swing.JButton();
         jButton_Sound = new javax.swing.JButton();
         jLabel_Userpic = new javax.swing.JLabel();
+        jButton_GameInvite = new javax.swing.JButton();
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -199,16 +201,25 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
+        jButton_GameInvite.setText("вызвать на игру");
+        jButton_GameInvite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_GameInviteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_InfoLayout = new javax.swing.GroupLayout(jPanel_Info);
         jPanel_Info.setLayout(jPanel_InfoLayout);
         jPanel_InfoLayout.setHorizontalGroup(
             jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_InfoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton_Ping, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                    .addComponent(jButton_Sound, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                    .addComponent(jLabel_Userpic, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton_Ping, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                        .addComponent(jButton_Sound, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                        .addComponent(jLabel_Userpic, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton_GameInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel_InfoLayout.setVerticalGroup(
@@ -220,7 +231,9 @@ public class PrivateChat extends javax.swing.JPanel {
                 .addComponent(jButton_Ping)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_Sound)
-                .addContainerGap(378, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton_GameInvite)
+                .addContainerGap(330, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -277,7 +290,12 @@ public class PrivateChat extends javax.swing.JPanel {
 		jTextField_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formComponentAdded
 
+	private void jButton_GameInviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GameInviteActionPerformed
+		new GameInvitePersonal(null, true, player).setVisible(true);
+	}//GEN-LAST:event_jButton_GameInviteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_GameInvite;
     private javax.swing.JButton jButton_Ping;
     private javax.swing.JButton jButton_Sound;
     private javax.swing.JLabel jLabel_Userpic;

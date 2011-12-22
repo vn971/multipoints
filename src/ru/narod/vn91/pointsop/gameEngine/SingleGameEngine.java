@@ -339,7 +339,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 		} while (dot != null && getDotType(dot.x, dot.y).notIn(
 				DotType.EMPTY, DotType.BLUE_CTRL, DotType.RED_CTRL));
 
-//		System.out.println("dot = " + dot);
 		if (dot == null) {
 			return MoveResult.ERROR;
 		}

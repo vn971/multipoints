@@ -22,6 +22,8 @@ public interface ConsoleAi6 {
 
 	void reg_genmove_with_time(boolean color, long milliseconds);
 
+	void set_random_seed(int seed);
+
 	void undo();
 
 	/**

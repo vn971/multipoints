@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
 import ru.narod.vn91.pointsop.server.ServerZagram2;
 //import ru.narod.vn91.pointsop.zagram.ServerZagram;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 public class WelcomePanel extends javax.swing.JPanel {
 
@@ -18,7 +18,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	private void updateNick() {
 		nick = jTextField_Username.getText();
-		Memory.setUserName(nick);
+		Settings.setUserName(nick);
 	}
 
 	private void connectToZagram() {
@@ -58,7 +58,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 	public WelcomePanel(GuiController actionDistributor) {
 		this.guiController = actionDistributor;
 		initComponents();
-		jTextField_Username.setText(Memory.getUserName());
+		jTextField_Username.setText(Settings.getUserName());
 		jTextField_Username.select(
 				jTextField_Username.getText().length(),
 				jTextField_Username.getText().length()
@@ -207,6 +207,11 @@ public class WelcomePanel extends javax.swing.JPanel {
         });
 
         jPasswordField_Password.setBorder(javax.swing.BorderFactory.createTitledBorder("пароль (необяз.)"));
+        jPasswordField_Password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPasswordField_PasswordKeyPressed(evt);
+            }
+        });
 
         jTextField_Email.setBorder(javax.swing.BorderFactory.createTitledBorder("email"));
 
@@ -278,6 +283,10 @@ public class WelcomePanel extends javax.swing.JPanel {
 	private void jButton_ConnectToZagramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnectToZagramActionPerformed
 		connectToZagram();
 	}//GEN-LAST:event_jButton_ConnectToZagramActionPerformed
+
+	private void jPasswordField_PasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField_PasswordKeyPressed
+		jTextField_UsernameKeyPressed(evt);
+	}//GEN-LAST:event_jPasswordField_PasswordKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

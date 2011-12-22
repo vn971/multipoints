@@ -26,6 +26,7 @@ import org.jibble.pircbot.User;
 import ru.narod.vn91.pointsop.data.Dot;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
+import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
@@ -34,7 +35,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAb
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 
 public class ServerPointsxt
@@ -92,10 +93,10 @@ public class ServerPointsxt
 				// let's make the code unreadable, yeah!
 				// in reality, I just try out FP methods
 				// like "foreach" and others :)
-				int[] portList = { Memory.getIrcPort(), 6667, 6029, 7029, 46175 };
+				int[] portList = { Settings.getIrcPort(), 6667, 6029, 7029, 46175 };
 				for (int port : portList) {
 					if (connector.call(port) == true) {
-						Memory.setIrcPort(port);
+						Settings.setIrcPort(port);
 						break;
 					} else {
 						gui.rawConnectionState(ServerPointsxt.this,
@@ -499,7 +500,7 @@ public class ServerPointsxt
 //				return;
 			} else if (myGame.isSearching() == false) {
 			} else {
-				gui.gameInviteReceived(
+				gui.askedPlay(
 						this, myGame.roomName,
 						nicknameManager.irc2id(sender));
 			}
@@ -514,7 +515,7 @@ public class ServerPointsxt
 				String opponentNick = nicknameManager.irc2id(
 						sender
 				);
-				gui.gameInviteReceived(this, channel, opponentNick);
+				gui.askedPlay(this, channel, opponentNick);
 			} else if (message.startsWith(commandCommonPrefix
 					+ commandAcceptOpponent + myNickOnServ
 					) && isPointsopSameVersionNickname(sender)) {
@@ -610,7 +611,7 @@ public class ServerPointsxt
 								"(Это системное сообщение.)"
 						);
 			} else {
-				gui.gameInviteReceived(
+				gui.askedPlay(
 								this, myGame.roomName, nicknameManager
 										.irc2id(sender));
 //			tryInvitePointsxt(sender, true);
@@ -948,7 +949,7 @@ public class ServerPointsxt
 					defaultChannel, null, null,
 					39, 32,
 					true, null, 0, 0, false, true, false, null,
-					null, 0, 0, null);
+					null, 0, 0, null, null);
 				// searching his opponent in the list
 				User[] users = getUsers(defaultChannel);
 				String opponent = "";
@@ -980,7 +981,8 @@ public class ServerPointsxt
 							true, isRated(ircNick),
 							0, 0, false, true, false,
 							GameState.Playing,
-							isBlitz(ircNick) ? 5 : 180, 0, 0, isBlitz(ircNick) ? 1 : 5);
+							isBlitz(ircNick) ? 5 : 180, 0, 0, isBlitz(ircNick) ? 1 : 5,
+							null);
 
 					gui.gameRowCreated(this, defaultChannel, newRoom);
 				} else if (isPointsopNickname(ircNick)) {
@@ -991,7 +993,8 @@ public class ServerPointsxt
 							39, 32,
 							true, false, 0, 0, false, true, false,
 							GameState.SearchingOpponent,
-							myGame.getDefaultTime(), 0, 0, myGame.periodLength);
+							myGame.getDefaultTime(), 0, 0, myGame.periodLength,
+							null);
 					gui.gameRowCreated(this, defaultChannel, newRoom);
 				}
 			}
@@ -1423,6 +1426,62 @@ public class ServerPointsxt
 			ex.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean isPrivateGameInviteAllowed() {
+		return false;
+	}
+
+	@Override
+	public void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField20x20Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField25x25Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField30x30Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField39x32Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isStartingEmptyFieldAllowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isStartingCrossAllowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isStarting4CrossAllowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMaximum() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMinimum() {
+		throw new UnsupportedOperationException();
+	}
+
 }
 class IrcNicknameManager {
 

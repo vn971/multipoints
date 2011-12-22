@@ -5,7 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
-public class Memory {
+public class Settings {
+
+	static boolean isDebug = false;
 
 	static private Set<Function<Void, Void>> colorChangeListenerList =
 			new LinkedHashSet<Function<Void, Void>>();
@@ -47,20 +49,22 @@ public class Memory {
 	}
 
 	public static boolean isDebug() {
-		return memory.getBoolean("isDebug", false);
+		return isDebug;
+//		return memory.getBoolean("isDebug", false);
 	}
 
 	public static void setDebug(boolean isDebug) {
-		memory.putBoolean("isDebug", isDebug);
+		Settings.isDebug = isDebug;
+//		memory.putBoolean("isDebug", isDebug);
 	}
 
-	public static boolean isZagramTest() {
-		return memory.getBoolean("isZagramTest", false);
-	}
+//	public static boolean isZagramTest() {
+//		return memory.getBoolean("isZagramTest", false);
+//	}
 
-	public static void setZagramTest(boolean isZagramTest) {
-		memory.putBoolean("isZagramTest", isZagramTest);
-	}
+//	public static void setZagramTest(boolean isZagramTest) {
+//		memory.putBoolean("isZagramTest", isZagramTest);
+//	}
 
 	public static void setNewestVersion() {
 		memory.putInt("version", newestVersion);
@@ -240,7 +244,7 @@ public class Memory {
 
 	public static void main(String[] args) {
 //		setZagramTest(false);
-//		setDebug(true);
+//		setDebug(false);
 	}
 
 	public enum ClickAudibility {

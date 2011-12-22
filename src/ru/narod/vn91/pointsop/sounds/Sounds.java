@@ -5,7 +5,7 @@ import java.applet.AudioClip;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 public class Sounds {
 
@@ -32,32 +32,32 @@ public class Sounds {
 	}
 
 	public static void playReceiveChat() {
-		if (Memory.getOtherSounds()) {
+		if (Settings.getOtherSounds()) {
 			playInNewThread("receiveChat.wav");
 		}
 	}
 
 	public static void playSendChat() {
-		if (Memory.getOtherSounds()) {
+		if (Settings.getOtherSounds()) {
 			playInNewThread("sendChat.wav");
 		}
 	}
 
 	public static void playNameMentioned() {
-		if (Memory.getOtherSounds()) {
+		if (Settings.getOtherSounds()) {
 			playInNewThread("nameMentioned.wav");
 		}
 	}
 
 	public static void playAlarmSignal() {
-		if (Memory.getOtherSounds()) {
+		if (Settings.getOtherSounds()) {
 			playInNewThread("alarmSignal.wav");
 		}
 	}
 
 	public static void playMakeMove(boolean isInMyGame) {
-		if ((Memory.getClickAudibility() == Memory.ClickAudibility.IN_ALL_GAMES)
-				|| (isInMyGame && (Memory.getClickAudibility() == Memory.ClickAudibility.IN_MY_GAMES))) {
+		if ((Settings.getClickAudibility() == Settings.ClickAudibility.IN_ALL_GAMES)
+				|| (isInMyGame && (Settings.getClickAudibility() == Settings.ClickAudibility.IN_MY_GAMES))) {
 			playInNewThread("makeMove.wav");
 		}
 	}

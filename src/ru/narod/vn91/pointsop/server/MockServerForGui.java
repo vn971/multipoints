@@ -1,5 +1,7 @@
 package ru.narod.vn91.pointsop.server;
 
+import ru.narod.vn91.pointsop.data.TimeSettings;
+
 public class MockServerForGui implements ServerInterface{
 
 	@Override
@@ -119,5 +121,59 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	public void getUserpic(String user) {
+	}
+
+	@Override
+	public boolean isField20x20Allowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isField25x25Allowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isField30x30Allowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isField39x32Allowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isStartingEmptyFieldAllowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isStartingCrossAllowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isStarting4CrossAllowed() {
+		return false;
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMaximum() {
+		return new TimeSettings(10, 10, 0, 1, 0);
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMinimum() {
+		return new TimeSettings(1, 1, 0, 1, 0);
+	}
+
+	@Override
+	public void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	}
+
+	@Override
+	public boolean isPrivateGameInviteAllowed() {
+		return true;
 	}
 }

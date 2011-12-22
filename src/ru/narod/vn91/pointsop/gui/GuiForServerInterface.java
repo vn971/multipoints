@@ -38,7 +38,7 @@ public interface GuiForServerInterface {
 			Integer handicapRed, Integer instantWin, Boolean manualEnclosings,
 			Boolean stopEnabled, Boolean isEmptyScored, GameState state,
 			Integer freeTemporalTime, Integer additionalAccumulatingTime,
-			Integer startingTime, Integer periodLength
+			Integer startingTime, Integer periodLength, String comment
 			);
 
 	public abstract void userJoinedRoom(
@@ -103,7 +103,7 @@ public interface GuiForServerInterface {
 			String room,
 			String message);
 
-	public abstract void gameInviteReceived(
+	public abstract void askedPlay(
 			ServerInterface server,
 			String room,
 			String possibleOpponent);
@@ -147,4 +147,5 @@ public interface GuiForServerInterface {
 	public abstract void rawConnectionState(
 			ServerInterface server,
 			String info);
+
 }

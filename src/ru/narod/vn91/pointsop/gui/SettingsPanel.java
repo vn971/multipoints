@@ -8,8 +8,8 @@ import javax.swing.AbstractButton;
 import javax.swing.JColorChooser;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.CustomColors;
-import ru.narod.vn91.pointsop.utils.Memory;
-import ru.narod.vn91.pointsop.utils.Memory.ClickAudibility;
+import ru.narod.vn91.pointsop.utils.Settings;
+import ru.narod.vn91.pointsop.utils.Settings.ClickAudibility;
 
 @SuppressWarnings("serial")
 public class SettingsPanel extends javax.swing.JPanel {
@@ -19,7 +19,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 	class PointsClickListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			Memory.setClickAudibility(e.getActionCommand());
+			Settings.setClickAudibility(e.getActionCommand());
 		}
 	}
 	PointsClickListener pointsClickListener = new PointsClickListener();
@@ -33,9 +33,9 @@ public class SettingsPanel extends javax.swing.JPanel {
 	PrivateChatListener privateChatListener = new PrivateChatListener();
 
 	private void setColors() {
-		Color p1 = Memory.getPlayer1Color();
-		Color p2 = Memory.getPlayer2Color();
-		Color back = Memory.getBackgroundColor();
+		Color p1 = Settings.getPlayer1Color();
+		Color p2 = Settings.getPlayer2Color();
+		Color back = Settings.getBackgroundColor();
 		jButton_P1Color.setBackground(p1);
 		jButton_P2Color.setBackground(p2);
 		jButton_BackgroundColor.setBackground(back);
@@ -56,17 +56,17 @@ public class SettingsPanel extends javax.swing.JPanel {
 				ClickAudibility.NOWHERE.name());
 //		jSlider1.setValueIsAdjusting(true);
 		jSlider1.setValue(
-				(int)(Memory.getDotWidth()
+				(int)(Settings.getDotWidth()
 				* (jSlider1.getMaximum() - jSlider1.getMinimum() + 1)
 				+ 0.5));
 //		jSlider1.setValueIsAdjusting(false);
 		jCheckBox_DrawConnections.setSelected(
-				Memory.getDrawConnections());
+				Settings.getDrawConnections());
 		setColors();
-		jCheckBox_OtherSounds.setSelected(Memory.getOtherSounds());
+		jCheckBox_OtherSounds.setSelected(Settings.getOtherSounds());
 		{
 			Enumeration<AbstractButton> pointClickButtons = buttonGroup_PointClick.getElements();
-			String userSetting = Memory.getClickAudibility().name();
+			String userSetting = Settings.getClickAudibility().name();
 			for (Enumeration<AbstractButton> enumerator = pointClickButtons; enumerator.hasMoreElements();) {
 				AbstractButton abstractButton = enumerator.nextElement();
 				if (abstractButton.getActionCommand().equals(userSetting)) {
@@ -303,7 +303,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 
 	private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
 		if (initPhase == false) {
-			Memory.setDotWidth(
+			Settings.setDotWidth(
 					((double) jSlider1.getValue())
 							/ jSlider1.getMaximum()
 			);
@@ -311,46 +311,46 @@ public class SettingsPanel extends javax.swing.JPanel {
 	}//GEN-LAST:event_jSlider1StateChanged
 
 	private void jCheckBox_DrawConnectionsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox_DrawConnectionsStateChanged
-		Memory.setDrawConnections(
+		Settings.setDrawConnections(
 				jCheckBox_DrawConnections.isSelected()
 		);
 	}//GEN-LAST:event_jCheckBox_DrawConnectionsStateChanged
 
 	private void jButton_P1ColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_P1ColorActionPerformed
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
-				Memory.getPlayer1Color());
+				Settings.getPlayer1Color());
 		if (c != null) {
-			Memory.setPlayer1Color(c, true);
+			Settings.setPlayer1Color(c, true);
 			setColors();
 		}
 	}//GEN-LAST:event_jButton_P1ColorActionPerformed
 
 	private void jButton_P2ColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_P2ColorActionPerformed
 		Color c = JColorChooser.showDialog(null, "цвет второго игрока",
-				Memory.getPlayer2Color());
+				Settings.getPlayer2Color());
 		if (c != null) {
-			Memory.setPlayer2Color(c, true);
+			Settings.setPlayer2Color(c, true);
 			setColors();
 		}
 	}//GEN-LAST:event_jButton_P2ColorActionPerformed
 
 	private void jButton_BackgroundColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BackgroundColorActionPerformed
 		Color c = JColorChooser.showDialog(null, "цвет первого игрока",
-				Memory.getBackgroundColor());
+				Settings.getBackgroundColor());
 		if (c != null) {
-			Memory.setBackgroundColor(c, true);
+			Settings.setBackgroundColor(c, true);
 			setColors();
 		}
 
 	}//GEN-LAST:event_jButton_BackgroundColorActionPerformed
 
 	private void jButton_ResetColorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ResetColorsActionPerformed
-		Memory.resetColors();
+		Settings.resetColors();
 		setColors();
 	}//GEN-LAST:event_jButton_ResetColorsActionPerformed
 
 private void jCheckBox_OtherSoundsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox_OtherSoundsStateChanged
-	Memory.setOtherSounds(jCheckBox_OtherSounds.isSelected());
+	Settings.setOtherSounds(jCheckBox_OtherSounds.isSelected());
 }//GEN-LAST:event_jCheckBox_OtherSoundsStateChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -76,11 +76,9 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 			playerNew.addChangeListener(new PlayerChangeListener() {
 				@Override
 				public void onChange(Player player) {
-					if ((int) player.rating != (int) playerRatingBeforeChange.value) {
-						System.out.println("hard user rejoin executed: " +
-							player + " " +
-							playerRatingBeforeChange.value +
-							"->" + player.rating);
+					if ((int) player.rating != (int) playerRatingBeforeChange.value
+//						&& playerRatingBeforeChange.value != 0
+						) {
 						playerRatingBeforeChange.value = player.rating;
 						userLeave(player);
 						userJoined(player, false);

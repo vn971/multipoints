@@ -23,7 +23,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.utils.CustomColors;
 import ru.narod.vn91.pointsop.utils.Function2;
-import ru.narod.vn91.pointsop.utils.Memory;
+import ru.narod.vn91.pointsop.utils.Settings;
 
 @SuppressWarnings("serial")
 public abstract class Paper extends JPanel {
@@ -622,12 +622,12 @@ public abstract class Paper extends JPanel {
 
 	@Override
 	public void paint(Graphics graphics) {
-		dotWidth = Memory.getDotWidth();
-		drawConnections = Memory.getDrawConnections();
+		dotWidth = Settings.getDotWidth();
+		drawConnections = Settings.getDrawConnections();
 		setColors(
-				Memory.getPlayer1Color(),
-				Memory.getPlayer2Color(),
-				Memory.getBackgroundColor()
+				Settings.getPlayer1Color(),
+				Settings.getPlayer2Color(),
+				Settings.getBackgroundColor()
 		);
 		if (engine == null) {
 			return;
@@ -934,7 +934,6 @@ public abstract class Paper extends JPanel {
 								);
 					}
 				}
-				// System.out.println("drawing");
 			}
 
 			// лучше исправить потом. Здесь можно просто вызвать метод paint()

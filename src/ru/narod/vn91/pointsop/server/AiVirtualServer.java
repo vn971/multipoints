@@ -2,6 +2,7 @@ package ru.narod.vn91.pointsop.server;
 
 import ru.narod.vn91.pointsop.ai.Ai2Gui_Interface;
 import ru.narod.vn91.pointsop.ai.Gui2Ai_Interface;
+import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 
 /**
@@ -30,7 +31,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		gui.updateGameInfo(this, "", "",
 			ai.getName(), this.getMyName(),
 			39, 32,
-			null, null, null, null, null, null, null, null, null, null, null, null);
+			null, null, null, null, null, null, null, null, null, null, null, null, null);
 		gui.subscribedGame(
 				this,
 				"");
@@ -183,5 +184,60 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	public void getUserpic(String user) {
 	}
-	
+
+	@Override
+	public void invitePlayer(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField20x20Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField25x25Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField30x30Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isField39x32Allowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isStartingEmptyFieldAllowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isStartingCrossAllowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isStarting4CrossAllowed() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMaximum() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsMinimum() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isPrivateGameInviteAllowed() {
+		return false;
+	}
+
 }

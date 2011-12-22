@@ -41,7 +41,6 @@ public class PhpBackupServer {
 		BufferedReader input;
 		String error = "";
 		String result = "";
-//		System.out.println("making request to " + urlAsString + " with POST data\n" + content);
 		try {
 			url = new URL(urlAsString);
 			urlConn = url.openConnection();
