@@ -82,12 +82,12 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jButton_Ping" alignment="1" pref="179" max="32767" attributes="1"/>
-                          <Component id="jButton_Sound" alignment="1" pref="179" max="32767" attributes="1"/>
-                          <Component id="jLabel_Userpic" alignment="1" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="jButton_GameInvite" alignment="0" pref="179" max="32767" attributes="0"/>
+                      <Component id="jButton_Sound" alignment="0" pref="193" max="32767" attributes="2"/>
+                      <Component id="jLabel_Userpic" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="jButton_AcceptIncomingInvite" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jButton_Ping" alignment="0" pref="193" max="32767" attributes="2"/>
+                      <Component id="jButton_GameInvite" alignment="1" pref="193" max="32767" attributes="0"/>
+                      <Component id="jButton_CancelInvite" alignment="0" pref="193" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -103,8 +103,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButton_Sound" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jButton_AcceptIncomingInvite" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButton_GameInvite" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="330" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButton_CancelInvite" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="258" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -128,12 +132,28 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_Userpic">
         </Component>
+        <Component class="javax.swing.JButton" name="jButton_AcceptIncomingInvite">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x43f;&#x440;&#x438;&#x43d;&#x44f;&#x442;&#x44c; &#x437;&#x430;&#x44f;&#x432;&#x43a;&#x443; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_AcceptIncomingInviteActionPerformed"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.JButton" name="jButton_GameInvite">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x432;&#x44b;&#x437;&#x432;&#x430;&#x442;&#x44c; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_GameInviteActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton_CancelInvite">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x43e;&#x442;&#x43e;&#x437;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x432;&#x43e;&#x44e; &#x437;&#x430;&#x44f;&#x432;&#x43a;&#x443;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_CancelInviteActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

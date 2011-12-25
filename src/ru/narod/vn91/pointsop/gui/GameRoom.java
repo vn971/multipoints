@@ -1,5 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
+import ru.narod.vn91.pointsop.data.GameInfoListener;
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.Sgf;
@@ -320,20 +321,47 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		};
 		player2ChangeListener.onChange(gameOuterInfo.second);
 		gameOuterInfo.second.addChangeListener(player2ChangeListener);
-		
+
 		gameOuterInfo.server.getUserpic(gameOuterInfo.second.id);
 
 		roomPart_Chat.setReadOnly(false);
 		roomPart_Chat.initChat(this,gameOuterInfo);
-//				(gameOuterInfo.first==null) ? "" : gameOuterInfo.first.guiName,
-//				(gameOuterInfo.second==null) ? "" : gameOuterInfo.second.guiName);
-//		if (amIPlaying == false) {
-//		jButton_AdditionalActions.setVisible(false);
-//		}
+		// (gameOuterInfo.first==null) ? "" : gameOuterInfo.first.guiName,
+		// (gameOuterInfo.second==null) ? "" : gameOuterInfo.second.guiName);
+		// if (amIPlaying == false) {
+		// jButton_AdditionalActions.setVisible(false);
+		// }
 
-			// netbeans debug
-			GameRoom this_copy = this;
-			roomPart_UserList.initRoomPart(this_copy, centralGuiController);
+		GameRoom this_copy = this; // netbeans debug
+		roomPart_UserList.initRoomPart(this_copy, centralGuiController);
+		
+		GameInfoListener gameInfoListener = new GameInfoListener() {
+			@Override
+			public void onChange(GameOuterInfo gameOuterInfo) {
+				String instantWin =
+						gameOuterInfo.instantWin == 0
+							? ""
+							: "немедленный выигрыш при разнице в " + gameOuterInfo.instantWin + " очков, ";
+				String message = String.format(
+					"Правила игры: " +
+						"основное время %s сек, " +
+						"добавочное за ход %s сек, " +
+						"%s" +
+						"%s, " +
+						"размер поля %s*%s, " +
+						"СТОП %s.",
+					gameOuterInfo.startingTime,
+					gameOuterInfo.additionalAccumulatingTime,
+					instantWin,
+					gameOuterInfo.isRated ? "рейтинговая" : "нерейтинговая",
+					gameOuterInfo.sizeX, gameOuterInfo.sizeY,
+					gameOuterInfo.stopEnabled ? "разрешён" : "запрещён"
+						);
+				roomPart_Chat.addServerNotice(message);
+			}
+		};
+		gameOuterInfo.addChangeListener(gameInfoListener);
+		gameInfoListener.onChange(gameOuterInfo); // invoke change
 	}
 
 	/** This method is called from within the constructor to

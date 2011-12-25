@@ -270,6 +270,21 @@ public class ServerPointsxt
 		);
 	}
 
+	@Override
+	public void acceptPersonalGameInvite(String playerId) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void cancelPersonalGameInvite(String playerId) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void rejectPersonalGameInvite(String playerId) {
+		throw new UnsupportedOperationException();
+	}
+
 	public void tryInvitePointsxt(String target, boolean isVerbose) {
 //		if (target.startsWith("\\^")) {
 //			super.sendMessage(
@@ -1433,7 +1448,7 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 		throw new UnsupportedOperationException();
 	}
 

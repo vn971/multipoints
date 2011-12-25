@@ -1,6 +1,5 @@
 package ru.narod.vn91.pointsop.gui;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.util.Date;
@@ -29,23 +28,23 @@ import ru.narod.vn91.pointsop.utils.Settings;
 
 public class GuiController implements GuiForServerInterface {
 
-  JTabbedPaneMod tabbedPane;
-  JTextPane serverOutput;
-  ServerInterface pointsxt_tochkiorg_server;
-  ServerInterface pointsxt_ircworldru_server;
-  ServerInterface pointsxt_vn91_server;
-  ServerInterface zagram_server;
-  ServerInterface pointsopServer;
-  HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
-  HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();
-  HashMap<ServerRoom, LangRoom> langRooms = new HashMap<ServerRoom, LangRoom>();
-  HashMap<Player, PrivateChat> privateChatList = new HashMap<Player, PrivateChat>();
-  PlayerPool playerPool = new PlayerPool();
-  GamePool gamePool = new GamePool();
+	JTabbedPaneMod tabbedPane;
+	JTextPane serverOutput;
+	ServerInterface pointsxt_tochkiorg_server;
+	ServerInterface pointsxt_ircworldru_server;
+	ServerInterface pointsxt_vn91_server;
+	ServerInterface zagram_server;
+	ServerInterface pointsopServer;
+	HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
+	HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();
+	HashMap<ServerRoom, LangRoom> langRooms = new HashMap<ServerRoom, LangRoom>();
+	HashMap<Player, PrivateChat> privateChatList = new HashMap<Player, PrivateChat>();
+	PlayerPool playerPool = new PlayerPool();
+	GamePool gamePool = new GamePool();
 
-  GuiController(final JTabbedPaneMod tabbedPane) {
-    this.tabbedPane = tabbedPane;
-  }
+	GuiController(final JTabbedPaneMod tabbedPane) {
+		this.tabbedPane = tabbedPane;
+	}
 
 	public synchronized void serverClosed(ServerInterface server) {
 		if (server == pointsxt_ircworldru_server) {
@@ -60,11 +59,11 @@ public class GuiController implements GuiForServerInterface {
 		}
 		if (!(server instanceof AiVirtualServer)) {
 			rawError(
-					server,
-					"Отключился от сервера... \n"
-							+ "К сожалению, переподключиться в \"тихом\" режиме "
-							+ "пока-что невозможно. \n"
-							+ "Чтобы подключиться, закройте приложение и откройте его заново.");
+				server,
+				"Отключился от сервера... \n"
+					+ "К сожалению, переподключиться в \"тихом\" режиме "
+					+ "пока-что невозможно. \n"
+					+ "Чтобы подключиться, закройте приложение и откройте его заново.");
 		}
 	}
 
@@ -77,11 +76,11 @@ public class GuiController implements GuiForServerInterface {
 		Player player = playerPool.get(server, id);
 		int previousRating = player.rating;
 		Player updateInstance = new Player(server, id, guiName, rating, winCount,
-					lossCount, drawCount, imageIcon, status);
+			lossCount, drawCount, imageIcon, status);
 		player.updateFrom(updateInstance);
-		if (rating!=null &&
-				previousRating != rating &&
-				previousRating != 0) {
+		if (rating != null &&
+			previousRating != rating &&
+			previousRating != 0) {
 			this.serverNoticeReceived(server, server.getMainRoom(),
 				player.guiName + " " + previousRating + " -> " + rating);
 		}
@@ -194,44 +193,44 @@ public class GuiController implements GuiForServerInterface {
 				)
 				);
 
-    if (langRoom != null) {
-      // nothing
-    } else {
-      langRoom = new LangRoom(serverInterface, roomNameOnServer, this);
-      langRooms.put(
-          new ServerRoom(roomNameOnServer, serverInterface),
-          langRoom
-          );
-      roomInterfaces.put(
-          new ServerRoom(roomNameOnServer, serverInterface),
-          langRoom
-          );
-      tabbedPane.addTab(guiRoomName, langRoom, false);
-      tabbedPane.makeBold(langRoom);
-      if (isServersMainRoom) {
-        tabbedPane.setSelectedComponent(langRoom);
-      }
-    }
-  }
+		if (langRoom != null) {
+			// nothing
+		} else {
+			langRoom = new LangRoom(serverInterface, roomNameOnServer, this);
+			langRooms.put(
+				new ServerRoom(roomNameOnServer, serverInterface),
+				langRoom
+					);
+			roomInterfaces.put(
+				new ServerRoom(roomNameOnServer, serverInterface),
+				langRoom
+					);
+			tabbedPane.addTab(guiRoomName, langRoom, false);
+			tabbedPane.makeBold(langRoom);
+			if (isServersMainRoom) {
+				tabbedPane.setSelectedComponent(langRoom);
+			}
+		}
+	}
 
-  @Override
-  public synchronized void subscribedGame(
-      ServerInterface server, String roomId) {
-    final GameOuterInfo game = gamePool.get(server, roomId);
-    if (roomInterfaces.containsKey(new ServerRoom(game.id, server))) {
-      return;
-    }
-    final GameRoom containerRoom_Game = new GameRoom(
-        game,
-        this);
-    gameRooms.put(
-        new ServerRoom(game.id, server),
-        containerRoom_Game
-        );
-    roomInterfaces.put(
-        new ServerRoom(game.id, server),
-        containerRoom_Game
-        );
+	@Override
+	public synchronized void subscribedGame(
+			ServerInterface server, String roomId) {
+		final GameOuterInfo game = gamePool.get(server, roomId);
+		if (roomInterfaces.containsKey(new ServerRoom(game.id, server))) {
+			return;
+		}
+		final GameRoom containerRoom_Game = new GameRoom(
+			game,
+			this);
+		gameRooms.put(
+			new ServerRoom(game.id, server),
+			containerRoom_Game
+				);
+		roomInterfaces.put(
+			new ServerRoom(game.id, server),
+			containerRoom_Game
+				);
 
 		final Function<Void, String> game2html = new Function<Void, String>() {
 			@Override
@@ -243,7 +242,7 @@ public class GuiController implements GuiForServerInterface {
 					game.first.guiName,
 					GlobalGuiSettings.getHtmlColor(game.player2Color()),
 					game.second.guiName
-					);
+						);
 			}
 		};
 		tabbedPane.addTab(game2html.call(null), containerRoom_Game, true);
@@ -276,168 +275,258 @@ public class GuiController implements GuiForServerInterface {
 				}
 				);
 
-  };
+	};
 
-  public synchronized void unsubscribedRoom(
-      ServerInterface server,
-      String room) {
-    RoomInterface roomInterface = roomInterfaces.get(
-        new ServerRoom(
-            room,
-            server
-        )
-        );
-    if (roomInterface != null) {
-      tabbedPane.remove((Component) roomInterface);
-    }
-    roomInterfaces.remove(new ServerRoom(room, server));
-  }
+	public synchronized void unsubscribedRoom(
+			ServerInterface server,
+			String room) {
+		RoomInterface roomInterface = roomInterfaces.get(
+				new ServerRoom(
+					room,
+					server
+				)
+				);
+		if (roomInterface != null) {
+			tabbedPane.remove((Component) roomInterface);
+		}
+		roomInterfaces.remove(new ServerRoom(room, server));
+	}
 
-  public synchronized void chatReceived(
-      ServerInterface server,
-      String room,
-      String user,
-      String message,
-      Long time) {
-    RoomInterface roomInterface = roomInterfaces.get(
-        new ServerRoom(
-            room,
-            server
-        )
-        );
-    if (roomInterface == null) {
-    } else {
-      RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
-      if (chat != null) {
-        roomInterface.getRoomPart_Chat().addChat(user, message, time);
-        tabbedPane.makeBold(roomInterface.getMainJPanel());
-      }
-    }
-  }
+	public synchronized void chatReceived(
+			ServerInterface server,
+			String room,
+			String user,
+			String message,
+			Long time) {
+		RoomInterface roomInterface = roomInterfaces.get(
+				new ServerRoom(
+					room,
+					server
+				)
+				);
+		if (roomInterface == null) {
+		} else {
+			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
+			if (chat != null) {
+				roomInterface.getRoomPart_Chat().addChat(user, message, time);
+				tabbedPane.makeBold(roomInterface.getMainJPanel());
+			}
+		}
+	}
 
-  public synchronized void privateMessageReceived(
-      ServerInterface server,
-      String userId,
-      String message) {
+	public synchronized void privateMessageReceived(
+			ServerInterface server,
+			String userId,
+			String message) {
 
-    Player player = playerPool.get(server, userId);
-    PrivateChat privateChat = privateChatList.get(player);
-    if (privateChat == null) {
-      // creating new panel
-      privateChat = new PrivateChat(player);
-      privateChatList.put(player, privateChat);
-      tabbedPane.addTab(player.guiName, privateChat, true);
-    } else {
-      if (tabbedPane.contains(privateChat) == false) {
-        tabbedPane.addTab(
-            player.guiName, privateChat, true
-            ); // resurrecting a closed panel
-      } else {
-        // updating an old and not closed panel
-      }
-    }
-    tabbedPane.makeBold(privateChat);
-    privateChat.addChat(player.guiName, message, false);
-  }
-
-  @Override
-  public void soundReceived(ServerInterface server, String user) {
-    privateMessageReceived(server, user, "послан звуковой сигнал");
-    Sounds.playAlarmSignal();
-  }
-
-  public synchronized void createPrivateChatWindow(
-      Player player
-      ) {
-    PrivateChat privateChat = privateChatList.get(player);
-    if (privateChat == null) {
-      privateChat = new PrivateChat(player);
-      privateChatList.put(player, privateChat);
-      tabbedPane.addTab(player.guiName, privateChat, true);
-      tabbedPane.setSelectedComponent(privateChat);
-    } else {
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			// creating new panel
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+		} else {
 			if (tabbedPane.contains(privateChat) == false) {
-        tabbedPane.addTab(player.guiName, privateChat, true);
-      }
-      tabbedPane.setSelectedComponent(privateChat);
-    }
-  }
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
+			} else {
+				// updating an old and not closed panel
+			}
+		}
+		tabbedPane.makeBold(privateChat);
+		privateChat.addChat(player.guiName, message, false);
+	}
 
-  public synchronized void serverNoticeReceived(
-      ServerInterface server,
-      String room,
-      String message) {
-    RoomInterface roomInterface = roomInterfaces.get(
-        new ServerRoom(
-            room,
-            server
-        )
-        );
-    if (roomInterface == null) {
-    } else {
-      RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
-      if (chat != null) {
-        roomInterface.getRoomPart_Chat().addServerNotice(message);
-      }
-    }
-  }
+	@Override
+	public void soundReceived(ServerInterface server, String user) {
+		privateMessageReceived(server, user, "послан звуковой сигнал");
+		Sounds.playAlarmSignal();
+	}
 
-  @Override
-  public void gameRowCreated(
-      ServerInterface server,
-      String masterRoom,
-      String newRoom) {
-    GameOuterInfo gameOuterInfo = gamePool.get(server, newRoom);
-    RoomInterface roomInterface = roomInterfaces.get(
-        new ServerRoom(masterRoom, server));
-    if (roomInterface == null) {
-      this.raw(server, "creating a game with an incorrect MasterRoom");
-    } else {
-      roomInterface.getRoomPart_GameList().gameCreated(gameOuterInfo);
-    }
+	public synchronized void createPrivateChatWindow(
+			Player player
+			) {
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+			tabbedPane.setSelectedComponent(privateChat);
+		} else {
+			if (tabbedPane.contains(privateChat) == false) {
+				tabbedPane.addTab(player.guiName, privateChat, true);
+			}
+			tabbedPane.setSelectedComponent(privateChat);
+		}
+	}
 
-  }
+	public synchronized void serverNoticeReceived(
+			ServerInterface server,
+			String room,
+			String message) {
+		RoomInterface roomInterface = roomInterfaces.get(
+				new ServerRoom(
+					room,
+					server
+				)
+				);
+		if (roomInterface == null) {
+		} else {
+			RoomPart_Chat chat = roomInterface.getRoomPart_Chat();
+			if (chat != null) {
+				roomInterface.getRoomPart_Chat().addServerNotice(message);
+			}
+		}
+	}
 
-  @Override
-  public void gameRowDestroyed(
-      ServerInterface server,
-      String oldRoom) {
-    GameOuterInfo gameOuterInfo = gamePool.get(server, oldRoom);
-    if (gameOuterInfo != null) {
-      LangRoom room = langRooms.get(
-          new ServerRoom(gameOuterInfo.masterRoomId, server));
-      if (room != null) {
-        room.getRoomPart_GameList().gameDestroyed(gameOuterInfo);
-      }
-    }
-  }
-//public synchronized void gameDestroyed(
-//ServerInterface server,
-//String masterRoom,
-//String oldRoom) {
-//GameInfo gameInfo = gamePool.get(server, oldRoom, masterRoom);
-//LangRoom room = langRooms.get(new ServerRoom(masterRoom, server));
-//if (room == null) {
-//} else {
-//room.getRoomPart_GameList().gameDestroyed(gameInfo);
-//}
-//}
+	@Override
+	public void gameRowCreated(
+			ServerInterface server,
+			String masterRoom,
+			String newRoom) {
+		GameOuterInfo gameOuterInfo = gamePool.get(server, newRoom);
+		RoomInterface roomInterface = roomInterfaces.get(
+				new ServerRoom(masterRoom, server));
+		if (roomInterface == null) {
+			this.raw(server, "creating a game with an incorrect MasterRoom");
+		} else {
+			roomInterface.getRoomPart_GameList().gameCreated(gameOuterInfo);
+		}
 
+	}
 
-//public synchronized void unsubsribedGame(
-//		ServerInterface server,
-//		String room) {
-//	RoomInterface roomInterface = roomInterfaces.get(
-//			new ServerRoom(
-//					room,
-//					server
-//			)
-//			);
-//	if (roomInterface != null) {
-//		tabbedPane.remove((Component) roomInterface);
-//	}
-//	roomInterfaces.remove(new ServerRoom(room, server));
-//}
+	@Override
+	public void gameRowDestroyed(
+			ServerInterface server,
+			String oldRoom) {
+		GameOuterInfo gameOuterInfo = gamePool.get(server, oldRoom);
+		if (gameOuterInfo != null) {
+			LangRoom room = langRooms.get(
+					new ServerRoom(gameOuterInfo.masterRoomId, server));
+			if (room != null) {
+				room.getRoomPart_GameList().gameDestroyed(gameOuterInfo);
+			}
+		}
+	}
+
+	@Override
+	public void personalInviteCancelled(ServerInterface server, String userId, String gameId) {
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			// creating new panel
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+		} else {
+			if (tabbedPane.contains(privateChat) == false) {
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
+			} else {
+				// updating an old and not closed panel
+			}
+		}
+		tabbedPane.makeBold(privateChat);
+
+		privateChat.personalInviteCancelled();
+	}
+
+	@Override
+	public void personalInviteReceived(ServerInterface server, String userId, String gameId) {
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			// creating new panel
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+		} else {
+			if (tabbedPane.contains(privateChat) == false) {
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
+			} else {
+				// updating an old and not closed panel
+			}
+		}
+		tabbedPane.makeBold(privateChat);
+
+		GameOuterInfo gameOuterInfo = gamePool.get(server, gameId);
+
+		privateChat.personalInviteReceived(gameOuterInfo);
+	}
+
+	@Override
+	public void youCancelledPersonalInvite(ServerInterface server, String userId, String gameId) {
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			// creating new panel
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+		} else {
+			if (tabbedPane.contains(privateChat) == false) {
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
+			} else {
+				// updating an old and not closed panel
+			}
+		}
+		tabbedPane.makeBold(privateChat);
+
+		privateChat.yourPersonalInviteCancelled();
+	}
+
+	@Override
+	public void yourPersonalInviteRejected(ServerInterface server, String userId, String gameId) {
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			// creating new panel
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+		} else {
+			if (tabbedPane.contains(privateChat) == false) {
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
+			} else {
+				// updating an old and not closed panel
+			}
+		}
+		tabbedPane.makeBold(privateChat);
+
+		privateChat.yourPersonalInviteRejected();
+	}
+
+	@Override
+	public void yourPersonalInviteSent(ServerInterface server, String userId, String gameId) {
+		Player player = playerPool.get(server, userId);
+		PrivateChat privateChat = privateChatList.get(player);
+		if (privateChat == null) {
+			// creating new panel
+			privateChat = new PrivateChat(player);
+			privateChatList.put(player, privateChat);
+			tabbedPane.addTab(player.guiName, privateChat, true);
+		} else {
+			if (tabbedPane.contains(privateChat) == false) {
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
+			} else {
+				// updating an old and not closed panel
+			}
+		}
+		tabbedPane.makeBold(privateChat);
+
+		privateChat.yourPersonalInviteSent();
+	}
 
 	@Override
 	public void askedPlay(
@@ -448,16 +537,16 @@ public class GuiController implements GuiForServerInterface {
 		server.acceptGameVacancyOpponent(room, possibleOpponent);
 	}
 
-@Override
-public void makedMove(ServerInterface server, String roomId, boolean silent,
-		int x, int y, boolean isRed, boolean nowPlays) {
-	GameRoom gameRoom = gameRooms.get(new ServerRoom(roomId, server));
-	if (gameRoom != null) {
-		gameRoom.makeMove(silent, x, y, isRed, nowPlays
-		);
-		tabbedPane.makeBold(gameRoom);
+	@Override
+	public void makedMove(ServerInterface server, String roomId, boolean silent,
+			int x, int y, boolean isRed, boolean nowPlays) {
+		GameRoom gameRoom = gameRooms.get(new ServerRoom(roomId, server));
+		if (gameRoom != null) {
+			gameRoom.makeMove(silent, x, y, isRed, nowPlays
+					);
+			tabbedPane.makeBold(gameRoom);
+		}
 	}
-}
 
 	public synchronized void makedMove(
 			ServerInterface server,
@@ -481,29 +570,29 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 		}
 	}
 
-  public synchronized void gameStop(
-      ServerInterface server,
-      String room,
-      boolean isRedPlayer) {
-    GameRoom room_Game = gameRooms.get(new ServerRoom(room, server));
-    if (room_Game != null) {
-      gameRooms.get(new ServerRoom(room, server)).stopGame(isRedPlayer);
-    }
-  }
+	public synchronized void gameStop(
+			ServerInterface server,
+			String room,
+			boolean isRedPlayer) {
+		GameRoom room_Game = gameRooms.get(new ServerRoom(room, server));
+		if (room_Game != null) {
+			gameRooms.get(new ServerRoom(room, server)).stopGame(isRedPlayer);
+		}
+	}
 
-  public synchronized void gameLost(
-      ServerInterface server,
-      String room,
-      boolean isRedLooser,
-      boolean wantToSave) {
-    GameRoom room_Game = gameRooms.get(new ServerRoom(room, server));
-    if (room_Game != null) {
-      gameRooms.get(new ServerRoom(room, server)).gameLost(
-          isRedLooser,
-          wantToSave
-          );
-    }
-  }
+	public synchronized void gameLost(
+			ServerInterface server,
+			String room,
+			boolean isRedLooser,
+			boolean wantToSave) {
+		GameRoom room_Game = gameRooms.get(new ServerRoom(room, server));
+		if (room_Game != null) {
+			gameRooms.get(new ServerRoom(room, server)).gameLost(
+				isRedLooser,
+				wantToSave
+					);
+		}
+	}
 
 	@Override
 	public synchronized void raw(ServerInterface server, String info) {
@@ -526,7 +615,7 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 					info,
 					"Error: " + info,
 					JOptionPane.ERROR_MESSAGE
-				);
+						);
 			};
 		}.start();
 	}
@@ -542,64 +631,63 @@ public void makedMove(ServerInterface server, String roomId, boolean silent,
 		serverOutput.setText(oldText + add);
 	}
 
-  public synchronized void activateGameRoom(
-      ServerInterface server,
-      String roomName) {
-    try {
-      tabbedPane.setSelectedComponent(
-          gameRooms.get(
-              new ServerRoom(
-                  roomName, server
-              )
-              )
-          );
-    } catch (Exception ignored) {
-    }
-  }
+	public synchronized void activateGameRoom(
+			ServerInterface server,
+			String roomName) {
+		try {
+			tabbedPane.setSelectedComponent(
+					gameRooms.get(
+							new ServerRoom(
+								roomName, server
+							)
+							)
+					);
+		} catch (Exception ignored) {
+		}
+	}
 }
 
 class ServerRoom {
 
-  String roomName;
-  ServerInterface serverInterface;
+	String roomName;
+	ServerInterface serverInterface;
 
-  public ServerRoom(
-      String roomName,
-      ServerInterface serverInterface) {
-    this.roomName = roomName;
-    this.serverInterface = serverInterface;
-  }
+	public ServerRoom(
+			String roomName,
+			ServerInterface serverInterface) {
+		this.roomName = roomName;
+		this.serverInterface = serverInterface;
+	}
 
-  @Override
-  public boolean equals(Object compareToObject) {
-    if (compareToObject instanceof ServerRoom == false) {
-      return false;
-      // avoid this stupid NetBeans hint...
-    }
-    if ((compareToObject == null)
-        || (getClass().isInstance(compareToObject) == false)) {
-      return false;
-    }
-    ServerRoom compareTo = getClass().cast(compareToObject);
-    boolean roomNameEquals = (roomName == null)
-        ? compareTo.roomName == null
-        : roomName.equals(compareTo.roomName);
-    boolean serverEquals = (serverInterface == null)
-        ? compareTo.serverInterface == null
-        : serverInterface.equals(compareTo.serverInterface);
-    return roomNameEquals && serverEquals;
-  }
+	@Override
+	public boolean equals(Object compareToObject) {
+		if (compareToObject instanceof ServerRoom == false) {
+			return false;
+			// avoid this stupid NetBeans hint...
+		}
+		if ((compareToObject == null)
+			|| (getClass().isInstance(compareToObject) == false)) {
+			return false;
+		}
+		ServerRoom compareTo = getClass().cast(compareToObject);
+		boolean roomNameEquals = (roomName == null)
+			? compareTo.roomName == null
+			: roomName.equals(compareTo.roomName);
+		boolean serverEquals = (serverInterface == null)
+			? compareTo.serverInterface == null
+			: serverInterface.equals(compareTo.serverInterface);
+		return roomNameEquals && serverEquals;
+	}
 
-  @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 29 * hash + (this.roomName != null ? this.roomName.hashCode() : 0);
-    hash = 29 * hash
-        + (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
-    return hash;
-  }
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 29 * hash + (this.roomName != null ? this.roomName.hashCode() : 0);
+		hash = 29 * hash
+			+ (this.serverInterface != null ? this.serverInterface.hashCode() : 0);
+		return hash;
+	}
 }
-
 
 class JTabbedPaneMod {
 
@@ -625,7 +713,7 @@ class JTabbedPaneMod {
 			public Void call(TabCloseable input) {
 				Function<Void, Boolean> closeListener = closeListeners.get(component);
 				if (closeListener != null &&
-						closeListener.call(null) == Boolean.FALSE) {
+					closeListener.call(null) == Boolean.FALSE) {
 					// do nothing. Calling listeners is enough.
 				} else {
 					remove(component);
@@ -662,7 +750,7 @@ class JTabbedPaneMod {
 	public void makeBold(Component component) {
 		int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0 &&
-				tabIndex != tabbedPane.getSelectedIndex()) {
+			tabIndex != tabbedPane.getSelectedIndex()) {
 			tabbedPane.setBackgroundAt(tabIndex, boldColor);
 			// Component panel = tabbedPane.getTabComponentAt(tabIndex);
 			// try {

@@ -40,8 +40,8 @@ public class ServerZagram2 implements ServerInterface {
 	String secretId;
 	volatile boolean isDisposed = false;
 	MessageQueue queue = new MessageQueue(5);
-	Set<String> personalInvitesOld = new LinkedHashSet<String>();
-	Set<String> personalInvitesNew = new LinkedHashSet<String>();
+	Set<String> personalInvites = new LinkedHashSet<String>();
+	String currentInvitationPlayer = "";
 
 	Map<String,String> avatarUrls = new HashMap<String, String>();
 	Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
@@ -187,22 +187,6 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void acceptGameVacancyOpponent(String roomName, String newOpponent) {
-		gui.raw(this, "MultiPoints пока-что не умеет оставлять заявки на игру на этом сервере..");
-	}
-
-	@Override
-	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
-		String result =
-				getLinkContent("http://zagram.org/a.kropki?idGracza=" +
-						secretId + "&co=zaproszenieNie");
-		if (result.equals("") == false) {
-			gui.rawError(this,
-					"Непустой ответ при попытке отказаться от игры: " + result);
-		}
-	}
-
-	@Override
 	public void connect() {
 		Thread thread = new Thread() {
 			@Override
@@ -225,10 +209,12 @@ public class ServerZagram2 implements ServerInterface {
 				String authorizationResult = getLinkContent(authorizationURL);
 				if (authorizationResult.equals("")) {
 					gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
+					getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
 				} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
 					// avatarUrls.put(myNameOnServer, authorizationResult.split("\\.")[2]);
 					gui.rawConnectionState(ServerZagram2.this,
 						"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
+					getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
 				} else {
 					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
 				}
@@ -312,7 +298,58 @@ public class ServerZagram2 implements ServerInterface {
 	@Override
 	public void askGameVacancyPlay(String gameRoomName) {
 		throw new UnsupportedOperationException();
-		// gui.raw(this, "пытаюсь присоединиться к комнате " + gameRoomName);
+	}
+
+	@Override
+	public void acceptGameVacancyOpponent(String roomName, String newOpponent) {
+		gui.raw(this, "MultiPoints пока-что не умеет оставлять заявки на игру на этом сервере..");
+	}
+
+	@Override
+	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
+		gui.raw(this, "MultiPoints пока-что не умеет оставлять заявки на игру на этом сервере..");
+	}
+
+	@Override
+	public void acceptPersonalGameInvite(String playerId) {
+		if (personalInvites.contains(playerId)) {
+			String message = "v" + queue.sizePlusOne() +
+					"." + getMainRoom() + "." + "a";
+			sendCommandToServer(message);
+		}
+	}
+
+	// TODO bookmark:)
+	@Override
+	public void cancelPersonalGameInvite(String playerId) {
+		if (personalInvites.contains(playerId)) {
+			String message = "v" + queue.sizePlusOne() +
+					"." + getMainRoom() + "." + "c";
+			sendCommandToServer(message);
+		}
+		gui.youCancelledPersonalInvite(this, playerId, playerId + "@outgoing");
+	}
+
+	@Override
+	public void rejectPersonalGameInvite(String playerId) {
+		if (personalInvites.contains(playerId)) {
+			String message = "v" + queue.sizePlusOne() +
+					"." + getMainRoom() + "." + "r";
+			sendCommandToServer(message);
+		}
+	}
+
+	@Override
+	public void addPersonalGameInvite(String playerId, TimeSettings time, int fieldX, int fieldY) {
+		String msgToSend =
+				"v" + queue.sizePlusOne() + "." + "0"/* room# */+ "." +
+					"s." + getServerEncoded(playerId) + "." +
+					getGameTypeString(fieldX, fieldY, time.starting, time.periodAdditional);
+		sendCommandToServer(msgToSend);
+		gui.updateGameInfo(this, playerId + "@outgoing", getMainRoom(), getMyName(), null,
+			fieldX, fieldY, false, false, 0, 0, false,
+			false, false, null, 0, time.periodAdditional, time.starting, 1, playerId);
+		gui.yourPersonalInviteSent(this, playerId, playerId + "@outgoing");
 	}
 
 	@Override
@@ -348,18 +385,6 @@ public class ServerZagram2 implements ServerInterface {
 		String msgToSend = "q" + queue.sizePlusOne() + "." + room + ".";
 		sendCommandToServer(msgToSend);
 		gui.unsubscribedRoom(this, room);
-	}
-
-	@Override
-	public void askPersonalGame(String playerId, TimeSettings time, int fieldX, int fieldY) {
-		String msgToSend =
-				"v" + queue.sizePlusOne() + "." + "0"/* room# */+ "." +
-					"s." + getServerEncoded(playerId) + "." +
-					getGameTypeString(fieldX, fieldY, time.starting, time.periodAdditional);
-		sendCommandToServer(msgToSend);
-		gui.updateGameInfo(this, getMyName()+"@outgoing", getMainRoom(), getMyName(), null, fieldX, fieldY, false, false, 0, 0, false, 
-			false, false, null, 0, time.periodAdditional, time.starting, 1, playerId);
-		gui.askedPlay(this, this.getMyName() + "@outgoing", "");
 	}
 
 	@Override
@@ -501,6 +526,7 @@ public class ServerZagram2 implements ServerInterface {
 										text.indexOf("ok/") + "ok/".length(),
 										text.length() - "/end".length())
 								.split("/");
+				Set<String> personalInvitesNew = new LinkedHashSet<String>();
 				String currentRoom = "";
 				for (String message : splitted) {
 					if (message.startsWith("m")) { // message numbers info
@@ -712,29 +738,41 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("vg")) { // game invite
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", ""); // first part
-						if (personalInvitesOld.add(sender) == true) {
+						if (personalInvites.add(sender) == true) {
 							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
 							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
-							gui.updateGameInfo(
-								server, sender + "@incoming", currentRoom,
-								sender, null,
-								gameType.fieldX, gameType.FieldY, false,
-								gameType.isRated, 0,
-								gameType.instantWin, false, gameType.isStopEnabled, false,
-								GameState.SearchingOpponent,
-								0, gameType.timeAdditional, gameType.timeStarting, 1,
-								sender + "to YOU");
-							System.out.println("gui.gameRowCreated");
-							gui.gameRowCreated(server, currentRoom, sender+"@incoming");
-							gui.raw(server, String.format(
-								"Игрок '%s' вызвал(а) тебя на игру: %s. " +
-										"Дальнейшее поведение MultiPoints пока тестируется (пытаюсь принять заявку).",
-										sender,
-										gameDescription
-									));
-							// server.rejectOpponent(null, sender);
+							if (gameType.isStopEnabled == true) {
+								server.rejectPersonalGameInvite(sender);
+								gui.raw(server, String.format(
+									"Игрок '%s' вызвал(а) тебя на игру: " +
+										"К сожалению, принять заявку невозможно, " +
+										"т.к. нестандартные правила игры пока-что не поддерживаются программой. " +
+										"Отослан отказ от игры. ",
+									sender));
+							} else {
+								gui.updateGameInfo(
+									server, sender + "@incoming", currentRoom,
+									sender, null,
+									gameType.fieldX, gameType.FieldY, false,
+									gameType.isRated, 0,
+									gameType.instantWin, false, gameType.isStopEnabled, false,
+									GameState.SearchingOpponent,
+									0, gameType.timeAdditional, gameType.timeStarting, 1,
+									sender + "to YOU");
+								gui.personalInviteReceived(server, sender, sender + "@incoming");
+							}
 						}
 						personalInvitesNew.add(sender);
+					} else if (message.startsWith("vs")) {
+						String user = message.substring(2).split("\\.")[0];
+						gui.yourPersonalInviteSent(server, user, user + "@outgoing");
+					} else if (message.startsWith("vr")) {
+						String user = message.substring(2);
+						gui.yourPersonalInviteRejected(server, user, user + "@outgoing");
+
+						// "OK to the fact that someone rejected your invitation" :-/
+						String msgToSend = "v" + queue.sizePlusOne() + "." + "0" + "." + "o";
+						sendCommandToServer(msgToSend);
 					}
 				}
 
@@ -742,18 +780,17 @@ public class ServerZagram2 implements ServerInterface {
 				// now I have to compare two sets of player invitations
 				// if I don't have a player in the new set -
 				// then the invitation is closed and I should delete it.
-				for (Iterator<String> iterator = personalInvitesOld.iterator(); iterator.hasNext();) {
+				for (Iterator<String> iterator = personalInvites.iterator(); iterator.hasNext();) {
 					String player = iterator.next();
 					if (personalInvitesNew.contains(player) == false) {
 						// invitation cancelled
-						System.out.println("deleting row");
-						gui.gameRowDestroyed(server, player + "@incoming");
+						gui.personalInviteCancelled(server, player, player + "@incoming");
 					}
 				}
 				// now swap old-new and clear the old.
-				personalInvitesOld.clear();
-				Set<String> backup = personalInvitesOld;
-				personalInvitesOld = personalInvitesNew;
+				personalInvites.clear();
+				Set<String> backup = personalInvites;
+				personalInvites = personalInvitesNew;
 				personalInvitesNew = backup;
 			} else if (text.equals("")) {
 				// we got an empty result. Well, lets treat that as normal.

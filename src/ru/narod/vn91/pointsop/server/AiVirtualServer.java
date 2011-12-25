@@ -86,6 +86,18 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		gui.raw(this, "Not supported");
 	}
 
+	@Override
+	public void acceptPersonalGameInvite(String playerId) {
+	}
+
+	@Override
+	public void cancelPersonalGameInvite(String playerId) {
+	}
+
+	@Override
+	public void rejectPersonalGameInvite(String playerId) {
+	}
+
 	public void acceptGameVacancyOpponent(String roomName,
 			String name) {
 		gui.raw(this, "Not supported");
@@ -186,7 +198,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	@Override
-	public void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 		throw new UnsupportedOperationException();
 	}
 

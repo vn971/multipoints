@@ -34,6 +34,18 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
+	public void acceptPersonalGameInvite(String playerId) {
+	}
+
+	@Override
+	public void cancelPersonalGameInvite(String playerId) {
+	}
+
+	@Override
+	public void rejectPersonalGameInvite(String playerId) {
+	}
+
+	@Override
 	public void stopGameVacancy() {
 	}
 
@@ -169,7 +181,7 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
-	public void askPersonalGame(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 	}
 
 	@Override

@@ -13,9 +13,11 @@ public interface GuiForServerInterface {
 	}
 
 	/**
-	 * Server implementations should execute this method if they get disconnected from a physical server
-	 *
-	 * @param server always return <b>this</b>
+	 * Server implementations should execute this method if they get disconnected
+	 * from a physical server
+	 * 
+	 * @param server
+	 *          always return <b>this</b>
 	 */
 	public abstract void serverClosed(ServerInterface server);
 
@@ -58,6 +60,7 @@ public interface GuiForServerInterface {
 			String user,
 			String additionalMessage);
 
+	// subscribtions
 	public abstract void subscribedLangRoom(
 			String roomNameOnServer,
 			ServerInterface serverInterface,
@@ -73,6 +76,7 @@ public interface GuiForServerInterface {
 			ServerInterface server,
 			String room);
 
+	// game rows
 	public abstract void gameRowCreated(
 			ServerInterface server,
 			String masterRoom,
@@ -81,6 +85,32 @@ public interface GuiForServerInterface {
 	public abstract void gameRowDestroyed(
 			ServerInterface server,
 			String oldRoom);
+
+	// personal gameInvites
+	public void personalInviteReceived(
+			ServerInterface server,
+			String userId,
+			String gameId);
+
+	public void personalInviteCancelled(
+			ServerInterface server,
+			String userId,
+			String gameId);
+
+	public void yourPersonalInviteSent(
+			ServerInterface server,
+			String userId,
+			String gameId);
+
+	public void yourPersonalInviteRejected(
+			ServerInterface server,
+			String userId,
+			String gameId);
+	
+	public void youCancelledPersonalInvite(
+			ServerInterface server,
+			String userId,
+			String gameId);
 
 	public abstract void chatReceived(
 			ServerInterface server,
@@ -116,7 +146,6 @@ public interface GuiForServerInterface {
 			int y,
 			boolean isRed,
 			boolean nowPlays
-//			int timeLeftRed, int timeLeftBlue
 			);
 
 	public abstract void gameStop(
@@ -134,7 +163,7 @@ public interface GuiForServerInterface {
 			ServerInterface server,
 			String room,
 			TimeLeft t
-	);
+			);
 
 	public abstract void raw(
 			ServerInterface server,
