@@ -15,8 +15,10 @@ import javax.swing.JSeparator;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
+import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.MockServerForGui;
+import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.utils.Settings;
 
 public class SelfishGuiStarter {
@@ -116,9 +118,9 @@ public class SelfishGuiStarter {
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
 		if (Settings.isDebug()) {
-			tabbedPane.addTab("комната", new LangRoom(new MockServerForGui(), "", guiController), true);
-		//		tabbedPane.addTab("game room", new GameRoom(null, "", guiController, "",
-		//				"", 1, 1, "", false, "", true, true));
+			ServerInterface mockServer = new MockServerForGui();
+			tabbedPane.addTab("комната", new LangRoom(mockServer, "", guiController), true);
+			tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, ""), guiController), true);
 		//		tabbedPane.addTab(
 		//				"priv chat", new PrivateChat(null, guiController, ""),
 		//				false

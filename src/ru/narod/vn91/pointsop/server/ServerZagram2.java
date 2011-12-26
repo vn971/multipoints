@@ -11,7 +11,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -26,6 +25,7 @@ import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
+import ru.narod.vn91.pointsop.server.zagram.MessageQueue;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Wait;
@@ -42,6 +42,7 @@ public class ServerZagram2 implements ServerInterface {
 	MessageQueue queue = new MessageQueue(5);
 	Set<String> personalInvites = new LinkedHashSet<String>();
 	String currentInvitationPlayer = "";
+	ThreadMain threadMain;
 
 	Map<String,String> avatarUrls = new HashMap<String, String>();
 	Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
@@ -112,7 +113,7 @@ public class ServerZagram2 implements ServerInterface {
 			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
 			int sizeY = Integer.parseInt(hellishString.substring(2, 4));
 			String rulesAsString = hellishString.substring(4, 8);
-			boolean isStopEnabled = !rulesAsString.matches("terr");
+			boolean isStopEnabled = rulesAsString.matches("noT4|noT1|terr");
 			// boolean manualEnclosings = rulesAsString.matches("terr");
 			// boolean stopEnabled = rulesAsString.matches("noT4|noT1");
 			// boolean isEmptyScored = rulesAsString.matches("terr");
@@ -188,7 +189,7 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void connect() {
-		Thread thread = new Thread() {
+		Thread threadStartup = new Thread() {
 			@Override
 			public void run() {
 				gui.rawConnectionState(ServerZagram2.this, "Подключение...");
@@ -207,42 +208,49 @@ public class ServerZagram2 implements ServerInterface {
 				}
 
 				String authorizationResult = getLinkContent(authorizationURL);
+				boolean isAuthorized;
 				if (authorizationResult.equals("")) {
 					gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
-					getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
+					isAuthorized = true;
 				} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
 					// avatarUrls.put(myNameOnServer, authorizationResult.split("\\.")[2]);
 					gui.rawConnectionState(ServerZagram2.this,
 						"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
-					getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
+					isAuthorized = true;
 				} else {
 					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
+					isAuthorized = false;
 				}
 
-				final Thread disconnectThread = new Thread() {
-					@Override
-					public void run() {
-						disconnectServer();
-					}
-				};
-				Thread killUltimatively = new Thread() {
-					@Override
-					public void run() {
-						// give the "disconnectThread" a little time, and after that kill it
-						Wait.waitExactly(1000L);
-						disconnectThread.interrupt();
+				if (isAuthorized) {
+					getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
+
+					final Thread disconnectThread = new Thread() {
+						@Override
+						public void run() {
+							disconnectServer();
+						}
 					};
-				};
-				killUltimatively.setDaemon(true);
-				Runtime.getRuntime().addShutdownHook(disconnectThread);
-				Runtime.getRuntime().addShutdownHook(killUltimatively);
-				new ThreadMain().start();
+					Thread killUltimatively = new Thread() {
+						@Override
+						public void run() {
+							// give the "disconnectThread" a little time, and after that kill it
+							Wait.waitExactly(1000L);
+							disconnectThread.interrupt();
+						};
+					};
+					killUltimatively.setDaemon(true);
+					Runtime.getRuntime().addShutdownHook(killUltimatively);
+					Runtime.getRuntime().addShutdownHook(disconnectThread);
+					threadMain = new ThreadMain();
+					threadMain.start();
+				}
 			};
 		};
-		thread.setDaemon(true);
-		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.setName("zagramThread");
-		thread.start();
+		threadStartup.setDaemon(true);
+		threadStartup.setPriority(Thread.MIN_PRIORITY);
+		threadStartup.setName("zagramThread");
+		threadStartup.start();
 	}
 
 	@Override
@@ -312,31 +320,29 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void acceptPersonalGameInvite(String playerId) {
-		if (personalInvites.contains(playerId)) {
+//		if (personalInvites.contains(playerId)) {
 			String message = "v" + queue.sizePlusOne() +
 					"." + getMainRoom() + "." + "a";
 			sendCommandToServer(message);
-		}
+//		}
 	}
 
-	// TODO bookmark:)
+	// TODO bookmark :)
 	@Override
 	public void cancelPersonalGameInvite(String playerId) {
-		if (personalInvites.contains(playerId)) {
-			String message = "v" + queue.sizePlusOne() +
-					"." + getMainRoom() + "." + "c";
-			sendCommandToServer(message);
-		}
+		String message = "v" + queue.sizePlusOne() +
+			"." + getMainRoom() + "." + "c";
+		sendCommandToServer(message);
 		gui.youCancelledPersonalInvite(this, playerId, playerId + "@outgoing");
 	}
 
 	@Override
 	public void rejectPersonalGameInvite(String playerId) {
-		if (personalInvites.contains(playerId)) {
+//		if (personalInvites.contains(playerId)) {
 			String message = "v" + queue.sizePlusOne() +
 					"." + getMainRoom() + "." + "r";
 			sendCommandToServer(message);
-		}
+//		}
 	}
 
 	@Override
@@ -388,7 +394,130 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void surrender(String roomName) {
+	public void surrender(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "resign";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void stop(String roomId) {
+		getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId +
+			"&co=stopMove&stol=" + roomId);
+	}
+
+	@Override
+	public void askNewGame(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "new";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void cancelAskingNewGame(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "cancel1new";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void acceptNewGame(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "new"; // same as ask
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void rejectNewGame(String roomId) {
+		// cannot reject, just ignore
+	}
+
+	@Override
+	public void askEndGameAndScore(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "score";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void cancelAskingEndGameAndScore(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "cancel1score";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void acceptEndGameAndScore(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "accept2score";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void rejectEndGameAndScore(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "reject2score";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void askUndo(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "undo";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void cancelAskingUndo(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "cancel1undo";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void acceptUndo(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "accept2undo";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void rejectUndo(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "reject2undo";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void askDraw(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "draw";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void cancelAskingDraw(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "cancel1draw";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void acceptDraw(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "accept2draw";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void rejectDraw(String roomId) {
+		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "reject2draw";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void pauseOpponentTime(String roomId) {
+		String msgToSend = "t" + queue.sizePlusOne() + "." + roomId + "." + "p";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void unpauseOpponentTime(String roomId) {
+		String msgToSend = "t" + queue.sizePlusOne() + "." + roomId + "." + "u";
+		sendCommandToServer(msgToSend);
+	}
+
+	@Override
+	public void addOpponentTime(String roomId, int seconds) {
+		getLinkContent("http://zagram.org/a.kropki" +
+			"?idGracza=" + secretId +
+			"&co=dodajeCzas&ile=" + seconds +
+			"&stol=" + roomId);
 	}
 
 	private synchronized String getLinkContent(String link) {
@@ -493,6 +622,8 @@ public class ServerZagram2 implements ServerInterface {
 
 		@Override
 		public void run() {
+			sendCommandToServer("i0nJa");// nulls, infinite invites
+
 			while (isDisposed == false) {
 
 				String commands = "";
@@ -517,7 +648,7 @@ public class ServerZagram2 implements ServerInterface {
 			}
 		}
 
-		private void handleText(String text) {
+		private synchronized void handleText(String text) {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
 			ServerInterface server = ServerZagram2.this;
 			if (text.matches(".*ok/.*") && text.endsWith("/end")) {
@@ -671,7 +802,6 @@ public class ServerZagram2 implements ServerInterface {
 									server,
 									"общий чат: zagram",
 									true);
-//							sendCommandToServer("i0n");
 						} else {
 							gui.subscribedGame(server, currentRoom);
 						}
@@ -738,7 +868,7 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("vg")) { // game invite
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", ""); // first part
-						if (personalInvites.add(sender) == true) {
+						if (personalInvites.contains(sender) == false) {
 							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
 							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
 							if (gameType.isStopEnabled == true) {
@@ -760,9 +890,11 @@ public class ServerZagram2 implements ServerInterface {
 									0, gameType.timeAdditional, gameType.timeStarting, 1,
 									sender + "to YOU");
 								gui.personalInviteReceived(server, sender, sender + "@incoming");
+								personalInvitesNew.add(sender);
 							}
+						} else {
+							personalInvitesNew.add(sender);
 						}
-						personalInvitesNew.add(sender);
 					} else if (message.startsWith("vs")) {
 						String user = message.substring(2).split("\\.")[0];
 						gui.yourPersonalInviteSent(server, user, user + "@outgoing");
@@ -785,6 +917,7 @@ public class ServerZagram2 implements ServerInterface {
 					if (personalInvitesNew.contains(player) == false) {
 						// invitation cancelled
 						gui.personalInviteCancelled(server, player, player + "@incoming");
+						sendCommandToServer("i0nJa");
 					}
 				}
 				// now swap old-new and clear the old.
@@ -835,31 +968,6 @@ public class ServerZagram2 implements ServerInterface {
 			return "";
 		}
 	}
-	
-	@Override
-	public boolean isIncomingYInverted() {
-		return true;
-	}
-
-	@Override
-	public boolean isGuiYInverted() {
-		return false;
-	}
-
-	@Override
-	public boolean isPrivateChatEnabled() {
-		return false;
-	}
-
-	@Override
-	public boolean isPingEnabled() {
-		return false;
-	}
-
-	@Override
-	public boolean isSoundNotifyEnabled() {
-		return false;
-	}
 
 	public void getUserInfoText(String user) {
 	}
@@ -880,6 +988,36 @@ public class ServerZagram2 implements ServerInterface {
 			}
 		} catch (Exception ex) {
 		}
+	}
+
+	@Override
+	public boolean isIncomingYInverted() {
+		return true;
+	}
+
+	@Override
+	public boolean isGuiYInverted() {
+		return false;
+	}
+
+	@Override
+	public boolean isPrivateChatEnabled() {
+		return false;
+	}
+
+	@Override
+	public boolean isPingEnabled() {
+		return false;
+	}
+	
+	@Override
+	public boolean isStopEnabled() {
+		return true;
+	}
+
+	@Override
+	public boolean isSoundNotifyEnabled() {
+		return false;
 	}
 
 	@Override
@@ -904,12 +1042,12 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public boolean isStartingEmptyFieldAllowed() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isStartingCrossAllowed() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -919,56 +1057,22 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public TimeSettings getTimeSettingsMaximum() {
-		return new TimeSettings(99999, 999, 0, 1, 0);
+		return new TimeSettings(120 * 60 /* 120 minutes */, 60, 0, 1, 0);
 	}
 
 	@Override
 	public TimeSettings getTimeSettingsMinimum() {
-		return new TimeSettings(20, 2, 0, 1, 0);
+		return new TimeSettings(60, 2, 0, 1, 0);
 	}
-
+	
+	@Override
+	public TimeSettings getTimeSettingsDefault() {
+		return new TimeSettings(3 * 60, 15, 0, 1, 0);
+	}
 
 	@Override
 	public boolean isPrivateGameInviteAllowed() {
 		return true;
 	}
 
-}
-
-
-class MessageQueue {
-	ArrayList<String> stringList;
-	int size = 0;
-	final int stackSize;
-
-	public MessageQueue(int stackSize) {
-		this.stackSize = stackSize;
-		stringList = new ArrayList<String>(stackSize);
-		for (int i = 0; i < stackSize; i++) {
-			stringList.add("");
-		}
-	}
-
-	String get(int index) {
-		if (index >= 0
-				&& index <= size()
-				&& index >= size() - stackSize + 1) {
-			return stringList.get(index % stackSize);
-		} else {
-			return null;
-		}
-	}
-
-	void add(String message) {
-		size = size + 1;
-		stringList.set(size % stackSize, message);
-	}
-
-	int size() {
-		return size;
-	}
-
-	int sizePlusOne() {
-		return size() + 1;
-	}
 }

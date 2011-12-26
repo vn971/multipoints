@@ -595,6 +595,142 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
+	public void askedNewGame(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент предложил вам начать новую игру.", null);
+		// }
+	}
+
+	@Override
+	public void acceptedNewGame(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент согласился на ваше предложение новой игры.", null);
+		// }
+	}
+
+	@Override
+	public void rejectedNewGame(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент отклонил ваше предложение на новую игру.", null);
+		// }
+	}
+
+	@Override
+	public void askedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент предложил завершить игру и подсчитать очки.", null);
+		// }
+	}
+
+	@Override
+	public void acceptedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент согласился на завершение игры и подсчёт очков.", null);
+		// }
+	}
+
+	@Override
+	public void rejectedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент отклонил предложение на завершение игры и подсчёт очков.",
+		// null);
+		// }
+	}
+
+	@Override
+	public void askedUndo(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент спрашивает взятие хода назад.", null);
+		// }
+	}
+
+	@Override
+	public void acceptedUndo(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент согласился взять ход назад.", null);
+		// }
+	}
+
+	@Override
+	public void rejectedUndo(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент отказался взять ход назад.", null);
+		// }
+	}
+
+	@Override
+	public void askedDraw(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент предлагает вам закончить игру ничьёй.", null);
+		// }
+	}
+
+	@Override
+	public void acceptedDraw(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент согласился на ничью.", null);
+		// }
+	}
+
+	@Override
+	public void rejectedDraw(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент отказался от ничьей.", null);
+		// }
+	}
+
+	@Override
+	public void pausedOpponentTime(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент запаузил ваше время.", null);
+		// }
+	}
+
+	@Override
+	public void unpausedOpponentTime(ServerInterface server, String roomId, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server",
+		// "Оппонент возобновил течение вашего времени.", null);
+		// }
+	}
+
+	@Override
+	public void addedOpponentTime(ServerInterface server, String roomId, int seconds, boolean you) {
+		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
+		// if (room_Game != null) {
+		// room_Game.getRoomPart_Chat().addChat("server", "Оппонент прибавил вам " +
+		// seconds + " секунд", null);
+		// }
+	}
+	
+	@Override
 	public synchronized void raw(ServerInterface server, String info) {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
 
@@ -645,6 +781,7 @@ public class GuiController implements GuiForServerInterface {
 		} catch (Exception ignored) {
 		}
 	}
+
 }
 
 class ServerRoom {

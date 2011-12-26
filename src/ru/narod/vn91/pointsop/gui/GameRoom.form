@@ -2,15 +2,203 @@
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Container class="javax.swing.JPopupMenu" name="jPopupMenu_AdditionalActions">
+    <Container class="javax.swing.JPopupMenu" name="jPopupMenu_Actions">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_Surrender">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x434;&#x430;&#x442;&#x44c;&#x441;&#x44f;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_SurrenderActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_Stop">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x422;&#x41e;&#x41f; (&#x43e;&#x442;&#x43a;&#x430;&#x437;&#x430;&#x442;&#x44c;&#x441;&#x44f; &#x43e;&#x442; &#x434;&#x430;&#x43b;&#x44c;&#x43d;&#x435;&#x439;&#x448;&#x435;&#x439; &#x43f;&#x43e;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x43a;&#x438; &#x442;&#x43e;&#x447;&#x435;&#x43a;)"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_StopActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AskNewGame">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x438;&#x442;&#x44c; &#x43d;&#x430;&#x447;&#x430;&#x442;&#x44c; &#x43d;&#x43e;&#x432;&#x443;&#x44e; &#x438;&#x433;&#x440;&#x443;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AskNewGameActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_CancelAskingNewGame">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x43d;&#x43e;&#x432;&#x43e;&#x439; &#x438;&#x433;&#x440;&#x44b;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_CancelAskingNewGameActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AcceptNewGame">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x433;&#x43b;&#x430;&#x441;&#x438;&#x442;&#x44c;&#x441;&#x44f; &#x43d;&#x430;&#x447;&#x430;&#x442;&#x44c; &#x43d;&#x43e;&#x432;&#x443;&#x44e; &#x438;&#x433;&#x440;&#x443;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AcceptNewGameActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_RejectNewGame">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x43b;&#x43e;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x43d;&#x43e;&#x432;&#x43e;&#x439; &#x438;&#x433;&#x440;&#x44b;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_RejectNewGameActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AskEndGameAndScore">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43a;&#x43e;&#x43d;&#x447;&#x438;&#x442;&#x44c; &#x438;&#x433;&#x440;&#x443; &#x441; &#x43f;&#x43e;&#x434;&#x441;&#x447;&#x451;&#x442;&#x43e;&#x43c; &#x442;&#x43e;&#x447;&#x435;&#x43a;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AskEndGameAndScoreActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_CancelAskingEndGameAndScore">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x43a;&#x43e;&#x43d;&#x446;&#x430; &#x438;&#x433;&#x440;&#x44b; &#x438; &#x43f;&#x43e;&#x434;&#x441;&#x447;&#x451;&#x442;&#x430; &#x442;&#x43e;&#x447;&#x435;&#x43a;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_CancelAskingEndGameAndScoreActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AcceptEndGameAndScore">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x433;&#x43b;&#x430;&#x441;&#x438;&#x442;&#x44c;&#x441;&#x44f; &#x43d;&#x430; &#x43a;&#x43e;&#x43d;&#x435;&#x446; &#x438;&#x433;&#x440;&#x44b; &#x438; &#x43f;&#x43e;&#x434;&#x441;&#x447;&#x451;&#x442; &#x442;&#x43e;&#x447;&#x435;&#x43a;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AcceptEndGameAndScoreActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_RejectEndGameAndScore">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x430;&#x437;&#x430;&#x442;&#x44c;&#x441;&#x44f; &#x43e;&#x442; &#x43e;&#x43a;&#x430;&#x43d;&#x447;&#x438;&#x432;&#x430;&#x43d;&#x438;&#x44f; &#x438;&#x433;&#x440;&#x44b; &#x438; &#x43f;&#x43e;&#x434;&#x441;&#x447;&#x451;&#x442;&#x430; &#x442;&#x43e;&#x447;&#x435;&#x43a;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_RejectEndGameAndScoreActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AskUndo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43f;&#x440;&#x43e;&#x441;&#x438;&#x442;&#x44c; &#x432;&#x437;&#x44f;&#x442;&#x44c; &#x445;&#x43e;&#x434; &#x43d;&#x430;&#x437;&#x430;&#x434;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AskUndoActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_CancelAskingUndo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441; &#x43d;&#x430; &#x432;&#x43e;&#x437;&#x432;&#x440;&#x430;&#x442; &#x445;&#x43e;&#x434;&#x430;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_CancelAskingUndoActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AcceptUndo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x433;&#x43b;&#x430;&#x441;&#x438;&#x442;&#x44c;&#x441;&#x44f; &#x43d;&#x430; &#x432;&#x43e;&#x437;&#x432;&#x440;&#x430;&#x442; &#x445;&#x43e;&#x434;&#x430;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AcceptUndoActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_RejectUndo">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x43b;&#x43e;&#x43d;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441; &#x43d;&#x430; &#x432;&#x43e;&#x437;&#x432;&#x440;&#x430;&#x442; &#x445;&#x43e;&#x434;&#x430;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_RejectUndoActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator4">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AskDraw">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x438;&#x442;&#x44c; &#x43d;&#x438;&#x447;&#x44c;&#x44e;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AskDrawActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_CancelAskingDraw">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x43d;&#x430; &#x43d;&#x438;&#x447;&#x44c;&#x44e;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_CancelAskingDrawActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AcceptDraw">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x433;&#x43b;&#x430;&#x441;&#x438;&#x442;&#x44c;&#x441;&#x44f; &#x43d;&#x430; &#x43d;&#x438;&#x447;&#x44c;&#x44e;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AcceptDrawActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_RejectDraw">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x43b;&#x43e;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x440;&#x435;&#x434;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x43d;&#x430; &#x43d;&#x438;&#x447;&#x44c;&#x44e;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_RejectDrawActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator5">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_PauseOpponentTime">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c; &#x432;&#x440;&#x435;&#x43c;&#x44f; &#x43e;&#x43f;&#x43f;&#x43e;&#x43d;&#x435;&#x43d;&#x442;&#x430;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_PauseOpponentTimeActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_UnpauseOpponentTime">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x440;&#x43e;&#x434;&#x43e;&#x43b;&#x436;&#x438;&#x442;&#x44c; &#x442;&#x435;&#x447;&#x435;&#x43d;&#x438;&#x435; &#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x438; &#x43e;&#x43f;&#x43f;&#x43e;&#x43d;&#x435;&#x43d;&#x442;&#x430;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_UnpauseOpponentTimeActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_AddOpponentTime">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44c; &#x43e;&#x43f;&#x43f;&#x43e;&#x43d;&#x435;&#x43d;&#x442;&#x443; &#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x438; (&#x432;&#x432;&#x43e;&#x434;)"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_AddOpponentTimeActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator6">
+        </Component>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_SaveGame">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jMenuItem1"/>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; &#x438;&#x433;&#x440;&#x443;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_SaveGameActionPerformed"/>
@@ -66,9 +254,18 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="roomPart_UserList" alignment="0" pref="246" max="32767" attributes="2"/>
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jLabel_Player1" pref="121" max="32767" attributes="0"/>
+                  <Component id="jLabel_Player1" pref="120" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel_Player2" pref="119" max="32767" attributes="0"/>
+                  <Component id="jLabel_Player2" pref="120" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabel_Time1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jLabel_Score1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
+                  <Component id="jLabel_Score2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jLabel_Time2" min="-2" max="-2" attributes="0"/>
               </Group>
               <Component id="roomPart_Chat" alignment="0" pref="246" max="32767" attributes="2"/>
           </Group>
@@ -76,14 +273,25 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="roomPart_UserList" pref="83" max="32767" attributes="0"/>
+                  <Component id="roomPart_UserList" pref="115" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel_Player1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel_Player2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="roomPart_Chat" pref="168" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="jLabel_Time1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel_Score1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="jLabel_Time2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel_Score2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="roomPart_Chat" pref="155" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -115,6 +323,40 @@
             <Property name="horizontalTextPosition" type="int" value="2"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_Score2">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="text" type="java.lang.String" value="&#x25cf;16&#x25cf;"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_Score1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x25cf;16&#x25cf;"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_Time1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="DejaVu Sans Mono" size="15" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="00:00"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="timerLabel1;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_Time2">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="DejaVu Sans Mono" size="15" style="0"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="text" type="java.lang.String" value="00:00"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="timerLabel2;"/>
+          </AuxValues>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel_ForGame">
@@ -129,17 +371,14 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jLabel_MouseCoords" alignment="0" pref="344" max="32767" attributes="0"/>
               <Component id="jPanel_Tree" alignment="0" max="32767" attributes="0"/>
-              <Component id="jPanel_Paper" alignment="0" max="32767" attributes="0"/>
               <Component id="jPanel_Bottom" alignment="0" max="32767" attributes="0"/>
+              <Component id="jPanel_Paper" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jLabel_MouseCoords" min="-2" max="-2" attributes="1"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
                   <Component id="jPanel_Paper" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel_Bottom" min="-2" max="-2" attributes="0"/>
@@ -158,27 +397,16 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="344" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="384" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="173" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="255" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
         </Container>
-        <Component class="javax.swing.JLabel" name="jLabel_MouseCoords">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-              <FontInfo relative="true">
-                <Font component="jLabel_MouseCoords" property="font" relativeSize="true" size="3"/>
-              </FontInfo>
-            </Property>
-            <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="  .  "/>
-          </Properties>
-        </Component>
         <Container class="javax.swing.JPanel" name="jPanel_Bottom">
 
           <Layout>
@@ -187,19 +415,19 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jToggleButton_ShowTree" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton_AdditionalActions" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jPanel_Time" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel_MouseCoords" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="118" max="32767" attributes="0"/>
+                      <Component id="jButton_Actions" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="jToggleButton_ShowTree" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton_AdditionalActions" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jToggleButton_ShowTree" alignment="3" max="32767" attributes="0"/>
+                      <Component id="jLabel_MouseCoords" alignment="3" pref="30" max="32767" attributes="2"/>
+                      <Component id="jButton_Actions" alignment="3" pref="30" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jPanel_Time" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -213,83 +441,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton_ShowTreeActionPerformed"/>
               </Events>
             </Component>
-            <Container class="javax.swing.JPanel" name="jPanel_Time">
+            <Component class="javax.swing.JLabel" name="jLabel_MouseCoords">
               <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-                    <EtchetBorder/>
-                  </Border>
-                </Property>
+                <Property name="text" type="java.lang.String" value="[10:10]"/>
               </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel_Time1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton_TimeActions" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel_Time2" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="jLabel_Time1" alignment="3" pref="30" max="32767" attributes="0"/>
-                          <Component id="jButton_TimeActions" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel_Time2" alignment="3" pref="30" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel_Time2">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jLabel_Time2" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="00:00"/>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="timerLabel2;"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.JButton" name="jButton_TimeActions">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;&#x412;&#x440;&#x435;&#x43c;&#x44f;&gt;"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_TimeActionsActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel_Time1">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jLabel_Time1" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="00:00"/>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="timerLabel1;"/>
-                  </AuxValues>
-                </Component>
-              </SubComponents>
-            </Container>
-            <Component class="javax.swing.JButton" name="jButton_AdditionalActions">
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton_Actions">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&#x441;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c;"/>
-                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="jPopupMenu_AdditionalActions"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="&#x434;&#x43e;&#x43f;.&#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x44f; &#x432; &#x438;&#x433;&#x440;&#x435;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_AdditionalActionsActionPerformed"/>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_ActionsMousePressed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_ActionsActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -306,7 +469,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="332" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="372" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

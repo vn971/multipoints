@@ -76,7 +76,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 
 	void addChat(String user,
 			String message, Long time) {
-		Date date = (time!=null) ? new Date(time) : new Date();
+		Date date = (time != null && time != 0) ? new Date(time) : new Date();
 		String formattedDate = GlobalGuiSettings.myTimeFormat.format(date);
 		AttributeSet playerAttributes;
 		if (gameInfo != null && gameInfo.first.guiName.equals(user)) {

@@ -19,12 +19,12 @@ public interface GuiForServerInterface {
 	 * @param server
 	 *          always return <b>this</b>
 	 */
-	public abstract void serverClosed(ServerInterface server);
+	public void serverClosed(ServerInterface server);
 
 	/*
 	 * fields initialized by null will not be updated
 	 */
-	public abstract void updateUserInfo(
+	public void updateUserInfo(
 			ServerInterface server, String id,
 			String guiName, ImageIcon imageIcon,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
@@ -33,7 +33,7 @@ public interface GuiForServerInterface {
 	/*
 	 * fields initialized by null will not be updated
 	 */
-	public abstract void updateGameInfo(
+	public void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
 			String firstId, String secondId, Integer sizeX, Integer sizeY,
 			Boolean isRedFirst, Boolean isRated,
@@ -43,102 +43,55 @@ public interface GuiForServerInterface {
 			Integer startingTime, Integer periodLength, String comment
 			);
 
-	public abstract void userJoinedRoom(
-			ServerInterface server,
-			String room,
-			String id,
-			boolean isStartup);
+	public void userJoinedRoom(ServerInterface server, String room, String id, boolean isStartup);
 
-	public abstract void userLeftRoom(
-			ServerInterface server,
-			String roomId,
-			String userId,
-			String reason);
+	public void userLeftRoom(ServerInterface server, String roomId, String userId, String reason);
 
-	public abstract void userDisconnected(
-			ServerInterface server,
-			String user,
-			String additionalMessage);
+	public void userDisconnected(ServerInterface server, String user, String additionalMessage);
 
 	// subscribtions
-	public abstract void subscribedLangRoom(
+	public void subscribedLangRoom(
 			String roomNameOnServer,
 			ServerInterface serverInterface,
 			String guiRoomName,
 			boolean isServersMainRoom);
 
-	public abstract void subscribedGame(
-			ServerInterface server,
-			String roomId
-			);
+	public void subscribedGame(ServerInterface server, String roomId);
 
-	public abstract void unsubscribedRoom(
-			ServerInterface server,
-			String room);
+	public void unsubscribedRoom(ServerInterface server, String room);
 
 	// game rows
-	public abstract void gameRowCreated(
-			ServerInterface server,
-			String masterRoom,
-			String newRoom);
+	public void gameRowCreated(ServerInterface server, String masterRoom, String newRoom);
 
-	public abstract void gameRowDestroyed(
-			ServerInterface server,
-			String oldRoom);
+	public void gameRowDestroyed( ServerInterface server, String oldRoom);
 
 	// personal gameInvites
-	public void personalInviteReceived(
-			ServerInterface server,
-			String userId,
-			String gameId);
+	public void personalInviteReceived(ServerInterface server, String userId, String gameId);
 
-	public void personalInviteCancelled(
-			ServerInterface server,
-			String userId,
-			String gameId);
+	public void personalInviteCancelled(ServerInterface server, String userId, String gameId);
 
-	public void yourPersonalInviteSent(
-			ServerInterface server,
-			String userId,
-			String gameId);
+	public void yourPersonalInviteSent(ServerInterface server, String userId, String gameId);
 
-	public void yourPersonalInviteRejected(
-			ServerInterface server,
-			String userId,
-			String gameId);
-	
-	public void youCancelledPersonalInvite(
-			ServerInterface server,
-			String userId,
-			String gameId);
+	public void yourPersonalInviteRejected(ServerInterface server, String userId, String gameId);
 
-	public abstract void chatReceived(
+	public void youCancelledPersonalInvite(ServerInterface server, String userId, String gameId);
+
+	public void chatReceived(
 			ServerInterface server,
 			String room,
 			String user,
 			String message,
 			Long time);
 
-	public abstract void privateMessageReceived(
-			ServerInterface server,
-			String user,
-			String message);
+	public void privateMessageReceived(ServerInterface server, String user, String message);
 
-	public abstract void soundReceived(
-			ServerInterface server,
-			String user);
+	public void soundReceived(ServerInterface server, String user);
 
-	public abstract void serverNoticeReceived(
-			ServerInterface server,
-			String room,
-			String message);
+	public void serverNoticeReceived(ServerInterface server, String room, String message);
 
-	public abstract void askedPlay(
-			ServerInterface server,
-			String room,
-			String possibleOpponent);
+	public void askedPlay(ServerInterface server, String room, String possibleOpponent);
 
-	public abstract void makedMove(
+	public void makedMove(
 			ServerInterface server,
 			String roomId,
 			boolean silent,
@@ -148,33 +101,36 @@ public interface GuiForServerInterface {
 			boolean nowPlays
 			);
 
-	public abstract void gameStop(
-			ServerInterface server,
-			String room,
-			boolean isRedPlayer);
+	public void gameStop(ServerInterface server, String room, boolean isRedPlayer);
 
-	public abstract void gameLost(
-			ServerInterface server,
-			String room,
-			boolean isRedLooser,
-			boolean wantToSave);
+	public void gameLost(ServerInterface server, String room, boolean isRedLooser, boolean wantToSave);
 
-	public abstract void timeUpdate(
-			ServerInterface server,
-			String room,
-			TimeLeft t
-			);
+	public void askedNewGame(ServerInterface server, String roomId, boolean you);
+	public void acceptedNewGame(ServerInterface server, String roomId, boolean you);
+	public void rejectedNewGame(ServerInterface server, String roomId, boolean you);
 
-	public abstract void raw(
-			ServerInterface server,
-			String info);
+	public void askedEndGameAndScore(ServerInterface server, String roomId, boolean you);
+	public void acceptedEndGameAndScore(ServerInterface server, String roomId, boolean you);
+	public void rejectedEndGameAndScore(ServerInterface server, String roomId, boolean you);
 
-	public abstract void rawError(
-			ServerInterface server,
-			String info);
+	public void askedUndo(ServerInterface server, String roomId, boolean you);
+	public void acceptedUndo(ServerInterface server, String roomId, boolean you);
+	public void rejectedUndo(ServerInterface server, String roomId, boolean you);
 
-	public abstract void rawConnectionState(
-			ServerInterface server,
-			String info);
+	public void askedDraw(ServerInterface server, String roomId, boolean you);
+	public void acceptedDraw(ServerInterface server, String roomId, boolean you);
+	public void rejectedDraw(ServerInterface server, String roomId, boolean you);
+
+	public void pausedOpponentTime(ServerInterface server, String roomId, boolean you);
+	public void unpausedOpponentTime(ServerInterface server, String roomId, boolean you);
+	public void addedOpponentTime(ServerInterface server, String roomId, int seconds, boolean you);
+
+	public void timeUpdate(ServerInterface server, String room, TimeLeft t);
+
+	public void raw(ServerInterface server, String info);
+
+	public void rawError(ServerInterface server, String info);
+
+	public void rawConnectionState(ServerInterface server, String info);
 
 }

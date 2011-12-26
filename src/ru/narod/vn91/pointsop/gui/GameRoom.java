@@ -1,5 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.HeadlessException;
 import ru.narod.vn91.pointsop.data.GameInfoListener;
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.Player;
@@ -22,7 +23,6 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import ru.narod.vn91.pointsop.data.PlayerChangeListener;
 
 @SuppressWarnings("serial")
@@ -104,7 +104,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			moveInfoAbstract.moveType = (isRed) ? MoveType.RED : MoveType.BLUE;
 			moveList.add(moveInfoAbstract);
 			if (silent == false) {
-				showScoreAndCursor();
+				updateScore();
 				Sounds.playMakeMove(gameOuterInfo.amIPlaying());
 
 				// make move to current mouse position
@@ -223,33 +223,59 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			MouseEvent evt) {
 		mousePosX = x;
 		mousePosY = y;
-		showScoreAndCursor();
+		updateCoordinates();
 	}
 
 	private boolean isOnlineGame() {
 		return gameOuterInfo.server!=null;
 	}
 
-	private void showScoreAndCursor() {
-		String result = "<html>";
+	private void updateScore() {
+		jLabel_Score1.setText(String.format(
+				"<html><font color=%s>●%s●</font></html>",
+				GlobalGuiSettings.getHtmlColor(gameOuterInfo.player1Color()),
+				paper.getRedScore()));
+		jLabel_Score2.setText(String.format(
+				"<html><font color=%s>●%s●</font></html>",
+				GlobalGuiSettings.getHtmlColor(gameOuterInfo.player2Color()),
+				paper.getBlueScore()));
+	}
+	
+	private void updateCoordinates() {
 		if (mousePosX != -1) {
 			int xGui = mousePosX;
 			int yGui = gameOuterInfo.server.isGuiYInverted()
 				? gameOuterInfo.sizeY + 1 - mousePosY
 				: mousePosY;
-			result += "<b>[";
-			result += gameOuterInfo.server.coordinatesToString(xGui, yGui);
-//			result += gameOuterInfo.server.coordinateToString(xGui, yGui);
-			result += "]</b> ";
+		jLabel_MouseCoords.setText(
+				"["+
+				gameOuterInfo.server.coordinatesToString(xGui, yGui) +
+				"]");
+		} else {
+			jLabel_MouseCoords.setText("");
 		}
-		result += String.format("счёт <b><font color=red>%s</font>"
-				+ "-<font color=blue>%s</font></b>", paper.getRedScore(),
-				paper.getBlueScore());
-		result += ", ход " + (moveList.size() + 1);
-		result += "</html>";
-		jLabel_MouseCoords.setText(result);
-
 	}
+	
+//	private void showScoreAndCursor() {
+//		String result = "<html>";
+//		if (mousePosX != -1) {
+//			int xGui = mousePosX;
+//			int yGui = gameOuterInfo.server.isGuiYInverted()
+//				? gameOuterInfo.sizeY + 1 - mousePosY
+//				: mousePosY;
+//			result += "<b>[";
+//			result += gameOuterInfo.server.coordinatesToString(xGui, yGui);
+////			result += gameOuterInfo.server.coordinateToString(xGui, yGui);
+//			result += "]</b> ";
+//		}
+//		result += String.format("счёт <b><font color=red>%s</font>"
+//				+ "-<font color=blue>%s</font></b>", paper.getRedScore(),
+//				paper.getBlueScore());
+//		result += ", ход " + (moveList.size() + 1);
+//		result += "</html>";
+//		jLabel_MouseCoords.setText(result);
+//
+//	}
 
 	/** Creates new form ContainerRoom_Game */
 	public GameRoom(
@@ -303,6 +329,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						"<html><font color=%s>%s</font></html>",
 						GlobalGuiSettings.getHtmlColor(gameOuterInfo.player1Color()),
 						gameOuterInfo.first.guiName));
+				updateScore();
 				jLabel_Player1.setIcon(gameOuterInfo.first.imageIcon);
 			}
 		};
@@ -316,6 +343,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 						"<html><font color=%s>%s</font></html>",
 						GlobalGuiSettings.getHtmlColor(gameOuterInfo.player2Color()),
 						gameOuterInfo.second.guiName));
+				updateScore();
 				jLabel_Player2.setIcon(gameOuterInfo.second.imageIcon);
 			}
 		};
@@ -373,32 +401,241 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu_AdditionalActions = new javax.swing.JPopupMenu();
+        jPopupMenu_Actions = new javax.swing.JPopupMenu();
+        jMenuItem_Surrender = new javax.swing.JMenuItem();
+        jMenuItem_Stop = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_AskNewGame = new javax.swing.JMenuItem();
+        jMenuItem_CancelAskingNewGame = new javax.swing.JMenuItem();
+        jMenuItem_AcceptNewGame = new javax.swing.JMenuItem();
+        jMenuItem_RejectNewGame = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_AskEndGameAndScore = new javax.swing.JMenuItem();
+        jMenuItem_CancelAskingEndGameAndScore = new javax.swing.JMenuItem();
+        jMenuItem_AcceptEndGameAndScore = new javax.swing.JMenuItem();
+        jMenuItem_RejectEndGameAndScore = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_AskUndo = new javax.swing.JMenuItem();
+        jMenuItem_CancelAskingUndo = new javax.swing.JMenuItem();
+        jMenuItem_AcceptUndo = new javax.swing.JMenuItem();
+        jMenuItem_RejectUndo = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_AskDraw = new javax.swing.JMenuItem();
+        jMenuItem_CancelAskingDraw = new javax.swing.JMenuItem();
+        jMenuItem_AcceptDraw = new javax.swing.JMenuItem();
+        jMenuItem_RejectDraw = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_PauseOpponentTime = new javax.swing.JMenuItem();
+        jMenuItem_UnpauseOpponentTime = new javax.swing.JMenuItem();
+        jMenuItem_AddOpponentTime = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenuItem_SaveGame = new javax.swing.JMenuItem();
         jPanel_ForChat = new javax.swing.JPanel();
         roomPart_UserList = new ru.narod.vn91.pointsop.gui.RoomPart_Userlist();
         roomPart_Chat = new ru.narod.vn91.pointsop.gui.RoomPart_Chat();
         jLabel_Player1 = new javax.swing.JLabel();
         jLabel_Player2 = new javax.swing.JLabel();
+        jLabel_Score2 = new javax.swing.JLabel();
+        jLabel_Score1 = new javax.swing.JLabel();
+        jLabel_Time1 = timerLabel1;
+        jLabel_Time2 = timerLabel2;
         jPanel_ForGame = new javax.swing.JPanel();
         jPanel_Paper = paper;
-        jLabel_MouseCoords = new javax.swing.JLabel();
         jPanel_Bottom = new javax.swing.JPanel();
         jToggleButton_ShowTree = new javax.swing.JToggleButton();
-        jPanel_Time = new javax.swing.JPanel();
-        jLabel_Time2 = timerLabel2;
-        jButton_TimeActions = new javax.swing.JButton();
-        jLabel_Time1 = timerLabel1;
-        jButton_AdditionalActions = new javax.swing.JButton();
+        jLabel_MouseCoords = new javax.swing.JLabel();
+        jButton_Actions = new javax.swing.JButton();
         jPanel_Tree = new javax.swing.JPanel();
 
-        jMenuItem_SaveGame.setText("jMenuItem1");
+        jMenuItem_Surrender.setText("Сдаться");
+        jMenuItem_Surrender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_SurrenderActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_Surrender);
+
+        jMenuItem_Stop.setText("СТОП (отказаться от дальнейшей постановки точек)");
+        jMenuItem_Stop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_StopActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_Stop);
+        jPopupMenu_Actions.add(jSeparator1);
+
+        jMenuItem_AskNewGame.setText("Предложить начать новую игру");
+        jMenuItem_AskNewGame.setEnabled(false);
+        jMenuItem_AskNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AskNewGameActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AskNewGame);
+
+        jMenuItem_CancelAskingNewGame.setText("Отменить предложение новой игры");
+        jMenuItem_CancelAskingNewGame.setEnabled(false);
+        jMenuItem_CancelAskingNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_CancelAskingNewGameActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_CancelAskingNewGame);
+
+        jMenuItem_AcceptNewGame.setText("Согласиться начать новую игру");
+        jMenuItem_AcceptNewGame.setEnabled(false);
+        jMenuItem_AcceptNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AcceptNewGameActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AcceptNewGame);
+
+        jMenuItem_RejectNewGame.setText("Отклонить предложение новой игры");
+        jMenuItem_RejectNewGame.setEnabled(false);
+        jMenuItem_RejectNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_RejectNewGameActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_RejectNewGame);
+        jPopupMenu_Actions.add(jSeparator2);
+
+        jMenuItem_AskEndGameAndScore.setText("Предложить закончить игру с подсчётом точек");
+        jMenuItem_AskEndGameAndScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AskEndGameAndScoreActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AskEndGameAndScore);
+
+        jMenuItem_CancelAskingEndGameAndScore.setText("Отменить предложение конца игры и подсчёта точек");
+        jMenuItem_CancelAskingEndGameAndScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_CancelAskingEndGameAndScoreActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_CancelAskingEndGameAndScore);
+
+        jMenuItem_AcceptEndGameAndScore.setText("Согласиться на конец игры и подсчёт точек");
+        jMenuItem_AcceptEndGameAndScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AcceptEndGameAndScoreActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AcceptEndGameAndScore);
+
+        jMenuItem_RejectEndGameAndScore.setText("Отказаться от оканчивания игры и подсчёта точек");
+        jMenuItem_RejectEndGameAndScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_RejectEndGameAndScoreActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_RejectEndGameAndScore);
+        jPopupMenu_Actions.add(jSeparator3);
+
+        jMenuItem_AskUndo.setText("Попросить взять ход назад");
+        jMenuItem_AskUndo.setEnabled(false);
+        jMenuItem_AskUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AskUndoActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AskUndo);
+
+        jMenuItem_CancelAskingUndo.setText("Отменить запрос на возврат хода");
+        jMenuItem_CancelAskingUndo.setEnabled(false);
+        jMenuItem_CancelAskingUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_CancelAskingUndoActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_CancelAskingUndo);
+
+        jMenuItem_AcceptUndo.setText("Согласиться на возврат хода");
+        jMenuItem_AcceptUndo.setEnabled(false);
+        jMenuItem_AcceptUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AcceptUndoActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AcceptUndo);
+
+        jMenuItem_RejectUndo.setText("Отклонить запрос на возврат хода");
+        jMenuItem_RejectUndo.setEnabled(false);
+        jMenuItem_RejectUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_RejectUndoActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_RejectUndo);
+        jPopupMenu_Actions.add(jSeparator4);
+
+        jMenuItem_AskDraw.setText("Предложить ничью");
+        jMenuItem_AskDraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AskDrawActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AskDraw);
+
+        jMenuItem_CancelAskingDraw.setText("Отменить предложение на ничью");
+        jMenuItem_CancelAskingDraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_CancelAskingDrawActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_CancelAskingDraw);
+
+        jMenuItem_AcceptDraw.setText("Согласиться на ничью");
+        jMenuItem_AcceptDraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AcceptDrawActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AcceptDraw);
+
+        jMenuItem_RejectDraw.setText("Отклонить предложение на ничью");
+        jMenuItem_RejectDraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_RejectDrawActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_RejectDraw);
+        jPopupMenu_Actions.add(jSeparator5);
+
+        jMenuItem_PauseOpponentTime.setText("Остановить время оппонента");
+        jMenuItem_PauseOpponentTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_PauseOpponentTimeActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_PauseOpponentTime);
+
+        jMenuItem_UnpauseOpponentTime.setText("Продолжить течение времени оппонента");
+        jMenuItem_UnpauseOpponentTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_UnpauseOpponentTimeActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_UnpauseOpponentTime);
+
+        jMenuItem_AddOpponentTime.setText("Добавить оппоненту времени (ввод)");
+        jMenuItem_AddOpponentTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AddOpponentTimeActionPerformed(evt);
+            }
+        });
+        jPopupMenu_Actions.add(jMenuItem_AddOpponentTime);
+        jPopupMenu_Actions.add(jSeparator6);
+
+        jMenuItem_SaveGame.setText("Сохранить игру");
         jMenuItem_SaveGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem_SaveGameActionPerformed(evt);
             }
         });
-        jPopupMenu_AdditionalActions.add(jMenuItem_SaveGame);
+        jPopupMenu_Actions.add(jMenuItem_SaveGame);
 
         jPanel_ForChat.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jPanel_ForChat.setMaximumSize(new java.awt.Dimension(246, 99999));
@@ -413,27 +650,55 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jLabel_Player2.setText("игрок2");
         jLabel_Player2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
+        jLabel_Score2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel_Score2.setText("●16●");
+
+        jLabel_Score1.setText("●16●");
+
+        jLabel_Time1.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
+        jLabel_Time1.setText("00:00");
+
+        jLabel_Time2.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
+        jLabel_Time2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel_Time2.setText("00:00");
+
         javax.swing.GroupLayout jPanel_ForChatLayout = new javax.swing.GroupLayout(jPanel_ForChat);
         jPanel_ForChat.setLayout(jPanel_ForChatLayout);
         jPanel_ForChatLayout.setHorizontalGroup(
             jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
             .addGroup(jPanel_ForChatLayout.createSequentialGroup()
-                .addComponent(jLabel_Player1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addComponent(jLabel_Player1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel_Player2, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
+                .addComponent(jLabel_Player2, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+            .addGroup(jPanel_ForChatLayout.createSequentialGroup()
+                .addComponent(jLabel_Time1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel_Score1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(jLabel_Score2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel_Time2))
             .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
         );
         jPanel_ForChatLayout.setVerticalGroup(
             jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_ForChatLayout.createSequentialGroup()
-                .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Player1)
                     .addComponent(jLabel_Player2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE))
+                .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel_Time1)
+                        .addComponent(jLabel_Score1))
+                    .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel_Time2)
+                        .addComponent(jLabel_Score2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
         );
 
         jPanel_ForGame.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -442,16 +707,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_Paper.setLayout(jPanel_PaperLayout);
         jPanel_PaperLayout.setHorizontalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 344, Short.MAX_VALUE)
+            .addGap(0, 384, Short.MAX_VALUE)
         );
         jPanel_PaperLayout.setVerticalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 173, Short.MAX_VALUE)
+            .addGap(0, 255, Short.MAX_VALUE)
         );
-
-        jLabel_MouseCoords.setFont(jLabel_MouseCoords.getFont().deriveFont(jLabel_MouseCoords.getFont().getSize()+3f));
-        jLabel_MouseCoords.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel_MouseCoords.setText("  .  ");
 
         jToggleButton_ShowTree.setText(">");
         jToggleButton_ShowTree.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -465,45 +726,17 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
             }
         });
 
-        jPanel_Time.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jLabel_MouseCoords.setText("[10:10]");
 
-        jLabel_Time2.setFont(jLabel_Time2.getFont().deriveFont(jLabel_Time2.getFont().getSize()+2f));
-        jLabel_Time2.setText("00:00");
-
-        jButton_TimeActions.setText("<Время>");
-        jButton_TimeActions.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_TimeActionsActionPerformed(evt);
+        jButton_Actions.setText("доп.действия в игре");
+        jButton_Actions.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton_ActionsMousePressed(evt);
             }
         });
-
-        jLabel_Time1.setFont(jLabel_Time1.getFont().deriveFont(jLabel_Time1.getFont().getSize()+2f));
-        jLabel_Time1.setText("00:00");
-
-        javax.swing.GroupLayout jPanel_TimeLayout = new javax.swing.GroupLayout(jPanel_Time);
-        jPanel_Time.setLayout(jPanel_TimeLayout);
-        jPanel_TimeLayout.setHorizontalGroup(
-            jPanel_TimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_TimeLayout.createSequentialGroup()
-                .addComponent(jLabel_Time1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_TimeActions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel_Time2))
-        );
-        jPanel_TimeLayout.setVerticalGroup(
-            jPanel_TimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_TimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel_Time1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                .addComponent(jButton_TimeActions)
-                .addComponent(jLabel_Time2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
-        );
-
-        jButton_AdditionalActions.setText("сохранить");
-        jButton_AdditionalActions.setComponentPopupMenu(jPopupMenu_AdditionalActions);
-        jButton_AdditionalActions.addActionListener(new java.awt.event.ActionListener() {
+        jButton_Actions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_AdditionalActionsActionPerformed(evt);
+                jButton_ActionsActionPerformed(evt);
             }
         });
 
@@ -514,16 +747,16 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
             .addGroup(jPanel_BottomLayout.createSequentialGroup()
                 .addComponent(jToggleButton_ShowTree)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_AdditionalActions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel_Time, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel_MouseCoords)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                .addComponent(jButton_Actions))
         );
         jPanel_BottomLayout.setVerticalGroup(
             jPanel_BottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_BottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jToggleButton_ShowTree)
-                .addComponent(jButton_AdditionalActions))
-            .addComponent(jPanel_Time, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToggleButton_ShowTree, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(jButton_Actions, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
         );
 
         jPanel_Tree.setBorder(javax.swing.BorderFactory.createTitledBorder("дерево ходов (пока не рабочее...)"));
@@ -532,7 +765,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_Tree.setLayout(jPanel_TreeLayout);
         jPanel_TreeLayout.setHorizontalGroup(
             jPanel_TreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 332, Short.MAX_VALUE)
+            .addGap(0, 372, Short.MAX_VALUE)
         );
         jPanel_TreeLayout.setVerticalGroup(
             jPanel_TreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -543,16 +776,13 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_ForGame.setLayout(jPanel_ForGameLayout);
         jPanel_ForGameLayout.setHorizontalGroup(
             jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
             .addComponent(jPanel_Tree, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel_Bottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel_ForGameLayout.setVerticalGroup(
             jPanel_ForGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_ForGameLayout.createSequentialGroup()
-                .addComponent(jLabel_MouseCoords)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_ForGameLayout.createSequentialGroup()
                 .addComponent(jPanel_Paper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_Bottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -576,10 +806,6 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-	private void jMenuItem_SaveGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveGameActionPerformed
-
-	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
-
 	private void jToggleButton_ShowTreeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeStateChanged
 //		timerLabel.setRemainingTime(5,false);
 		if (jToggleButton_ShowTree.isSelected()) {
@@ -594,55 +820,169 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void jToggleButton_ShowTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_ShowTreeActionPerformed
 	}//GEN-LAST:event_jToggleButton_ShowTreeActionPerformed
 
-	private void jButton_TimeActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_TimeActionsActionPerformed
-		JOptionPane.showMessageDialog(this, "Дополнительные действия с временем пока недоступны.");
+	private void jMenuItem_SurrenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SurrenderActionPerformed
+		gameOuterInfo.server.surrender(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_SurrenderActionPerformed
 
-	}//GEN-LAST:event_jButton_TimeActionsActionPerformed
+	private void jMenuItem_StopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_StopActionPerformed
+		gameOuterInfo.server.stop(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_StopActionPerformed
 
-	private void jButton_AdditionalActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AdditionalActionsActionPerformed
-		String[] extensions = {".sgf", ".sgftochki"};
+	private void jMenuItem_AskNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AskNewGameActionPerformed
+		gameOuterInfo.server.askNewGame(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AskNewGameActionPerformed
+
+	private void jMenuItem_CancelAskingNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CancelAskingNewGameActionPerformed
+		gameOuterInfo.server.cancelAskingNewGame(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_CancelAskingNewGameActionPerformed
+
+	private void jMenuItem_AcceptNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AcceptNewGameActionPerformed
+		gameOuterInfo.server.acceptNewGame(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AcceptNewGameActionPerformed
+
+	private void jMenuItem_RejectNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RejectNewGameActionPerformed
+		gameOuterInfo.server.rejectNewGame(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_RejectNewGameActionPerformed
+
+	private void jMenuItem_AskEndGameAndScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AskEndGameAndScoreActionPerformed
+		gameOuterInfo.server.askEndGameAndScore(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AskEndGameAndScoreActionPerformed
+
+	private void jMenuItem_CancelAskingEndGameAndScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CancelAskingEndGameAndScoreActionPerformed
+		gameOuterInfo.server.cancelAskingEndGameAndScore(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_CancelAskingEndGameAndScoreActionPerformed
+
+	private void jMenuItem_AcceptEndGameAndScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AcceptEndGameAndScoreActionPerformed
+		gameOuterInfo.server.acceptEndGameAndScore(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AcceptEndGameAndScoreActionPerformed
+
+	private void jMenuItem_RejectEndGameAndScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RejectEndGameAndScoreActionPerformed
+		gameOuterInfo.server.rejectEndGameAndScore(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_RejectEndGameAndScoreActionPerformed
+
+	private void jMenuItem_AskUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AskUndoActionPerformed
+		gameOuterInfo.server.askUndo(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AskUndoActionPerformed
+
+	private void jMenuItem_CancelAskingUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CancelAskingUndoActionPerformed
+		gameOuterInfo.server.cancelAskingUndo(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_CancelAskingUndoActionPerformed
+
+	private void jMenuItem_AcceptUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AcceptUndoActionPerformed
+		gameOuterInfo.server.acceptUndo(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AcceptUndoActionPerformed
+
+	private void jMenuItem_RejectUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RejectUndoActionPerformed
+		gameOuterInfo.server.rejectUndo(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_RejectUndoActionPerformed
+
+	private void jMenuItem_AskDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AskDrawActionPerformed
+		gameOuterInfo.server.askDraw(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AskDrawActionPerformed
+
+	private void jMenuItem_CancelAskingDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CancelAskingDrawActionPerformed
+		gameOuterInfo.server.cancelAskingDraw(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_CancelAskingDrawActionPerformed
+
+	private void jMenuItem_AcceptDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AcceptDrawActionPerformed
+		gameOuterInfo.server.acceptDraw(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_AcceptDrawActionPerformed
+
+	private void jMenuItem_RejectDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RejectDrawActionPerformed
+		gameOuterInfo.server.rejectDraw(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_RejectDrawActionPerformed
+
+	private void jMenuItem_PauseOpponentTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_PauseOpponentTimeActionPerformed
+		gameOuterInfo.server.pauseOpponentTime(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_PauseOpponentTimeActionPerformed
+
+	private void jMenuItem_UnpauseOpponentTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_UnpauseOpponentTimeActionPerformed
+		gameOuterInfo.server.unpauseOpponentTime(gameOuterInfo.id);
+	}//GEN-LAST:event_jMenuItem_UnpauseOpponentTimeActionPerformed
+
+	private void jMenuItem_AddOpponentTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AddOpponentTimeActionPerformed
+		try {
+			String result = JOptionPane.showInputDialog("Время для добавления оппоненту, секунд:");
+			if (result != null && !result.equals("")) {
+				int i = Integer.parseInt(result);
+				gameOuterInfo.server.addOpponentTime(gameOuterInfo.id, i);
+			}
+		} catch (NumberFormatException ex) {
+		} catch (HeadlessException ex) {
+		}
+	}//GEN-LAST:event_jMenuItem_AddOpponentTimeActionPerformed
+
+	private void jMenuItem_SaveGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveGameActionPerformed
+		String[] extensions = {"sgf", "sgftochki"};
 		String sgfData = Sgf.constructSgf(
 				gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
 				gameOuterInfo.first.rating, gameOuterInfo.second.rating, 39, 32,
 				gameOuterInfo.getTimeAsString(), gameResult, 0,
 				moveList, true);
-
 		try {
 			ByteArrayInputStream is = new ByteArrayInputStream(
 					sgfData.getBytes());
-//			FileOpenService fos = (FileOpenService) ServiceManager.lookup(
-//					"javax.jnlp.FileOpenService"
-//			);
 			FileSaveService fss = (FileSaveService) ServiceManager.lookup("javax.jnlp.FileSaveService");
 
-			//					userFirst + "-" + userSecond + " "
-			//					+ GlobalGuiSettings.myDateFormat + " "
-			//					+ GlobalGuiSettings.myTimeFormat,
-			//FileContents fileContents =
 			fss.saveFileDialog(
 					"Vasya - Frosya 2011-04-01", extensions,
 					is, "Vasya - Frosya 2011-04-01");
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
-	}//GEN-LAST:event_jButton_AdditionalActionsActionPerformed
+	}//GEN-LAST:event_jMenuItem_SaveGameActionPerformed
+
+	private void jButton_ActionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ActionsActionPerformed
+//		jPopupMenu_Actions.show(null, evt.ge, WIDTH);
+	}//GEN-LAST:event_jButton_ActionsActionPerformed
+
+	private void jButton_ActionsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ActionsMousePressed
+		jPopupMenu_Actions.show(evt.getComponent(), evt.getX(), evt.getY());
+	}//GEN-LAST:event_jButton_ActionsMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_AdditionalActions;
-    private javax.swing.JButton jButton_TimeActions;
+    private javax.swing.JButton jButton_Actions;
     private javax.swing.JLabel jLabel_MouseCoords;
     private javax.swing.JLabel jLabel_Player1;
     private javax.swing.JLabel jLabel_Player2;
+    private javax.swing.JLabel jLabel_Score1;
+    private javax.swing.JLabel jLabel_Score2;
     private javax.swing.JLabel jLabel_Time1;
     private javax.swing.JLabel jLabel_Time2;
+    private javax.swing.JMenuItem jMenuItem_AcceptDraw;
+    private javax.swing.JMenuItem jMenuItem_AcceptEndGameAndScore;
+    private javax.swing.JMenuItem jMenuItem_AcceptNewGame;
+    private javax.swing.JMenuItem jMenuItem_AcceptUndo;
+    private javax.swing.JMenuItem jMenuItem_AddOpponentTime;
+    private javax.swing.JMenuItem jMenuItem_AskDraw;
+    private javax.swing.JMenuItem jMenuItem_AskEndGameAndScore;
+    private javax.swing.JMenuItem jMenuItem_AskNewGame;
+    private javax.swing.JMenuItem jMenuItem_AskUndo;
+    private javax.swing.JMenuItem jMenuItem_CancelAskingDraw;
+    private javax.swing.JMenuItem jMenuItem_CancelAskingEndGameAndScore;
+    private javax.swing.JMenuItem jMenuItem_CancelAskingNewGame;
+    private javax.swing.JMenuItem jMenuItem_CancelAskingUndo;
+    private javax.swing.JMenuItem jMenuItem_PauseOpponentTime;
+    private javax.swing.JMenuItem jMenuItem_RejectDraw;
+    private javax.swing.JMenuItem jMenuItem_RejectEndGameAndScore;
+    private javax.swing.JMenuItem jMenuItem_RejectNewGame;
+    private javax.swing.JMenuItem jMenuItem_RejectUndo;
     private javax.swing.JMenuItem jMenuItem_SaveGame;
+    private javax.swing.JMenuItem jMenuItem_Stop;
+    private javax.swing.JMenuItem jMenuItem_Surrender;
+    private javax.swing.JMenuItem jMenuItem_UnpauseOpponentTime;
     private javax.swing.JPanel jPanel_Bottom;
     private javax.swing.JPanel jPanel_ForChat;
     private javax.swing.JPanel jPanel_ForGame;
     private javax.swing.JPanel jPanel_Paper;
-    private javax.swing.JPanel jPanel_Time;
     private javax.swing.JPanel jPanel_Tree;
-    private javax.swing.JPopupMenu jPopupMenu_AdditionalActions;
+    private javax.swing.JPopupMenu jPopupMenu_Actions;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JToggleButton jToggleButton_ShowTree;
     private ru.narod.vn91.pointsop.gui.RoomPart_Chat roomPart_Chat;
     private ru.narod.vn91.pointsop.gui.RoomPart_Userlist roomPart_UserList;

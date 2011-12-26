@@ -116,6 +116,91 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		gui.raw(this, "Not supported");
 	}
 
+	@Override
+	public void stop(String roomName) {
+	}
+
+	@Override
+	public void askNewGame(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingNewGame(String roomId) {
+	}
+
+	@Override
+	public void acceptNewGame(String roomName) {
+	}
+
+	@Override
+	public void rejectNewGame(String roomName) {
+	}
+
+	@Override
+	public void askEndGameAndScore(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingEndGameAndScore(String roomId) {
+	}
+
+	@Override
+	public void acceptEndGameAndScore(String roomName) {
+	}
+
+	@Override
+	public void rejectEndGameAndScore(String roomName) {
+	}
+
+	@Override
+	public void askUndo(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingUndo(String roomId) {
+	}
+
+	@Override
+	public void acceptUndo(String roomName) {
+	}
+
+	@Override
+	public void rejectUndo(String roomName) {
+	}
+
+	@Override
+	public void askDraw(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingDraw(String roomId) {
+	}
+
+	@Override
+	public void acceptDraw(String roomName) {
+	}
+
+	@Override
+	public void rejectDraw(String roomName) {
+	}
+
+	@Override
+	public void pauseOpponentTime(String roomName) {
+	}
+
+	@Override
+	public void unpauseOpponentTime(String roomName) {
+	}
+
+	@Override
+	public void addOpponentTime(String roomName, int seconds) {
+	}
+
+	@Override
+	public boolean isStopEnabled() {
+		return false;
+	}
+
 	public void subscribeRoom(String name) {
 		gui.raw(this, "Not supported");
 	}
@@ -244,6 +329,11 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
 	@Override
 	public TimeSettings getTimeSettingsMinimum() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public TimeSettings getTimeSettingsDefault() {
 		throw new UnsupportedOperationException();
 	}
 

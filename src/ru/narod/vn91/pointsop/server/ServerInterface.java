@@ -36,7 +36,33 @@ public interface ServerInterface {
 	// game actions:
 	void makeMove(String roomName, int x, int y);
 
-	void surrender(String roomName);
+	void surrender(String roomId);
+
+	void stop(String roomId);
+
+	void askNewGame(String roomId);
+	void cancelAskingNewGame(String roomId);
+	void acceptNewGame(String roomId);
+	void rejectNewGame(String roomId);
+
+	void askEndGameAndScore(String roomId);
+	void cancelAskingEndGameAndScore(String roomId);
+	void acceptEndGameAndScore(String roomId);
+	void rejectEndGameAndScore(String roomId);
+
+	void askUndo(String roomId);
+	void cancelAskingUndo(String roomId);
+	void acceptUndo(String roomId);
+	void rejectUndo(String roomId);
+
+	void askDraw(String roomId);
+	void cancelAskingDraw(String roomId);
+	void acceptDraw(String roomId);
+	void rejectDraw(String roomId);
+	
+	void pauseOpponentTime(String roomId);
+	void unpauseOpponentTime(String roomId);
+	void addOpponentTime(String roomNameId, int seconds);
 
 	void sendChat(String room, String message);
 
@@ -63,6 +89,8 @@ public interface ServerInterface {
 
 	boolean isPingEnabled();
 
+	boolean isStopEnabled();
+
 	boolean isSoundNotifyEnabled();
 
 	boolean isPrivateGameInviteAllowed();
@@ -84,6 +112,8 @@ public interface ServerInterface {
 	TimeSettings getTimeSettingsMaximum();
 
 	TimeSettings getTimeSettingsMinimum();
+
+	TimeSettings getTimeSettingsDefault();
 
 	String coordinatesToString(Integer xOrNull, Integer yOrNull);
 

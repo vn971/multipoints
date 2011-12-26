@@ -60,6 +60,91 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
+	public void stop(String roomName) {
+	}
+
+	@Override
+	public void askNewGame(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingNewGame(String roomId) {
+	}
+
+	@Override
+	public void acceptNewGame(String roomName) {
+	}
+
+	@Override
+	public void rejectNewGame(String roomName) {
+	}
+
+	@Override
+	public void askEndGameAndScore(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingEndGameAndScore(String roomId) {
+	}
+
+	@Override
+	public void acceptEndGameAndScore(String roomName) {
+	}
+
+	@Override
+	public void rejectEndGameAndScore(String roomName) {
+	}
+
+	@Override
+	public void askUndo(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingUndo(String roomId) {
+	}
+
+	@Override
+	public void acceptUndo(String roomName) {
+	}
+
+	@Override
+	public void rejectUndo(String roomName) {
+	}
+
+	@Override
+	public void askDraw(String roomName) {
+	}
+
+	@Override
+	public void cancelAskingDraw(String roomId) {
+	}
+
+	@Override
+	public void acceptDraw(String roomName) {
+	}
+
+	@Override
+	public void rejectDraw(String roomName) {
+	}
+
+	@Override
+	public void pauseOpponentTime(String roomName) {
+	}
+
+	@Override
+	public void unpauseOpponentTime(String roomName) {
+	}
+
+	@Override
+	public void addOpponentTime(String roomName, int seconds) {
+	}
+
+	@Override
+	public boolean isStopEnabled() {
+		return false;
+	}
+
+	@Override
 	public void subscribeRoom(String room) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
@@ -101,17 +186,25 @@ public class MockServerForGui implements ServerInterface{
 
 	@Override
 	public boolean isIncomingYInverted() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		return false;
 	}
 
 	@Override
 	public boolean isGuiYInverted() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		return false;
 	}
 
 	@Override
 	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		if (xOrNull != null && yOrNull != null) {
+			return String.format("%02d:%02d", xOrNull - 1, yOrNull - 1);
+		} else if (xOrNull != null) {
+			return String.format("%02d", xOrNull - 1);
+		} else if (yOrNull != null) {
+			return String.format("%02d", yOrNull - 1);
+		} else {
+			return "";
+		}
 	}
 
 	@Override
@@ -181,6 +274,11 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
+	public TimeSettings getTimeSettingsDefault() {
+		return new TimeSettings(5, 5, 0, 1, 0);
+	}
+
+	@Override
 	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY) {
 	}
 
@@ -188,4 +286,5 @@ public class MockServerForGui implements ServerInterface{
 	public boolean isPrivateGameInviteAllowed() {
 		return true;
 	}
+
 }

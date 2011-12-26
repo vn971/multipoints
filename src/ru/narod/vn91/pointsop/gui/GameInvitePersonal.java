@@ -1,7 +1,6 @@
 package ru.narod.vn91.pointsop.gui;
 
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.TimeSettings;
@@ -25,26 +24,48 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 
 		TimeSettings max = server.getTimeSettingsMaximum();
 		TimeSettings min = server.getTimeSettingsMinimum();
+		TimeSettings def = server.getTimeSettingsDefault();
 		spinnerStarting = new SpinnerNumberModel(
-						min.starting, 
-						min.starting, max.starting, 1);
+			def.starting / 60,
+			min.starting / 60, max.starting / 60, 1);
 		spinnerPeriodAdditional = new SpinnerNumberModel(
-						min.periodAdditional, 
-						min.periodAdditional, max.periodAdditional, 1);
+			def.periodAdditional,
+			min.periodAdditional, max.periodAdditional, 1);
 		spinnerPeriodTransient = new SpinnerNumberModel(
-						min.periodTransient, 
-						min.periodTransient, max.periodTransient, 1);
+			def.periodTransient,
+			min.periodTransient, max.periodTransient, 1);
 		spinnerPeriodLength = new SpinnerNumberModel(
-						min.periodLength, 
-						min.periodLength, max.periodLength, 1);
+			def.periodLength,
+			min.periodLength, max.periodLength, 1);
 		initComponents();
 		jRadioButton_Field2020.setEnabled(server.isField20x20Allowed());
 		jRadioButton_Field2525.setEnabled(server.isField25x25Allowed());
 		jRadioButton_Field3030.setEnabled(server.isField30x30Allowed());
 		jRadioButton_Field3932.setEnabled(server.isField39x32Allowed());
+		if (server.isField20x20Allowed()==true) {
+			jRadioButton_Field2020.setSelected(true);
+		}
+		else if (server.isField25x25Allowed() == true) {
+			jRadioButton_Field2525.setSelected(true);
+		}
+		else if (server.isField30x30Allowed() == true) {
+			jRadioButton_Field3030.setSelected(true);
+		}
+		else if (server.isField39x32Allowed() == true) {
+			jRadioButton_Field3932.setSelected(true);
+		}
 		jRadioButton_StartingEmpty.setEnabled(server.isStartingEmptyFieldAllowed());
 		jRadioButton_StartingCross.setEnabled(server.isStartingCrossAllowed());
 		jRadioButton_Starting4cross.setEnabled(server.isStarting4CrossAllowed());
+		if (server.isStartingCrossAllowed()) {
+			jRadioButton_StartingCross.setSelected(true);
+		}
+		else if (server.isStarting4CrossAllowed()) {
+			jRadioButton_Starting4cross.setSelected(true);
+		}
+		else if (server.isStartingEmptyFieldAllowed()) {
+			jRadioButton_StartingEmpty.setSelected(true);
+		}
 		if (max.periodAdditional <= 0) {
 			int index = jTabbedPane_Time.indexOfComponent(jPanel_Zagram);
 			jTabbedPane_Time.setEnabledAt(index, false);
@@ -265,7 +286,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 			fieldY = 20;
 		}
 		TimeSettings timeSettings = new TimeSettings(
-						spinnerStarting.getNumber().intValue(), 
+						spinnerStarting.getNumber().intValue() * 60, 
 						spinnerPeriodAdditional.getNumber().intValue(),
 						spinnerPeriodTransient.getNumber().intValue(),
 						spinnerPeriodLength.getNumber().intValue(),
