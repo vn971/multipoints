@@ -12,10 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 
@@ -33,6 +30,8 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
+import ru.narod.vn91.pointsop.server.irc.IrcNicknameManager;
+import ru.narod.vn91.pointsop.server.irc.SimpleMove;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
@@ -50,7 +49,7 @@ public class ServerPointsxt
 	private String defaultServer_Visible;
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
-	static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
+	public static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
 	String pointsxtVersion = "187";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
@@ -675,6 +674,9 @@ public class ServerPointsxt
 		} else if (message.startsWith("/PASSOK")
 				&& (sender.equalsIgnoreCase("podbot"))) {
 			subscribeRoom("#pointsxt");
+		} else if (message.startsWith("mpPasswordedLoginAccepted ")
+				&& (sender.equalsIgnoreCase("podbot"))) {
+//			subscribeRoom("#pointsxt");
 		} else if (message.startsWith("/PASSOK")) {
 			// someone else sent "passok"
 		} else if (message.startsWith("/SpectrGame")) {
@@ -726,7 +728,7 @@ public class ServerPointsxt
 			super.sendMessage(sender, "/Pong");
 		} else if (message.equals("/GameMinimaze")) {
 		} else if (message.equals("/GameMaximaze")) {
-		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith("Игрок")) {
+		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">Игрок")) {
 			gui.privateMessageReceived(this, message.split(" ")[1], message);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
@@ -1338,141 +1340,6 @@ public class ServerPointsxt
 		}
 	}
 
-	class MyGame {
-
-		String roomName = "";
-		String opponentName = "";
-		boolean amIRed;
-		SingleGameEngineInterface engine;
-		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
-		Thread lastTimeoutThread = null;
-		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
-		final int timeAllowedPerTurn = 5;
-		final int periodLength = 1; // not working yet.
-
-		public String getOpponentIrcName() {
-			return nicknameManager.id2irc(opponentName);
-		}
-
-		public String getOpponentShortName() {
-			return opponentName;
-		}
-
-		public int getDefaultTime() {
-			return this.timeAllowedPerTurn;
-		}
-
-		public int getTimeLeftRed() {
-			return getDefaultTime();
-		}
-
-		public int getTimeLeftForBlue() {
-			return getDefaultTime();
-		}
-
-		public int getTimeLeftForColor(boolean color) {
-			if (color==true) {
-				return getTimeLeftRed();
-			} else {
-				return getTimeLeftForBlue();
-			}
-		}
-
-		public int getTimeLeftForMe() {
-			return getTimeLeftForColor(amIRed);
-		}
-
-		private boolean isPlaying() {
-			return "".equals(opponentName) == false;
-		}
-
-		private boolean isSearching() {
-			return roomName != null
-					&& roomName.equals("") == false
-					&& isPlaying() == false;
-		}
-
-		private void clear() {
-			randomMovesProvider = new RandomMovesProvider(39, 32);
-			roomName = "";
-			moveList.clear();
-			opponentName = "";
-			engine = null;
-			ServerPointsxt.this.setPointsxtNickname("", false, false);
-		}
-
-		void leaveGame(boolean isGuiVisible) {
-			if (isPlaying() || isSearching()) {
-				for (String channel : ServerPointsxt.this.getChannels()) {
-					if (channel.equals(myGame.roomName)) {
-						String roomNameCopy = roomName;
-						ServerPointsxt.this.partChannel(roomNameCopy);
-						clear();
-						if (isGuiVisible) {
-							ServerPointsxt.this.gui.unsubscribedRoom(ServerPointsxt.this, roomNameCopy);
-						}
-						break;
-					}
-				}
-			}
-		}
-
-//		void stopSearchingOpponent
-
-		boolean isMyMoveNow() {
-			boolean firstMove = amIRed && moveList.isEmpty();
-			boolean myTurnNow = (moveList.isEmpty() == false)
-					&& (moveList.get(
-					moveList.size() - 1
-			).isRed
-					^ amIRed);
-			return firstMove || myTurnNow;
-		}
-
-		boolean isRedMoveNow() {
-			boolean firstMove = amIRed && moveList.isEmpty();
-			boolean previousWasBlue = (moveList.isEmpty() == false)
-					&& (moveList.get(
-					moveList.size() - 1
-			).isRed == false);
-			return firstMove || previousWasBlue;
-		}
-
-		public void makeMove(
-				String roomName,
-				int x,
-				int y,
-				int timeLeft) {
-			if (roomName.equals(this.roomName)) {
-				boolean isFirstMoveAllowed = ((moveList.size() >= 2))
-						|| ((x - 1 >= 12) && (x - 1 <= 19)
-						&& (32 - y >= 12) && (32 - y <= 26)); // 12<=x<=19, 12<=y<=26
-				if (isMyMoveNow()
-						&& isFirstMoveAllowed
-						&& engine.getDotType(x, y).isEmpty()) {
-					ServerPointsxt.this.sendMoveToGui(
-							roomName, false, x, y,
-							amIRed
-					);
-					String timeLeftAsString = String.format("%03d", timeLeft);
-					ServerPointsxt.this.sendMessage(
-							roomName,
-							"" + (char) ('0' + x - 1)
-									+ (char) ('0' + 32 - y)
-									+ timeLeftAsString
-					);
-				}
-			}
-		}
-
-		public void surrender(String roomName) {
-			if (roomName.equals(this.roomName)
-					&& isMyMoveNow()) {
-				ServerPointsxt.this.sendMessage(roomName, "/ImLost");
-			}
-		}
-	}
-
 	@Override
 	public String coordinatesToString(Integer xOrNull, Integer yOrNull) {
 		if (xOrNull != null && yOrNull != null) {
@@ -1512,7 +1379,7 @@ public class ServerPointsxt
 	}
 
 	public void getUserInfoText(String user) {
-		sendPrivateMsg("Podbot", "!info " + user);
+		sendPrivateMsg("Podbot", "!mppersinf " + user.replaceAll("\\(.*\\)", ""));
 	}
 
 	public void getUserpic(String user) {
@@ -1530,6 +1397,11 @@ public class ServerPointsxt
 	@Override
 	public boolean isPrivateGameInviteAllowed() {
 		return false;
+	}
+
+	@Override
+	public boolean isGlobalGameVacancyAllowed() {
+		return true;
 	}
 
 	@Override
@@ -1587,87 +1459,139 @@ public class ServerPointsxt
 		throw new UnsupportedOperationException();
 	}
 
-}
-class IrcNicknameManager {
+	class MyGame {
 
-	Map<String, String> fromId = new LinkedHashMap<String, String>();
-	Map<String, String> fromIrc = new LinkedHashMap<String, String>();
+		String roomName = "";
+		String opponentName = "";
+		boolean amIRed;
+		SingleGameEngineInterface engine;
+		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
+		Thread lastTimeoutThread = null;
+		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
+		final int timeAllowedPerTurn = 5;
+		final int periodLength = 1; // not working yet.
 
-	String irc2id(String ircNick) {
-		// inDI_X220111123511[g101]
-		if (fromIrc.get(ircNick) != null) {
-			// we already had him
-			return fromIrc.get(ircNick);
-		} else {
-			String shortBasic = ircNick.replaceAll(
-					ServerPointsxt.pointsxtTail_RegExp, ""
-			);
-			String shortResult;
-			if (fromId.containsKey(shortBasic)) {
-				int i = 2;
-				while (fromId.containsKey(shortBasic + "(" + i + ")")) {
-					i += 1;
-				}
-				shortResult = shortBasic + "(" + i + ")";
+		public String getOpponentIrcName() {
+			return nicknameManager.id2irc(opponentName);
+		}
+
+		public String getOpponentShortName() {
+			return opponentName;
+		}
+
+		public int getDefaultTime() {
+			return this.timeAllowedPerTurn;
+		}
+
+		public int getTimeLeftRed() {
+			return getDefaultTime();
+		}
+
+		public int getTimeLeftForBlue() {
+			return getDefaultTime();
+		}
+
+		public int getTimeLeftForColor(boolean color) {
+			if (color == true) {
+				return getTimeLeftRed();
 			} else {
-				shortResult = shortBasic;
-			}
-			fromId.put(shortResult, ircNick);
-			fromIrc.put(ircNick, shortResult);
-			return shortResult;
-		}
-	}
-
-	String id2irc(String id) {
-		String result = fromId.get(id);
-		return (result == null) ? "" : result;
-	}
-
-	void changeIrcNick(
-			String oldIrcNick,
-			String newIrcNick) {
-
-		String id = fromIrc.get(oldIrcNick);
-
-		fromIrc.remove(oldIrcNick); // we point both irc nicks to the Id - no, we don't
-		fromIrc.put(newIrcNick, id);
-
-		fromId.remove(id);
-		fromId.put(id, newIrcNick); // overwrite the old
-	}
-
-	void removeIrcNick(String ircNick) {
-		ircNick = ircNick.toLowerCase();
-		String shortNick = fromIrc.get(ircNick);
-		fromId.remove(shortNick);
-		for (Entry<String,String> mapEntry : fromIrc.entrySet()) {
-			if (mapEntry.getValue().equals(shortNick)) {
-				fromIrc.remove(mapEntry.getKey());
+				return getTimeLeftForBlue();
 			}
 		}
-	}
 
-	public String getGuiNick(String ircNick) {
-//		return this.irc2id(ircNick);
-		return ircNick.replaceAll(ServerPointsxt.pointsxtTail_RegExp, "");
+		public int getTimeLeftForMe() {
+			return getTimeLeftForColor(amIRed);
+		}
+
+		private boolean isPlaying() {
+			return "".equals(opponentName) == false;
+		}
+
+		private boolean isSearching() {
+			return roomName != null
+				&& roomName.equals("") == false
+				&& isPlaying() == false;
+		}
+
+		private void clear() {
+			randomMovesProvider = new RandomMovesProvider(39, 32);
+			roomName = "";
+			moveList.clear();
+			opponentName = "";
+			engine = null;
+			ServerPointsxt.this.setPointsxtNickname("", false, false);
+		}
+
+		void leaveGame(boolean isGuiVisible) {
+			if (isPlaying() || isSearching()) {
+				for (String channel : ServerPointsxt.this.getChannels()) {
+					if (channel.equals(roomName)) {
+						String roomNameCopy = roomName;
+						ServerPointsxt.this.partChannel(roomNameCopy);
+						clear();
+						if (isGuiVisible) {
+							ServerPointsxt.this.gui.unsubscribedRoom(ServerPointsxt.this, roomNameCopy);
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		boolean isMyMoveNow() {
+			boolean firstMove = amIRed && moveList.isEmpty();
+			boolean myTurnNow = (moveList.isEmpty() == false)
+				&& (moveList.get(
+						moveList.size() - 1
+						).isRed
+				^ amIRed);
+			return firstMove || myTurnNow;
+		}
+
+		boolean isRedMoveNow() {
+			boolean firstMove = amIRed && moveList.isEmpty();
+			boolean previousWasBlue = (moveList.isEmpty() == false)
+				&& (moveList.get(
+						moveList.size() - 1
+						).isRed == false);
+			return firstMove || previousWasBlue;
+		}
+
+		public void makeMove(
+				String roomName,
+				int x,
+				int y,
+				int timeLeft) {
+			if (roomName.equals(this.roomName)) {
+				boolean isFirstMoveAllowed = ((moveList.size() >= 2))
+					|| ((x - 1 >= 12) && (x - 1 <= 19)
+						&& (32 - y >= 12) && (32 - y <= 26)); // 12<=x<=19, 12<=y<=26
+				if (isMyMoveNow()
+					&& isFirstMoveAllowed
+					&& engine.getDotType(x, y).isEmpty()) {
+					ServerPointsxt.this.sendMoveToGui(
+						roomName, false, x, y,
+						amIRed
+							);
+					String timeLeftAsString = String.format("%03d", timeLeft);
+					ServerPointsxt.this.sendMessage(
+						roomName,
+						"" + (char) ('0' + x - 1)
+							+ (char) ('0' + 32 - y)
+							+ timeLeftAsString
+							);
+				}
+			}
+		}
+
+		public void surrender(String roomName) {
+			if (roomName.equals(this.roomName)
+				&& isMyMoveNow()) {
+				ServerPointsxt.this.sendMessage(roomName, "/ImLost");
+			}
+		}
 	}
 
 }
 
-class SimpleMove {
 
-	int x, y;
-	boolean isRed;
-
-	public SimpleMove() {
-	}
-
-	public SimpleMove(
-			int x,
-			int y,
-			boolean isRed) {
-		this.x = x;
-		this.y = y;
-		this.isRed = isRed;
-	}
-}

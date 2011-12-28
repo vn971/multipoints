@@ -95,6 +95,8 @@ public interface ServerInterface {
 
 	boolean isPrivateGameInviteAllowed();
 
+	boolean isGlobalGameVacancyAllowed();
+
 	boolean isField20x20Allowed();
 
 	boolean isField25x25Allowed();

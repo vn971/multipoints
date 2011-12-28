@@ -57,7 +57,7 @@
                 <Column editable="false" title=" " type="java.lang.String"/>
               </Table>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&#xa;&#x9;* = &#x43e;&#x442;&#x43e;&#x448;&#x451;&#x43b;,   ! = &#x438;&#x433;&#x440;&#x430;&#x435;&#x442;&lt;br&gt;&#xa;&#x9;&#x414;&#x43b;&#x44f; &#x434;&#x43e;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x44b;&#x445; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x439; &#x449;&#x435;&#x43b;&#x43a;&#x43d;&#x438;&#x442;&#x435; &#x434;&#x432;&#x430;&#x436;&#x434;&#x44b; &#x43c;&#x44b;&#x448;&#x43a;&#x43e;&#x439;&lt;br&gt;&#xa;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x43b;&#x44f; &#x434;&#x43e;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x44b;&#x445; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x439; &#x449;&#x451;&#x43b;&#x43a;&#x43d;&#x438;&#x442;&#x435; &#x434;&#x432;&#x430;&#x436;&#x434;&#x44b; &#x43c;&#x44b;&#x448;&#x43a;&#x43e;&#x439;"/>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">

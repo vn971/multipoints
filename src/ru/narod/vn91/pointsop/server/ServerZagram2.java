@@ -11,9 +11,12 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,9 +42,12 @@ public class ServerZagram2 implements ServerInterface {
 	String currentTable = "";
 	String secretId;
 	volatile boolean isDisposed = false;
-	MessageQueue queue = new MessageQueue(5);
-	Set<String> personalInvites = new LinkedHashSet<String>();
+	MessageQueue queue = new MessageQueue(10);
+	List<String> transiendQueue = new ArrayList();
+	Set<String> personalInvitesIncoming = new LinkedHashSet<String>();
+	Set<String> personalInvitesOutgoing = new LinkedHashSet<String>();
 	String currentInvitationPlayer = "";
+	Set<String> subscribedRooms = new LinkedHashSet<String>();
 	ThreadMain threadMain;
 
 	Map<String,String> avatarUrls = new HashMap<String, String>();
@@ -80,16 +86,17 @@ public class ServerZagram2 implements ServerInterface {
 
 	class ZagramGameTyme{
 		final int fieldX, FieldY;
-		final boolean isStopEnabled;
+		final boolean isStopEnabled, isEmptyScored;
 		final int timeStarting, timeAdditional;
 		final String startingPosition;
 		final boolean isRated;
 		final int instantWin;
-		public ZagramGameTyme(int fieldX, int fieldY, boolean isStopEnabled, int timeStarting, int timeAdditional,
+		public ZagramGameTyme(int fieldX, int fieldY, boolean isStopEnabled, boolean isEmptyScored, int timeStarting, int timeAdditional,
 				String startingPosition, boolean isRated, int instantWin) {
 			this.fieldX = fieldX;
 			this.FieldY = fieldY;
 			this.isStopEnabled = isStopEnabled;
+			this.isEmptyScored = isEmptyScored;
 			this.timeStarting = timeStarting;
 			this.timeAdditional = timeAdditional;
 			this.startingPosition = startingPosition;
@@ -114,14 +121,14 @@ public class ServerZagram2 implements ServerInterface {
 			int sizeY = Integer.parseInt(hellishString.substring(2, 4));
 			String rulesAsString = hellishString.substring(4, 8);
 			boolean isStopEnabled = rulesAsString.matches("noT4|noT1|terr");
+			boolean isEmptyScored = rulesAsString.matches("terr");
 			// boolean manualEnclosings = rulesAsString.matches("terr");
 			// boolean stopEnabled = rulesAsString.matches("noT4|noT1");
-			// boolean isEmptyScored = rulesAsString.matches("terr");
 			String startingPosition = rulesAsString.replaceAll("no|terr|stan", "");
 			boolean isRated = !(hellishString.substring(8, 9).equals("F"));
 			Integer instantWin = Integer.parseInt(hellishString.substring(9));
 			return new ZagramGameTyme(
-				sizeX, sizeY, isStopEnabled,
+				sizeX, sizeY, isStopEnabled, isEmptyScored,
 				startingTime, addTime, 
 				startingPosition, 
 				isRated, instantWin);
@@ -355,7 +362,7 @@ public class ServerZagram2 implements ServerInterface {
 		gui.updateGameInfo(this, playerId + "@outgoing", getMainRoom(), getMyName(), null,
 			fieldX, fieldY, false, false, 0, 0, false,
 			false, false, null, 0, time.periodAdditional, time.starting, 1, playerId);
-		gui.yourPersonalInviteSent(this, playerId, playerId + "@outgoing");
+//		gui.yourPersonalInviteSent(this, playerId, playerId + "@outgoing");
 	}
 
 	@Override
@@ -390,7 +397,7 @@ public class ServerZagram2 implements ServerInterface {
 	public void unsubscribeRoom(String room) {
 		String msgToSend = "q" + queue.sizePlusOne() + "." + room + ".";
 		sendCommandToServer(msgToSend);
-		gui.unsubscribedRoom(this, room);
+//		gui.unsubscribedRoom(this, room);
 	}
 
 	@Override
@@ -553,6 +560,10 @@ public class ServerZagram2 implements ServerInterface {
 	private void sendCommandToServer(String message) {
 		queue.add(message);
 	}
+	
+	private void sendCommandToServerTransient(String message) {
+		transiendQueue.add(message);
+	}
 
 	private static String get1SgfCoord(int i) {
 		if (i <= 26) {
@@ -622,17 +633,23 @@ public class ServerZagram2 implements ServerInterface {
 
 		@Override
 		public void run() {
-			sendCommandToServer("i0nJa");// nulls, infinite invites
+			sendCommandToServerTransient("i0nJa");// nulls, infinite invites
 
 			while (isDisposed == false) {
 
 				String commands = "";
+
+				for (String message : transiendQueue) {
+					commands = commands + message + "/";
+				}
+
 				for (int i = lastSentCommandNumber + 1; i < queue.size() + 1; i++) {
 					// (non-standard interval. Here is: A < x <= B)
 					commands = commands + queue.get(i) + "/";
 				}
 				lastSentCommandNumber = queue.size();
-				if (commands.length() == 0) {
+
+				if (commands.equals("")) {
 					commands = "x";
 				} else {
 					commands = commands.substring(0, commands.length() - 1);
@@ -641,7 +658,6 @@ public class ServerZagram2 implements ServerInterface {
 						"http://zagram.org/a.kropki?playerId=" +
 							secretId + "&co=getMsg&msgNo=" +
 							lastServerMessageNumber + "&msgFromClient=" + commands);
-				// betBMsg
 				handleText(text);
 
 				Wait.waitExactly(1000L);
@@ -657,7 +673,10 @@ public class ServerZagram2 implements ServerInterface {
 										text.indexOf("ok/") + "ok/".length(),
 										text.length() - "/end".length())
 								.split("/");
-				Set<String> personalInvitesNew = new LinkedHashSet<String>();
+				Set<String> personalInvitesIncomingNew = new LinkedHashSet<String>();
+				Set<String> personalInvitesOutgoingNew = new LinkedHashSet<String>();
+				Set<String> modifiedSubscribedRooms = new HashSet<String>();
+
 				String currentRoom = "";
 				for (String message : splitted) {
 					if (message.startsWith("m")) { // message numbers info
@@ -763,7 +782,8 @@ public class ServerZagram2 implements ServerInterface {
 						if (dotSplitted.length == 4 || dotSplitted.length == 8) {
 							player = dotSplitted[0];
 							avatarUrls.put(player, dotSplitted[1]);
-							status = dotSplitted[2].equals("F") ? "free" : "";
+							status = (dotSplitted[2].matches(".*(N|b).*") ? "" : "free");
+							// + (dotSplitted[2].contains("J") ? " java" : "web");
 							language = dotSplitted[3];
 							myStatus = language + " (" + status + ")";
 						}
@@ -795,15 +815,21 @@ public class ServerZagram2 implements ServerInterface {
 							}
 						}
 					} else if (message.startsWith("q")) { // current room
-						currentRoom = message.substring(1);
-						if (currentRoom.equals("0")) {
-							gui.subscribedLangRoom(
+						String room = message.substring(1);
+						currentRoom = room;
+
+						modifiedSubscribedRooms.add(room);
+						if (subscribedRooms.contains(room)) { // old set
+						} else {
+							if (currentRoom.equals("0")) {
+								gui.subscribedLangRoom(
 									currentRoom,
 									server,
 									"общий чат: zagram",
 									true);
-						} else {
-							gui.subscribedGame(server, currentRoom);
+							} else {
+								gui.subscribedGame(server, currentRoom);
+							}
 						}
 					} else if (message.matches("sa.*|sr.*")) { // game actions
 						message = message.replaceAll("\\(|\\)", "");
@@ -868,15 +894,16 @@ public class ServerZagram2 implements ServerInterface {
 					} else if (message.startsWith("vg")) { // game invite
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", ""); // first part
-						if (personalInvites.contains(sender) == false) {
+						if (personalInvitesIncoming.contains(sender) == false) {
 							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
 							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
-							if (gameType.isStopEnabled == true) {
+							if (gameType.isEmptyScored == true) {
 								server.rejectPersonalGameInvite(sender);
 								gui.raw(server, String.format(
 									"Игрок '%s' вызвал(а) тебя на игру: " +
 										"К сожалению, принять заявку невозможно, " +
-										"т.к. нестандартные правила игры пока-что не поддерживаются программой. " +
+										"т.к. польские правила с ручными обводами территории " +
+										"пока-что не поддерживаютяс программой. " +
 										"Отослан отказ от игры. ",
 									sender));
 							} else {
@@ -890,41 +917,65 @@ public class ServerZagram2 implements ServerInterface {
 									0, gameType.timeAdditional, gameType.timeStarting, 1,
 									sender + "to YOU");
 								gui.personalInviteReceived(server, sender, sender + "@incoming");
-								personalInvitesNew.add(sender);
+								personalInvitesIncomingNew.add(sender);
 							}
 						} else {
-							personalInvitesNew.add(sender);
+							personalInvitesIncomingNew.add(sender);
 						}
 					} else if (message.startsWith("vs")) {
 						String user = message.substring(2).split("\\.")[0];
-						gui.yourPersonalInviteSent(server, user, user + "@outgoing");
+						if (personalInvitesOutgoing.contains(user) == false) {
+							gui.yourPersonalInviteSent(server, user, user + "@outgoing");
+						}
+						personalInvitesOutgoingNew.add(user);
 					} else if (message.startsWith("vr")) {
 						String user = message.substring(2);
 						gui.yourPersonalInviteRejected(server, user, user + "@outgoing");
 
 						// "OK to the fact that someone rejected your invitation" :-/
-						String msgToSend = "v" + queue.sizePlusOne() + "." + "0" + "." + "o";
-						sendCommandToServer(msgToSend);
+						sendCommandToServer("v" + queue.sizePlusOne() + "." + "0" + "." + "o");
 					}
 				}
 
-				// warning: UGLY CODE
-				// now I have to compare two sets of player invitations
-				// if I don't have a player in the new set -
-				// then the invitation is closed and I should delete it.
-				for (Iterator<String> iterator = personalInvites.iterator(); iterator.hasNext();) {
-					String player = iterator.next();
-					if (personalInvitesNew.contains(player) == false) {
-						// invitation cancelled
-						gui.personalInviteCancelled(server, player, player + "@incoming");
-						sendCommandToServer("i0nJa");
+				{
+					// warning: UGLY CODE
+					// now I have to compare two sets of player invitations
+					// if I don't have a player in the new set -
+					// then the invitation is closed and I should delete it.
+					for (Iterator<String> iterator = personalInvitesIncoming.iterator(); iterator.hasNext();) {
+						String player = iterator.next();
+						if (personalInvitesIncomingNew.contains(player) == false) {
+							// invitation cancelled
+							gui.personalInviteCancelled(server, player, player + "@incoming");
+							sendCommandToServerTransient("i0nJa");
+						}
 					}
+					personalInvitesIncoming = personalInvitesIncomingNew;
+					personalInvitesIncomingNew = new LinkedHashSet<String>();
 				}
-				// now swap old-new and clear the old.
-				personalInvites.clear();
-				Set<String> backup = personalInvites;
-				personalInvites = personalInvitesNew;
-				personalInvitesNew = backup;
+				{
+					for (Iterator<String> iterator = personalInvitesOutgoing.iterator(); iterator.hasNext();) {
+						String player = iterator.next();
+						if (personalInvitesOutgoingNew.contains(player) == false) {
+							// invitation cancelled
+							gui.yourPersonalInviteRejected(server, player, player + "@outgoing");
+						}
+					}
+					personalInvitesOutgoing = personalInvitesOutgoingNew;
+					personalInvitesOutgoingNew = new LinkedHashSet<String>();
+				}
+				{
+					for (Iterator<String> iterator = subscribedRooms.iterator(); iterator.hasNext();) {
+						String room = iterator.next();
+						if (modifiedSubscribedRooms.contains(room) == false) {
+							// unsubscribed room
+							gui.unsubscribedRoom(server, room);
+						}
+					}
+					subscribedRooms = modifiedSubscribedRooms;
+					modifiedSubscribedRooms = new LinkedHashSet<String>();
+				}
+
 			} else if (text.equals("")) {
 				// we got an empty result. Well, lets treat that as normal.
 			} else {
@@ -1075,4 +1126,8 @@ public class ServerZagram2 implements ServerInterface {
 		return true;
 	}
 
+	@Override
+	public boolean isGlobalGameVacancyAllowed() {
+		return false;
+	}
 }

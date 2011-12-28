@@ -287,4 +287,9 @@ public class MockServerForGui implements ServerInterface{
 		return true;
 	}
 
+	@Override
+	public boolean isGlobalGameVacancyAllowed() {
+		return false;
+	}
+
 }

@@ -22,9 +22,9 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jScrollPane_Chat" pref="477" max="32767" attributes="2"/>
-                  <Component id="jTextField_Chat" alignment="1" pref="477" max="32767" attributes="2"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jTextField_Chat" pref="477" max="32767" attributes="2"/>
+                  <Component id="jScrollPane_Chat" alignment="1" pref="477" max="32767" attributes="2"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel_Info" min="-2" max="-2" attributes="0"/>
@@ -84,9 +84,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButton_Sound" alignment="0" pref="193" max="32767" attributes="2"/>
                       <Component id="jLabel_Userpic" alignment="0" min="-2" max="-2" attributes="1"/>
-                      <Component id="jButton_AcceptIncomingInvite" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jButton_AcceptInvite" alignment="0" max="32767" attributes="0"/>
                       <Component id="jButton_Ping" alignment="0" pref="193" max="32767" attributes="2"/>
-                      <Component id="jButton_GameInvite" alignment="1" pref="193" max="32767" attributes="0"/>
+                      <Component id="jButton_RejectInvite" alignment="0" pref="193" max="32767" attributes="0"/>
+                      <Component id="jButton_Invite" alignment="1" pref="193" max="32767" attributes="0"/>
                       <Component id="jButton_CancelInvite" alignment="0" pref="193" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -103,12 +104,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButton_Sound" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton_AcceptIncomingInvite" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton_AcceptInvite" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButton_GameInvite" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton_RejectInvite" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jButton_Invite" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButton_CancelInvite" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="258" max="32767" attributes="0"/>
+                  <EmptySpace pref="216" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -132,20 +135,20 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_Userpic">
         </Component>
-        <Component class="javax.swing.JButton" name="jButton_AcceptIncomingInvite">
+        <Component class="javax.swing.JButton" name="jButton_AcceptInvite">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x43f;&#x440;&#x438;&#x43d;&#x44f;&#x442;&#x44c; &#x437;&#x430;&#x44f;&#x432;&#x43a;&#x443; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443;"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_AcceptIncomingInviteActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_AcceptInviteActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton_GameInvite">
+        <Component class="javax.swing.JButton" name="jButton_Invite">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x432;&#x44b;&#x437;&#x432;&#x430;&#x442;&#x44c; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443;"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_GameInviteActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_InviteActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_CancelInvite">
@@ -154,6 +157,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_CancelInviteActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton_RejectInvite">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x43e;&#x442;&#x43a;&#x43b;&#x43e;&#x43d;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x44f;&#x432;&#x43a;&#x443;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_RejectInviteActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

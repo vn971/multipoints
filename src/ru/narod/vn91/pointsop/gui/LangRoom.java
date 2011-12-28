@@ -71,6 +71,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 		roomPart_Chat1.initChat(this, null);
 		roomPart_UserList1.initRoomPart(this, centralGuiController);
 		roomPart_GameList1.initRoomPart(this, centralGuiController);
+		jToggleButton_LeaveZayavka.setVisible(server.isGlobalGameVacancyAllowed());
 	}
 
 	/** This method is called from within the constructor to

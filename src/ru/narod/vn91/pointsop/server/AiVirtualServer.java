@@ -342,4 +342,9 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 		return false;
 	}
 
+	@Override
+	public boolean isGlobalGameVacancyAllowed() {
+		return false;
+	}
+
 }

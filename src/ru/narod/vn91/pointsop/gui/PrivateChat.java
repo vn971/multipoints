@@ -14,7 +14,6 @@ import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerChangeListener;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
-import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 
 @SuppressWarnings("serial")
@@ -36,7 +35,8 @@ public class PrivateChat extends javax.swing.JPanel {
 	}
 
 	public void personalInviteReceived(GameOuterInfo gameInfo) {
-		this.jButton_AcceptIncomingInvite.setEnabled(true);
+		this.jButton_AcceptInvite.setEnabled(true);
+		this.jButton_RejectInvite.setEnabled(true);
 		String message = String.format("Собеседник вызывает вас на игру с " +
 			"%s секундами основного времени + %s добавочного за ход, %s, размер поля %s*%s",
 			gameInfo.startingTime,
@@ -48,24 +48,27 @@ public class PrivateChat extends javax.swing.JPanel {
 	}
 
 	public void personalInviteCancelled() {
-		jButton_AcceptIncomingInvite.setEnabled(false);
+		jButton_AcceptInvite.setEnabled(false);
+		jButton_RejectInvite.setEnabled(false);
+		this.addChat("server", "Собеседник отменил свою заявку на игру.", false);
 	}
 
 	public void yourPersonalInviteCancelled() {
 		jButton_CancelInvite.setEnabled(false);
-		jButton_GameInvite.setEnabled(true);
+		jButton_Invite.setEnabled(true);
 		this.addChat("server", "Вы отменили своё приглашение на игру.", false);
 	}
 
 	public void yourPersonalInviteRejected() {
 		jButton_CancelInvite.setEnabled(false);
-		jButton_GameInvite.setEnabled(true);
-		this.addChat("server", "Оппонент отклонил ваше приглашение на игру.", false);
+		jButton_Invite.setEnabled(true);
+		this.addChat("server", "Собеседник отклонил ваше приглашение на игру.", false);
 	}
 
 	public void yourPersonalInviteSent() {
 		jButton_CancelInvite.setEnabled(true);
-		jButton_GameInvite.setEnabled(false);
+		jButton_Invite.setEnabled(false);
+		this.addChat("server", "Заявка на игру отправлена.", false);
 	}
 
 	void addChat(String user,
@@ -161,7 +164,7 @@ public class PrivateChat extends javax.swing.JPanel {
 			jTextPane_Chat.setEnabled(false);
 			jTextPane_Chat.setText("чат на этом сервере недоступен");
 		}
-		jButton_GameInvite.setEnabled(me.server.isPrivateGameInviteAllowed());
+		jButton_Invite.setEnabled(me.server.isPrivateGameInviteAllowed());
 		jButton_Ping.setEnabled(me.server.isPingEnabled());
 		jButton_Sound.setEnabled(me.server.isSoundNotifyEnabled());
 		me.addChangeListener(new PlayerChangeListener() {
@@ -172,7 +175,8 @@ public class PrivateChat extends javax.swing.JPanel {
 		});
 		me.server.getUserInfoText(me.id);
 		me.server.getUserpic(me.id);
-		jButton_AcceptIncomingInvite.setEnabled(false);
+		jButton_AcceptInvite.setEnabled(false);
+		jButton_RejectInvite.setEnabled(false);
 		jButton_CancelInvite.setEnabled(false);
 	}
 
@@ -193,9 +197,10 @@ public class PrivateChat extends javax.swing.JPanel {
         jButton_Ping = new javax.swing.JButton();
         jButton_Sound = new javax.swing.JButton();
         jLabel_Userpic = new javax.swing.JLabel();
-        jButton_AcceptIncomingInvite = new javax.swing.JButton();
-        jButton_GameInvite = new javax.swing.JButton();
+        jButton_AcceptInvite = new javax.swing.JButton();
+        jButton_Invite = new javax.swing.JButton();
         jButton_CancelInvite = new javax.swing.JButton();
+        jButton_RejectInvite = new javax.swing.JButton();
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -237,17 +242,17 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
-        jButton_AcceptIncomingInvite.setText("принять заявку на игру");
-        jButton_AcceptIncomingInvite.addActionListener(new java.awt.event.ActionListener() {
+        jButton_AcceptInvite.setText("принять заявку на игру");
+        jButton_AcceptInvite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_AcceptIncomingInviteActionPerformed(evt);
+                jButton_AcceptInviteActionPerformed(evt);
             }
         });
 
-        jButton_GameInvite.setText("вызвать на игру");
-        jButton_GameInvite.addActionListener(new java.awt.event.ActionListener() {
+        jButton_Invite.setText("вызвать на игру");
+        jButton_Invite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_GameInviteActionPerformed(evt);
+                jButton_InviteActionPerformed(evt);
             }
         });
 
@@ -255,6 +260,13 @@ public class PrivateChat extends javax.swing.JPanel {
         jButton_CancelInvite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_CancelInviteActionPerformed(evt);
+            }
+        });
+
+        jButton_RejectInvite.setText("отклонить заявку");
+        jButton_RejectInvite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_RejectInviteActionPerformed(evt);
             }
         });
 
@@ -267,9 +279,10 @@ public class PrivateChat extends javax.swing.JPanel {
                 .addGroup(jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_Sound, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(jLabel_Userpic)
-                    .addComponent(jButton_AcceptIncomingInvite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_AcceptInvite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton_Ping, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jButton_GameInvite, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(jButton_RejectInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(jButton_Invite, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(jButton_CancelInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -283,12 +296,14 @@ public class PrivateChat extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_Sound)
                 .addGap(18, 18, 18)
-                .addComponent(jButton_AcceptIncomingInvite)
+                .addComponent(jButton_AcceptInvite)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_GameInvite)
+                .addComponent(jButton_RejectInvite)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton_Invite)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_CancelInvite)
-                .addContainerGap(258, Short.MAX_VALUE))
+                .addContainerGap(216, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -296,9 +311,9 @@ public class PrivateChat extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
-                    .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                    .addComponent(jScrollPane_Chat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_Info, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -345,24 +360,28 @@ public class PrivateChat extends javax.swing.JPanel {
 		jTextField_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formComponentAdded
 
-	private void jButton_GameInviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GameInviteActionPerformed
+	private void jButton_InviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_InviteActionPerformed
 		new GameInvitePersonal(null, true, companion).setVisible(true);
-	}//GEN-LAST:event_jButton_GameInviteActionPerformed
+	}//GEN-LAST:event_jButton_InviteActionPerformed
 
-	private void jButton_AcceptIncomingInviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AcceptIncomingInviteActionPerformed
+	private void jButton_AcceptInviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AcceptInviteActionPerformed
 		companion.server.acceptPersonalGameInvite(companion.id);
-	}//GEN-LAST:event_jButton_AcceptIncomingInviteActionPerformed
+	}//GEN-LAST:event_jButton_AcceptInviteActionPerformed
 
 	private void jButton_CancelInviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelInviteActionPerformed
 		companion.server.cancelPersonalGameInvite(companion.id);
-		// TODO add your handling code here:
 	}//GEN-LAST:event_jButton_CancelInviteActionPerformed
 
+	private void jButton_RejectInviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RejectInviteActionPerformed
+		companion.server.rejectPersonalGameInvite(companion.id);
+	}//GEN-LAST:event_jButton_RejectInviteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_AcceptIncomingInvite;
+    private javax.swing.JButton jButton_AcceptInvite;
     private javax.swing.JButton jButton_CancelInvite;
-    private javax.swing.JButton jButton_GameInvite;
+    private javax.swing.JButton jButton_Invite;
     private javax.swing.JButton jButton_Ping;
+    private javax.swing.JButton jButton_RejectInvite;
     private javax.swing.JButton jButton_Sound;
     private javax.swing.JLabel jLabel_Userpic;
     private javax.swing.JPanel jPanel_Info;

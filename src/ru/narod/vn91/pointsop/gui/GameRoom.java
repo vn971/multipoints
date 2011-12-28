@@ -322,6 +322,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		initComponents();
 		jToggleButton_ShowTree.setVisible(false);
 		jPanel_Tree.setVisible(false);
+		jToolBar1.setVisible(false);
 
 		PlayerChangeListener player1ChangeListener = new PlayerChangeListener() {
 			public void onChange(Player player) {
@@ -445,6 +446,19 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jToggleButton_ShowTree = new javax.swing.JToggleButton();
         jLabel_MouseCoords = new javax.swing.JLabel();
         jButton_Actions = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
         jPanel_Tree = new javax.swing.JPanel();
 
         jMenuItem_Surrender.setText("Сдаться");
@@ -655,10 +669,10 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 
         jLabel_Score1.setText("●16●");
 
-        jLabel_Time1.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
+        jLabel_Time1.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15));
         jLabel_Time1.setText("00:00");
 
-        jLabel_Time2.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
+        jLabel_Time2.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15));
         jLabel_Time2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel_Time2.setText("00:00");
 
@@ -740,6 +754,80 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
             }
         });
 
+        jToolBar1.setRollover(true);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton1);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton2);
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton3);
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton4);
+
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton5);
+
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
+        jButton6.setFocusable(false);
+        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton6);
+
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
+        jButton7.setFocusable(false);
+        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton7);
+
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
+        jButton8.setFocusable(false);
+        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton8);
+
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
+        jButton9.setFocusable(false);
+        jButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton9);
+
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
+        jButton10.setFocusable(false);
+        jButton10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton10.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton10);
+
+        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/eraser.png"))); // NOI18N
+        jButton11.setFocusable(false);
+        jButton11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton11.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton11);
+
+        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
+        jButton12.setFocusable(false);
+        jButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton12.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton12);
+
         javax.swing.GroupLayout jPanel_BottomLayout = new javax.swing.GroupLayout(jPanel_Bottom);
         jPanel_Bottom.setLayout(jPanel_BottomLayout);
         jPanel_BottomLayout.setHorizontalGroup(
@@ -748,15 +836,17 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
                 .addComponent(jToggleButton_ShowTree)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_MouseCoords)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addComponent(jButton_Actions))
         );
         jPanel_BottomLayout.setVerticalGroup(
             jPanel_BottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_BottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jToggleButton_ShowTree, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                .addComponent(jButton_Actions, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+            .addComponent(jButton_Actions)
+            .addComponent(jToggleButton_ShowTree)
+            .addComponent(jLabel_MouseCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
         jPanel_Tree.setBorder(javax.swing.BorderFactory.createTitledBorder("дерево ходов (пока не рабочее...)"));
@@ -941,6 +1031,18 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}//GEN-LAST:event_jButton_ActionsMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JButton jButton_Actions;
     private javax.swing.JLabel jLabel_MouseCoords;
     private javax.swing.JLabel jLabel_Player1;
@@ -984,6 +1086,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JToggleButton jToggleButton_ShowTree;
+    private javax.swing.JToolBar jToolBar1;
     private ru.narod.vn91.pointsop.gui.RoomPart_Chat roomPart_Chat;
     private ru.narod.vn91.pointsop.gui.RoomPart_Userlist roomPart_UserList;
     // End of variables declaration//GEN-END:variables
