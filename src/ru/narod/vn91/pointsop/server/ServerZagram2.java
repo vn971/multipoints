@@ -345,11 +345,11 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void rejectPersonalGameInvite(String playerId) {
-//		if (personalInvites.contains(playerId)) {
+		if (personalInvitesIncoming.contains(playerId)) {
 			String message = "v" + queue.sizePlusOne() +
-					"." + getMainRoom() + "." + "r";
+				"." + getMainRoom() + "." + "r";
 			sendCommandToServer(message);
-//		}
+		}
 	}
 
 	@Override
@@ -898,7 +898,11 @@ public class ServerZagram2 implements ServerInterface {
 							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
 							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
 							if (gameType.isEmptyScored == true) {
+
+								personalInvitesIncoming.add(sender);
 								server.rejectPersonalGameInvite(sender);
+								personalInvitesIncoming.remove(sender); // kind of a hack
+
 								gui.raw(server, String.format(
 									"Игрок '%s' вызвал(а) тебя на игру: " +
 										"К сожалению, принять заявку невозможно, " +

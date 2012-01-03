@@ -18,7 +18,7 @@ public class IrcNicknameManager {
 			return fromIrc.get(ircNick);
 		} else {
 			String shortBasic = ircNick.replaceAll(
-					ServerPointsxt.pointsxtTail_RegExp, ""
+					IrcRegexp.pointsxtTail_RegExp, ""
 			);
 			String shortResult;
 			if (fromId.containsKey(shortBasic)) {
@@ -66,8 +66,7 @@ public class IrcNicknameManager {
 	}
 
 	public String getGuiNick(String ircNick) {
-//		return this.irc2id(ircNick);
-		return ircNick.replaceAll(ServerPointsxt.pointsxtTail_RegExp, "");
+		return ircNick.replaceAll(IrcRegexp.pointsxtTail_RegExp, "");
 	}
 
 }

@@ -7,13 +7,11 @@ package ru.narod.vn91.pointsop.server;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 
 import org.jibble.pircbot.IrcException;
@@ -31,11 +29,11 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.server.irc.IrcNicknameManager;
+import ru.narod.vn91.pointsop.server.irc.IrcRegexp;
 import ru.narod.vn91.pointsop.server.irc.SimpleMove;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
-
 
 public class ServerPointsxt
 		extends PircBot
@@ -49,7 +47,6 @@ public class ServerPointsxt
 	private String defaultServer_Visible;
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
-	public static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
 	String pointsxtVersion = "187";
 	static String gamePrefix = "#pxt";
 	static String commandCommonPrefix = "OpCmd ";
@@ -231,7 +228,7 @@ public class ServerPointsxt
 		String ircOpponentName = nicknameManager.id2irc(newOpponent);
 		if (ircOpponentName == null) {
 			// do nothing
-		} else if (isPointsXTNickname(ircOpponentName)) {
+		} else if (IrcRegexp.isPointsXTNickname(ircOpponentName)) {
 			tryInvitePointsxt(ircOpponentName, false);
 		} else if (isPointsopSameVersionNickname(ircOpponentName)) {
 			myGame.opponentName = newOpponent;
@@ -271,17 +268,14 @@ public class ServerPointsxt
 
 	@Override
 	public void acceptPersonalGameInvite(String playerId) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void cancelPersonalGameInvite(String playerId) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void rejectPersonalGameInvite(String playerId) {
-		throw new UnsupportedOperationException();
 	}
 
 	public void tryInvitePointsxt(String target, boolean isVerbose) {
@@ -439,7 +433,7 @@ public class ServerPointsxt
 			String kickerHostname,
 			String recipientNick,
 			String reason) {
-		userDisconnected_PointsxtStyle(channel, recipientNick, reason.replaceAll(pointsxtTail_RegExp, ""));
+		userDisconnected_PointsxtStyle(channel, recipientNick, IrcRegexp.cutIrcText(reason));
 	}
 
 	@Override
@@ -458,12 +452,9 @@ public class ServerPointsxt
 			String sourceHostname,
 			String reason) {
 		for (String channelName : super.getChannels()) {
-			userDisconnected_PointsxtStyle(channelName, sourceNick, reason.replaceAll(pointsxtTail_RegExp, ""));
+			userDisconnected_PointsxtStyle(channelName, sourceNick, IrcRegexp.cutIrcText(reason));
 		}
-		gui.userDisconnected(
-			this, nicknameManager.irc2id(sourceNick),
-			reason.replaceAll(pointsxtTail_RegExp, "")
-				);
+		gui.userDisconnected(this, nicknameManager.irc2id(sourceNick), IrcRegexp.cutIrcText(reason));
 		nicknameManager.removeIrcNick(sourceNick);
 	}
 
@@ -506,7 +497,7 @@ public class ServerPointsxt
 				message.equalsIgnoreCase("!s")
 						|| message.equalsIgnoreCase("!ы"))) {
 
-			if (isPointsopNickname(sender)) {
+			if (IrcRegexp.isPointsopNickname(sender)) {
 //				super.sendMessage(
 //						target,
 //						"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
@@ -553,18 +544,10 @@ public class ServerPointsxt
 			And this message shouldn't be visible as text in this case */
 		} else if (channel.equals(defaultChannel)) {
 			if (message.startsWith("ACTION")) {
-				gui.chatReceived(
-						this, channel, "***" + nick, message.substring(
-								7
-								).replaceAll(pointsxtTail_RegExp, ""),
-						null
-						);
+				gui.chatReceived(this, channel, "***" + nick, 
+					IrcRegexp.cutIrcText(message.substring(7)), null);
 			} else {
-				gui.chatReceived(
-						this, channel, nick, message.replaceAll(
-								pointsxtTail_RegExp, ""),
-						null
-						);
+				gui.chatReceived(this, channel, nick, IrcRegexp.cutIrcText(message), null);
 			}
 		} else {
 			// game channel
@@ -614,7 +597,7 @@ public class ServerPointsxt
 //			) + " sends you a sound"
 //			);
 
-			if (isPointsopNickname(sender)) {
+			if (IrcRegexp.isPointsopNickname(sender)) {
 				gui.soundReceived(this, nicknameManager.irc2id(sender));
 			} else if (myGame.isSearching() == false) {
 				gui.soundReceived(this, nicknameManager.irc2id(sender));
@@ -641,7 +624,7 @@ public class ServerPointsxt
 			//			}
 		} else if (message.startsWith("/PointsXTAccept ")) {
 			String room = getPlayerRoom(sender);
-			if (isPointsXTNickname(sender)
+			if (IrcRegexp.isPointsXTNickname(sender)
 					&& (room.equals("")) == false) {
 				if (myGame.isPlaying()) {
 					super.sendMessage(
@@ -732,11 +715,7 @@ public class ServerPointsxt
 			gui.privateMessageReceived(this, message.split(" ")[1], message);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
-			gui.privateMessageReceived(
-					this, nick, message.replaceAll(
-					pointsxtTail_RegExp, ""
-			)
-			);
+			gui.privateMessageReceived(this, nick, IrcRegexp.cutIrcText(message));
 		}
 	}
 
@@ -745,23 +724,12 @@ public class ServerPointsxt
 		if (line.matches(":[^ ]* PONG [^ ]* :[0-9]*")) {
 			// it's a PING-PONG. Don't do anything
 		} else {
-			gui.raw(
-				this,
-				line.replaceAll(pointsxtTail_RegExp, ""));
+			gui.raw(this, IrcRegexp.cutIrcText(line));
 		}
 	}
 
-	private boolean isGamerNickname(String fullNick) {
-		return fullNick.matches(".*" + pointsxtTail_RegExp);
-	}
-
-	private boolean isPointsXTNickname(String ircNick) {
-		return (isPointsopNickname(ircNick) == false)
-				&& ircNick.matches(".*" + pointsxtTail_RegExp);
-	}
-
 	private String getPlayerRoom(String nick) {
-		if (isGamerNickname(nick) == false) {
+		if (IrcRegexp.isGamerNickname(nick) == false) {
 			return "";
 		} else {
 			String roomSuffix =
@@ -771,18 +739,6 @@ public class ServerPointsxt
 			} else {
 				return "#pxt" + roomSuffix;
 			}
-		}
-	}
-
-	private int getPlayerRank(String ircNick) {
-		if (isGamerNickname(ircNick)) {
-			String rankAsString = ircNick.substring(
-					ircNick.length() - 15,
-					ircNick.length() - 11
-			);
-			return Integer.parseInt(rankAsString);
-		} else {
-			return 0;
 		}
 	}
 
@@ -809,24 +765,6 @@ public class ServerPointsxt
 			return false;
 		} else {
 			return null;
-		}
-	}
-
-	private String extractUserStatus(String nick) {
-		if (isGamerNickname(nick)) {
-			String stateType = nick.substring(
-					nick.length() - 5,
-					nick.length() - 1
-			);
-			if (stateType.equals("free")) {
-				return " ";
-			} else if (stateType.equals("away")) {
-				return "";
-			} else {
-				return "!";
-			}
-		} else {
-			return "";
 		}
 	}
 
@@ -907,7 +845,7 @@ public class ServerPointsxt
 	}
 
 	private int getPlayerIngameNumber(String fullNick) {
-		if (isGamerNickname(fullNick)) {
+		if (IrcRegexp.isGamerNickname(fullNick)) {
 			String letter = fullNick.substring(
 					fullNick.length() - 4,
 					fullNick.length() - 3
@@ -929,11 +867,6 @@ public class ServerPointsxt
 		return charr - "0".charAt(0);
 	}
 
-	private boolean isPointsopNickname(String ircNick) {
-		return ircNick.startsWith("^")
-		&& ircNick.matches(".*" + pointsxtTail_RegExp + ".*");
-	}
-
 	private boolean isPointsopSameVersionNickname(String ircNick) {
 		return ircNick.startsWith("^")
 				&& ircNick.matches(
@@ -947,8 +880,8 @@ public class ServerPointsxt
 		String shortNick = nicknameManager.irc2id(ircNick);
 		gui.updateUserInfo(
 				this, shortNick,
-				nicknameManager.getGuiNick(ircNick), null, getPlayerRank(ircNick),
-				0, 0, 0, extractUserStatus(ircNick));
+				nicknameManager.getGuiNick(ircNick), null, IrcRegexp.getPlayerRank(ircNick),
+				0, 0, 0, IrcRegexp.extractUserStatus(ircNick));
 		if (room.equals(defaultChannel)) {
 			// join Lang room
 			gui.userJoinedRoom(this, room, shortNick, silent);
@@ -1002,7 +935,7 @@ public class ServerPointsxt
 							null);
 
 					gui.gameRowCreated(this, defaultChannel, newRoom);
-				} else if (isPointsopNickname(ircNick)) {
+				} else if (IrcRegexp.isPointsopNickname(ircNick)) {
 					// no opponent found of a pointsOp player
 					gui.updateGameInfo(
 							this, newRoom,
@@ -1254,7 +1187,7 @@ public class ServerPointsxt
 	 * @return GUI name
 	 */
 	public String getMyName() {
-		return myNickOnServ.replaceAll(pointsxtTail_RegExp, "");
+		return IrcRegexp.cutIrcTail(myNickOnServ);
 	}
 
 	public String getMainRoom() {
@@ -1383,15 +1316,17 @@ public class ServerPointsxt
 	}
 
 	public void getUserpic(String user) {
-		try {
-			URL url = new URL("http://pointsgame.net/mp/irc-icons/" + user + ".gif");
-			if (url != null) {
-				ImageIcon imageIcon = new ImageIcon(url);
-				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
-			}
-		} catch (MalformedURLException ex) {
-			ex.printStackTrace();
+		// try {
+		// URL url = new URL("http://pointsgame.net/mp/irc-icons/" + user + ".gif");
+		// } catch (MalformedURLException ex) {
+		// }
+
+		URL url = ServerPointsxt.class.getResource("irc/" + user.toLowerCase() + ".gif");
+		if (url != null) {
+			ImageIcon imageIcon = new ImageIcon(url);
+			gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
 		}
+
 	}
 
 	@Override

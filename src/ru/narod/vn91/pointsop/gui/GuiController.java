@@ -24,6 +24,7 @@ import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.Function;
+import ru.narod.vn91.pointsop.utils.Function0;
 import ru.narod.vn91.pointsop.utils.Settings;
 
 public class GuiController implements GuiForServerInterface {
@@ -248,9 +249,9 @@ public class GuiController implements GuiForServerInterface {
 		tabbedPane.addTab(game2html.call(null), containerRoom_Game, true);
 		tabbedPane.setCloseListener_FalseIfStopClosing(
 			containerRoom_Game,
-			new Function<Void, Boolean>() {
+			new Function0<Boolean>() {
 				@Override
-				public Boolean call(Void input) {
+				public Boolean call() {
 					return containerRoom_Game.userAsksClose();
 				}
 			});
@@ -315,8 +316,8 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	public synchronized void privateMessageReceived(
-			ServerInterface server,
-			String userId,
+			final ServerInterface server,
+			final String userId,
 			String message) {
 
 		Player player = playerPool.get(server, userId);
@@ -328,13 +329,19 @@ public class GuiController implements GuiForServerInterface {
 			tabbedPane.addTab(player.guiName, privateChat, true);
 		} else {
 			if (tabbedPane.contains(privateChat) == false) {
-				tabbedPane.addTab(
-					player.guiName, privateChat, true
-						); // resurrecting a closed panel
 			} else {
 				// updating an old and not closed panel
 			}
 		}
+		tabbedPane.setCloseListener_FalseIfStopClosing(privateChat, new Function0<Boolean>() {
+			@Override
+			public Boolean call() {
+				server.rejectPersonalGameInvite(userId);
+				// server.cancelPersonalGameInvite(userId);
+				return true;
+			}
+		});
+
 		tabbedPane.makeBold(privateChat);
 		privateChat.addChat(player.guiName, message, false);
 	}
@@ -832,8 +839,8 @@ class JTabbedPaneMod {
 	final Color boldColor = Color.GRAY;
 	final Color normalColor = tabbedPane.getBackground();
 
-	Map<Component, Function<Void, Boolean>> closeListeners =
-			new HashMap<Component, Function<Void, Boolean>>();
+	Map<Component, Function0<Boolean>> closeListeners =
+			new HashMap<Component, Function0<Boolean>>();
 
 	public Component getComponent() {
 		return Component.class.cast(tabbedPane);
@@ -848,9 +855,9 @@ class JTabbedPaneMod {
 		tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
 			@Override
 			public Void call(TabCloseable input) {
-				Function<Void, Boolean> closeListener = closeListeners.get(component);
+				Function0<Boolean> closeListener = closeListeners.get(component);
 				if (closeListener != null &&
-					closeListener.call(null) == Boolean.FALSE) {
+					closeListener.call() == false) {
 					// do nothing. Calling listeners is enough.
 				} else {
 					remove(component);
@@ -863,7 +870,7 @@ class JTabbedPaneMod {
 
 	public void setCloseListener_FalseIfStopClosing(
 			Component component,
-			Function<Void, Boolean> closeListener) {
+			Function0<Boolean> closeListener) {
 		closeListeners.put(component, closeListener);
 	}
 

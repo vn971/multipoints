@@ -62,19 +62,19 @@ public class SelfishGuiStarter {
 		{
 			if (Settings.getFrameWidth() > 0
 					&& Settings.getFrameHeight() > 0) {
-				//					&& Memory.getFrameX() > 0
-				//					&& Memory.getFrameY() > 0
+				// && Memory.getFrameX() > 0
+				// && Memory.getFrameY() > 0
 				frame.setBounds(
 						Settings.getFrameX(),
 						Settings.getFrameY(),
 						Settings.getFrameWidth(),
 						Settings.getFrameHeight()
 				);
-				//				frame.setSize(
-				//						Memory.getFrameWidth(),
-				//						Memory.getFrameHeight());
+				// frame.setSize(
+				// Memory.getFrameWidth(),
+				// Memory.getFrameHeight());
 			}
-			//			frame.setLocationRelativeTo(frame.getRootPane());
+			// frame.setLocationRelativeTo(frame.getRootPane());
 
 			frame.addComponentListener(
 					new ComponentListener() {
@@ -119,13 +119,22 @@ public class SelfishGuiStarter {
 
 		if (Settings.isDebug()) {
 			ServerInterface mockServer = new MockServerForGui();
-			tabbedPane.addTab("комната", new LangRoom(mockServer, "", guiController), true);
-			tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, ""), guiController), true);
-		//		tabbedPane.addTab(
-		//				"priv chat", new PrivateChat(null, guiController, ""),
-		//				false
-		//		);
-		//		tabbedPane.addTab("Ai test", new AiRoom().panel1, true);
+			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
+
+			guiController.privateMessageReceived(mockServer, "user", "message");
+
+			{
+				// closeable
+				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
+				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
+			}
+			{
+				// non-closeable
+				// guiController.subscribedLangRoom("lang", mockServer, "lang", true); // non-closeable
+				// guiController.subscribedGame(mockServer, "game");
+			}
+
 		}
 
 		{
