@@ -234,11 +234,13 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jLabel_Score1.setText(String.format(
 				"<html><font color=%s>●%s●</font></html>",
 				GlobalGuiSettings.getHtmlColor(gameOuterInfo.player1Color()),
-				paper.getRedScore()));
+				gameOuterInfo.isRedFirst ? paper.getRedScore() : paper.getBlueScore()
+					));
 		jLabel_Score2.setText(String.format(
 				"<html><font color=%s>●%s●</font></html>",
 				GlobalGuiSettings.getHtmlColor(gameOuterInfo.player2Color()),
-				paper.getBlueScore()));
+				gameOuterInfo.isRedFirst ? paper.getBlueScore() : paper.getRedScore()
+				));
 	}
 	
 	private void updateCoordinates() {

@@ -1051,9 +1051,7 @@ public class ServerPointsxt
 			gui.makedMove(this, room, silent, x, y, isRed, !isRed
 //				, !isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue()
 				);
-			gui.timeUpdate(this, room, new TimeLeft(
-				myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue(),
-				!isRed, isRed));
+			gui.timeUpdate(this, room, new TimeLeft(-1, -1, false, false));
 		}
 	}
 
