@@ -7,14 +7,15 @@ import java.util.prefs.Preferences;
 
 public class Settings {
 
-	static boolean isDebug = false;
+	private static boolean isDebug = false;
+	private static String ircAddress = "pointsgame.net";
 
 	static private Set<Function<Void, Void>> colorChangeListenerList =
 			new LinkedHashSet<Function<Void, Void>>();
 
 	static public int newestVersion = 4;
 	static Preferences memory = Preferences.userRoot().node(
-			"ru.narod.ru.pointsop.userdata");
+		"ru.narod.ru.pointsop.userdata");
 
 	public static int getIrcPort() {
 		return memory.getInt("ircPort", 6667);
@@ -22,6 +23,14 @@ public class Settings {
 
 	public static void setIrcPort(int port) {
 		memory.putInt("ircPort", port);
+	}
+
+	public static String getIrcAddress() {
+		return ircAddress;
+	}
+
+	public static void setIrcAddress(String address) {
+		Settings.ircAddress = address;
 	}
 
 	public static boolean isShowJoinPart() {

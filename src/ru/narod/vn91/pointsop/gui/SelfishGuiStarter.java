@@ -36,12 +36,19 @@ public class SelfishGuiStarter {
 		// // feel.
 		// }
 		for (String argument : args) {
+			// System.out.println("argument = " + argument);
 			if (argument.matches("--version|-v|-h|--help")) {
 				System.out.println("MultiPoints. Sorry, no info is aviable here...");
 				System.exit(0);
-			} else if (argument.matches("debug=.*")) {
+			}
+			else if (argument.matches("debug=.*")) {
 				Settings.setDebug(argument.matches("debug=(true|debug|on)"));
 				System.out.println("debug level set to 'true'");
+			}
+			else if (argument.matches("ircAddress=.*")) {
+				String address = argument.replaceFirst(".*=", "");
+				Settings.setIrcAddress(address);
+				System.out.println(argument);
 			}
 		}
 

@@ -4,8 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import ru.narod.vn91.pointsop.server.ServerPointsxt;
-
 public class IrcNicknameManager {
 
 	Map<String, String> fromId = new LinkedHashMap<String, String>();
