@@ -33,8 +33,10 @@ public class WelcomePanel extends javax.swing.JPanel {
 	private void connectToPointsxt() {
 		updateNick();
 		if (guiController.pointsxt_vn91_server == null) {
+			String password = String.copyValueOf(jPasswordField_Password.getPassword());
 			guiController.pointsxt_vn91_server = new ServerPointsxt(
-						Settings.getIrcAddress(), guiController, nick,
+						Settings.getIrcAddress(), guiController,
+						nick, password,
 						"none", "201120", true
 					);
 			guiController.pointsxt_vn91_server.connect();

@@ -34,6 +34,7 @@ import ru.narod.vn91.pointsop.server.irc.SimpleMove;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
+import ru.narod.vn91.pointsop.utils.Sha1;
 
 public class ServerPointsxt
 		extends PircBot
@@ -41,9 +42,11 @@ public class ServerPointsxt
 
 	GuiForServerInterface gui;
 	String myNickOnServ, myNick_Originally;
+	String myPassword;
+	private int myRank;
 	private String defaultServ;
 	private String defaultChannel;
-	private String defaultPass;
+	private String defaultChannelPass;
 	private String defaultServer_Visible;
 	protected String ircPassword;
 	protected boolean ircAcceptsRussianNicks;
@@ -72,10 +75,17 @@ public class ServerPointsxt
 											);
 							connect(defaultServ, port, ircPassword);
 							myNickOnServ = getNick();
-							ServerPointsxt.super.sendMessage(
-											"podbot",
-											"!opConnect0423"
-											);
+							if (myPassword==null || myPassword.equals("")) {
+								ServerPointsxt.super.sendMessage(
+									"podbot",
+									"!opConnect0423"
+										);
+							} else {
+								ServerPointsxt.super.sendMessage(
+									"podbot",
+									"mpPasswordedLogin " + Sha1.getSha1PodbotPassword(myPassword)
+									);
+							}
 						} catch (NickAlreadyInUseException ignored) {
 							gui.rawConnectionState(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
 						} catch (IrcException ignored) {
@@ -119,16 +129,18 @@ public class ServerPointsxt
 			String server,
 			GuiForServerInterface gui,
 			String myName,
+			String myPassword,
 			String ircPassword,
 			String roomPassword,
 			boolean ircAcceptsRussianNicks
 	) {
 		super();
 		this.gui = gui;
+		this.myPassword = myPassword;
 		this.defaultServ = server;
 		this.ircPassword = ircPassword;
 		defaultChannel = "#pointsxt";
-		defaultPass = roomPassword;
+		defaultChannelPass = roomPassword;
 		this.ircAcceptsRussianNicks = ircAcceptsRussianNicks;
 		defaultServer_Visible = defaultServ;
 
@@ -339,7 +351,7 @@ public class ServerPointsxt
 		}
 
 		if (roomName.equals("#pointsxt")) {
-			super.joinChannel(roomName, defaultPass);
+			super.joinChannel(roomName, defaultChannelPass);
 		} else {
 			super.joinChannel(roomName);
 		}
@@ -659,7 +671,15 @@ public class ServerPointsxt
 			subscribeRoom("#pointsxt");
 		} else if (message.startsWith("mpPasswordedLoginAccepted ")
 				&& (sender.equalsIgnoreCase("podbot"))) {
-//			subscribeRoom("#pointsxt");
+			try {
+				// TODO
+				String rankAsString = message.split(" ", 2)[1];
+				myRank = Integer.parseInt(rankAsString);
+				this.setPointsxtNickname("", false, false);
+				subscribeRoom("#pointsxt");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} else if (message.startsWith("/PASSOK")) {
 			// someone else sent "passok"
 		} else if (message.startsWith("/SpectrGame")) {
@@ -711,8 +731,11 @@ public class ServerPointsxt
 			super.sendMessage(sender, "/Pong");
 		} else if (message.equals("/GameMinimaze")) {
 		} else if (message.equals("/GameMaximaze")) {
-		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">Игрок")) {
-			gui.privateMessageReceived(this, message.split(" ")[1], message);
+		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">server ")) {
+			// TODO
+			gui.raw(this, message.substring(">server ".length()));
+		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">mpinf ")) {
+			gui.privateMessageReceived(this, message.substring(">mpinf ".length()), message);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
 			gui.privateMessageReceived(this, nick, IrcRegexp.cutIrcText(message));
@@ -826,7 +849,7 @@ public class ServerPointsxt
 		result += "_X";
 //		result += String.format("%03d", programVersion);
 		result += pointsxtVersion;
-		result += "0000";
+		result += String.format("%04d", myRank);
 		roomName = roomName.replaceAll(".pxt", "");
 		while (roomName.length() < 5) {
 			roomName = "0" + roomName;
@@ -1051,7 +1074,7 @@ public class ServerPointsxt
 			gui.makedMove(this, room, silent, x, y, isRed, !isRed
 //				, !isRed, myGame.getTimeLeftRed(), myGame.getTimeLeftForBlue()
 				);
-			gui.timeUpdate(this, room, new TimeLeft(-1, -1, false, false));
+			gui.timeUpdate(this, room, new TimeLeft(0, 0, false, false));
 		}
 	}
 
