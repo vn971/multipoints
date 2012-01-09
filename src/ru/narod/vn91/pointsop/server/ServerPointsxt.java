@@ -169,7 +169,7 @@ public class ServerPointsxt
 		this.myNickOnServ = myName;
 		super.setAutoNickChange(false);
 
-//		super.setVerbose(true);
+		super.setVerbose(Settings.isDebug());
 
 		super.setMessageDelay(100L);
 		super.setVersion("Op");

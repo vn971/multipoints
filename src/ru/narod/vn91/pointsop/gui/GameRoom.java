@@ -326,34 +326,37 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		jPanel_Tree.setVisible(false);
 		jToolBar1.setVisible(false);
 
-		PlayerChangeListener player1ChangeListener = new PlayerChangeListener() {
-			public void onChange(Player player) {
-				jLabel_Player1.setText(String.format(
+		if (gameOuterInfo.first != null && gameOuterInfo.first.id != null) {
+			PlayerChangeListener player1ChangeListener = new PlayerChangeListener() {
+				public void onChange(Player player) {
+					jLabel_Player1.setText(String.format(
 						"<html><font color=%s>%s</font></html>",
 						GlobalGuiSettings.getHtmlColor(gameOuterInfo.player1Color()),
 						gameOuterInfo.first.guiName));
-				updateScore();
-				jLabel_Player1.setIcon(gameOuterInfo.first.imageIcon);
-			}
-		};
-		player1ChangeListener.onChange(gameOuterInfo.first);
-		gameOuterInfo.first.addChangeListener(player1ChangeListener);
-		gameOuterInfo.server.getUserpic(gameOuterInfo.first.id);
+					updateScore();
+					jLabel_Player1.setIcon(gameOuterInfo.first.imageIcon);
+				}
+			};
+			player1ChangeListener.onChange(gameOuterInfo.first);
+			gameOuterInfo.first.addChangeListener(player1ChangeListener);
+			gameOuterInfo.server.getUserpic(gameOuterInfo.first.id);
+		}
 
-		PlayerChangeListener player2ChangeListener = new PlayerChangeListener() {
-			public void onChange(Player player) {
-				jLabel_Player2.setText(String.format(
+		if (gameOuterInfo.second != null && gameOuterInfo.second.id != null) {
+			PlayerChangeListener player2ChangeListener = new PlayerChangeListener() {
+				public void onChange(Player player) {
+					jLabel_Player2.setText(String.format(
 						"<html><font color=%s>%s</font></html>",
 						GlobalGuiSettings.getHtmlColor(gameOuterInfo.player2Color()),
 						gameOuterInfo.second.guiName));
-				updateScore();
-				jLabel_Player2.setIcon(gameOuterInfo.second.imageIcon);
-			}
-		};
-		player2ChangeListener.onChange(gameOuterInfo.second);
-		gameOuterInfo.second.addChangeListener(player2ChangeListener);
-
-		gameOuterInfo.server.getUserpic(gameOuterInfo.second.id);
+					updateScore();
+					jLabel_Player2.setIcon(gameOuterInfo.second.imageIcon);
+				}
+			};
+			player2ChangeListener.onChange(gameOuterInfo.second);
+			gameOuterInfo.second.addChangeListener(player2ChangeListener);
+			gameOuterInfo.server.getUserpic(gameOuterInfo.second.id);
+		}
 
 		roomPart_Chat.setReadOnly(false);
 		roomPart_Chat.initChat(this,gameOuterInfo);
