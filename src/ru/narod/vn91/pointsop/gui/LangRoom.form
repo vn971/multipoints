@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
@@ -50,7 +50,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="roomPart_Chat1" pref="180" max="32767" attributes="0"/>
           </Group>
-          <Component id="roomPart_UserList1" alignment="1" pref="356" max="32767" attributes="0"/>
+          <Component id="roomPart_UserList1" alignment="1" pref="357" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -88,7 +88,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="499" max="32767" attributes="0"/>
+                  <EmptySpace pref="407" max="32767" attributes="0"/>
+                  <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jToggleButton_LeaveZayavka" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -96,14 +98,17 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jButton2" alignment="0" max="32767" attributes="1"/>
-              <Component id="jToggleButton_LeaveZayavka" alignment="0" max="32767" attributes="1"/>
+              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                  <Component id="jToggleButton_LeaveZayavka" alignment="3" max="32767" attributes="1"/>
+                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JToggleButton" name="jToggleButton_LeaveZayavka">
           <Properties>
-            <Property name="text" type="java.lang.String" value="[] &#x437;&#x430;&#x44f;&#x432;&#x43a;&#x430; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443;"/>
+            <Property name="text" type="java.lang.String" value="&#x437;&#x430;&#x44f;&#x432;&#x43a;&#x430; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443;"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -117,6 +122,20 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jComboBox1">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="2">
+                <StringItem index="0" value="&#x441;&#x432;&#x43e;&#x431;&#x43e;&#x434;&#x435;&#x43d;"/>
+                <StringItem index="1" value="&#x437;&#x430;&#x43d;&#x44f;&#x442;"/>
+              </StringArray>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&#x412; &#x441;&#x43b;&#x443;&#x447;&#x430;&#x435; &#x441;&#x442;&#x430;&#x442;&#x443;&#x441;&#x430; &quot;&#x437;&#x430;&#x43d;&#x44f;&#x442;&quot; &lt;br&gt;&#x43f;&#x440;&#x438;&#x433;&#x43b;&#x430;&#x448;&#x435;&#x43d;&#x438;&#x44f; &#x43d;&#x430; &#x438;&#x433;&#x440;&#x443; &#x430;&#x432;&#x442;&#x43e;&#x43c;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438; &#x43e;&#x442;&#x43a;&#x43b;&#x43e;&#x43d;&#x44f;&#x44e;&#x442;&#x441;&#x44f;.&lt;/html&gt;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

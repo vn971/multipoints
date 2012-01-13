@@ -28,6 +28,8 @@ public interface ServerInterface {
 
 	void rejectPersonalGameInvite(String playerId);
 
+	void setStatus(boolean isBusy);
+	
 	// room actions:
 	void subscribeRoom(String room);
 

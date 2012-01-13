@@ -20,6 +20,7 @@ import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.MockServerForGui;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.utils.Settings;
+import ru.narod.vn91.pointsop.world.GuiController;
 
 public class SelfishGuiStarter {
 
@@ -53,7 +54,7 @@ public class SelfishGuiStarter {
 		}
 
 		if (Settings.getVersion() <= 1 &&
-			Settings.getKeijKvantttAiPath().equals("keijkvantttai"))
+				Settings.getKeijKvantttAiPath().equals("keijkvantttai"))
 		{
 			Settings.setKeijKvantttAiPath("");
 		}
@@ -61,7 +62,7 @@ public class SelfishGuiStarter {
 			Settings.resetColors();
 		}
 		Settings.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 2.0.4");
+		final JFrame frame = new JFrame("Точки - MultiPoints 2.0.5");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
@@ -131,11 +132,13 @@ public class SelfishGuiStarter {
 			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
 
 			guiController.privateMessageReceived(mockServer, "user", "message");
+			
 
 			{
-				// closeable
+				// hack into the GuiController
 				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
 				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
+				tabbedPane.addTab("ИИ", new AiPanel(), true);
 			}
 			{
 				// non-closeable

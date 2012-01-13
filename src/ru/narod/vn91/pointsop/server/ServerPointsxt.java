@@ -27,7 +27,6 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
-import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.server.irc.IrcNicknameManager;
 import ru.narod.vn91.pointsop.server.irc.IrcRegexp;
 import ru.narod.vn91.pointsop.server.irc.SimpleMove;
@@ -35,6 +34,7 @@ import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Sha1;
+import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 public class ServerPointsxt
 		extends PircBot
@@ -372,6 +372,11 @@ public class ServerPointsxt
 	}
 
 	@Override
+	public void setStatus(boolean isBusy) {
+		gui.raw(this, "Статусы 'занят'/'свободен' не поддерживаются на этом сервере.");
+	}
+	
+	@Override
 	protected void onConnect() {
 		if (super.isConnected()) {
 			gui.rawConnectionState(
@@ -534,7 +539,7 @@ public class ServerPointsxt
 				);
 				gui.askedPlay(this, channel, opponentNick);
 			} else if (message.startsWith(commandCommonPrefix
-					+ commandAcceptOpponent + myNickOnServ
+					+ commandAcceptOpponent + "^" + myNick_Originally
 					) && isPointsopSameVersionNickname(sender)) {
 				this.setPointsxtNickname(
 						channel,
@@ -735,7 +740,9 @@ public class ServerPointsxt
 			// TODO
 			gui.raw(this, message.substring(">server ".length()));
 		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">mpinf ")) {
-			gui.privateMessageReceived(this, message.substring(">mpinf ".length()), message);
+			String user = message.split(" ", 4)[2];
+			String messageGui = message.split(" ", 2)[1];
+			gui.privateMessageReceived(this, user, messageGui);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
 			gui.privateMessageReceived(this, nick, IrcRegexp.cutIrcText(message));
@@ -1460,7 +1467,7 @@ public class ServerPointsxt
 		}
 
 		private boolean isPlaying() {
-			return "".equals(opponentName) == false;
+			return ! "".equals(opponentName);
 		}
 
 		private boolean isSearching() {

@@ -3,7 +3,7 @@ package ru.narod.vn91.pointsop.server;
 import ru.narod.vn91.pointsop.ai.Ai2Gui_Interface;
 import ru.narod.vn91.pointsop.ai.Gui2Ai_Interface;
 import ru.narod.vn91.pointsop.data.TimeSettings;
-import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
+import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 /**
  * Чтобы присоединить свой ИИ к Op теперь можно:
@@ -345,6 +345,10 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	@Override
 	public boolean isGlobalGameVacancyAllowed() {
 		return false;
+	}
+
+	@Override
+	public void setStatus(boolean isBusy) {
 	}
 
 }

@@ -292,4 +292,8 @@ public class MockServerForGui implements ServerInterface{
 		return false;
 	}
 
+	@Override
+	public void setStatus(boolean isBusy) {
+	}
+
 }

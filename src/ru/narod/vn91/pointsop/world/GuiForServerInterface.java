@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsop.gui;
+package ru.narod.vn91.pointsop.world;
 
 import javax.swing.ImageIcon;
 import ru.narod.vn91.pointsop.data.TimeLeft;
@@ -65,6 +65,8 @@ public interface GuiForServerInterface {
 
 	public void gameRowDestroyed( ServerInterface server, String oldRoom);
 
+	void statusSet(ServerInterface server, boolean isBusy);
+	
 	// personal gameInvites
 	public void personalInviteReceived(ServerInterface server, String userId, String gameId);
 

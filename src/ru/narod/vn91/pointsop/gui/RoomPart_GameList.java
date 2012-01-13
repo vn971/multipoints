@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.GameInfoListener;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
+import ru.narod.vn91.pointsop.world.GuiController;
 
 public class RoomPart_GameList extends javax.swing.JPanel {
 
@@ -39,7 +40,7 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 		return result;
 	}
 
-	void gameCreated(
+	public void gameCreated(
 			GameOuterInfo gameOuterInfo) {
 		synchronized (gameList) {
 			for (GameOuterInfo info2 : gameList) {
@@ -119,7 +120,7 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 		// tableModel.insertRow(rowNumb, row);
 	}
 
-	void gameDestroyed(
+	public void gameDestroyed(
 			GameOuterInfo gameOuterInfo) {
 		synchronized (gameList) {
 			int position = 0;

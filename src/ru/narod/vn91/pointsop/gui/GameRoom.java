@@ -16,6 +16,8 @@ import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 import ru.narod.vn91.pointsop.utils.TimedAction;
+import ru.narod.vn91.pointsop.world.GuiController;
+import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 import javax.jnlp.FileSaveService;
 import javax.jnlp.ServiceManager;

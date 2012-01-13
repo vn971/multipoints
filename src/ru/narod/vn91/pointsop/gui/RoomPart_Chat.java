@@ -74,7 +74,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		}
 	}
 
-	void addChat(String user,
+	public void addChat(String user,
 			String message, Long time) {
 		Date date = (time != null && time != 0) ? new Date(time) : new Date();
 		String formattedDate = GlobalGuiSettings.myTimeFormat.format(date);
@@ -105,7 +105,7 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		}
 	}
 
-	void addServerNotice(String message) {
+	public void addServerNotice(String message) {
 		try {
 			document.insertString(document.getLength(),
 					"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
@@ -117,13 +117,13 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		scrollDown();
 	}
 
-	void addUserJoinedNotice(Player player) {
+	public void addUserJoinedNotice(Player player) {
 		if (showUserJoinLeave) {
 			addServerNotice("в комнату вошёл(а) " + player.guiName + "");
 		}
 	}
 
-	void addUserLeftNotice(String user, String reason) {
+	public void addUserLeftNotice(String user, String reason) {
 		if (showUserJoinLeave) {
 			String messageToAdd = user + " вышел(а) из комнаты";
 			if (reason != null && reason.equals("") == false) {

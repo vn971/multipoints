@@ -197,19 +197,23 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-                          <Component id="jTextField_Username" pref="204" max="32767" attributes="1"/>
+                          <Component id="jTextField_Username" pref="197" max="32767" attributes="1"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPasswordField_Password" pref="204" max="32767" attributes="0"/>
+                          <Component id="jPasswordField_Password" pref="197" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTextField_Email" pref="204" max="32767" attributes="0"/>
+                          <Component id="jTextField_Email" pref="197" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jPanel_Connections" max="32767" attributes="1"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel_Password" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -223,9 +227,11 @@
                   <Component id="jTextField_Username" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPasswordField_Password" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel_Connections" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="153" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jLabel_Password" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="96" max="32767" attributes="0"/>
                   <Component id="jTextField_Email" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -245,8 +251,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton_ConnectToPointsxt" alignment="0" pref="192" max="32767" attributes="1"/>
-                  <Component id="jButton_ConnectToZagram" alignment="0" pref="192" max="32767" attributes="1"/>
+                  <Component id="jButton_ConnectToPointsxt" alignment="0" pref="185" max="32767" attributes="1"/>
+                  <Component id="jButton_ConnectToZagram" alignment="0" pref="185" max="32767" attributes="1"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -324,6 +330,19 @@
                 <TitledBorder title="email"/>
               </Border>
             </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_Password">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabel_Password" property="font" relativeSize="true" size="-3"/>
+              </FontInfo>
+            </Property>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="jPasswordField_Password"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x43f;&#x440;&#x438; &#x43e;&#x442;&#x441;&#x443;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44f;&lt;br&gt;&#x431;&#x443;&#x434;&#x435;&#x442; &#x43e;&#x441;&#x443;&#x449;&#x435;&#x441;&#x442;&#x432;&#x43b;&#x451;&#x43d; &#x432;&#x445;&#x43e;&#x434; &lt;br&gt;&#x433;&#x43e;&#x441;&#x442;&#x451;&#x43c;&lt;/html&gt;"/>
           </Properties>
         </Component>
       </SubComponents>

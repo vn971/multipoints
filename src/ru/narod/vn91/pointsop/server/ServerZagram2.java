@@ -27,11 +27,11 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.TimeSettings;
-import ru.narod.vn91.pointsop.gui.GuiForServerInterface;
 import ru.narod.vn91.pointsop.server.zagram.MessageQueue;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Wait;
+import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 @SuppressWarnings("serial")
 public class ServerZagram2 implements ServerInterface {
@@ -43,11 +43,14 @@ public class ServerZagram2 implements ServerInterface {
 	String secretId;
 	volatile boolean isDisposed = false;
 	MessageQueue queue = new MessageQueue(10);
-	List<String> transiendQueue = new ArrayList();
+	List<String> transiendQueue = new ArrayList<String>();
+	
+	boolean isBusy = false;
 	Set<String> personalInvitesIncoming = new LinkedHashSet<String>();
 	Set<String> personalInvitesOutgoing = new LinkedHashSet<String>();
 	String currentInvitationPlayer = "";
 	Set<String> subscribedRooms = new LinkedHashSet<String>();
+	Map<String,Set<String>> playerRooms = new HashMap<String, Set<String>>();
 	ThreadMain threadMain;
 
 	Map<String,String> avatarUrls = new HashMap<String, String>();
@@ -401,6 +404,12 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
+	public void setStatus(boolean isBusy) {
+		this.isBusy = isBusy;
+		gui.statusSet(this, isBusy);
+	}
+	
+	@Override
 	public void surrender(String roomId) {
 		String msgToSend = "u" + queue.sizePlusOne() + "." + roomId + "." + "resign";
 		sendCommandToServer(msgToSend);
@@ -656,7 +665,7 @@ public class ServerZagram2 implements ServerInterface {
 				}
 				String text = getLinkContent(
 						"http://zagram.org/a.kropki?playerId=" +
-							secretId + "&co=getMsg&msgNo=" +
+							secretId + "&co=getBMsg&msgNo=" +
 							lastServerMessageNumber + "&msgFromClient=" + commands);
 				handleText(text);
 
@@ -679,35 +688,38 @@ public class ServerZagram2 implements ServerInterface {
 
 				String currentRoom = "";
 				for (String message : splitted) {
-					if (message.startsWith("m")) { // message numbers info
-						// try {
-						String tail = message.substring(1);
-						String[] dotSplitted = tail.split("\\.");
-						String a1 = dotSplitted.length >= 1 ? dotSplitted[0] : "";
-						String a2 = dotSplitted.length >= 2 ? dotSplitted[1] : "";
-						String a3 = dotSplitted.length >= 3 ? dotSplitted[2] : "";
-						int i1 = Integer.parseInt(a1);
-						int i2 = Integer.parseInt(a2);
-						int i3 = Integer.parseInt(a3);
-						if (i1 > lastServerMessageNumber + 1) {
-							break;
+					if (message.startsWith("b")) { // room subscriptions
+						// b*Вася.0.234.1234.1451.21
+						String player = message.replaceAll("\\..*", "").substring(1);
+						String[] dotSplitted = message.replaceFirst(".*?\\.", "").split("\\.");
+						
+						final Set<String> newRooms = new LinkedHashSet<String>();
+						for (String room : dotSplitted) {
+							newRooms.add(room);
 						}
-						lastServerMessageNumber = i2;
-						lastSentCommandNumber = i3;
-						// } catch (IndexOutOfBoundsException ignore) {
-						// } catch (NumberFormatException e) {
-						// }
-						// don't catch anything.
-						// If an exception would be thrown then we are completely
-						// unfamiliar with this server protocol.
-						// } else if (message.startsWith("b")) { // player in tables
-						// String playerId = message.replaceAll("\\..*", "");
-						// String[] roomList = message.replaceFirst(".*\\.",
-						// "").split("\\.");
-						// for (String roomId : roomList) {
-						// gui.userJoinedRoom(server, roomId, playerId, false);
-						// }
-					} else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
+						
+						final Set<String> oldRooms = playerRooms.get(player);
+						if (oldRooms==null) {
+							for (String room : newRooms) {
+//								gui.userJoinedRoom(server, room, player, true);
+							}
+						}
+						else {
+							for (String room : oldRooms) {
+								if (newRooms.contains(room)==false) {
+//									gui.userLeftRoom(server, room, player, "");
+								}
+							}
+							
+							for (String room : newRooms) {
+								if (oldRooms.contains(room)==false) {
+//									gui.userJoinedRoom(server, room, player, false);
+								}
+							}
+						}
+						
+					}
+					else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
 						String[] dotSplitted = message.substring("ca".length())
 								.split("\\.", 4);
 						try {
@@ -723,7 +735,8 @@ public class ServerZagram2 implements ServerInterface {
 						} catch (ArrayIndexOutOfBoundsException e) {
 							gui.raw(server, "unknown chat: " + message.substring(2));
 						}
-					} else if (message.startsWith("d")) { // game description
+					}
+					else if (message.startsWith("d")) { // game description
 
 						// first section and last two sections
 						String suffecientPart = message.
@@ -798,7 +811,35 @@ public class ServerZagram2 implements ServerInterface {
 						}
 						gui.updateUserInfo(server, player, player, null, rating,
 								winCount, lossCount, drawCount, myStatus);
-					} else if (message.startsWith("pa") || message.startsWith("pr")) { // +player
+					} else if (message.startsWith("m")) { // message numbers info
+						// try {
+						String tail = message.substring(1);
+						String[] dotSplitted = tail.split("\\.");
+						String a1 = dotSplitted.length >= 1 ? dotSplitted[0] : "";
+						String a2 = dotSplitted.length >= 2 ? dotSplitted[1] : "";
+						String a3 = dotSplitted.length >= 3 ? dotSplitted[2] : "";
+						int i1 = Integer.parseInt(a1);
+						int i2 = Integer.parseInt(a2);
+						int i3 = Integer.parseInt(a3);
+						if (i1 > lastServerMessageNumber + 1) {
+							break;
+						}
+						lastServerMessageNumber = i2;
+						lastSentCommandNumber = i3;
+						// } catch (IndexOutOfBoundsException ignore) {
+						// } catch (NumberFormatException e) {
+						// }
+						// don't catch anything.
+						// If an exception would be thrown then we are completely
+						// unfamiliar with this server protocol.
+						// } else if (message.startsWith("b")) { // player in tables
+						// String playerId = message.replaceAll("\\..*", "");
+						// String[] roomList = message.replaceFirst(".*\\.",
+						// "").split("\\.");
+						// for (String roomId : roomList) {
+						// gui.userJoinedRoom(server, roomId, playerId, false);
+						// }
+					} else if (message.startsWith("pa") || message.startsWith("pr")) { // player joined
 						String[] dotSplitted = message.substring("pa".length()).split("\\.");
 						for (String player : dotSplitted) {
 							if (player.length() != 0) {
@@ -897,7 +938,12 @@ public class ServerZagram2 implements ServerInterface {
 						if (personalInvitesIncoming.contains(sender) == false) {
 							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
 							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
-							if (gameType.isEmptyScored == true) {
+							if (isBusy == true) {
+								personalInvitesIncoming.add(sender);
+								server.rejectPersonalGameInvite(sender);
+								personalInvitesIncoming.remove(sender); // kind of a hack
+							}
+							else if (gameType.isEmptyScored == true) {
 
 								personalInvitesIncoming.add(sender);
 								server.rejectPersonalGameInvite(sender);
@@ -926,18 +972,18 @@ public class ServerZagram2 implements ServerInterface {
 						} else {
 							personalInvitesIncomingNew.add(sender);
 						}
+					} else if (message.startsWith("vr")) {
+						String user = message.substring(2);
+						gui.yourPersonalInviteRejected(server, user, user + "@outgoing");
+						
+						// "OK to the fact that someone rejected your invitation" :-/
+						sendCommandToServer("v" + queue.sizePlusOne() + "." + "0" + "." + "o");
 					} else if (message.startsWith("vs")) {
 						String user = message.substring(2).split("\\.")[0];
 						if (personalInvitesOutgoing.contains(user) == false) {
 							gui.yourPersonalInviteSent(server, user, user + "@outgoing");
 						}
 						personalInvitesOutgoingNew.add(user);
-					} else if (message.startsWith("vr")) {
-						String user = message.substring(2);
-						gui.yourPersonalInviteRejected(server, user, user + "@outgoing");
-
-						// "OK to the fact that someone rejected your invitation" :-/
-						sendCommandToServer("v" + queue.sizePlusOne() + "." + "0" + "." + "o");
 					}
 				}
 

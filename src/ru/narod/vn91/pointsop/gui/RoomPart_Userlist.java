@@ -9,6 +9,7 @@ import javax.swing.table.*;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerChangeListener;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
+import ru.narod.vn91.pointsop.world.GuiController;
 
 @SuppressWarnings("serial")
 public class RoomPart_Userlist extends javax.swing.JPanel {
@@ -105,11 +106,11 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 		}
 	}
 
-	synchronized void userJoined(Player playerNew) {
+	public synchronized void userJoined(Player playerNew) {
 		userJoined(playerNew, true);
 	}
 
-	synchronized void userLeave(Player playerLeaving) {
+	public synchronized void userLeave(Player playerLeaving) {
 		DefaultTableModel tableModel = ((DefaultTableModel) jTable_UserList.getModel());
 		int position=0;
 		for (Player player2 : playerList) {

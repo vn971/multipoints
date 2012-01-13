@@ -71,7 +71,7 @@ public class PrivateChat extends javax.swing.JPanel {
 		this.addChat("server", "Заявка на игру отправлена.", false);
 	}
 
-	void addChat(String user,
+	public void addChat(String user,
 			String message,
 			boolean silent) {
 		if (message.equals("/Pong")) {
