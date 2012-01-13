@@ -1,4 +1,5 @@
 syntax: glob
+
 *.iml
 *.iws
 .idea/*
@@ -9,6 +10,7 @@ lib/*
 nbproject/*
 .classpath
 .project
+.config/vasya.ks
 
 *.class
 *.jar
