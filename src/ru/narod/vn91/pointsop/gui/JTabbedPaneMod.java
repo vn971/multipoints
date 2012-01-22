@@ -25,7 +25,7 @@ public class JTabbedPaneMod {
 		return Component.class.cast(tabbedPane);
 	}
 
-	public void addTab(
+	public synchronized void addTab(
 			String title,
 			final Component component,
 			boolean isCloseable) {
@@ -47,30 +47,30 @@ public class JTabbedPaneMod {
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabCloseable);
 	}
 
-	public void setCloseListener_FalseIfStopClosing(
+	public synchronized void setCloseListener_FalseIfStopClosing(
 			Component component,
 			Function0<Boolean> closeListener) {
 		closeListeners.put(component, closeListener);
 	}
 
-	public boolean contains(Component component) {
+	public synchronized boolean contains(Component component) {
 		return tabbedPane.indexOfComponent(component) >= 0;
 	}
 
-	public boolean isSelected(Component component) {
+	public synchronized boolean isSelected(Component component) {
 		return tabbedPane.getSelectedComponent().equals(component);
 	}
 
-	public void setSelectedComponent(Component component) {
+	public synchronized void setSelectedComponent(Component component) {
 		tabbedPane.setSelectedComponent(component);
 	}
 
-	public void remove(Component component) {
+	public synchronized void remove(Component component) {
 		closeListeners.remove(component);
 		tabbedPane.remove(component);
 	}
 
-	public void makeBold(Component component) {
+	public synchronized void makeBold(Component component) {
 		int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0 &&
 			tabIndex != tabbedPane.getSelectedIndex()) {
@@ -87,7 +87,7 @@ public class JTabbedPaneMod {
 		}
 	}
 
-	public void updateTabText(Component component, String newTitle) {
+	public synchronized void updateTabText(Component component, String newTitle) {
 		int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0) {
 			Component tabPanel = tabbedPane.getTabComponentAt(tabIndex);

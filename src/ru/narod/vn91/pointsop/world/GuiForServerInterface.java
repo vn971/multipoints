@@ -43,7 +43,7 @@ public interface GuiForServerInterface {
 			Integer startingTime, Integer periodLength, String comment
 			);
 
-	public void userJoinedRoom(ServerInterface server, String room, String id, boolean isStartup);
+	public void userJoinedRoom(ServerInterface server, String room, String userId, boolean isStartup);
 
 	public void userLeftRoom(ServerInterface server, String roomId, String userId, String reason);
 

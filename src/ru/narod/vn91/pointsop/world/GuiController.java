@@ -73,7 +73,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void updateUserInfo(
+	public synchronized void updateUserInfo(
 			ServerInterface server, String id,
 			String guiName, ImageIcon imageIcon,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
@@ -92,7 +92,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void updateGameInfo(
+	public synchronized void updateGameInfo(
 			ServerInterface server, String id, String masterRoomId,
 			String firstId, String secondId, Integer sizeX, Integer sizeY,
 			Boolean isRedFirst, Boolean isRated,
@@ -115,7 +115,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void userJoinedRoom(ServerInterface server, String room, String id,
+	public synchronized void userJoinedRoom(ServerInterface server, String room, String id,
 			boolean isStartup) {
 		Player player = playerPool.get(server, id);
 		LangRoom langRoom = langRooms.get(new ServerRoom(room, server));
@@ -333,8 +333,9 @@ public class GuiController implements GuiForServerInterface {
 			tabbedPane.addTab(player.guiName, privateChat, true);
 		} else {
 			if (tabbedPane.contains(privateChat) == false) {
-			} else {
-				// updating an old and not closed panel
+				tabbedPane.addTab(
+					player.guiName, privateChat, true
+						); // resurrecting a closed panel
 			}
 		}
 		tabbedPane.setCloseListener_FalseIfStopClosing(privateChat, new Function0<Boolean>() {
@@ -351,7 +352,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void soundReceived(ServerInterface server, String user) {
+	public synchronized void soundReceived(ServerInterface server, String user) {
 		privateMessageReceived(server, user, "послан звуковой сигнал");
 		Sounds.playAlarmSignal();
 	}
@@ -393,7 +394,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void gameRowCreated(
+	public synchronized void gameRowCreated(
 			ServerInterface server,
 			String masterRoom,
 			String newRoom) {
@@ -409,7 +410,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void gameRowDestroyed(
+	public synchronized void gameRowDestroyed(
 			ServerInterface server,
 			String oldRoom) {
 		GameOuterInfo gameOuterInfo = gamePool.get(server, oldRoom);
@@ -423,12 +424,12 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void statusSet(ServerInterface server, boolean isBusy) {
+	public synchronized void statusSet(ServerInterface server, boolean isBusy) {
 		
 	}
 	
 	@Override
-	public void personalInviteCancelled(ServerInterface server, String userId, String gameId) {
+	public synchronized void personalInviteCancelled(ServerInterface server, String userId, String gameId) {
 		Player player = playerPool.get(server, userId);
 		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
@@ -451,7 +452,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void personalInviteReceived(ServerInterface server, String userId, String gameId) {
+	public synchronized void personalInviteReceived(ServerInterface server, String userId, String gameId) {
 		Player player = playerPool.get(server, userId);
 		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
@@ -476,7 +477,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void youCancelledPersonalInvite(ServerInterface server, String userId, String gameId) {
+	public synchronized void youCancelledPersonalInvite(ServerInterface server, String userId, String gameId) {
 		Player player = playerPool.get(server, userId);
 		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
@@ -499,7 +500,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void yourPersonalInviteRejected(ServerInterface server, String userId, String gameId) {
+	public synchronized void yourPersonalInviteRejected(ServerInterface server, String userId, String gameId) {
 		Player player = playerPool.get(server, userId);
 		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
@@ -522,7 +523,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void yourPersonalInviteSent(ServerInterface server, String userId, String gameId) {
+	public synchronized void yourPersonalInviteSent(ServerInterface server, String userId, String gameId) {
 		Player player = playerPool.get(server, userId);
 		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
@@ -545,7 +546,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void askedPlay(
+	public synchronized void askedPlay(
 			ServerInterface server,
 			String room,
 			String possibleOpponent) {
@@ -554,7 +555,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void makedMove(ServerInterface server, String roomId, boolean silent,
+	public synchronized void makedMove(ServerInterface server, String roomId, boolean silent,
 			int x, int y, boolean isRed, boolean nowPlays) {
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(roomId, server));
 		if (gameRoom != null) {
@@ -576,7 +577,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void timeUpdate(
+	public synchronized void timeUpdate(
 			ServerInterface server,
 			String room,
 			TimeLeft t) {
@@ -611,7 +612,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void askedNewGame(ServerInterface server, String roomId, boolean you) {
+	public synchronized void askedNewGame(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -620,7 +621,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void acceptedNewGame(ServerInterface server, String roomId, boolean you) {
+	public synchronized void acceptedNewGame(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -629,7 +630,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void rejectedNewGame(ServerInterface server, String roomId, boolean you) {
+	public synchronized void rejectedNewGame(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -638,7 +639,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void askedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
+	public synchronized void askedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -647,7 +648,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void acceptedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
+	public synchronized void acceptedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -656,7 +657,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void rejectedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
+	public synchronized void rejectedEndGameAndScore(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -666,7 +667,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void askedUndo(ServerInterface server, String roomId, boolean you) {
+	public synchronized void askedUndo(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -675,7 +676,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void acceptedUndo(ServerInterface server, String roomId, boolean you) {
+	public synchronized void acceptedUndo(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -684,7 +685,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void rejectedUndo(ServerInterface server, String roomId, boolean you) {
+	public synchronized void rejectedUndo(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -693,7 +694,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void askedDraw(ServerInterface server, String roomId, boolean you) {
+	public synchronized void askedDraw(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -702,7 +703,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void acceptedDraw(ServerInterface server, String roomId, boolean you) {
+	public synchronized void acceptedDraw(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -711,7 +712,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void rejectedDraw(ServerInterface server, String roomId, boolean you) {
+	public synchronized void rejectedDraw(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -720,7 +721,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void pausedOpponentTime(ServerInterface server, String roomId, boolean you) {
+	public synchronized void pausedOpponentTime(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -729,7 +730,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void unpausedOpponentTime(ServerInterface server, String roomId, boolean you) {
+	public synchronized void unpausedOpponentTime(ServerInterface server, String roomId, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server",
@@ -738,7 +739,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void addedOpponentTime(ServerInterface server, String roomId, int seconds, boolean you) {
+	public synchronized void addedOpponentTime(ServerInterface server, String roomId, int seconds, boolean you) {
 		// GameRoom room_Game = gameRooms.get(new ServerRoom(roomId, server));
 		// if (room_Game != null) {
 		// room_Game.getRoomPart_Chat().addChat("server", "Оппонент прибавил вам " +
@@ -758,7 +759,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void rawError(ServerInterface server, final String info) {
+	public synchronized void rawError(ServerInterface server, final String info) {
 		this.raw(server, info);
 		new Thread() {
 			public void run() {
@@ -773,7 +774,7 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public void rawConnectionState(ServerInterface server, String info) {
+	public synchronized void rawConnectionState(ServerInterface server, String info) {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
 		if (Settings.isDebug() == true) {
 			System.out.print(add);
