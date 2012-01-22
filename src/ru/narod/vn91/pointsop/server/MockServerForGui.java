@@ -279,7 +279,7 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
-	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked) {
 	}
 
 	@Override

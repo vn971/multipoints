@@ -89,6 +89,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 
         buttonGroup_FieldSize = new javax.swing.ButtonGroup();
         buttonGroup_StartingPosition = new javax.swing.ButtonGroup();
+        buttonGroup_IsRating = new javax.swing.ButtonGroup();
         jPanel_FieldSize = new javax.swing.JPanel();
         jRadioButton_Field2020 = new javax.swing.JRadioButton();
         jRadioButton_Field2525 = new javax.swing.JRadioButton();
@@ -107,6 +108,9 @@ public class GameInvitePersonal extends javax.swing.JDialog {
         jSpinner_TimePeriodTransient = new JSpinner(spinnerPeriodTransient);
         jSpinner_TimePeriodLength = new JSpinner(spinnerPeriodLength);
         jButton_Invite = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jRadioButton_Ranked = new javax.swing.JRadioButton();
+        jRadioButton_Unranked = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -136,7 +140,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
                 .addComponent(jRadioButton_Field3030)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton_Field3932)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel_FieldSizeLayout.setVerticalGroup(
             jPanel_FieldSizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +172,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
                 .addComponent(jRadioButton_StartingCross)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton_Starting4cross)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel_StartingPositionLayout.setVerticalGroup(
             jPanel_StartingPositionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,8 +192,8 @@ public class GameInvitePersonal extends javax.swing.JDialog {
         jPanel_Zagram.setLayout(jPanel_ZagramLayout);
         jPanel_ZagramLayout.setHorizontalGroup(
             jPanel_ZagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSpinner_TimeStarting, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-            .addComponent(jSpinner_TimePeriodAdditional, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jSpinner_TimeStarting, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+            .addComponent(jSpinner_TimePeriodAdditional, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
         );
         jPanel_ZagramLayout.setVerticalGroup(
             jPanel_ZagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,8 +213,8 @@ public class GameInvitePersonal extends javax.swing.JDialog {
         jPanel_Irc.setLayout(jPanel_IrcLayout);
         jPanel_IrcLayout.setHorizontalGroup(
             jPanel_IrcLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSpinner_TimePeriodLength, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-            .addComponent(jSpinner_TimePeriodTransient, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jSpinner_TimePeriodLength, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+            .addComponent(jSpinner_TimePeriodTransient, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
         );
         jPanel_IrcLayout.setVerticalGroup(
             jPanel_IrcLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +230,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
         jPanel_Time.setLayout(jPanel_TimeLayout);
         jPanel_TimeLayout.setHorizontalGroup(
             jPanel_TimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane_Time, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+            .addComponent(jTabbedPane_Time, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
         );
         jPanel_TimeLayout.setVerticalGroup(
             jPanel_TimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,14 +244,41 @@ public class GameInvitePersonal extends javax.swing.JDialog {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("тип игры"));
+
+        buttonGroup_IsRating.add(jRadioButton_Ranked);
+        jRadioButton_Ranked.setText("рейтинговая");
+
+        buttonGroup_IsRating.add(jRadioButton_Unranked);
+        jRadioButton_Unranked.setSelected(true);
+        jRadioButton_Unranked.setText("нерейтинговая");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jRadioButton_Ranked)
+                .addGap(18, 18, 18)
+                .addComponent(jRadioButton_Unranked)
+                .addContainerGap(62, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jRadioButton_Ranked)
+                .addComponent(jRadioButton_Unranked))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel_FieldSize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel_StartingPosition, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton_Invite, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel_Time, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton_Invite, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,6 +286,8 @@ public class GameInvitePersonal extends javax.swing.JDialog {
                 .addComponent(jPanel_FieldSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_StartingPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_Time, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -291,7 +324,7 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 						spinnerPeriodTransient.getNumber().intValue(),
 						spinnerPeriodLength.getNumber().intValue(),
 						0);
-		server.addPersonalGameInvite(player.id, timeSettings, fieldX, fieldY);
+		server.addPersonalGameInvite(player.id, timeSettings, fieldX, fieldY, jRadioButton_Ranked.isSelected());
 		this.dispose();
 	}//GEN-LAST:event_jButton_InviteActionPerformed
 
@@ -319,8 +352,10 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup_FieldSize;
+    private javax.swing.ButtonGroup buttonGroup_IsRating;
     private javax.swing.ButtonGroup buttonGroup_StartingPosition;
     private javax.swing.JButton jButton_Invite;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel_FieldSize;
     private javax.swing.JPanel jPanel_Irc;
     private javax.swing.JPanel jPanel_StartingPosition;
@@ -330,9 +365,11 @@ public class GameInvitePersonal extends javax.swing.JDialog {
     private javax.swing.JRadioButton jRadioButton_Field2525;
     private javax.swing.JRadioButton jRadioButton_Field3030;
     private javax.swing.JRadioButton jRadioButton_Field3932;
+    private javax.swing.JRadioButton jRadioButton_Ranked;
     private javax.swing.JRadioButton jRadioButton_Starting4cross;
     private javax.swing.JRadioButton jRadioButton_StartingCross;
     private javax.swing.JRadioButton jRadioButton_StartingEmpty;
+    private javax.swing.JRadioButton jRadioButton_Unranked;
     private javax.swing.JSpinner jSpinner_TimePeriodAdditional;
     private javax.swing.JSpinner jSpinner_TimePeriodLength;
     private javax.swing.JSpinner jSpinner_TimePeriodTransient;

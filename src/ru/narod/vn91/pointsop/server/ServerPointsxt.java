@@ -1368,7 +1368,7 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -6,6 +6,8 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup_StartingPosition">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup_IsRating">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -30,8 +32,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jPanel_FieldSize" alignment="0" max="32767" attributes="0"/>
           <Component id="jPanel_StartingPosition" alignment="0" max="32767" attributes="0"/>
+          <Component id="jButton_Invite" alignment="0" pref="356" max="32767" attributes="0"/>
+          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
           <Component id="jPanel_Time" alignment="0" max="32767" attributes="0"/>
-          <Component id="jButton_Invite" alignment="0" pref="376" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -40,6 +43,8 @@
               <Component id="jPanel_FieldSize" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel_StartingPosition" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel_Time" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
@@ -69,7 +74,7 @@
                   <Component id="jRadioButton_Field3030" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jRadioButton_Field3932" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="32" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -137,7 +142,7 @@
                   <Component id="jRadioButton_StartingCross" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jRadioButton_Starting4cross" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="40" max="32767" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -190,7 +195,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jTabbedPane_Time" alignment="0" pref="364" max="32767" attributes="0"/>
+              <Component id="jTabbedPane_Time" alignment="0" pref="344" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -216,8 +221,8 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSpinner_TimeStarting" alignment="0" pref="356" max="32767" attributes="0"/>
-                      <Component id="jSpinner_TimePeriodAdditional" alignment="0" pref="356" max="32767" attributes="0"/>
+                      <Component id="jSpinner_TimeStarting" alignment="0" pref="336" max="32767" attributes="0"/>
+                      <Component id="jSpinner_TimePeriodAdditional" alignment="0" pref="336" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -277,8 +282,8 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSpinner_TimePeriodLength" alignment="0" pref="356" max="32767" attributes="0"/>
-                      <Component id="jSpinner_TimePeriodTransient" alignment="0" pref="356" max="32767" attributes="0"/>
+                      <Component id="jSpinner_TimePeriodLength" alignment="0" pref="336" max="32767" attributes="0"/>
+                      <Component id="jSpinner_TimePeriodTransient" alignment="0" pref="336" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -338,5 +343,54 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_InviteActionPerformed"/>
       </Events>
     </Component>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="&#x442;&#x438;&#x43f; &#x438;&#x433;&#x440;&#x44b;"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jRadioButton_Ranked" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jRadioButton_Unranked" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="62" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jRadioButton_Ranked" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButton_Unranked" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JRadioButton" name="jRadioButton_Ranked">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup_IsRating"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x440;&#x435;&#x439;&#x442;&#x438;&#x43d;&#x433;&#x43e;&#x432;&#x430;&#x44f;"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButton_Unranked">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup_IsRating"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="&#x43d;&#x435;&#x440;&#x435;&#x439;&#x442;&#x438;&#x43d;&#x433;&#x43e;&#x432;&#x430;&#x44f;"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

@@ -45,7 +45,7 @@ public class ServerZagram2 implements ServerInterface {
 	MessageQueue queue = new MessageQueue(10);
 	List<String> transiendQueue = new ArrayList<String>();
 	
-	boolean isBusy = false;
+	volatile boolean isBusy = false;
 	Set<String> personalInvitesIncoming = new LinkedHashSet<String>();
 	Set<String> personalInvitesOutgoing = new LinkedHashSet<String>();
 	String currentInvitationPlayer = "";
@@ -109,8 +109,10 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	private static String getGameTypeString(
-			int fieldX, int fieldY, int startingTime, int periodAdditionalTime) {
-		return "" + fieldX + fieldY + "stanF0." + startingTime + "." + periodAdditionalTime;
+			int fieldX, int fieldY, int startingTime, int periodAdditionalTime, boolean isRanked) {
+		return String.format("%s%sstan%s0.%s.%s",
+			fieldX, fieldY, isRanked ? "R" : "F", startingTime, periodAdditionalTime);
+//		return "" + fieldX + fieldY + "stanF0." + startingTime + "." + periodAdditionalTime;
 	}
 
 	ZagramGameTyme getZagramGameTyme(String str) {
@@ -181,12 +183,6 @@ public class ServerZagram2 implements ServerInterface {
 		return stringBuilder.toString();
 	}
 
-	public static void main(String[] args) {
-//		String sha = getSha1("test" + "9WB2qGYzzWry1vbVjoSK" + "1234");
-		// System.out.println(sha);
-		// System.out.println(getBase64ZagramVersion(sha));
-	}
-	
 	private static String getSha1(String input) {
 		try {
 			MessageDigest sha1 = MessageDigest.getInstance("SHA1");
@@ -356,11 +352,11 @@ public class ServerZagram2 implements ServerInterface {
 	}
 
 	@Override
-	public void addPersonalGameInvite(String playerId, TimeSettings time, int fieldX, int fieldY) {
+	public void addPersonalGameInvite(String playerId, TimeSettings time, int fieldX, int fieldY, boolean isRanked) {
 		String msgToSend =
 				"v" + queue.sizePlusOne() + "." + "0"/* room# */+ "." +
 					"s." + getServerEncoded(playerId) + "." +
-					getGameTypeString(fieldX, fieldY, time.starting, time.periodAdditional);
+					getGameTypeString(fieldX, fieldY, time.starting, time.periodAdditional, isRanked);
 		sendCommandToServer(msgToSend);
 		gui.updateGameInfo(this, playerId + "@outgoing", getMainRoom(), getMyName(), null,
 			fieldX, fieldY, false, false, 0, 0, false,
@@ -406,6 +402,7 @@ public class ServerZagram2 implements ServerInterface {
 	@Override
 	public void setStatus(boolean isBusy) {
 		this.isBusy = isBusy;
+		sendCommandToServerTransient("i0nJ" + (isBusy ? "b" : "a"));
 		gui.statusSet(this, isBusy);
 	}
 	
@@ -642,7 +639,7 @@ public class ServerZagram2 implements ServerInterface {
 
 		@Override
 		public void run() {
-			sendCommandToServerTransient("i0nJa");// nulls, infinite invites
+			sendCommandToServerTransient("i0nJ" + (isBusy ? "b" : "a"));
 
 			while (isDisposed == false) {
 
@@ -651,6 +648,7 @@ public class ServerZagram2 implements ServerInterface {
 				for (String message : transiendQueue) {
 					commands = commands + message + "/";
 				}
+				transiendQueue.clear();
 
 				for (int i = lastSentCommandNumber + 1; i < queue.size() + 1; i++) {
 					// (non-standard interval. Here is: A < x <= B)
@@ -700,9 +698,9 @@ public class ServerZagram2 implements ServerInterface {
 						
 						final Set<String> oldRooms = playerRooms.get(player);
 						if (oldRooms==null) {
-							for (String room : newRooms) {
+//							for (String room : newRooms) {
 //								gui.userJoinedRoom(server, room, player, true);
-							}
+//							}
 						}
 						else {
 							for (String room : oldRooms) {

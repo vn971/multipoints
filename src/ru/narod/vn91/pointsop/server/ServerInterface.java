@@ -20,7 +20,7 @@ public interface ServerInterface {
 	void rejectGameVacancyOpponent(String roomName, String notWantedOpponent);
 
 	// personal invites:
-	void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY);
+	void addPersonalGameInvite(String playerId, TimeSettings timeSettings, int fieldX, int fieldY, boolean isRanked);
 
 	void cancelPersonalGameInvite(String playerId);
 

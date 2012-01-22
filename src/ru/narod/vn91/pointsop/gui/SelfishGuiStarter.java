@@ -62,7 +62,7 @@ public class SelfishGuiStarter {
 			Settings.resetColors();
 		}
 		Settings.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 2.0.5");
+		final JFrame frame = new JFrame("Точки - MultiPoints 2.0.9");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
