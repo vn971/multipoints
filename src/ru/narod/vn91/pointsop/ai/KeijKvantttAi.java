@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
-
 public class KeijKvantttAi
 		implements Gui2Ai_Interface {
 

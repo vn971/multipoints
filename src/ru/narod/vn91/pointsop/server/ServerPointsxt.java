@@ -27,6 +27,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
+import ru.narod.vn91.pointsop.model.GuiForServerInterface;
 import ru.narod.vn91.pointsop.server.irc.IrcNicknameManager;
 import ru.narod.vn91.pointsop.server.irc.IrcRegexp;
 import ru.narod.vn91.pointsop.server.irc.SimpleMove;
@@ -34,7 +35,6 @@ import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Sha1;
-import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 public class ServerPointsxt
 		extends PircBot

@@ -9,6 +9,8 @@ import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
+import ru.narod.vn91.pointsop.model.GuiController;
+import ru.narod.vn91.pointsop.model.GuiForServerInterface;
 import ru.narod.vn91.pointsop.php.PhpBackupServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
@@ -16,8 +18,6 @@ import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
 import ru.narod.vn91.pointsop.utils.TimedAction;
-import ru.narod.vn91.pointsop.world.GuiController;
-import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 import javax.jnlp.FileSaveService;
 import javax.jnlp.ServiceManager;
@@ -235,12 +235,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void updateScore() {
 		jLabel_Score1.setText(String.format(
 				"<html><font color=%s>●%s●</font></html>",
-				GlobalGuiSettings.getHtmlColor(gameOuterInfo.player1Color()),
+				GuiCommon.getHtmlColor(gameOuterInfo.player1Color()),
 				gameOuterInfo.isRedFirst ? paper.getRedScore() : paper.getBlueScore()
 					));
 		jLabel_Score2.setText(String.format(
 				"<html><font color=%s>●%s●</font></html>",
-				GlobalGuiSettings.getHtmlColor(gameOuterInfo.player2Color()),
+				GuiCommon.getHtmlColor(gameOuterInfo.player2Color()),
 				gameOuterInfo.isRedFirst ? paper.getBlueScore() : paper.getRedScore()
 				));
 	}
@@ -333,7 +333,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				public void onChange(Player player) {
 					jLabel_Player1.setText(String.format(
 						"<html><font color=%s>%s</font></html>",
-						GlobalGuiSettings.getHtmlColor(gameOuterInfo.player1Color()),
+						GuiCommon.getHtmlColor(gameOuterInfo.player1Color()),
 						gameOuterInfo.first.guiName));
 					updateScore();
 					jLabel_Player1.setIcon(gameOuterInfo.first.imageIcon);
@@ -349,7 +349,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				public void onChange(Player player) {
 					jLabel_Player2.setText(String.format(
 						"<html><font color=%s>%s</font></html>",
-						GlobalGuiSettings.getHtmlColor(gameOuterInfo.player2Color()),
+						GuiCommon.getHtmlColor(gameOuterInfo.player2Color()),
 						gameOuterInfo.second.guiName));
 					updateScore();
 					jLabel_Player2.setIcon(gameOuterInfo.second.imageIcon);

@@ -53,7 +53,6 @@ public class Sgf {
 			int fieldSizeX, int fieldSizeY,
 			String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
 			ArrayList<MoveInfoAbstract> moves, boolean upsideDown) {
-		StringBuilder builder;
 		String content = "";
 		String sizeProperty = (fieldSizeX == fieldSizeY)
 				? "" + fieldSizeX

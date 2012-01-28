@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.narod.vn91.pointsop.gui;
 
 import java.awt.Color;
@@ -9,13 +5,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import ru.narod.vn91.pointsop.utils.Settings;
-
-/**
- *
- * @author vasya
- */
-public class GlobalGuiSettings {
+public class GuiCommon {
 
 	static final SimpleAttributeSet playerNameIncoming = new SimpleAttributeSet();
 	static final SimpleAttributeSet playerNameOutgoing = new SimpleAttributeSet();

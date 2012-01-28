@@ -1,19 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * GameSettings.java
- *
- * Created on Dec 4, 2011, 2:57:26 PM
- */
 package ru.narod.vn91.pointsop.gui;
 
-/**
- *
- * @author vasya
- */
 public class GameSettings extends javax.swing.JPanel {
 
 	/** Creates new form GameSettings */

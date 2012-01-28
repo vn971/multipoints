@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsop.world;
+package ru.narod.vn91.pointsop.model;
 
 import java.awt.Component;
 import java.util.Date;
@@ -16,7 +16,7 @@ import ru.narod.vn91.pointsop.data.PlayerPool;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.gui.GameRoom;
-import ru.narod.vn91.pointsop.gui.GlobalGuiSettings;
+import ru.narod.vn91.pointsop.gui.GuiCommon;
 import ru.narod.vn91.pointsop.gui.JTabbedPaneMod;
 import ru.narod.vn91.pointsop.gui.LangRoom;
 import ru.narod.vn91.pointsop.gui.PrivateChat;
@@ -243,9 +243,9 @@ public class GuiController implements GuiForServerInterface {
 				return String.format("<html><font color=%s>%s</font>" +
 					"<font color=black> - </font>" +
 					"<font color=%s>%s</font></html>",
-					GlobalGuiSettings.getHtmlColor(game.player1Color()),
+					GuiCommon.getHtmlColor(game.player1Color()),
 					game.first.guiName,
-					GlobalGuiSettings.getHtmlColor(game.player2Color()),
+					GuiCommon.getHtmlColor(game.player2Color()),
 					game.second.guiName
 						);
 			}

@@ -6,11 +6,10 @@ import java.awt.event.MouseListener;
 import java.net.URI;
 import javax.swing.JLabel;
 
+import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
 import ru.narod.vn91.pointsop.server.ServerZagram2;
-//import ru.narod.vn91.pointsop.zagram.ServerZagram;
 import ru.narod.vn91.pointsop.utils.Settings;
-import ru.narod.vn91.pointsop.world.GuiController;
 
 public class WelcomePanel extends javax.swing.JPanel {
 
@@ -26,7 +25,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 		updateNick();
 		if (guiController.zagram_server == null) {
 			String password = String.copyValueOf(jPasswordField_Password.getPassword());
-			guiController.zagram_server = new ServerZagram2(nick, password, guiController);
+			guiController.zagram_server = new ServerZagram2(guiController, nick, password, false);
 			guiController.zagram_server.connect();
 		}
 	}
@@ -362,7 +361,7 @@ class LinkedLabel extends JLabel {
 
 	@Override
 	public void setText(String text) {
-		// blue color and underlining
+		// show as a link
 		text = text.replaceAll("<html>|<a href=.*>|</a>|</html>", "");
 		super.setText(
 				"<html><a href=\"\""

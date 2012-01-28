@@ -1,4 +1,4 @@
-package ru.narod.vn91.pointsop.world;
+package ru.narod.vn91.pointsop.model;
 
 import javax.swing.ImageIcon;
 import ru.narod.vn91.pointsop.data.TimeLeft;

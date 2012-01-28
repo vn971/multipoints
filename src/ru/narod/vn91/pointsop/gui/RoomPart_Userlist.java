@@ -8,8 +8,8 @@ import javax.swing.table.*;
 
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.PlayerChangeListener;
+import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.utils.ObjectKeeper;
-import ru.narod.vn91.pointsop.world.GuiController;
 
 @SuppressWarnings("serial")
 public class RoomPart_Userlist extends javax.swing.JPanel {

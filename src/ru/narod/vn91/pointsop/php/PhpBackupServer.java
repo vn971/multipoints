@@ -22,10 +22,6 @@ import ru.narod.vn91.pointsop.data.Sgf;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 
-/**
- *
- * @author vasya
- */
 public class PhpBackupServer {
 
 	static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -39,7 +35,6 @@ public class PhpBackupServer {
 		URLConnection urlConn;
 		DataOutputStream output;
 		BufferedReader input;
-		String error = "";
 		String result = "";
 		try {
 			url = new URL(urlAsString);
@@ -60,9 +55,7 @@ public class PhpBackupServer {
 			}
 			input.close();
 		} catch (MalformedURLException e) {
-			error += e + "\n";
 		} catch (IOException e) {
-			error += e + "\n";
 		}
 		return result;
 	}
@@ -132,28 +125,14 @@ public class PhpBackupServer {
 		return "";
 	}
 
-	private static String get1SgfCoord(int i) {
-		if (i <= 26) {
-			return Character.toString((char) ((int) 'a' + i - 1));
-		} else {
-			return Character.toString((char) ((int) 'A' + i - 26 - 1));
-		}
-//		return (i <= 26)
-//				? (Character.toString("a".charAt(0) + i - 1))
-//				: (String.valueOf("A".charAt(0) + i - 26 - 1));
-//		System.out.println((char) ((int) 'a' + 3));
-//		Character aLowercase = 'a';
-//		Character aUppercase = 'A';
-//		char c = aLowercase;
-//		int aLow_Int = Character.getNumericValue('a');
-//		Character aLow_Char = Integer.
-//
-//		char d = c + 1
-//		c;
-	}
-
-//	private static String get1SgfNode(MoveInfoAbstract move) {
+//	private static String get1SgfCoord(int i) {
+//		if (i <= 26) {
+//			return Character.toString((char) ((int) 'a' + i - 1));
+//		} else {
+//			return Character.toString((char) ((int) 'A' + i - 26 - 1));
+//		}
 //	}
+
 	public static String sendToEidokropki(
 			String redName, String blueName,
 			int rank1, int rank2,

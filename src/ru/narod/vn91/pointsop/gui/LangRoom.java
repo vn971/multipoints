@@ -3,9 +3,10 @@ package ru.narod.vn91.pointsop.gui;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import ru.narod.vn91.pointsop.model.GuiController;
+import ru.narod.vn91.pointsop.model.GuiForServerInterface;
 import ru.narod.vn91.pointsop.server.ServerInterface;
-import ru.narod.vn91.pointsop.world.GuiController;
-import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 

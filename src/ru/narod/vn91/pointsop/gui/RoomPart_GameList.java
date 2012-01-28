@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.data.GameInfoListener;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
-import ru.narod.vn91.pointsop.world.GuiController;
+import ru.narod.vn91.pointsop.model.GuiController;
 
 public class RoomPart_GameList extends javax.swing.JPanel {
 

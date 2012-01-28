@@ -16,11 +16,11 @@ import javax.swing.JSeparator;
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.data.GameOuterInfo;
+import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.MockServerForGui;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.utils.Settings;
-import ru.narod.vn91.pointsop.world.GuiController;
 
 public class SelfishGuiStarter {
 

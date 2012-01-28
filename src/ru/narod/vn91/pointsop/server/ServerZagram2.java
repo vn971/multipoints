@@ -27,23 +27,23 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.TimeSettings;
+import ru.narod.vn91.pointsop.model.GuiForServerInterface;
 import ru.narod.vn91.pointsop.server.zagram.MessageQueue;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Wait;
-import ru.narod.vn91.pointsop.world.GuiForServerInterface;
 
 @SuppressWarnings("serial")
 public class ServerZagram2 implements ServerInterface {
 
-	String myNameOnServer;
-	boolean isPassworded;
-	GuiForServerInterface gui;
-	String currentTable = "";
-	String secretId;
+	final String myNameOnServer;
+	final boolean isPassworded;
+	final boolean isInvisible;
+	final GuiForServerInterface gui;
+	final String secretId;
 	volatile boolean isDisposed = false;
-	MessageQueue queue = new MessageQueue(10);
-	List<String> transiendQueue = new ArrayList<String>();
+	final MessageQueue queue = new MessageQueue(10);
+	final List<String> transiendQueue = new ArrayList<String>();
 	
 	volatile boolean isBusy = false;
 	Set<String> personalInvitesIncoming = new LinkedHashSet<String>();
@@ -53,10 +53,10 @@ public class ServerZagram2 implements ServerInterface {
 	Map<String,Set<String>> playerRooms = new HashMap<String, Set<String>>();
 	ThreadMain threadMain;
 
-	Map<String,String> avatarUrls = new HashMap<String, String>();
-	Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
+	final Map<String,String> avatarUrls = new HashMap<String, String>();
+	final Map<String,ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
 
-	public ServerZagram2(String myNameOnServer, String password, GuiForServerInterface gui) {
+	public ServerZagram2(GuiForServerInterface gui, String myNameOnServer, String password, boolean isInvisible) {
 
 		if (myNameOnServer.matches(".*[a-zA-Z].*")) {
 			myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Z0-9 ]", "");
@@ -68,6 +68,7 @@ public class ServerZagram2 implements ServerInterface {
 			myNameOnServer = myNameOnServer.replaceAll("[^0-9 ]", "");
 		}
 		isPassworded = !myNameOnServer.equals("") && !password.equals("");
+		this.isInvisible = isInvisible;
 		if (isPassworded) {
 			this.myNameOnServer = myNameOnServer;
 			this.gui = gui;
@@ -198,58 +199,64 @@ public class ServerZagram2 implements ServerInterface {
 		Thread threadStartup = new Thread() {
 			@Override
 			public void run() {
-				gui.rawConnectionState(ServerZagram2.this, "Подключение...");
-
-				String authorizationURL;
-				if (isPassworded) {
-					authorizationURL = "http://zagram.org/auth.py?co=loguj&opisGracza=" +
-						getServerEncoded(myNameOnServer) +
-						"&idGracza=" +
-						secretId +
-						"&lang=ru";
-				} else {
-					authorizationURL = "http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
-						secretId + "&opis=" +
-						getServerEncoded(myNameOnServer) + "&lang=ru";
-				}
-
-				String authorizationResult = getLinkContent(authorizationURL);
-				boolean isAuthorized;
-				if (authorizationResult.equals("")) {
-					gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
-					isAuthorized = true;
-				} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
-					// avatarUrls.put(myNameOnServer, authorizationResult.split("\\.")[2]);
-					gui.rawConnectionState(ServerZagram2.this,
-						"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
-					isAuthorized = true;
-				} else {
-					gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
-					isAuthorized = false;
-				}
-
-				if (isAuthorized) {
-					getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
-
-					final Thread disconnectThread = new Thread() {
-						@Override
-						public void run() {
-							disconnectServer();
-						}
-					};
-					Thread killUltimatively = new Thread() {
-						@Override
-						public void run() {
-							// give the "disconnectThread" a little time, and after that kill it
-							Wait.waitExactly(1000L);
-							disconnectThread.interrupt();
-						};
-					};
-					killUltimatively.setDaemon(true);
-					Runtime.getRuntime().addShutdownHook(killUltimatively);
-					Runtime.getRuntime().addShutdownHook(disconnectThread);
+				if (isInvisible) {
+					// do not authorize
 					threadMain = new ThreadMain();
 					threadMain.start();
+				} else {
+					gui.rawConnectionState(ServerZagram2.this, "Подключение...");
+
+					String authorizationURL;
+					if (isPassworded) {
+						authorizationURL = "http://zagram.org/auth.py?co=loguj&opisGracza=" +
+							getServerEncoded(myNameOnServer) +
+							"&idGracza=" +
+							secretId +
+							"&lang=ru";
+					} else {
+						authorizationURL = "http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
+							secretId + "&opis=" +
+							getServerEncoded(myNameOnServer) + "&lang=ru";
+					}
+
+					String authorizationResult = getLinkContent(authorizationURL);
+					boolean isAuthorized;
+					if (authorizationResult.equals("")) {
+						gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
+						isAuthorized = true;
+					} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
+						// avatarUrls.put(myNameOnServer, authorizationResult.split("\\.")[2]);
+						gui.rawConnectionState(ServerZagram2.this,
+							"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
+						isAuthorized = true;
+					} else {
+						gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
+						isAuthorized = false;
+					}
+
+					if (isAuthorized) {
+						getLinkContent("http://zagram.org/a.kropki?idGracza=" + secretId + "&co=changeLang&na=ru");
+
+						final Thread disconnectThread = new Thread() {
+							@Override
+							public void run() {
+								disconnectServer();
+							}
+						};
+						Thread killUltimatively = new Thread() {
+							@Override
+							public void run() {
+								// give the "disconnectThread" a little time, and after that kill it
+								Wait.waitExactly(1000L);
+								disconnectThread.interrupt();
+							};
+						};
+						killUltimatively.setDaemon(true);
+						Runtime.getRuntime().addShutdownHook(killUltimatively);
+						Runtime.getRuntime().addShutdownHook(disconnectThread);
+						threadMain = new ThreadMain();
+						threadMain.start();
+					}
 				}
 			};
 		};
@@ -674,7 +681,8 @@ public class ServerZagram2 implements ServerInterface {
 		private synchronized void handleText(String text) {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
 			ServerInterface server = ServerZagram2.this;
-			if (text.matches(".*ok/.*") && text.endsWith("/end")) {
+			if (text.matches("ok.*(end|oend)") ||
+					(text.matches("sd.*(end|oend)") && isInvisible)) {
 				String[] splitted =
 						text.substring(
 										text.indexOf("ok/") + "ok/".length(),

@@ -121,22 +121,22 @@ public class PrivateChat extends javax.swing.JPanel {
 			try {
 				if (user.equals(companion.server.getMyName())) {
 					document.insertString(document.getLength(),
-							"" + GlobalGuiSettings.myTimeFormat.format(
+							"" + GuiCommon.myTimeFormat.format(
 							new Date()) + " ",
-							GlobalGuiSettings.chatOutgoing);
+							GuiCommon.chatOutgoing);
 					document.insertString(document.getLength(), user
-							+ ":", GlobalGuiSettings.playerNameOutgoing);
+							+ ":", GuiCommon.playerNameOutgoing);
 					document.insertString(document.getLength(), " " + message
-							+ "\n", GlobalGuiSettings.chatOutgoing);
+							+ "\n", GuiCommon.chatOutgoing);
 				} else {
 					document.insertString(document.getLength(),
-							"" + GlobalGuiSettings.myTimeFormat.format(
+							"" + GuiCommon.myTimeFormat.format(
 							new Date()) + " ",
-							GlobalGuiSettings.chatIncoming);
+							GuiCommon.chatIncoming);
 					document.insertString(document.getLength(), user
-							+ ":", GlobalGuiSettings.playerNameIncoming);
+							+ ":", GuiCommon.playerNameIncoming);
 					document.insertString(document.getLength(), " " + message
-							+ "\n", GlobalGuiSettings.chatIncoming);
+							+ "\n", GuiCommon.chatIncoming);
 				}
 			} catch (Exception e) {
 			}

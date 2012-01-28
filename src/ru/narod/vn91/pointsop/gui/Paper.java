@@ -124,10 +124,10 @@ public abstract class Paper extends JPanel {
 			int x,
 			int y,
 			boolean isRed) {
-		int previousX = -1, previousY = -1;
+//		int previousX = -1, previousY = -1;
 		if (engine.getLastDot() != null) {
-			previousX = engine.getLastDot().x;
-			previousY = engine.getLastDot().y;
+//			previousX = engine.getLastDot().x;
+//			previousY = engine.getLastDot().y;
 		}
 		SingleGameEngineInterface.MoveResult moveResult = engine.makeMove(
 				x, y,
@@ -796,27 +796,26 @@ public abstract class Paper extends JPanel {
 		}
 	}
 
-	private int getStringWidth(
-			Graphics graphics,
-			String string) {
-		int result = graphics.getFontMetrics().stringWidth(string);
-		return result;
-	}
-
-	private int getStringHeight(
-			Graphics graphics,
-			String string) {
-		int result = graphics.getFontMetrics().getHeight();
-		if ((string.toLowerCase().equals(string)) && (string.toUpperCase().equals(
-				string
-		))) {
-			result -= 4;
-		} else {
-			result -= 1;
-		}
-		return result;
-//		this.
-	}
+//	private int getStringWidth(
+//			Graphics graphics,
+//			String string) {
+//		int result = graphics.getFontMetrics().stringWidth(string);
+//		return result;
+//	}
+//
+//	private int getStringHeight(
+//			Graphics graphics,
+//			String string) {
+//		int result = graphics.getFontMetrics().getHeight();
+//		if ((string.toLowerCase().equals(string)) && (string.toUpperCase().equals(
+//				string
+//		))) {
+//			result -= 4;
+//		} else {
+//			result -= 1;
+//		}
+//		return result;
+//	}
 
 	private Point getHumanCoordinates(Point pixel) {
 		// we are finding out the position of the click.

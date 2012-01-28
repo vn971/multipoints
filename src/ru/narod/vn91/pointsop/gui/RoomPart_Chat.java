@@ -77,23 +77,23 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	public void addChat(String user,
 			String message, Long time) {
 		Date date = (time != null && time != 0) ? new Date(time) : new Date();
-		String formattedDate = GlobalGuiSettings.myTimeFormat.format(date);
+		String formattedDate = GuiCommon.myTimeFormat.format(date);
 		AttributeSet playerAttributes;
 		if (gameInfo != null && gameInfo.first.guiName.equals(user)) {
-			playerAttributes = GlobalGuiSettings.getAttributeSet(true, gameInfo.player1Color());
+			playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player1Color());
 		} else if (gameInfo != null && gameInfo.second.guiName.equals(user)) {
-			playerAttributes = GlobalGuiSettings.getAttributeSet(true, gameInfo.player2Color());
+			playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player2Color());
 		} else if (user.equals(roomInterface.getServer().getMyName())) {
-			playerAttributes = GlobalGuiSettings.playerNameOutgoing;
+			playerAttributes = GuiCommon.playerNameOutgoing;
 		} else {
-			playerAttributes = GlobalGuiSettings.playerNameIncoming;
+			playerAttributes = GuiCommon.playerNameIncoming;
 		}
 		try {
 			document.insertString(document.getLength(), "" + formattedDate + " ",
-				GlobalGuiSettings.chatIncoming);
+				GuiCommon.chatIncoming);
 			document.insertString(document.getLength(), user + ":", playerAttributes);
 			document.insertString(document.getLength(), " " + message + "\n",
-				GlobalGuiSettings.chatIncoming);
+				GuiCommon.chatIncoming);
 		} catch (BadLocationException ignored) {
 		}
 		scrollDown();
@@ -108,10 +108,10 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	public void addServerNotice(String message) {
 		try {
 			document.insertString(document.getLength(),
-					"" + GlobalGuiSettings.myTimeFormat.format(new Date()) + " ",
-					GlobalGuiSettings.serverNotice);
+					"" + GuiCommon.myTimeFormat.format(new Date()) + " ",
+					GuiCommon.serverNotice);
 			document.insertString(document.getLength(), " " + message
-					+ "\n", GlobalGuiSettings.serverNotice);
+					+ "\n", GuiCommon.serverNotice);
 		} catch (BadLocationException ignored) {
 		}
 		scrollDown();
