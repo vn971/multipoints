@@ -47,6 +47,22 @@ public class Settings {
 
 	public static void setRestoreSize(boolean isRestoreSize) {
 		memory.putBoolean("isRestoreSize", isRestoreSize);
+//		if (isRestoreSize == false) {
+//			memory.remove("frameWidth");
+//			memory.remove("frameHeight");
+//		}
+	}
+
+	public static boolean isRestorePosition() {
+		return memory.getBoolean("isRestorePosition", true);
+	}
+
+	public static void setRestorePosition(boolean isRestorePosition) {
+		memory.putBoolean("isRestorePosition", isRestorePosition);
+//		if (isRestorePosition == false) {
+//			memory.remove("frameX");
+//			memory.remove("frameY");
+//		}
 	}
 
 	public static int getVersion() {

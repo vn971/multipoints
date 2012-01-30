@@ -900,8 +900,7 @@ public class ServerZagram2 implements ServerInterface {
 										String propertyName = sgfProperty.replaceAll("\\[.*", "");
 										String propertyValue = sgfProperty.replaceFirst(".*\\[", "");
 										if (propertyName.matches("U(B|W)")) {
-											throw new FatalGameRoomError(
-												"can't handle 'Undo black move'.");
+											throw new FatalGameRoomError("UNDO is unsupported");
 										} else if (propertyName.matches("B|W|AB|AW|")) {
 											boolean isWhite = propertyName.matches("W|AW") 
 													|| (propertyName.equals("") && lastMovePropertyName.matches("A|AW"));
@@ -920,10 +919,10 @@ public class ServerZagram2 implements ServerInterface {
 							}
 							gui.makedMove(server, currentRoom, false, -1, -1, true, false);
 						} catch (FatalGameRoomError e) {
-							server.unsubscribeRoom(currentRoom);
-							gui.raw(server, "fatal error in game room: " +
+//							server.unsubscribeRoom(currentRoom);
+							gui.raw(server, "ERROR in game room '" +
 								e.getMessage() +
-								". Exiting the room....");
+								"'. The game position is not guaranteed to be correct in this game for now on.");
 						}
 					} else if (message.matches("u.undo")) {
 						boolean isRed = message.charAt(1) == '1';

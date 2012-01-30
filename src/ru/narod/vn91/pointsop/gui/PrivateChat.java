@@ -160,9 +160,8 @@ public class PrivateChat extends javax.swing.JPanel {
 				me.server.getMaximumMessageLength()));
 		} else {
 			jTextField_Chat.setEnabled(false);
-//			jTextField_Chat.setText("чат на этом сервере недоступен");
 			jTextPane_Chat.setEnabled(false);
-			jTextPane_Chat.setText("чат на этом сервере недоступен");
+			jTextPane_Chat.setText("чат на этом сервере недоступен\n");
 		}
 		jButton_Invite.setEnabled(me.server.isPrivateGameInviteAllowed());
 		jButton_Ping.setEnabled(me.server.isPingEnabled());

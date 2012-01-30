@@ -1,5 +1,7 @@
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.*;
 import java.io.File;
 import java.net.URI;
@@ -12,6 +14,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
@@ -25,17 +29,19 @@ import ru.narod.vn91.pointsop.utils.Settings;
 public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
-		// try {
-		// for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		// if ("Nimbus".equals(info.getName())) {
-		// UIManager.setLookAndFeel(info.getClassName());
-		// break;
-		// }
-		// }
-		// } catch (Exception e) {
-		// // If Nimbus is not available, you can set the GUI to another look and
-		// // feel.
-		// }
+
+//		try {
+//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//				if ("Nimbus".equals(info.getName())) {
+//					UIManager.setLookAndFeel(info.getClassName());
+//					break;
+//				}
+//			}
+//		} catch (Exception e) {
+//			// If Nimbus is not available, you can set the GUI to another look and
+//			// feel.
+//		}
+
 		for (String argument : args) {
 			// System.out.println("argument = " + argument);
 			if (argument.matches("--version|-v|-h|--help")) {
@@ -62,59 +68,75 @@ public class SelfishGuiStarter {
 			Settings.resetColors();
 		}
 		Settings.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 2.0.9");
+		final JFrame frame = new JFrame("Точки - MultiPoints 2.1.0");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
-		frame.setSize(925, 670);
+//		frame.setSize(925, 670);
 
 		{
-			if (Settings.getFrameWidth() > 0
-					&& Settings.getFrameHeight() > 0) {
+			// frame size
+
+			if (Settings.isRestoreSize() &&
+					Settings.getFrameWidth() > 0 &&
+					Settings.getFrameHeight() > 0) {
 				// && Memory.getFrameX() > 0
 				// && Memory.getFrameY() > 0
-				frame.setBounds(
-						Settings.getFrameX(),
-						Settings.getFrameY(),
-						Settings.getFrameWidth(),
-						Settings.getFrameHeight()
-				);
-				// frame.setSize(
-				// Memory.getFrameWidth(),
-				// Memory.getFrameHeight());
+				frame.setSize(Settings.getFrameWidth(), Settings.getFrameHeight());
+//				frame.setBounds(
+//						Settings.getFrameX(),
+//						Settings.getFrameY(),
+//						Settings.getFrameWidth(),
+//						Settings.getFrameHeight()
+//				);
 			}
-			// frame.setLocationRelativeTo(frame.getRootPane());
+			if (Settings.isRestorePosition()) {
+				frame.setLocation(Settings.getFrameX(), Settings.getFrameY());
+			} else {
+				frame.setLocationRelativeTo(null);
+//				GraphicsDevice device =
+//						GraphicsEnvironment.
+//								getLocalGraphicsEnvironment().
+//								getDefaultScreenDevice();
+//				if (device.isFullScreenSupported()) {
+//					device.setFullScreenWindow(frame);
+//				}
+//				else {
+//					System.err.println("Full screen not supported");
+//				}
+			}
 
-			frame.addComponentListener(
-					new ComponentListener() {
+			// frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			// frame.setUndecorated(true);
 
-						public void componentShown(ComponentEvent e) {
-						}
-
-						public void componentResized(ComponentEvent e) {
-							Settings.setFrameWidth(frame.getWidth());
-							Settings.setFrameHeight(frame.getHeight());
-							Settings.setFrameX(frame.getX());
-							Settings.setFrameY(frame.getY());
-						}
-
-						public void componentMoved(ComponentEvent e) {
-							Settings.setFrameX(frame.getX());
-							Settings.setFrameY(frame.getY());
-						}
-
-						public void componentHidden(ComponentEvent e) {
-						}
-					}
-			);
-		}
-
-		{
 			int x = frame.getX(), y = frame.getY();
 			x = Math.max(x, 0);
 			y = Math.max(y, 0);
 			frame.setLocation(x, y);
 		}
+
+		frame.addComponentListener(
+				new ComponentListener() {
+
+					public void componentShown(ComponentEvent e) {
+					}
+
+					public void componentResized(ComponentEvent e) {
+						Settings.setFrameWidth(frame.getWidth());
+						Settings.setFrameHeight(frame.getHeight());
+						Settings.setFrameX(frame.getX());
+						Settings.setFrameY(frame.getY());
+					}
+
+					public void componentMoved(ComponentEvent e) {
+						Settings.setFrameX(frame.getX());
+						Settings.setFrameY(frame.getY());
+					}
+
+					public void componentHidden(ComponentEvent e) {
+					}
+				}
+		);
 
 		final JTabbedPaneMod tabbedPane = new JTabbedPaneMod();
 		frame.add(tabbedPane.getComponent());

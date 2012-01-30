@@ -5,9 +5,12 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.TabbedPaneUI;
 
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function0;
@@ -29,7 +32,7 @@ public class JTabbedPaneMod {
 			String title,
 			final Component component,
 			boolean isCloseable) {
-		tabbedPane.addTab("", component);
+		tabbedPane.addTab(title /*may be ""*/, component);
 		TabCloseable tabCloseable = new TabCloseable(title, isCloseable);
 		tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
 			@Override
@@ -106,7 +109,9 @@ public class JTabbedPaneMod {
 
 			public void stateChanged(ChangeEvent e) {
 				int selectedIndex = tabbedPane.getSelectedIndex();
+				// FIXME need to fix if using Nimbus LNF
 				tabbedPane.setBackgroundAt(selectedIndex, normalColor);
+
 				// Component panel = tabbedPane.getTabComponentAt(selectedIndex);
 				// try {
 				// TabCloseable tab = TabCloseable.class.cast(panel);

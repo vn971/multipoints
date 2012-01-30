@@ -34,6 +34,7 @@ public class TabCloseable extends JPanel {
 		super.setBorder(BorderFactory.createEmptyBorder(
 			2, 0, 0, 0));
 		super.setOpaque(false);
+		// FIXME need to fix if using Nimbus LNF
 
 		closeButton = new CloseButton();
 		label = new JLabel(title);
@@ -88,6 +89,7 @@ public class TabCloseable extends JPanel {
 		protected void paintComponent(Graphics g) {
 			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setStroke(new BasicStroke(2));
+			// FIXME need to fix if using Nimbus LNF
 			g2.setColor(super.getModel().isRollover() ? Color.PINK : Color.BLACK);
 			int margin = size / 3;
 			g2.drawLine(
