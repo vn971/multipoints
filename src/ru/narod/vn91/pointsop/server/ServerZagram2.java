@@ -44,7 +44,7 @@ public class ServerZagram2 implements ServerInterface {
 	volatile boolean isDisposed = false;
 	final MessageQueue queue = new MessageQueue(10);
 	final List<String> transiendQueue = new ArrayList<String>();
-	
+
 	volatile boolean isBusy = false;
 	Set<String> personalInvitesIncoming = new LinkedHashSet<String>();
 	Set<String> personalInvitesOutgoing = new LinkedHashSet<String>();
@@ -540,7 +540,7 @@ public class ServerZagram2 implements ServerInterface {
 			"&stol=" + roomId);
 	}
 
-	private synchronized String getLinkContent(String link) {
+	private static synchronized String getLinkContent(String link) {
 		StringBuilder result = new StringBuilder();
 		try {
 			URL url;
@@ -684,9 +684,10 @@ public class ServerZagram2 implements ServerInterface {
 			if (text.matches("ok.*(end|oend)") ||
 					(text.matches("sd.*(end|oend)") && isInvisible)) {
 				String[] splitted =
-						text.substring(
-										text.indexOf("ok/") + "ok/".length(),
-										text.length() - "/end".length())
+						text
+//						.substring(
+//										text.indexOf("ok/") + "ok/".length(),
+//										text.length() - "/end".length())
 								.split("/");
 				Set<String> personalInvitesIncomingNew = new LinkedHashSet<String>();
 				Set<String> personalInvitesOutgoingNew = new LinkedHashSet<String>();
@@ -828,7 +829,8 @@ public class ServerZagram2 implements ServerInterface {
 						int i2 = Integer.parseInt(a2);
 						int i3 = Integer.parseInt(a3);
 						if (i1 > lastServerMessageNumber + 1) {
-							break;
+							// break; no, don't break on this step -- we
+							// want to stay alive in case of a server restart.
 						}
 						lastServerMessageNumber = i2;
 						lastSentCommandNumber = i3;

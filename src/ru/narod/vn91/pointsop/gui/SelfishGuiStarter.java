@@ -1,7 +1,5 @@
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.*;
 import java.io.File;
 import java.net.URI;
@@ -14,8 +12,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
@@ -68,32 +64,31 @@ public class SelfishGuiStarter {
 			Settings.resetColors();
 		}
 		Settings.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 2.1.0");
+		final JFrame frame = new JFrame("Точки - MultiPoints 2.1.1");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
-//		frame.setSize(925, 670);
 
-		{
-			// frame size
-
-			if (Settings.isRestoreSize() &&
-					Settings.getFrameWidth() > 0 &&
-					Settings.getFrameHeight() > 0) {
-				// && Memory.getFrameX() > 0
-				// && Memory.getFrameY() > 0
-				frame.setSize(Settings.getFrameWidth(), Settings.getFrameHeight());
+		if (Settings.isRestoreSize() &&
+				Settings.getFrameWidth() > 0 &&
+				Settings.getFrameHeight() > 0) {
+			// && Memory.getFrameX() > 0
+			// && Memory.getFrameY() > 0
+			frame.setSize(Settings.getFrameWidth(), Settings.getFrameHeight());
 //				frame.setBounds(
 //						Settings.getFrameX(),
 //						Settings.getFrameY(),
 //						Settings.getFrameWidth(),
 //						Settings.getFrameHeight()
 //				);
-			}
-			if (Settings.isRestorePosition()) {
-				frame.setLocation(Settings.getFrameX(), Settings.getFrameY());
-			} else {
-				frame.setLocationRelativeTo(null);
+		} else {
+			frame.setSize(925, 670);
+		}
+
+		if (Settings.isRestorePosition()) {
+			frame.setLocation(Settings.getFrameX(), Settings.getFrameY());
+		} else {
+			frame.setLocationRelativeTo(null);
 //				GraphicsDevice device =
 //						GraphicsEnvironment.
 //								getLocalGraphicsEnvironment().
@@ -104,16 +99,15 @@ public class SelfishGuiStarter {
 //				else {
 //					System.err.println("Full screen not supported");
 //				}
-			}
-
-			// frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			// frame.setUndecorated(true);
-
-			int x = frame.getX(), y = frame.getY();
-			x = Math.max(x, 0);
-			y = Math.max(y, 0);
-			frame.setLocation(x, y);
 		}
+
+		// frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// frame.setUndecorated(true);
+
+		int x = frame.getX(), y = frame.getY();
+		x = Math.max(x, 0);
+		y = Math.max(y, 0);
+		frame.setLocation(x, y);
 
 		frame.addComponentListener(
 				new ComponentListener() {

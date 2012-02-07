@@ -331,12 +331,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		if (gameOuterInfo.first != null && gameOuterInfo.first.id != null) {
 			PlayerChangeListener player1ChangeListener = new PlayerChangeListener() {
 				public void onChange(Player player) {
-					jLabel_Player1.setText(String.format(
+					jLabel_Name1.setText(String.format(
 						"<html><font color=%s>%s</font></html>",
 						GuiCommon.getHtmlColor(gameOuterInfo.player1Color()),
 						gameOuterInfo.first.guiName));
 					updateScore();
-					jLabel_Player1.setIcon(gameOuterInfo.first.imageIcon);
+					jLabel_Avatar1.setIcon(gameOuterInfo.first.imageIcon);
 				}
 			};
 			player1ChangeListener.onChange(gameOuterInfo.first);
@@ -347,12 +347,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		if (gameOuterInfo.second != null && gameOuterInfo.second.id != null) {
 			PlayerChangeListener player2ChangeListener = new PlayerChangeListener() {
 				public void onChange(Player player) {
-					jLabel_Player2.setText(String.format(
+					jLabel_Name2.setText(String.format(
 						"<html><font color=%s>%s</font></html>",
 						GuiCommon.getHtmlColor(gameOuterInfo.player2Color()),
 						gameOuterInfo.second.guiName));
 					updateScore();
-					jLabel_Player2.setIcon(gameOuterInfo.second.imageIcon);
+					jLabel_Avatar2.setIcon(gameOuterInfo.second.imageIcon);
 				}
 			};
 			player2ChangeListener.onChange(gameOuterInfo.second);
@@ -441,12 +441,17 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_ForChat = new javax.swing.JPanel();
         roomPart_UserList = new ru.narod.vn91.pointsop.gui.RoomPart_Userlist();
         roomPart_Chat = new ru.narod.vn91.pointsop.gui.RoomPart_Chat();
-        jLabel_Player1 = new javax.swing.JLabel();
-        jLabel_Player2 = new javax.swing.JLabel();
-        jLabel_Score2 = new javax.swing.JLabel();
-        jLabel_Score1 = new javax.swing.JLabel();
+        jPanel_Players = new javax.swing.JPanel();
+        jPanel_Player1 = new javax.swing.JPanel();
         jLabel_Time1 = timerLabel1;
+        jLabel_Score1 = new javax.swing.JLabel();
+        jLabel_Avatar1 = new javax.swing.JLabel();
+        jLabel_Name1 = new javax.swing.JLabel();
+        jPanel_Player2 = new javax.swing.JPanel();
+        jLabel_Name2 = new javax.swing.JLabel();
+        jLabel_Score2 = new javax.swing.JLabel();
         jLabel_Time2 = timerLabel2;
+        jLabel_Avatar2 = new javax.swing.JLabel();
         jPanel_ForGame = new javax.swing.JPanel();
         jPanel_Paper = paper;
         jPanel_Bottom = new javax.swing.JPanel();
@@ -661,65 +666,118 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_ForChat.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jPanel_ForChat.setMaximumSize(new java.awt.Dimension(246, 99999));
 
-        jLabel_Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
-        jLabel_Player1.setText("игрок1");
-        jLabel_Player1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jLabel_Player1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        jLabel_Player2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel_Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/new.png"))); // NOI18N
-        jLabel_Player2.setText("игрок2");
-        jLabel_Player2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-
-        jLabel_Score2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel_Score2.setText("●16●");
-
-        jLabel_Score1.setText("●16●");
+        jPanel_Player1.setPreferredSize(new java.awt.Dimension(110, 357));
 
         jLabel_Time1.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15));
         jLabel_Time1.setText("00:00");
 
-        jLabel_Time2.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15));
+        jLabel_Score1.setText("●111●");
+
+        jLabel_Avatar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/zagram-avatar.png"))); // NOI18N
+
+        jLabel_Name1.setText("игрок1");
+        jLabel_Name1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_Name1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout jPanel_Player1Layout = new javax.swing.GroupLayout(jPanel_Player1);
+        jPanel_Player1.setLayout(jPanel_Player1Layout);
+        jPanel_Player1Layout.setHorizontalGroup(
+            jPanel_Player1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel_Name1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addGroup(jPanel_Player1Layout.createSequentialGroup()
+                .addComponent(jLabel_Avatar1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel_Player1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_Score1)
+                    .addComponent(jLabel_Time1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel_Player1Layout.setVerticalGroup(
+            jPanel_Player1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_Player1Layout.createSequentialGroup()
+                .addComponent(jLabel_Name1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel_Player1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel_Player1Layout.createSequentialGroup()
+                        .addComponent(jLabel_Score1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel_Time1))
+                    .addComponent(jLabel_Avatar1)))
+        );
+
+        jPanel_Player2.setPreferredSize(new java.awt.Dimension(110, 357));
+
+        jLabel_Name2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel_Name2.setText("игрок2");
+        jLabel_Name2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        jLabel_Score2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel_Score2.setText("●222●");
+
+        jLabel_Time2.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
         jLabel_Time2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel_Time2.setText("00:00");
+
+        jLabel_Avatar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/narod/vn91/pointsop/gui/zagram-avatar.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel_Player2Layout = new javax.swing.GroupLayout(jPanel_Player2);
+        jPanel_Player2.setLayout(jPanel_Player2Layout);
+        jPanel_Player2Layout.setHorizontalGroup(
+            jPanel_Player2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel_Name2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_Player2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel_Player2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel_Score2)
+                    .addComponent(jLabel_Time2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel_Avatar2))
+        );
+        jPanel_Player2Layout.setVerticalGroup(
+            jPanel_Player2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_Player2Layout.createSequentialGroup()
+                .addComponent(jLabel_Name2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel_Player2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_Avatar2)
+                    .addGroup(jPanel_Player2Layout.createSequentialGroup()
+                        .addComponent(jLabel_Score2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel_Time2))))
+        );
+
+        javax.swing.GroupLayout jPanel_PlayersLayout = new javax.swing.GroupLayout(jPanel_Players);
+        jPanel_Players.setLayout(jPanel_PlayersLayout);
+        jPanel_PlayersLayout.setHorizontalGroup(
+            jPanel_PlayersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_PlayersLayout.createSequentialGroup()
+                .addComponent(jPanel_Player1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel_Player2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+        );
+        jPanel_PlayersLayout.setVerticalGroup(
+            jPanel_PlayersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_PlayersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel_Player2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel_Player1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         javax.swing.GroupLayout jPanel_ForChatLayout = new javax.swing.GroupLayout(jPanel_ForChat);
         jPanel_ForChat.setLayout(jPanel_ForChatLayout);
         jPanel_ForChatLayout.setHorizontalGroup(
             jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-            .addGroup(jPanel_ForChatLayout.createSequentialGroup()
-                .addComponent(jLabel_Player1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel_Player2, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
-            .addGroup(jPanel_ForChatLayout.createSequentialGroup()
-                .addComponent(jLabel_Time1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_Score1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(jLabel_Score2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel_Time2))
-            .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+            .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+            .addComponent(jPanel_Players, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(roomPart_Chat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
         );
         jPanel_ForChatLayout.setVerticalGroup(
             jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_ForChatLayout.createSequentialGroup()
-                .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addComponent(roomPart_UserList, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_Player1)
-                    .addComponent(jLabel_Player2))
+                .addComponent(jPanel_Players, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel_Time1)
-                        .addComponent(jLabel_Score1))
-                    .addGroup(jPanel_ForChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel_Time2)
-                        .addComponent(jLabel_Score2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+                .addComponent(roomPart_Chat, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
         );
 
         jPanel_ForGame.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -728,11 +786,11 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_Paper.setLayout(jPanel_PaperLayout);
         jPanel_PaperLayout.setHorizontalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 384, Short.MAX_VALUE)
+            .addGap(0, 385, Short.MAX_VALUE)
         );
         jPanel_PaperLayout.setVerticalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 255, Short.MAX_VALUE)
+            .addGap(0, 211, Short.MAX_VALUE)
         );
 
         jToggleButton_ShowTree.setText(">");
@@ -844,8 +902,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_MouseCoords)
                 .addGap(18, 18, 18)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(jButton_Actions))
         );
         jPanel_BottomLayout.setVerticalGroup(
@@ -862,7 +920,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_Tree.setLayout(jPanel_TreeLayout);
         jPanel_TreeLayout.setHorizontalGroup(
             jPanel_TreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 372, Short.MAX_VALUE)
+            .addGap(0, 373, Short.MAX_VALUE)
         );
         jPanel_TreeLayout.setVerticalGroup(
             jPanel_TreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1051,9 +1109,11 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButton_Actions;
+    private javax.swing.JLabel jLabel_Avatar1;
+    private javax.swing.JLabel jLabel_Avatar2;
     private javax.swing.JLabel jLabel_MouseCoords;
-    private javax.swing.JLabel jLabel_Player1;
-    private javax.swing.JLabel jLabel_Player2;
+    private javax.swing.JLabel jLabel_Name1;
+    private javax.swing.JLabel jLabel_Name2;
     private javax.swing.JLabel jLabel_Score1;
     private javax.swing.JLabel jLabel_Score2;
     private javax.swing.JLabel jLabel_Time1;
@@ -1084,6 +1144,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
     private javax.swing.JPanel jPanel_ForChat;
     private javax.swing.JPanel jPanel_ForGame;
     private javax.swing.JPanel jPanel_Paper;
+    private javax.swing.JPanel jPanel_Player1;
+    private javax.swing.JPanel jPanel_Player2;
+    private javax.swing.JPanel jPanel_Players;
     private javax.swing.JPanel jPanel_Tree;
     private javax.swing.JPopupMenu jPopupMenu_Actions;
     private javax.swing.JPopupMenu.Separator jSeparator1;

@@ -278,7 +278,7 @@ public class GuiController implements GuiForServerInterface {
 						}
 					}
 				}
-				);
+		);
 
 	};
 
