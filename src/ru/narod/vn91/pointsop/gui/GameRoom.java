@@ -155,7 +155,9 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	}
 
 	public void stopGame(boolean isRedPlayer) {
-		String whoPressedStop = (isRedPlayer) ? gameOuterInfo.first.guiName : gameOuterInfo.second.guiName;
+		String whoPressedStop = (isRedPlayer)
+			? gameOuterInfo.firstGuiNameFailsafe()
+			: gameOuterInfo.secondGuiNameFailsafe();
 		if (isRedPlayer) {
 			redStopped = true;
 		} else {
@@ -179,8 +181,12 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	public void gameLost(final boolean isRedLooser,
 			final boolean wantToSave) {
 		gameResult = (isRedLooser) ? Sgf.GameResult.BLUE_WON_BY_RESIGN : Sgf.GameResult.RED_WON_BY_RESIGN;
-		final String whoWon = (isRedLooser) ? gameOuterInfo.second.guiName : gameOuterInfo.first.guiName;
-		String whoLost = (isRedLooser) ? gameOuterInfo.first.guiName : gameOuterInfo.second.guiName;
+		final String whoWon = (isRedLooser) 
+			? gameOuterInfo.secondGuiNameFailsafe()
+			: gameOuterInfo.firstGuiNameFailsafe();
+		String whoLost = (isRedLooser) 
+			? gameOuterInfo.firstGuiNameFailsafe()
+			: gameOuterInfo.secondGuiNameFailsafe();
 		roomPart_Chat.addServerNotice(
 				"" + whoLost + " сдался... Победитель - " + whoWon + ".");
 		new Thread() {
@@ -1070,7 +1076,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	private void jMenuItem_SaveGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveGameActionPerformed
 		String[] extensions = {"sgf", "sgftochki"};
 		String sgfData = Sgf.constructSgf(
-				gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
+				gameOuterInfo.firstGuiNameFailsafe(), gameOuterInfo.secondGuiNameFailsafe(),
 				gameOuterInfo.first.rating, gameOuterInfo.second.rating, 39, 32,
 				gameOuterInfo.getTimeAsString(), gameResult, 0,
 				moveList, true);

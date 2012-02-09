@@ -192,11 +192,7 @@ public class GuiController implements GuiForServerInterface {
 			String guiRoomName,
 			boolean isServersMainRoom) {
 		LangRoom langRoom = langRooms.get(
-				new ServerRoom(
-					roomNameOnServer,
-					serverInterface
-				)
-				);
+			new ServerRoom(roomNameOnServer, serverInterface));
 
 		if (langRoom != null) {
 			// nothing
@@ -204,12 +200,10 @@ public class GuiController implements GuiForServerInterface {
 			langRoom = new LangRoom(serverInterface, roomNameOnServer, this);
 			langRooms.put(
 				new ServerRoom(roomNameOnServer, serverInterface),
-				langRoom
-					);
+				langRoom);
 			roomInterfaces.put(
 				new ServerRoom(roomNameOnServer, serverInterface),
-				langRoom
-					);
+				langRoom);
 			tabbedPane.addTab(guiRoomName, langRoom, false);
 			tabbedPane.makeBold(langRoom);
 			if (isServersMainRoom) {
@@ -244,9 +238,9 @@ public class GuiController implements GuiForServerInterface {
 					"<font color=black> - </font>" +
 					"<font color=%s>%s</font></html>",
 					GuiCommon.getHtmlColor(game.player1Color()),
-					game.first.guiName,
+					game.firstGuiNameFailsafe(),
 					GuiCommon.getHtmlColor(game.player2Color()),
-					game.second.guiName
+					game.secondGuiNameFailsafe()
 						);
 			}
 		};

@@ -62,8 +62,10 @@ public class GameOuterInfo {
 	public GameOuterInfo(ServerInterface server, String id) {
 		this.server = server;
 		this.id = id;
-		this.first = new Player(server, "first"); // avoid nulls
-		this.second = new Player(server, "second"); // avoid nulls
+		this.first = null;
+		this.first = null;
+//		this.first = new Player(server, "first"); // avoid nulls
+//		this.second = new Player(server, "second"); // avoid nulls
 	}
 
 	public GameOuterInfo(ServerInterface server, String id, String masterRoomId,
@@ -154,7 +156,7 @@ public class GameOuterInfo {
 	}
 
 	public Boolean amIRed() {
-		if (amIPlaying() == false) {
+		if (amIPlaying() == false || first == null || second == null) {
 			return null;
 		} else if (server.getMyName().equals(first.id)) {
 			return true;
@@ -173,6 +175,22 @@ public class GameOuterInfo {
 		Color red = Settings.getPlayer1Color();
 		Color blue = Settings.getPlayer2Color();
 		return isRedFirst ? blue : red;
+	}
+
+	public String firstGuiNameFailsafe() {
+		if (first == null) {
+			return "???";
+		} else {
+			return first.guiName;
+		}
+	}
+
+	public String secondGuiNameFailsafe() {
+		if (second == null) {
+			return "???";
+		} else {
+			return second.guiName;
+		}
 	}
 
 	public enum GameState {

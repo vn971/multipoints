@@ -5,12 +5,9 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.TabbedPaneUI;
 
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function0;
@@ -76,8 +73,16 @@ public class JTabbedPaneMod {
 	public synchronized void makeBold(Component component) {
 		int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0 &&
-			tabIndex != tabbedPane.getSelectedIndex()) {
-			tabbedPane.setBackgroundAt(tabIndex, boldColor);
+			tabIndex != tabbedPane.getSelectedIndex() &&
+			tabIndex < tabbedPane.getTabCount()) {
+			try {
+				tabbedPane.setBackgroundAt(tabIndex, boldColor);
+			} catch (IndexOutOfBoundsException ex) {
+				ex.printStackTrace();
+			} catch (NullPointerException ex) {
+				ex.printStackTrace(); // SWING is buggy? I have lot's of exceptions here... :-/
+			}
+
 			// Component panel = tabbedPane.getTabComponentAt(tabIndex);
 			// try {
 			// TabCloseable tab = TabCloseable.class.cast(panel);

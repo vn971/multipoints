@@ -79,9 +79,9 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		Date date = (time != null && time != 0) ? new Date(time) : new Date();
 		String formattedDate = GuiCommon.myTimeFormat.format(date);
 		AttributeSet playerAttributes;
-		if (gameInfo != null && gameInfo.first.guiName.equals(user)) {
+		if (gameInfo != null && gameInfo.firstGuiNameFailsafe().equals(user)) {
 			playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player1Color());
-		} else if (gameInfo != null && gameInfo.second.guiName.equals(user)) {
+		} else if (gameInfo != null && gameInfo.secondGuiNameFailsafe().equals(user)) {
 			playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player2Color());
 		} else if (user.equals(roomInterface.getServer().getMyName())) {
 			playerAttributes = GuiCommon.playerNameOutgoing;

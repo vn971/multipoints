@@ -138,25 +138,10 @@ public class ServerZagram2 implements ServerInterface {
 				startingTime, addTime, 
 				startingPosition, 
 				isRated, instantWin);
-//			gui.updateGameInfo(
-//					server, roomId,
-//					currentRoom, player1, player2,
-//					sizeX, sizeY,
-//					false, isRated, 0, instantWin,
-//					manualEnclosings, stopEnabled, isEmptyScored, null,
-//					0, addTime, startingTime, 1);
 		} catch (NumberFormatException e) {
 			return null;
-//			return new ZagramGameTyme(1, 1, false, 1, 1, "", false, 0);
-//			gui.raw(server,
-//					"unknown game description: "
-//							+ message.substring(1));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
-//			return new ZagramGameTyme(1, 1, false, 1, 1, "", false, 0);
-//			gui.raw(server,
-//					"unknown game description: "
-//							+ message.substring(1));
 		}
 	}
 
@@ -340,7 +325,6 @@ public class ServerZagram2 implements ServerInterface {
 //		}
 	}
 
-	// TODO bookmark :)
 	@Override
 	public void cancelPersonalGameInvite(String playerId) {
 		String message = "v" + queue.sizePlusOne() +
@@ -1082,16 +1066,22 @@ public class ServerZagram2 implements ServerInterface {
 
 	public void getUserpic(String user) {
 		try {
-			if (avatarImages.get(user)!=null){
-			} else if (avatarUrls.get(user)!=null 
-					&& !avatarUrls.get(user).equals("")
-					&& !avatarUrls.get(user).equals("0")){
-				URL url = new URL("http://zagram.org/awatary/" + avatarUrls.get(user) + ".gif");
+			if (avatarImages.get(user) != null) {
+			} else if (
+					avatarUrls.get(user) != null
+//					&& !avatarUrls.get(user).equals("")
+//					&& !avatarUrls.get(user).equals("0")
+					) {
+				URL url;
+				if (avatarUrls.get(user).equals("") ||
+						avatarUrls.get(user).equals("0")) {
+					url = new URL("http://zagram.org/awatar2.png");
+				} else {
+					url = new URL("http://zagram.org/awatary/" + avatarUrls.get(user) + ".gif");
+				}
+				// URL url = new URL("http://www.citilink.com/~grizzly/anigifs/bear.gif"); // animation
 				ImageIcon imageIcon = new ImageIcon(url);
-				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
-			} else {
-				URL url = new URL("http://zagram.org/awatar2.png");
-				ImageIcon imageIcon = new ImageIcon(url);
+				// imageIcon.getImage().
 				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
 			}
 		} catch (Exception ex) {

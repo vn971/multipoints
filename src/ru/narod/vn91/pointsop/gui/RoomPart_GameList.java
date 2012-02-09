@@ -18,10 +18,30 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 
 	static Object[] createRow(GameOuterInfo gameOuterInfo) {
 		String row1, row2, row3;
-		String firstAsString = (gameOuterInfo.first == null || gameOuterInfo.first.guiName == null)
-				? "" : gameOuterInfo.first.guiName;
-		String secondAsString = (gameOuterInfo.second == null || gameOuterInfo.second.guiName == null)
-				? "" : gameOuterInfo.second.guiName;
+
+		String firstAsString;
+		if (gameOuterInfo.first == null || gameOuterInfo.first.guiName == null) {
+			firstAsString = "";
+		} else if (gameOuterInfo.first.rating <= 0) {
+			firstAsString = gameOuterInfo.first.guiName;
+		} else {
+			firstAsString = gameOuterInfo.first.guiName + " (" + gameOuterInfo.first.rating + ")";
+		}
+
+		String secondAsString;
+		if (gameOuterInfo.second == null || gameOuterInfo.second.guiName == null) {
+			secondAsString = "";
+		} else if (gameOuterInfo.second.rating <= 0) {
+			secondAsString = gameOuterInfo.second.guiName;
+		} else {
+			secondAsString = gameOuterInfo.second.guiName + " (" + gameOuterInfo.second.rating + ")";
+		}
+
+//		String firstAsString = (gameOuterInfo.first == null || gameOuterInfo.first.guiName == null)
+//				? "" : gameOuterInfo.first.guiName;
+//		String secondAsString = (gameOuterInfo.second == null || gameOuterInfo.second.guiName == null)
+//				? "" : gameOuterInfo.second.guiName;
+
 		boolean isSearching = (gameOuterInfo.state == GameState.SearchingOpponent);
 		row1 = String.format("%s%s%s",
 				isSearching ? "<html><b>" : "",

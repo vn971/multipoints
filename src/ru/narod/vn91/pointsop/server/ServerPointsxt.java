@@ -250,8 +250,7 @@ public class ServerPointsxt
 					commandCommonPrefix + commandAcceptOpponent + myGame.getOpponentIrcName()
 			);
 			this.setPointsxtNickname(roomName, true, true);
-			gui.subscribedGame(
-				this, roomName);
+			gui.subscribedGame(this, roomName);
 			for (User user : super.getUsers(roomName)) {
 				String ircNick = user.getNick();
 				gui.userJoinedRoom(this, roomName, nicknameManager.irc2id(ircNick), true);
