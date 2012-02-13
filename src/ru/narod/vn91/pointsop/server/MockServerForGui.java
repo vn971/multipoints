@@ -166,7 +166,7 @@ public class MockServerForGui implements ServerInterface{
 
 	@Override
 	public String getMyName() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		return "You";
 	}
 
 	@Override

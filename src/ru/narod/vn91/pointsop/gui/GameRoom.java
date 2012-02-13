@@ -189,8 +189,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			: gameOuterInfo.secondGuiNameFailsafe();
 		roomPart_Chat.addServerNotice(
 				"" + whoLost + " сдался... Победитель - " + whoWon + ".");
-		new Thread() {
 
+		new Thread() {
 			@Override
 			public void run() {
 				String eidokropkiLink = "";
@@ -210,6 +210,41 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			}
 		}.start();
 
+	}
+
+	public void disconnectedFromServer() {
+		jButton1.setEnabled(false);
+		jButton2.setEnabled(false);
+		jButton3.setEnabled(false);
+		jButton4.setEnabled(false);
+		jButton5.setEnabled(false);
+		jButton6.setEnabled(false);
+		jButton7.setEnabled(false);
+		jButton8.setEnabled(false);
+		jButton9.setEnabled(false);
+		jButton10.setEnabled(false);
+		jButton11.setEnabled(false);
+		jButton12.setEnabled(false);
+		jButton_Actions.setEnabled(false);
+		jLabel_Avatar1.setEnabled(false);
+		jLabel_Avatar2.setEnabled(false);
+		jLabel_MouseCoords.setEnabled(false);
+		jLabel_Name1.setEnabled(false);
+		jLabel_Name2.setEnabled(false);
+		jLabel_Score1.setEnabled(false);
+		jLabel_Score2.setEnabled(false);
+		jLabel_Time1.setEnabled(false);
+		jLabel_Time2.setEnabled(false);
+		jPanel_Bottom.setEnabled(false);
+		jPanel_ForChat.setEnabled(false);
+		jToolBar1.setEnabled(false);
+		jPanel_ForChat.setEnabled(false);
+		jPanel_ForGame.setEnabled(false);
+		jPanel_Paper.setEnabled(false);
+		jPanel_Players.setEnabled(false);
+		roomPart_UserList.setEnabled(false);
+		roomPart_Chat.setReadOnly(true);
+		roomPart_Chat.addChat("", "disconnected from server", 0L);
 	}
 
 	public void paperClick(
@@ -404,6 +439,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		};
 		gameOuterInfo.addChangeListener(gameInfoListener);
 		gameInfoListener.onChange(gameOuterInfo); // invoke change
+//		disconnectedFromServer();
 	}
 
 	/** This method is called from within the constructor to

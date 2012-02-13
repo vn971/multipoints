@@ -746,10 +746,10 @@ public class GuiController implements GuiForServerInterface {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
 
 		this.privateMessageReceived(server, server.getServerName(), info);
-		if (Settings.isDebug() == true) {
+//		if (Settings.isDebug() == true) {
 			System.out.print(add);
-		} else {
-		}
+//		} else {
+//		}
 	}
 
 	@Override
@@ -770,10 +770,10 @@ public class GuiController implements GuiForServerInterface {
 	@Override
 	public synchronized void rawConnectionState(ServerInterface server, String info) {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
-		if (Settings.isDebug() == true) {
+//		if (Settings.isDebug() == true) {
 			System.out.print(add);
-		} else {
-		}
+//		} else {
+//		}
 		String oldText = serverOutput.getText();
 		serverOutput.setText(oldText + add);
 	}

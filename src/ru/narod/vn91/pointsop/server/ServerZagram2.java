@@ -547,10 +547,10 @@ public class ServerZagram2 implements ServerInterface {
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {
 		}
-		if (Settings.isDebug()) {
+//		if (Settings.isDebug()) {
 			System.out.println("visiting: " + link);
 			System.out.println("received: " + result.toString());
-		}
+//		}
 		return result.toString();
 	}
 
@@ -623,7 +623,7 @@ public class ServerZagram2 implements ServerInterface {
 				.replaceAll("&#45;", "-");
 	}
 
-	private class ThreadMain extends java.lang.Thread {
+	private class ThreadMain extends Thread {
 
 		int lastSentCommandNumber = 0;
 		int lastServerMessageNumber = 0;

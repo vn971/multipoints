@@ -1338,22 +1338,29 @@ public class ServerPointsxt
 		return true;
 	}
 
-	public void getUserInfoText(String user) {
-		sendPrivateMsg("Podbot", "!mppersinf " + user.replaceAll("\\(.*\\)", ""));
+	public void getUserInfoText(final String user) {
+		new Thread() {
+			public void run() {
+				sendPrivateMsg("Podbot", "!mppersinf " + user.replaceAll("\\(.*\\)", ""));
+			};
+		}.start();
 	}
 
-	public void getUserpic(String user) {
+	public void getUserpic(final String user) {
 		// try {
 		// URL url = new URL("http://pointsgame.net/mp/irc-icons/" + user + ".gif");
 		// } catch (MalformedURLException ex) {
 		// }
 
-		URL url = ServerPointsxt.class.getResource("irc/" + user.toLowerCase() + ".gif");
-		if (url != null) {
-			ImageIcon imageIcon = new ImageIcon(url);
-			gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
-		}
-
+		new Thread() {
+			public void run() {
+				URL url = ServerPointsxt.class.getResource("irc/" + user.toLowerCase() + ".gif");
+				if (url != null) {
+					ImageIcon imageIcon = new ImageIcon(url);
+					gui.updateUserInfo(ServerPointsxt.this, user, null, imageIcon, null, null, null, null, null);
+				}
+			}
+		}.start();
 	}
 
 	@Override

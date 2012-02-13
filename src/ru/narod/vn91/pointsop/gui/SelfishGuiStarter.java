@@ -143,25 +143,24 @@ public class SelfishGuiStarter {
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
 		if (Settings.isDebug()) {
-			ServerInterface mockServer = new MockServerForGui();
-			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
-
-			guiController.privateMessageReceived(mockServer, "user", "message");
-			
-
-			{
-				// hack into the GuiController
-				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
-				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
-				tabbedPane.addTab("ИИ", new AiPanel(), true);
-			}
-			{
-				// non-closeable
-				// guiController.subscribedLangRoom("lang", mockServer, "lang", true); // non-closeable
-				// guiController.subscribedGame(mockServer, "game");
-			}
-
+//			ServerInterface mockServer = new MockServerForGui();
+//			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+//			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
+//
+//			guiController.privateMessageReceived(mockServer, "user", "message");
+//			
+//
+//			{
+//				// hack into the GuiController
+//				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
+//				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
+//				tabbedPane.addTab("ИИ", new AiPanel(), true);
+//			}
+//			{
+//				// non-closeable
+//				// guiController.subscribedLangRoom("lang", mockServer, "lang", true); // non-closeable
+//				// guiController.subscribedGame(mockServer, "game");
+//			}
 		}
 
 		{

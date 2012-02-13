@@ -20,10 +20,10 @@ import ru.narod.vn91.pointsop.sounds.Sounds;
 public class PrivateChat extends javax.swing.JPanel {
 
 	private final Player companion;
-//	GuiForServerInterface guiController;
+	// GuiForServerInterface guiController;
 	private StyledDocument document = new DefaultStyledDocument();
 	private Date lastPingSent = new Date();
-//	SingleGameEngineInterface engine;
+	// SingleGameEngineInterface engine;
 	private Paper paper;
 	private boolean lastMoveWasMine;
 	private static String prefixPointsop = "OpCmd ";
