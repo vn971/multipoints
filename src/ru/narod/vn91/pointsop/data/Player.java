@@ -1,9 +1,7 @@
 package ru.narod.vn91.pointsop.data;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -23,8 +21,8 @@ public class Player {
 	public ImageIcon imageIcon;
 	public String status = "";
 
-	Collection<WeakReference<PlayerChangeListener>> weak = new LinkedList<WeakReference<PlayerChangeListener>>();
-//	Collection<PlayerChangeListener> changeListenerList = new ArrayList<PlayerChangeListener>();
+//	Collection<WeakReference<PlayerChangeListener>> weakListeners = new LinkedList<WeakReference<PlayerChangeListener>>();
+	Collection<PlayerChangeListener> listeners = new LinkedList<PlayerChangeListener>();
 
 	public Player(final ServerInterface server, final String id) {
 		super();
@@ -59,24 +57,24 @@ public class Player {
 			}
 		}
 
-		Iterator<WeakReference<PlayerChangeListener>> i = weak.iterator();
-		while (i.hasNext()) {
-			PlayerChangeListener changeListener = i.next().get();
-			if (changeListener != null) {
-				changeListener.onChange(this);
-			} else {
-				i.remove();
-			}
-		}
+//		Iterator<WeakReference<PlayerChangeListener>> i = weak.iterator();
+//		while (i.hasNext()) {
+//			PlayerChangeListener changeListener = i.next().get();
+//			if (changeListener != null) {
+//				changeListener.onChange(this);
+//			} else {
+//				i.remove();
+//			}
+//		}
 
-		// for (PlayerChangeListener changeListener : changeListenerList) {
-		// changeListener.onChange(this);
-		// }
+		for (PlayerChangeListener changeListener : listeners) {
+			changeListener.onChange(this);
+		}
 	}
 
 	public void addChangeListener(PlayerChangeListener changeListener) {
-		weak.add(new WeakReference<PlayerChangeListener>(changeListener));
-//		changeListenerList.add(changeListener);
+//		weak.add(new WeakReference<PlayerChangeListener>(changeListener));
+		listeners.add(changeListener);
 	}
 
 	public static int compare(Player p1, Player p2) {

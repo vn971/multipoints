@@ -5,7 +5,9 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.utils.Settings;
@@ -56,8 +58,8 @@ public class GameOuterInfo {
 	// period in turns. See above.
 	public Integer periodLength = 0;
 
-	Collection<WeakReference<GameInfoListener>> weak = new LinkedList<WeakReference<GameInfoListener>>();
-	// private Set<GameInfoListener> changeListenerList = new LinkedHashSet<GameInfoListener>();
+//	Collection<WeakReference<GameInfoListener>> weak = new LinkedList<WeakReference<GameInfoListener>>();
+	 private Collection<GameInfoListener> listeners = new LinkedList<GameInfoListener>();
 
 	public GameOuterInfo(ServerInterface server, String id) {
 		this.server = server;
@@ -107,24 +109,24 @@ public class GameOuterInfo {
 			}
 		}
 
-		Iterator<WeakReference<GameInfoListener>> i = weak.iterator();
-		while (i.hasNext()) {
-			GameInfoListener changeListener = i.next().get();
-			if (changeListener != null) {
-				changeListener.onChange(this);
-			} else {
-				i.remove();
-			}
-		}
+//		Iterator<WeakReference<GameInfoListener>> i = weak.iterator();
+//		while (i.hasNext()) {
+//			GameInfoListener changeListener = i.next().get();
+//			if (changeListener != null) {
+//				changeListener.onChange(this);
+//			} else {
+//				i.remove();
+//			}
+//		}
 
-		// for (GameInfoListener changeListener : changeListenerList) {
-		// changeListener.onChange(this);
-		// }
+		 for (GameInfoListener changeListener : listeners) {
+		 changeListener.onChange(this);
+		 }
 	}
 
 	public void addChangeListener(GameInfoListener changeListener) {
-		weak.add(new WeakReference<GameInfoListener>(changeListener));
-		// changeListenerList.add(changeListener);
+//		weak.add(new WeakReference<GameInfoListener>(changeListener));
+		listeners.add(changeListener);
 	}
 
 	public static int compare(GameOuterInfo game1, GameOuterInfo game2) {
