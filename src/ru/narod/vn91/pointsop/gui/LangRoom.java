@@ -21,12 +21,12 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 
 	@Override
 	public RoomPart_Chat getRoomPart_Chat() {
-		return roomPart_Chat1;
+		return roomPart_Chat;
 	}
 
 	@Override
 	public RoomPart_Userlist getRoomPart_UserList() {
-		return roomPart_UserList1;
+		return roomPart_UserList;
 	}
 
 	@Override
@@ -75,8 +75,8 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 		jToggleButton_LeaveZayavkaActionPerformed(null);
 		this.server = server;
 
-		roomPart_Chat1.initChat(this, null);
-		roomPart_UserList1.initRoomPart(this, centralGuiController);
+		roomPart_Chat.initChat(this, null);
+		roomPart_UserList.initRoomPart(this, centralGuiController);
 		roomPart_GameList1.initRoomPart(this, centralGuiController);
 		jToggleButton_LeaveZayavka.setVisible(server.isGlobalGameVacancyAllowed());
 	}
@@ -91,13 +91,17 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        roomPart_Chat1 = new ru.narod.vn91.pointsop.gui.RoomPart_Chat();
+        jSplitPane_Global = new javax.swing.JSplitPane();
+        jPanel_GameListAndChat = new javax.swing.JPanel();
+        jSplitPane_GameListAndChat = new javax.swing.JSplitPane();
+        jPanel_GameList = new javax.swing.JPanel();
         roomPart_GameList1 = new ru.narod.vn91.pointsop.gui.RoomPart_GameList();
-        roomPart_UserList1 = new ru.narod.vn91.pointsop.gui.RoomPart_Userlist();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel_Toolbar = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
         jToggleButton_LeaveZayavka = new javax.swing.JToggleButton();
         jButton2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
+        roomPart_Chat = new ru.narod.vn91.pointsop.gui.RoomPart_Chat();
+        roomPart_UserList = new ru.narod.vn91.pointsop.gui.RoomPart_Userlist();
 
         jButton1.setText("!топ");
         jButton1.setFocusable(false);
@@ -115,11 +119,22 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
             }
         });
 
-        roomPart_Chat1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        roomPart_Chat1.setMinimumSize(null);
-        roomPart_Chat1.setPreferredSize(null);
+        jSplitPane_Global.setResizeWeight(1.0);
+        jSplitPane_Global.setContinuousLayout(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jSplitPane_GameListAndChat.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane_GameListAndChat.setResizeWeight(0.33);
+        jSplitPane_GameListAndChat.setContinuousLayout(true);
+
+        jPanel_Toolbar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "свободен", "занят" }));
+        jComboBox1.setToolTipText("<html>В случае статуса \"занят\" <br>приглашения на игру автоматически отклоняются.</html>");
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jToggleButton_LeaveZayavka.setText("заявка на игру");
         jToggleButton_LeaveZayavka.setFocusable(false);
@@ -141,63 +156,81 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "свободен", "занят" }));
-        jComboBox1.setToolTipText("<html>В случае статуса \"занят\" <br>приглашения на игру автоматически отклоняются.</html>");
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel_ToolbarLayout = new javax.swing.GroupLayout(jPanel_Toolbar);
+        jPanel_Toolbar.setLayout(jPanel_ToolbarLayout);
+        jPanel_ToolbarLayout.setHorizontalGroup(
+            jPanel_ToolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_ToolbarLayout.createSequentialGroup()
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 407, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToggleButton_LeaveZayavka))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel_ToolbarLayout.setVerticalGroup(
+            jPanel_ToolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jToggleButton_LeaveZayavka, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jToggleButton_LeaveZayavka, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
+
+        javax.swing.GroupLayout jPanel_GameListLayout = new javax.swing.GroupLayout(jPanel_GameList);
+        jPanel_GameList.setLayout(jPanel_GameListLayout);
+        jPanel_GameListLayout.setHorizontalGroup(
+            jPanel_GameListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel_Toolbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(roomPart_GameList1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+        );
+        jPanel_GameListLayout.setVerticalGroup(
+            jPanel_GameListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_GameListLayout.createSequentialGroup()
+                .addComponent(roomPart_GameList1, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel_Toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jSplitPane_GameListAndChat.setLeftComponent(jPanel_GameList);
+
+        roomPart_Chat.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        roomPart_Chat.setMinimumSize(null);
+        roomPart_Chat.setPreferredSize(null);
+        jSplitPane_GameListAndChat.setRightComponent(roomPart_Chat);
+
+        javax.swing.GroupLayout jPanel_GameListAndChatLayout = new javax.swing.GroupLayout(jPanel_GameListAndChat);
+        jPanel_GameListAndChat.setLayout(jPanel_GameListAndChatLayout);
+        jPanel_GameListAndChatLayout.setHorizontalGroup(
+            jPanel_GameListAndChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane_GameListAndChat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+        );
+        jPanel_GameListAndChatLayout.setVerticalGroup(
+            jPanel_GameListAndChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane_GameListAndChat, javax.swing.GroupLayout.PREFERRED_SIZE, 145, Short.MAX_VALUE)
+        );
+
+        jSplitPane_Global.setLeftComponent(jPanel_GameListAndChat);
+        jSplitPane_Global.setRightComponent(roomPart_UserList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(roomPart_Chat1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
-                    .addComponent(roomPart_GameList1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(roomPart_UserList1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jSplitPane_Global)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(roomPart_GameList1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(roomPart_Chat1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
-            .addComponent(roomPart_UserList1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+            .addComponent(jSplitPane_Global, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 	private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
-		roomPart_Chat1.requestFocusInWindow();
+		roomPart_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formFocusGained
 
 	private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-		roomPart_Chat1.requestFocusInWindow();
+		roomPart_Chat.requestFocusInWindow();
 	}//GEN-LAST:event_formComponentShown
 
 private void jToggleButton_LeaveZayavkaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton_LeaveZayavkaStateChanged
@@ -238,10 +271,14 @@ private void jToggleButton_LeaveZayavkaActionPerformed(java.awt.event.ActionEven
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel_GameList;
+    private javax.swing.JPanel jPanel_GameListAndChat;
+    private javax.swing.JPanel jPanel_Toolbar;
+    private javax.swing.JSplitPane jSplitPane_GameListAndChat;
+    private javax.swing.JSplitPane jSplitPane_Global;
     private javax.swing.JToggleButton jToggleButton_LeaveZayavka;
-    private ru.narod.vn91.pointsop.gui.RoomPart_Chat roomPart_Chat1;
+    private ru.narod.vn91.pointsop.gui.RoomPart_Chat roomPart_Chat;
     private ru.narod.vn91.pointsop.gui.RoomPart_GameList roomPart_GameList1;
-    private ru.narod.vn91.pointsop.gui.RoomPart_Userlist roomPart_UserList1;
+    private ru.narod.vn91.pointsop.gui.RoomPart_Userlist roomPart_UserList;
     // End of variables declaration//GEN-END:variables
 }

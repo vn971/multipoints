@@ -1,13 +1,9 @@
 package ru.narod.vn91.pointsop.data;
 
 import java.awt.Color;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.utils.Settings;

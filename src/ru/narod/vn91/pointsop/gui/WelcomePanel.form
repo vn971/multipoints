@@ -194,22 +194,12 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" max="-2" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPanel_Connections" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel_Password" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" max="-2" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jPasswordField_Password" alignment="1" min="-2" pref="197" max="-2" attributes="0"/>
-                              <Component id="jTextField_Username" alignment="0" pref="197" max="32767" attributes="1"/>
-                          </Group>
-                      </Group>
+                      <Component id="jPanel_Connections" alignment="1" max="32767" attributes="1"/>
+                      <Component id="jPasswordField_Password" alignment="0" pref="197" max="32767" attributes="1"/>
+                      <Component id="jTextField_Username" alignment="0" pref="197" max="32767" attributes="1"/>
+                      <Component id="jLabel_Password" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -226,7 +216,7 @@
                   <Component id="jPanel_Connections" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel_Password" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="153" max="32767" attributes="0"/>
+                  <EmptySpace pref="33" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -262,7 +252,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="jButton_ConnectToZagram">
               <Properties>
-                <Property name="text" type="java.lang.String" value="zagram.org"/>
+                <Property name="text" type="java.lang.String" value="zagram ***"/>
                 <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jTextField_Username"/>
                 </Property>
@@ -274,7 +264,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton_ConnectToPointsxt">
               <Properties>
-                <Property name="text" type="java.lang.String" value="pointsgame.net"/>
+                <Property name="text" type="java.lang.String" value="IRC **"/>
                 <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jTextField_Username"/>
                 </Property>
@@ -308,7 +298,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="&#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44c; (&#x43d;&#x435;&#x43e;&#x431;&#x44f;&#x437;.)"/>
+                <TitledBorder title="&#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44c; (&#x43d;&#x435;&#x43e;&#x431;&#x44f;&#x437;. *)"/>
               </Border>
             </Property>
           </Properties>
@@ -326,7 +316,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="jPasswordField_Password"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#x43f;&#x440;&#x438; &#x43e;&#x442;&#x441;&#x443;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44f;&lt;br&gt;&#x431;&#x443;&#x434;&#x435;&#x442; &#x43e;&#x441;&#x443;&#x449;&#x435;&#x441;&#x442;&#x432;&#x43b;&#x451;&#x43d; &#x432;&#x445;&#x43e;&#x434; &lt;br&gt;&#x433;&#x43e;&#x441;&#x442;&#x451;&#x43c;&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;* &#x43f;&#x440;&#x438; &#x43e;&#x442;&#x441;&#x443;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44f;&#xa;&lt;br&gt;&#x431;&#x443;&#x434;&#x435;&#x442; &#x43e;&#x441;&#x443;&#x449;&#x435;&#x441;&#x442;&#x432;&#x43b;&#x451;&#x43d; &#x432;&#x445;&#x43e;&#x434; &#xa;&lt;br&gt;&#x433;&#x43e;&#x441;&#x442;&#x451;&#x43c;&#xa;&lt;br&gt;&#xa;&lt;br&gt; ** &#x43d;&#x435; &#x43f;&#x43e;&#x434;&#x434;&#x435;&#x440;&#x436;&#x438;&#x432;&#x430;&#x435;&#x442;&#x441;&#x44f;&#xa;&lt;br&gt; (&#x43d;&#x43e;&#x432;&#x44b;&#x435; &#x444;&#x443;&#x43d;&#x43a;&#x446;&#x438;&#x438;&#xa;&lt;br&gt; &#x43d;&#x435; &#x43f;&#x438;&#x448;&#x443;&#x442;&#x441;&#x44f;)&#xa;&lt;br&gt;&#xa;&lt;br&gt; *** &#x43d;&#x435; &#x434;&#x43e;&#x43f;&#x438;&#x441;&#x430;&#x43d;&#x43e;&#xa;&lt;br&gt;(&#x447;&#x430;&#x441;&#x442;&#x438; &#x43d;&#x435;&#x43e;&#x431;&#x445;&#x43e;&#x434;&#x438;&#x43c;&#x44b;&#x445;&#xa;&lt;br&gt;&#x444;&#x443;&#x43d;&#x43a;&#x446;&#x438;&#x439; &#x43d;&#x435;&#x442;)&#xa;&lt;/html&gt;"/>
           </Properties>
         </Component>
       </SubComponents>

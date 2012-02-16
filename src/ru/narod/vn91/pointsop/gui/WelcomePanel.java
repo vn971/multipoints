@@ -165,7 +165,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jPanel_Connections.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "подключиться к:", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP));
 
-        jButton_ConnectToZagram.setText("zagram.org");
+        jButton_ConnectToZagram.setText("zagram ***");
         jButton_ConnectToZagram.setNextFocusableComponent(jTextField_Username);
         jButton_ConnectToZagram.setRequestFocusEnabled(false);
         jButton_ConnectToZagram.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +174,7 @@ public class WelcomePanel extends javax.swing.JPanel {
             }
         });
 
-        jButton_ConnectToPointsxt.setText("pointsgame.net");
+        jButton_ConnectToPointsxt.setText("IRC **");
         jButton_ConnectToPointsxt.setNextFocusableComponent(jTextField_Username);
         jButton_ConnectToPointsxt.setRequestFocusEnabled(false);
         jButton_ConnectToPointsxt.addActionListener(new java.awt.event.ActionListener() {
@@ -207,7 +207,7 @@ public class WelcomePanel extends javax.swing.JPanel {
             }
         });
 
-        jPasswordField_Password.setBorder(javax.swing.BorderFactory.createTitledBorder("пароль (необяз.)"));
+        jPasswordField_Password.setBorder(javax.swing.BorderFactory.createTitledBorder("пароль (необяз. *)"));
         jPasswordField_Password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPasswordField_PasswordKeyPressed(evt);
@@ -216,25 +216,19 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jLabel_Password.setFont(jLabel_Password.getFont().deriveFont(jLabel_Password.getFont().getSize()-3f));
         jLabel_Password.setLabelFor(jPasswordField_Password);
-        jLabel_Password.setText("<html>при отсутствии пароля<br>будет осуществлён вход <br>гостём</html>");
+        jLabel_Password.setText("<html>\n* при отсутствии пароля\n<br>будет осуществлён вход \n<br>гостём\n<br>\n<br> ** не поддерживается\n<br> (новые функции\n<br> не пишутся)\n<br>\n<br> *** не дописано\n<br>(части необходимых\n<br>функций нет)\n</html>");
 
         javax.swing.GroupLayout jPanel_LeftLayout = new javax.swing.GroupLayout(jPanel_Left);
         jPanel_Left.setLayout(jPanel_LeftLayout);
         jPanel_LeftLayout.setHorizontalGroup(
             jPanel_LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_LeftLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel_LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_LeftLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel_Connections, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel_LeftLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel_Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel_LeftLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel_LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPasswordField_Password, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField_Username, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))))
+                    .addComponent(jPanel_Connections, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPasswordField_Password, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addComponent(jTextField_Username, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addComponent(jLabel_Password))
                 .addContainerGap())
         );
         jPanel_LeftLayout.setVerticalGroup(
@@ -248,7 +242,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addComponent(jPanel_Connections, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel_Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

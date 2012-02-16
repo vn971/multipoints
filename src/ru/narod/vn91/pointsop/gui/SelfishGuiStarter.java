@@ -64,7 +64,7 @@ public class SelfishGuiStarter {
 			Settings.resetColors();
 		}
 		Settings.setNewestVersion();
-		final JFrame frame = new JFrame("Точки - MultiPoints 2.1.1");
+		final JFrame frame = new JFrame("Точки - MultiPoints 2.1.6");
 		URL url = SelfishGuiStarter.class.getClassLoader().
 				getResource("ru/narod/vn91/pointsop/gui/vp.jpg");
 		frame.setIconImage(new ImageIcon(url).getImage());
@@ -143,18 +143,18 @@ public class SelfishGuiStarter {
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
 		if (Settings.isDebug()) {
-//			ServerInterface mockServer = new MockServerForGui();
-//			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-//			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
+			ServerInterface mockServer = new MockServerForGui();
+			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
 //
 //			guiController.privateMessageReceived(mockServer, "user", "message");
 //			
 //
 //			{
 //				// hack into the GuiController
-//				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
-//				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
-//				tabbedPane.addTab("ИИ", new AiPanel(), true);
+				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
+				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
+				tabbedPane.addTab("ИИ", new AiPanel(), true);
 //			}
 //			{
 //				// non-closeable
