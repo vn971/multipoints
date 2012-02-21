@@ -216,7 +216,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jLabel_Password.setFont(jLabel_Password.getFont().deriveFont(jLabel_Password.getFont().getSize()-3f));
         jLabel_Password.setLabelFor(jPasswordField_Password);
-        jLabel_Password.setText("<html>\n* при отсутствии пароля\n<br>будет осуществлён вход \n<br>гостём\n<br>\n<br> ** не поддерживается\n<br> (новые функции\n<br> не пишутся)\n<br>\n<br> *** не дописано\n<br>(части необходимых\n<br>функций нет)\n</html>");
+        jLabel_Password.setText("<html> * при отсутствии пароля <br>будет осуществлён вход  <br>гостем <br> <br> ** не поддерживается <br> (новые функции <br> не пишутся) <br> <br> *** не дописано <br>(части необходимых <br>функций нет) </html>");
 
         javax.swing.GroupLayout jPanel_LeftLayout = new javax.swing.GroupLayout(jPanel_Left);
         jPanel_Left.setLayout(jPanel_LeftLayout);

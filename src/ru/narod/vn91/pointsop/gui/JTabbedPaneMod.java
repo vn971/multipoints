@@ -78,9 +78,9 @@ public class JTabbedPaneMod {
 			try {
 				tabbedPane.setBackgroundAt(tabIndex, boldColor);
 			} catch (IndexOutOfBoundsException ex) {
-				ex.printStackTrace();
+				System.out.println(ex);
 			} catch (NullPointerException ex) {
-				ex.printStackTrace(); // SWING is buggy? I have lot's of exceptions here... :-/
+				System.out.println(ex); // SWING is buggy? I have lot's of exceptions here... :-/
 			}
 
 			// Component panel = tabbedPane.getTabComponentAt(tabIndex);
