@@ -28,7 +28,7 @@ import ru.narod.vn91.pointsop.utils.Settings;
 @SuppressWarnings("serial")
 public abstract class Paper extends JPanel {
 
-	static boolean doAnimation = true;
+//	static boolean doAnimation = true;
 	private SingleGameEngineInterface engine;
 	private Function2<Integer, Integer, String> coordinatesFormatter = new Function2<Integer, Integer, String>() {
 		@Override
@@ -379,7 +379,7 @@ public abstract class Paper extends JPanel {
 			} else {
 				// нарисовать последний ход
 
-				if (doAnimation) {
+				if (Settings.getLastDotAnimation()) {
 					new LastMoveDrawer().start();
 				} else {
 					DotType dotType = engine.getDotType(x, y);

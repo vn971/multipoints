@@ -97,6 +97,7 @@ public class SettingsPanel extends javax.swing.JPanel {
 		}
 		jCheckBox_RestoreSize.setSelected(Settings.isRestoreSize());
 		jCheckBox_RestorePosition.setSelected(Settings.isRestorePosition());
+		jCheckBox_Animation.setSelected(Settings.getLastDotAnimation());
 		initPhase = false;
 	}
 
@@ -116,13 +117,17 @@ public class SettingsPanel extends javax.swing.JPanel {
         jRadioButton_PointsClick_OnlyInMyGames = new javax.swing.JRadioButton();
         jRadioButton_PointsClick_Nowhere = new javax.swing.JRadioButton();
         jButton_PointClick = new javax.swing.JButton();
-        jPanel_Dots = new javax.swing.JPanel();
-        jSlider_DotWidth = new javax.swing.JSlider();
+        jPanel_PaperSettings = new javax.swing.JPanel();
+        jSplitPane = new javax.swing.JSplitPane();
+        jPanel_PaperSettings2 = new javax.swing.JPanel();
         jCheckBox_DrawConnections = new javax.swing.JCheckBox();
+        jSlider_DotWidth = new javax.swing.JSlider();
+        jPanel1 = new javax.swing.JPanel();
         jButton_P1Color = new javax.swing.JButton();
         jButton_P2Color = new javax.swing.JButton();
         jButton_BackgroundColor = new javax.swing.JButton();
         jButton_ResetColors = new javax.swing.JButton();
+        jCheckBox_Animation = new javax.swing.JCheckBox();
         jPanel_Paper = paper;
         jPanel_OtherSounds = new javax.swing.JPanel();
         jCheckBox_OtherSounds = new javax.swing.JCheckBox();
@@ -169,7 +174,7 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addComponent(jRadioButton_PointsClick_Nowhere)
                 .addGap(18, 18, 18)
                 .addComponent(jButton_PointClick)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanel_ClickLayout.setVerticalGroup(
             jPanel_ClickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,8 +185,18 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addComponent(jButton_PointClick))
         );
 
-        jPanel_Dots.setBorder(javax.swing.BorderFactory.createTitledBorder("настройки игрового поля"));
-        // jPanel_Dots.setVisible(false);
+        jPanel_PaperSettings.setBorder(javax.swing.BorderFactory.createTitledBorder("настройки игрового поля"));
+        // jPanel_PaperSettings.setVisible(false);
+
+        jSplitPane.setResizeWeight(1.0);
+        jSplitPane.setContinuousLayout(true);
+
+        jCheckBox_DrawConnections.setText("<html>соединять соседние точки палочками</html>");
+        jCheckBox_DrawConnections.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBox_DrawConnectionsStateChanged(evt);
+            }
+        });
 
         jSlider_DotWidth.setMajorTickSpacing(3);
         jSlider_DotWidth.setMaximum(17);
@@ -194,13 +209,6 @@ public class SettingsPanel extends javax.swing.JPanel {
         jSlider_DotWidth.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSlider_DotWidthStateChanged(evt);
-            }
-        });
-
-        jCheckBox_DrawConnections.setText("соединять соседние точки палочками");
-        jCheckBox_DrawConnections.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox_DrawConnectionsStateChanged(evt);
             }
         });
 
@@ -232,49 +240,87 @@ public class SettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jButton_P1Color)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_P2Color)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_BackgroundColor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_ResetColors)
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButton_P1Color)
+                .addComponent(jButton_P2Color)
+                .addComponent(jButton_BackgroundColor)
+                .addComponent(jButton_ResetColors))
+        );
+
+        jCheckBox_Animation.setText("анимация последней поставленной точки");
+        jCheckBox_Animation.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBox_AnimationStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel_PaperSettings2Layout = new javax.swing.GroupLayout(jPanel_PaperSettings2);
+        jPanel_PaperSettings2.setLayout(jPanel_PaperSettings2Layout);
+        jPanel_PaperSettings2Layout.setHorizontalGroup(
+            jPanel_PaperSettings2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_PaperSettings2Layout.createSequentialGroup()
+                .addComponent(jSlider_DotWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(215, 215, 215))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel_PaperSettings2Layout.createSequentialGroup()
+                .addComponent(jCheckBox_DrawConnections, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel_PaperSettings2Layout.createSequentialGroup()
+                .addComponent(jCheckBox_Animation)
+                .addContainerGap())
+        );
+        jPanel_PaperSettings2Layout.setVerticalGroup(
+            jPanel_PaperSettings2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_PaperSettings2Layout.createSequentialGroup()
+                .addComponent(jSlider_DotWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox_DrawConnections, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox_Animation))
+        );
+
+        jSplitPane.setLeftComponent(jPanel_PaperSettings2);
+
         javax.swing.GroupLayout jPanel_PaperLayout = new javax.swing.GroupLayout(jPanel_Paper);
         jPanel_Paper.setLayout(jPanel_PaperLayout);
         jPanel_PaperLayout.setHorizontalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 127, Short.MAX_VALUE)
+            .addGap(0, 151, Short.MAX_VALUE)
         );
         jPanel_PaperLayout.setVerticalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 93, Short.MAX_VALUE)
+            .addGap(0, 153, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel_DotsLayout = new javax.swing.GroupLayout(jPanel_Dots);
-        jPanel_Dots.setLayout(jPanel_DotsLayout);
-        jPanel_DotsLayout.setHorizontalGroup(
-            jPanel_DotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_DotsLayout.createSequentialGroup()
-                .addGroup(jPanel_DotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider_DotWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel_DotsLayout.createSequentialGroup()
-                        .addComponent(jButton_P1Color)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_P2Color)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_BackgroundColor)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_DotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_ResetColors)
-                    .addComponent(jCheckBox_DrawConnections))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jPanel_Paper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jSplitPane.setRightComponent(jPanel_Paper);
+
+        javax.swing.GroupLayout jPanel_PaperSettingsLayout = new javax.swing.GroupLayout(jPanel_PaperSettings);
+        jPanel_PaperSettings.setLayout(jPanel_PaperSettingsLayout);
+        jPanel_PaperSettingsLayout.setHorizontalGroup(
+            jPanel_PaperSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
         );
-        jPanel_DotsLayout.setVerticalGroup(
-            jPanel_DotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_DotsLayout.createSequentialGroup()
-                .addComponent(jSlider_DotWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_DotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_P1Color)
-                    .addComponent(jButton_P2Color)
-                    .addComponent(jButton_BackgroundColor)
-                    .addComponent(jButton_ResetColors)))
-            .addComponent(jCheckBox_DrawConnections)
-            .addComponent(jPanel_Paper, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        jPanel_PaperSettingsLayout.setVerticalGroup(
+            jPanel_PaperSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
         );
 
         jPanel_OtherSounds.setBorder(javax.swing.BorderFactory.createTitledBorder("прочие звуки"));
@@ -292,7 +338,7 @@ public class SettingsPanel extends javax.swing.JPanel {
             jPanel_OtherSoundsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_OtherSoundsLayout.createSequentialGroup()
                 .addComponent(jCheckBox_OtherSounds)
-                .addContainerGap(571, Short.MAX_VALUE))
+                .addContainerGap(471, Short.MAX_VALUE))
         );
         jPanel_OtherSoundsLayout.setVerticalGroup(
             jPanel_OtherSoundsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,7 +369,7 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addGroup(jPanel_AtStartupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox_RestorePosition)
                     .addComponent(jCheckBox_RestoreSize))
-                .addContainerGap(371, Short.MAX_VALUE))
+                .addContainerGap(271, Short.MAX_VALUE))
         );
         jPanel_AtStartupLayout.setVerticalGroup(
             jPanel_AtStartupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,7 +385,7 @@ public class SettingsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel_Click, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel_OtherSounds, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel_Dots, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel_PaperSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel_AtStartup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -349,10 +395,10 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_OtherSounds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel_Dots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel_PaperSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_AtStartup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -425,6 +471,10 @@ private void jCheckBox_OtherSoundsStateChanged(javax.swing.event.ChangeEvent evt
 		Settings.setRestoreSize(jCheckBox_RestoreSize.isSelected());
 	}//GEN-LAST:event_jCheckBox_RestoreSizeActionPerformed
 
+	private void jCheckBox_AnimationStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox_AnimationStateChanged
+		Settings.setLastDotAnimation(jCheckBox_Animation.isSelected());
+	}//GEN-LAST:event_jCheckBox_AnimationStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup_PointClick;
     private javax.swing.ButtonGroup buttonGroup_PrivateChat;
@@ -433,18 +483,22 @@ private void jCheckBox_OtherSoundsStateChanged(javax.swing.event.ChangeEvent evt
     private javax.swing.JButton jButton_P2Color;
     private javax.swing.JButton jButton_PointClick;
     private javax.swing.JButton jButton_ResetColors;
+    private javax.swing.JCheckBox jCheckBox_Animation;
     private javax.swing.JCheckBox jCheckBox_DrawConnections;
     private javax.swing.JCheckBox jCheckBox_OtherSounds;
     private javax.swing.JCheckBox jCheckBox_RestorePosition;
     private javax.swing.JCheckBox jCheckBox_RestoreSize;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel_AtStartup;
     private javax.swing.JPanel jPanel_Click;
-    private javax.swing.JPanel jPanel_Dots;
     private javax.swing.JPanel jPanel_OtherSounds;
     private javax.swing.JPanel jPanel_Paper;
+    private javax.swing.JPanel jPanel_PaperSettings;
+    private javax.swing.JPanel jPanel_PaperSettings2;
     private javax.swing.JRadioButton jRadioButton_PointsClick_InAllGames;
     private javax.swing.JRadioButton jRadioButton_PointsClick_Nowhere;
     private javax.swing.JRadioButton jRadioButton_PointsClick_OnlyInMyGames;
     private javax.swing.JSlider jSlider_DotWidth;
+    private javax.swing.JSplitPane jSplitPane;
     // End of variables declaration//GEN-END:variables
 }

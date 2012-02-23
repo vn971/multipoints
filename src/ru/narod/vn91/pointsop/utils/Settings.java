@@ -188,6 +188,13 @@ public class Settings {
 		memory.put("DotWidth", String.valueOf(d));
 	}
 
+	public static boolean getLastDotAnimation() {
+		return memory.getBoolean("LastDotAnimation", false);
+	}
+	public static void setLastDotAnimation(boolean b) {
+		memory.putBoolean("LastDotAnimation", b);
+	}
+
 	public static boolean getDrawConnections() {
 		return memory.getBoolean("DrawConnections", true);
 	}
