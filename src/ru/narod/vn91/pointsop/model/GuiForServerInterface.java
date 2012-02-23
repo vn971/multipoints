@@ -28,7 +28,7 @@ public interface GuiForServerInterface {
 			ServerInterface server, String id,
 			String guiName, ImageIcon imageIcon,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
-			String status);
+			String status, String userInfo);
 
 	/*
 	 * fields initialized by null will not be updated

@@ -801,7 +801,7 @@ public class ServerZagram2 implements ServerInterface {
 							}
 						}
 						gui.updateUserInfo(server, player, player, null, rating,
-								winCount, lossCount, drawCount, myStatus);
+								winCount, lossCount, drawCount, myStatus, null);
 					} else if (message.startsWith("m")) { // message numbers info
 						// try {
 						String tail = message.substring(1);
@@ -1082,7 +1082,7 @@ public class ServerZagram2 implements ServerInterface {
 				// URL url = new URL("http://www.citilink.com/~grizzly/anigifs/bear.gif"); // animation
 				ImageIcon imageIcon = new ImageIcon(url);
 				// imageIcon.getImage().
-				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null);
+				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null, null);
 			}
 		} catch (Exception ex) {
 		}

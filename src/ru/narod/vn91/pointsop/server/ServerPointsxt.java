@@ -741,7 +741,8 @@ public class ServerPointsxt
 		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">mpinf ")) {
 			String user = message.split(" ", 4)[2];
 			String messageGui = message.split(" ", 2)[1];
-			gui.privateMessageReceived(this, user, messageGui);
+			gui.updateUserInfo(this, user, null, null, null, null, null, null, null, messageGui);
+//			gui.privateMessageReceived(this, user, messageGui);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
 			gui.privateMessageReceived(this, nick, IrcRegexp.cutIrcText(message));
@@ -910,7 +911,7 @@ public class ServerPointsxt
 		gui.updateUserInfo(
 				this, shortNick,
 				nicknameManager.getGuiNick(ircNick), null, IrcRegexp.getPlayerRank(ircNick),
-				0, 0, 0, IrcRegexp.extractUserStatus(ircNick));
+				0, 0, 0, IrcRegexp.extractUserStatus(ircNick), null);
 		if (room.equals(defaultChannel)) {
 			// join Lang room
 			gui.userJoinedRoom(this, room, shortNick, silent);
@@ -1347,17 +1348,13 @@ public class ServerPointsxt
 	}
 
 	public void getUserpic(final String user) {
-		// try {
 		// URL url = new URL("http://pointsgame.net/mp/irc-icons/" + user + ".gif");
-		// } catch (MalformedURLException ex) {
-		// }
-
 		new Thread() {
 			public void run() {
 				URL url = ServerPointsxt.class.getResource("irc/" + user.toLowerCase() + ".gif");
 				if (url != null) {
 					ImageIcon imageIcon = new ImageIcon(url);
-					gui.updateUserInfo(ServerPointsxt.this, user, null, imageIcon, null, null, null, null, null);
+					gui.updateUserInfo(ServerPointsxt.this, user, null, imageIcon, null, null, null, null, null, null);
 				}
 			}
 		}.start();

@@ -20,6 +20,7 @@ public class Player {
 	public Integer drawCount = 0;
 	public ImageIcon imageIcon;
 	public String status = "";
+	public String userInfo = "";
 
 //	Collection<WeakReference<PlayerChangeListener>> weakListeners = new LinkedList<WeakReference<PlayerChangeListener>>();
 	Collection<PlayerChangeListener> listeners = new LinkedList<PlayerChangeListener>();
@@ -34,7 +35,7 @@ public class Player {
 
 	public Player(ServerInterface server, String id, String guiName,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
-			ImageIcon imageIcon, String status) {
+			ImageIcon imageIcon, String status, String userInfo) {
 		super();
 		this.server = server;
 		this.id = id;
@@ -45,6 +46,7 @@ public class Player {
 		this.drawCount = drawCount;
 		this.imageIcon = imageIcon;
 		this.status = status;
+		this.userInfo = userInfo;
 	}
 
 	public void updateFrom(Player p) {

@@ -5,6 +5,7 @@
  */
 package ru.narod.vn91.pointsop.gui;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.text.DefaultStyledDocument;
@@ -152,6 +153,7 @@ public class PrivateChat extends javax.swing.JPanel {
 	public PrivateChat(final Player me) {
 		this.companion = me;
 		initComponents();
+		jScrollPane1.setVisible(false);
 		if (me.server.isPrivateChatEnabled()) {
 			jTextField_Chat.requestFocusInWindow();
 			jTextField_Chat.setDocument(
@@ -166,12 +168,22 @@ public class PrivateChat extends javax.swing.JPanel {
 		jButton_Invite.setEnabled(me.server.isPrivateGameInviteAllowed());
 		jButton_Ping.setEnabled(me.server.isPingEnabled());
 		jButton_Sound.setEnabled(me.server.isSoundNotifyEnabled());
-		me.addChangeListener(new PlayerChangeListener() {
-			@Override
-			public void onChange(Player player) {
-				jLabel_Userpic.setIcon(me.imageIcon);
-			}
-		});
+		jTextArea1.setBackground(this.getBackground());
+		{
+			PlayerChangeListener changeListener = new PlayerChangeListener() {
+				@Override
+				public void onChange(Player player) {
+					jLabel_Userpic.setIcon(me.imageIcon);
+					if (me.userInfo != null) {
+					jTextArea1.setText(player.userInfo);
+//					jTextArea1.setEnabled(true);
+					jScrollPane1.setVisible(true);
+					}
+				}
+			};
+			changeListener.onChange(me);
+			me.addChangeListener(changeListener);
+		}
 		me.server.getUserInfoText(me.id);
 		me.server.getUserpic(me.id);
 		jButton_AcceptInvite.setEnabled(false);
@@ -200,6 +212,8 @@ public class PrivateChat extends javax.swing.JPanel {
         jButton_Invite = new javax.swing.JButton();
         jButton_CancelInvite = new javax.swing.JButton();
         jButton_RejectInvite = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -241,6 +255,8 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
+        jLabel_Userpic.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         jButton_AcceptInvite.setText("принять заявку на игру");
         jButton_AcceptInvite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -269,28 +285,32 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setEditable(false);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane1.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout jPanel_InfoLayout = new javax.swing.GroupLayout(jPanel_Info);
         jPanel_Info.setLayout(jPanel_InfoLayout);
         jPanel_InfoLayout.setHorizontalGroup(
             jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_InfoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_Sound, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jLabel_Userpic)
-                    .addComponent(jButton_AcceptInvite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton_Ping, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jButton_RejectInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jButton_Invite, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jButton_CancelInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jLabel_Userpic, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jButton_Ping, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jButton_Sound, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jButton_AcceptInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jButton_RejectInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jButton_Invite, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jButton_CancelInvite, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
         );
         jPanel_InfoLayout.setVerticalGroup(
             jPanel_InfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_InfoLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel_Userpic)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton_Ping)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_Sound)
@@ -302,7 +322,8 @@ public class PrivateChat extends javax.swing.JPanel {
                 .addComponent(jButton_Invite)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_CancelInvite)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -384,7 +405,9 @@ public class PrivateChat extends javax.swing.JPanel {
     private javax.swing.JButton jButton_Sound;
     private javax.swing.JLabel jLabel_Userpic;
     private javax.swing.JPanel jPanel_Info;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane_Chat;
+    private javax.swing.JTextArea jTextArea1;
     javax.swing.JTextField jTextField_Chat;
     private javax.swing.JTextPane jTextPane_Chat;
     // End of variables declaration//GEN-END:variables

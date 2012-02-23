@@ -145,9 +145,9 @@ public class SelfishGuiStarter {
 		if (Settings.isDebug()) {
 			ServerInterface mockServer = new MockServerForGui();
 			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, null);
+			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, "status", "userinfo");
 //
-//			guiController.privateMessageReceived(mockServer, "user", "message");
+			guiController.privateMessageReceived(mockServer, "user", "message");
 //			
 //
 //			{

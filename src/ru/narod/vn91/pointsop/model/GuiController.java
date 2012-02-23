@@ -46,6 +46,7 @@ public class GuiController implements GuiForServerInterface {
 	HashMap<Player, PrivateChat> privateChatList = new HashMap<Player, PrivateChat>();
 	PlayerPool playerPool = new PlayerPool();
 	GamePool gamePool = new GamePool();
+	private String st;
 
 	public GuiController(final JTabbedPaneMod tabbedPane) {
 		this.tabbedPane = tabbedPane;
@@ -77,11 +78,11 @@ public class GuiController implements GuiForServerInterface {
 			ServerInterface server, String id,
 			String guiName, ImageIcon imageIcon,
 			Integer rating, Integer winCount, Integer lossCount, Integer drawCount,
-			String status) {
+			String status, String userInfo) {
 		Player player = playerPool.get(server, id);
 		int previousRating = player.rating;
 		Player updateInstance = new Player(server, id, guiName, rating, winCount,
-			lossCount, drawCount, imageIcon, status);
+			lossCount, drawCount, imageIcon, status, userInfo);
 		player.updateFrom(updateInstance);
 		if (rating != null &&
 			previousRating != rating &&
