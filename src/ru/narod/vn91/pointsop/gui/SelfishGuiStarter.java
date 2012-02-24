@@ -12,6 +12,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
@@ -26,17 +29,22 @@ public class SelfishGuiStarter {
 
 	public static void main(String[] args) {
 
-//		try {
-//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//				if ("Nimbus".equals(info.getName())) {
-//					UIManager.setLookAndFeel(info.getClassName());
-//					break;
-//				}
-//			}
-//		} catch (Exception e) {
-//			// If Nimbus is not available, you can set the GUI to another look and
-//			// feel.
-//		}
+		try {
+			// Set cross-platform Java L&F (also called "Metal")
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+
+			// for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+			// if ("Nimbus".equals(info.getName())) {
+			// UIManager.setLookAndFeel(info.getClassName());
+			// break;
+			// }
+			// }
+		} catch (UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
+
 
 		for (String argument : args) {
 			// System.out.println("argument = " + argument);

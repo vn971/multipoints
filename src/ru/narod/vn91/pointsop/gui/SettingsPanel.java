@@ -174,7 +174,7 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addComponent(jRadioButton_PointsClick_Nowhere)
                 .addGap(18, 18, 18)
                 .addComponent(jButton_PointClick)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel_ClickLayout.setVerticalGroup(
             jPanel_ClickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,6 +188,7 @@ public class SettingsPanel extends javax.swing.JPanel {
         jPanel_PaperSettings.setBorder(javax.swing.BorderFactory.createTitledBorder("настройки игрового поля"));
         // jPanel_PaperSettings.setVisible(false);
 
+        jSplitPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jSplitPane.setResizeWeight(1.0);
         jSplitPane.setContinuousLayout(true);
 
@@ -252,7 +253,7 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addComponent(jButton_BackgroundColor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_ResetColors)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,7 +304,7 @@ public class SettingsPanel extends javax.swing.JPanel {
         jPanel_Paper.setLayout(jPanel_PaperLayout);
         jPanel_PaperLayout.setHorizontalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 151, Short.MAX_VALUE)
+            .addGap(0, 137, Short.MAX_VALUE)
         );
         jPanel_PaperLayout.setVerticalGroup(
             jPanel_PaperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,11 +317,11 @@ public class SettingsPanel extends javax.swing.JPanel {
         jPanel_PaperSettings.setLayout(jPanel_PaperSettingsLayout);
         jPanel_PaperSettingsLayout.setHorizontalGroup(
             jPanel_PaperSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+            .addComponent(jSplitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
         );
         jPanel_PaperSettingsLayout.setVerticalGroup(
             jPanel_PaperSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+            .addComponent(jSplitPane)
         );
 
         jPanel_OtherSounds.setBorder(javax.swing.BorderFactory.createTitledBorder("прочие звуки"));
@@ -338,7 +339,7 @@ public class SettingsPanel extends javax.swing.JPanel {
             jPanel_OtherSoundsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_OtherSoundsLayout.createSequentialGroup()
                 .addComponent(jCheckBox_OtherSounds)
-                .addContainerGap(471, Short.MAX_VALUE))
+                .addContainerGap(449, Short.MAX_VALUE))
         );
         jPanel_OtherSoundsLayout.setVerticalGroup(
             jPanel_OtherSoundsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,7 +370,7 @@ public class SettingsPanel extends javax.swing.JPanel {
                 .addGroup(jPanel_AtStartupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox_RestorePosition)
                     .addComponent(jCheckBox_RestoreSize))
-                .addContainerGap(271, Short.MAX_VALUE))
+                .addContainerGap(249, Short.MAX_VALUE))
         );
         jPanel_AtStartupLayout.setVerticalGroup(
             jPanel_AtStartupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
