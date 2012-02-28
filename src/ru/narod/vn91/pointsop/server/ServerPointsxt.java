@@ -6,12 +6,17 @@ package ru.narod.vn91.pointsop.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.swing.ImageIcon;
 
 import org.jibble.pircbot.IrcException;
@@ -99,8 +104,15 @@ public class ServerPointsxt
 				// let's make the code unreadable, yeah!
 				// in reality, I just try out FP methods
 				// like "foreach" and others :)
-				int[] portList = { Settings.getIrcPort(), 6667, 6029, 7029, 46175 };
-				for (int port : portList) {
+				// int[] portList = { Settings.getIrcPort(), 6667, 6029, 7029, 46175 };
+				Set<Integer> portSet = new LinkedHashSet<Integer>();
+				portSet.add(Settings.getIrcPort());
+				portSet.add(6667);
+				portSet.add(6029);
+				portSet.add(7029);
+				portSet.add(46175);
+
+				for (int port : portSet) {
 					if (connector.call(port) == true) {
 						Settings.setIrcPort(port);
 						break;
