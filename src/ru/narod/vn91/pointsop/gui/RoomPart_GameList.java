@@ -14,7 +14,7 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 
 	RoomInterface room;
 	GuiController guiController;
-	private List<GameOuterInfo> gameList = new ArrayList<GameOuterInfo>();
+	volatile private List<GameOuterInfo> gameList = new ArrayList<GameOuterInfo>();
 
 	static Object[] createRow(GameOuterInfo gameOuterInfo) {
 		String row1, row2, row3;

@@ -46,7 +46,6 @@ public class GuiController implements GuiForServerInterface {
 	HashMap<Player, PrivateChat> privateChatList = new HashMap<Player, PrivateChat>();
 	PlayerPool playerPool = new PlayerPool();
 	GamePool gamePool = new GamePool();
-	private String st;
 
 	public GuiController(final JTabbedPaneMod tabbedPane) {
 		this.tabbedPane = tabbedPane;

@@ -1,5 +1,3 @@
-syntax: glob
-
 *.iml
 *.iws
 .idea/*
@@ -8,10 +6,8 @@ build/*
 dist/*
 lib/*
 nbproject/*
-.cache
 .classpath
 .project
-.settings/*
 .config/vasya.ks
 
 *.class

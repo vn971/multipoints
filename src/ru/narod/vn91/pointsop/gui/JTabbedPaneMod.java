@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -26,25 +27,30 @@ public class JTabbedPaneMod {
 	}
 
 	public synchronized void addTab(
-			String title,
+			final String title,
 			final Component component,
-			boolean isCloseable) {
-		tabbedPane.addTab(title /*may be ""*/, component);
-		TabCloseable tabCloseable = new TabCloseable(title, isCloseable);
-		tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
+			final boolean isCloseable) {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-			public Void call(TabCloseable input) {
-				Function0<Boolean> closeListener = closeListeners.get(component);
-				if (closeListener != null &&
-					closeListener.call() == false) {
-					// do nothing. Calling listeners is enough.
-				} else {
-					remove(component);
-				}
-				return null;
+			public void run() {
+				tabbedPane.addTab(title /*may be ""*/, component);
+				TabCloseable tabCloseable = new TabCloseable(title, isCloseable);
+				tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
+					@Override
+					public Void call(TabCloseable input) {
+						Function0<Boolean> closeListener = closeListeners.get(component);
+						if (closeListener != null &&
+								closeListener.call() == false) {
+							// do nothing. Calling listeners is enough.
+						} else {
+							remove(component);
+						}
+						return null;
+					}
+				});
+				tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabCloseable);
 			}
 		});
-		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabCloseable);
 	}
 
 	public synchronized void setCloseListener_FalseIfStopClosing(
@@ -61,22 +67,40 @@ public class JTabbedPaneMod {
 		return tabbedPane.getSelectedComponent().equals(component);
 	}
 
-	public synchronized void setSelectedComponent(Component component) {
-		tabbedPane.setSelectedComponent(component);
+	public synchronized void setSelectedComponent(final Component component) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					tabbedPane.setSelectedComponent(component);
+				} catch (IllegalArgumentException ex) {
+				}
+			}
+		});
 	}
 
-	public synchronized void remove(Component component) {
-		closeListeners.remove(component);
-		tabbedPane.remove(component);
+	public synchronized void remove(final Component component) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				closeListeners.remove(component);
+				tabbedPane.remove(component);
+			}
+		});
 	}
 
 	public synchronized void makeBold(Component component) {
-		int tabIndex = tabbedPane.indexOfComponent(component);
+		final int tabIndex = tabbedPane.indexOfComponent(component);
 		if (tabIndex >= 0 &&
 			tabIndex != tabbedPane.getSelectedIndex() &&
 			tabIndex < tabbedPane.getTabCount()) {
 			try {
-				tabbedPane.setBackgroundAt(tabIndex, boldColor);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						tabbedPane.setBackgroundAt(tabIndex, boldColor);
+					}
+				});
 			} catch (IndexOutOfBoundsException ex) {
 				System.out.println(ex);
 			} catch (NullPointerException ex) {
@@ -95,16 +119,22 @@ public class JTabbedPaneMod {
 		}
 	}
 
-	public synchronized void updateTabText(Component component, String newTitle) {
-		int tabIndex = tabbedPane.indexOfComponent(component);
-		if (tabIndex >= 0) {
-			Component tabPanel = tabbedPane.getTabComponentAt(tabIndex);
-			// try {
-			TabCloseable tab = TabCloseable.class.cast(tabPanel);
-			tab.setText(newTitle);
-			// } catch (ClassCastException e) {
-			// }
-		}
+	public synchronized void updateTabText(
+			final Component component, final String newTitle) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				int tabIndex = tabbedPane.indexOfComponent(component);
+				if (tabIndex >= 0) {
+					Component tabPanel = tabbedPane.getTabComponentAt(tabIndex);
+					// try {
+					TabCloseable tab = TabCloseable.class.cast(tabPanel);
+					tab.setText(newTitle);
+					// } catch (ClassCastException e) {
+					// }
+				}
+			}
+		});
 	}
 
 	public JTabbedPaneMod() {

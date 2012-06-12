@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -21,81 +22,103 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 	GameOuterInfo gameInfo;
 	RoomInterface roomInterface;
 	private StyledDocument document = new DefaultStyledDocument();
-	boolean autoscroll = true;
+	volatile boolean autoscroll = true;
 	boolean showUserJoinLeave = true;
 	// ↓↧⍗
 	// ᐥ↔⇙⇆↢
 
-	void setAutoscroll(boolean newValue){
-		this.autoscroll = newValue;
-		jCheckBoxMenuItem_Autoscroll.setSelected(autoscroll);
-		scrollDown();
+	void setAutoscroll(final boolean newValue){
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				autoscroll = newValue;
+				jCheckBoxMenuItem_Autoscroll.setSelected(autoscroll);
+				scrollDown();
+			}
+		});
 	}
 
-	void setShowUserJoinLeave(boolean newValue) {
-		this.showUserJoinLeave = newValue;
-		jCheckBoxMenuItem_ShowUserJoin.setSelected(showUserJoinLeave);
+	void setShowUserJoinLeave(final boolean newValue) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				showUserJoinLeave = newValue;
+				jCheckBoxMenuItem_ShowUserJoin.setSelected(showUserJoinLeave);
+			}
+		});
 	}
 
 	void tryEraseChat() {
 		int userConfirm = JOptionPane.showConfirmDialog(null,
 				"Действительно очистить окошко с чатом? (Операция необратима.)");
 		if (userConfirm == JOptionPane.YES_OPTION) {
-			jTextPane_Chat.setText("");
-			// you cleared the chat...\n
-			addServerNotice("you cleared the chat...\n");
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					jTextPane_Chat.setText("");
+					addServerNotice("you cleared the chat...\n");
+				}
+			});
 		}
 	}
 
 	void sendMessageInChatbox() {
 		if (jTextField_Chat.getText().trim().isEmpty() == false) {
-			String message = jTextField_Chat.getText();
-			if (message.startsWith("/me")) {
-				String actionFormattedMessage = "ACTION " + message.substring(3);
-//				String messageWOActionStamp =
-//						message.substring(3);
-				roomInterface.getServer().
-						sendChat(roomInterface.getRoomNameOnServer(),
-						actionFormattedMessage);
-			} else {
-				roomInterface.getServer().
-						sendChat(roomInterface.getRoomNameOnServer(),
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					String message = jTextField_Chat.getText();
+					roomInterface.getServer().
+					sendChat(roomInterface.getRoomNameOnServer(),
 						message);
-			}
-			jTextField_Chat.setText("");
+					jTextField_Chat.setText("");
+				}
+			});
 		}
 	}
 
 	void scrollDown() {
-		if (autoscroll) {
-			int l = jTextPane_Chat.getText().length();
-			jTextPane_Chat.setSelectionStart(l);
-			jTextPane_Chat.setSelectionEnd(l);
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (autoscroll) {
+					int l = jTextPane_Chat.getText().length();
+					jTextPane_Chat.setSelectionStart(l);
+					jTextPane_Chat.setSelectionEnd(l);
+				}
+			}
+		});
 	}
 
-	public void addChat(String user,
-			String message, Long time) {
+	public void addChat(
+			final String user,
+			final String message, 
+			Long time) {
 		Date date = (time != null && time != 0) ? new Date(time) : new Date();
-		String formattedDate = GuiCommon.myTimeFormat.format(date);
-		AttributeSet playerAttributes;
-		if (gameInfo != null && gameInfo.firstGuiNameFailsafe().equals(user)) {
-			playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player1Color());
-		} else if (gameInfo != null && gameInfo.secondGuiNameFailsafe().equals(user)) {
-			playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player2Color());
-		} else if (user.equals(roomInterface.getServer().getMyName())) {
-			playerAttributes = GuiCommon.playerNameOutgoing;
-		} else {
-			playerAttributes = GuiCommon.playerNameIncoming;
-		}
-		try {
-			document.insertString(document.getLength(), "" + formattedDate + " ",
-				GuiCommon.chatIncoming);
-			document.insertString(document.getLength(), user + ":", playerAttributes);
-			document.insertString(document.getLength(), " " + message + "\n",
-				GuiCommon.chatIncoming);
-		} catch (BadLocationException ignored) {
-		}
+		final String formattedDate = GuiCommon.myTimeFormat.format(date);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					AttributeSet playerAttributes;
+					if (gameInfo != null && gameInfo.firstGuiNameFailsafe().equals(user)) {
+						playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player1Color());
+					} else if (gameInfo != null && gameInfo.secondGuiNameFailsafe().equals(user)) {
+						playerAttributes = GuiCommon.getAttributeSet(true, gameInfo.player2Color());
+					} else if (user.equals(roomInterface.getServer().getMyName())) {
+						playerAttributes = GuiCommon.playerNameOutgoing;
+					} else {
+						playerAttributes = GuiCommon.playerNameIncoming;
+					}
+					document.insertString(document.getLength(), "" + formattedDate + " ",
+						GuiCommon.chatIncoming);
+					document.insertString(document.getLength(), user + ":", playerAttributes);
+					document.insertString(document.getLength(), " " + message + "\n",
+						GuiCommon.chatIncoming);
+				} catch (BadLocationException ignored) {
+				}
+			}
+		});
 		scrollDown();
 
 		if (message.toLowerCase().contains(
@@ -105,37 +128,57 @@ public class RoomPart_Chat extends javax.swing.JPanel {
 		}
 	}
 
-	public void addServerNotice(String message) {
-		try {
-			document.insertString(document.getLength(),
-					"" + GuiCommon.myTimeFormat.format(new Date()) + " ",
-					GuiCommon.serverNotice);
-			document.insertString(document.getLength(), " " + message
-					+ "\n", GuiCommon.serverNotice);
-		} catch (BadLocationException ignored) {
-		}
-		scrollDown();
-	}
-
-	public void addUserJoinedNotice(Player player) {
-		if (showUserJoinLeave) {
-			addServerNotice("в комнату вошёл(а) " + player.guiName + "");
-		}
-	}
-
-	public void addUserLeftNotice(String user, String reason) {
-		if (showUserJoinLeave) {
-			String messageToAdd = user + " вышел(а) из комнаты";
-			if (reason != null && reason.equals("") == false) {
-				messageToAdd += " (" + reason + ")";
+	public void addServerNotice(final String message) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					document.insertString(document.getLength(),
+						"" + GuiCommon.myTimeFormat.format(new Date()) + " ",
+						GuiCommon.serverNotice);
+					document.insertString(document.getLength(), " " + message
+						+ "\n", GuiCommon.serverNotice);
+				} catch (BadLocationException ignored) {
+				}
+				scrollDown();
 			}
-			addServerNotice(messageToAdd);
-		}
+		});
 	}
 
-	void setReadOnly(boolean isReadOnly) {
-		jButton_Help.setVisible(!isReadOnly);
-		jTextField_Chat.setVisible(!isReadOnly);
+	public void addUserJoinedNotice(final Player player) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (showUserJoinLeave) {
+					addServerNotice("в комнату вошёл(а) " + player.guiName + "");
+				}
+			}
+		});
+	}
+
+	public void addUserLeftNotice(final String user, final String reason) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (showUserJoinLeave) {
+					String messageToAdd = user + " вышел(а) из комнаты";
+					if (reason != null && reason.equals("") == false) {
+						messageToAdd += " (" + reason + ")";
+					}
+					addServerNotice(messageToAdd);
+				}
+			}
+		});
+	}
+
+	void setReadOnly(final boolean isReadOnly) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				jButton_Help.setVisible(!isReadOnly);
+				jTextField_Chat.setVisible(!isReadOnly);
+			}
+		});
 	}
 
 	/** Creates new form RoomPart_Chat */

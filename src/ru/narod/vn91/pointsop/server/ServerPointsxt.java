@@ -1198,10 +1198,13 @@ public class ServerPointsxt
 			String room,
 			String message) {
 		if (room.equals(defaultChannel)) {
-			super.sendMessage(room, message);
+			String formattedMessage = message.startsWith("/me")
+				? "ACTION " + message.substring(3)
+				: message;
+			super.sendMessage(room, formattedMessage);
 			gui.chatReceived(
 					this, room, getMyName(),
-					message.replaceAll("ACTION", "***"),
+					formattedMessage.replaceAll("ACTION", "***"),
 					null
 			);
 		} else if (room.startsWith("#")) {

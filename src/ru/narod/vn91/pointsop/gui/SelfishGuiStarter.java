@@ -13,16 +13,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
-import ru.narod.vn91.pointsop.data.GameOuterInfo;
 import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
-import ru.narod.vn91.pointsop.server.MockServerForGui;
-import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.utils.Settings;
 
 public class SelfishGuiStarter {
@@ -32,13 +28,6 @@ public class SelfishGuiStarter {
 		try {
 			// Set cross-platform Java L&F (also called "Metal")
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-
-			// for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			// if ("Nimbus".equals(info.getName())) {
-			// UIManager.setLookAndFeel(info.getClassName());
-			// break;
-			// }
-			// }
 		} catch (UnsupportedLookAndFeelException e) {
 		} catch (ClassNotFoundException e) {
 		} catch (InstantiationException e) {
@@ -62,6 +51,49 @@ public class SelfishGuiStarter {
 				System.out.println(argument);
 			}
 		}
+
+//	//Create a file chooser
+//		final JFileChooser fc = new JFileChooser();
+//
+//		int returnVal = fc.showOpenDialog(null);
+//
+//		System.out.println("start file tests...");
+//		if (returnVal == JFileChooser.APPROVE_OPTION) {
+//			try {
+//				File file = fc.getSelectedFile();
+//				// This is where a real application would open the file.
+//				System.out.println(file.getAbsolutePath());
+//				System.out.println("file.isDirectory() = " + file.isDirectory());
+//				System.out.println("file.canExecute() = " + file.canExecute());
+//				System.out.println("file.canRead() = " + file.canRead());
+//				System.out.println("file.canWrite() = " + file.canWrite());
+//				
+//
+//				FileInputStream fileInputStream;
+//				fileInputStream = new FileInputStream(file);
+//				DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+//				InputStreamReader inputStreamReader =
+//						new InputStreamReader(dataInputStream, "UTF-8") {
+//						};
+//				BufferedReader br = new BufferedReader(inputStreamReader);
+//
+//				String strLine;
+//				while ((strLine = br.readLine()) != null) {
+//					System.out.println("strLine = " + strLine);
+//				}
+//				dataInputStream.close();
+//			} catch (FileNotFoundException ex) {
+//				ex.printStackTrace();
+//			} catch (UnsupportedEncodingException ex) {
+//				ex.printStackTrace();
+//			} catch (IOException ex) {
+//				ex.printStackTrace();
+//			}
+//		} else {
+//			System.out.println("error");
+//		}
+////		while("".equals("")) {}
+//		System.exit(0);
 
 		if (Settings.getVersion() <= 1 &&
 				Settings.getKeijKvantttAiPath().equals("keijkvantttai"))
@@ -141,7 +173,6 @@ public class SelfishGuiStarter {
 		);
 
 		final JTabbedPaneMod tabbedPane = new JTabbedPaneMod();
-		frame.add(tabbedPane.getComponent());
 
 		final GuiController guiController = new GuiController(tabbedPane);
 
@@ -151,18 +182,18 @@ public class SelfishGuiStarter {
 		guiController.serverOutput = roomWelcome.jTextPane_ServerOutput;
 
 		if (Settings.isDebug()) {
-			ServerInterface mockServer = new MockServerForGui();
-			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, "status", "userinfo");
+//			ServerInterface mockServer = new MockServerForGui();
+//			guiController.updateGameInfo(mockServer, "game", "lang", "user", "user2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+//			guiController.updateUserInfo(mockServer, "user", "user-gui-name", null, null, null, null, null, "status", "userinfo");
 //
-			guiController.privateMessageReceived(mockServer, "user", "message");
+//			guiController.privateMessageReceived(mockServer, "user", "message");
 //			
 //
 //			{
 //				// hack into the GuiController
-				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
-				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
-				tabbedPane.addTab("ИИ", new AiPanel(), true);
+//				tabbedPane.addTab("комната", new LangRoom(mockServer, "lang-hack", guiController), true);
+//				tabbedPane.addTab("игра", new GameRoom(new GameOuterInfo(mockServer, "game-hack"), guiController), true);
+//				tabbedPane.addTab("ИИ", new AiPanel(), true);
 //			}
 //			{
 //				// non-closeable
@@ -368,13 +399,12 @@ public class SelfishGuiStarter {
 
 				{
 					jMenu_AI.add(new JMenuItemWithLink(
-								"Priymak AI - о программе",
+								"PointsAI (от Priymak Alexey) - о программе",
 								"http://pointsgame.net/site/pointsai"));
 				}
 
 				{
-					final JMenuItem jMenuItem =
-							new JMenuItem("Priymak AI - запуск 1.10");
+					final JMenuItem jMenuItem = new JMenuItem("PointsAI - запуск 1.12");
 					jMenuItem.addActionListener(
 							new ActionListener() {
 
@@ -461,6 +491,7 @@ public class SelfishGuiStarter {
 			frame.setJMenuBar(jMenuBar);
 		}
 
+		frame.add(tabbedPane.getComponent());
 		frame.setVisible(true);
 		roomWelcome.jTextField_Username.requestFocusInWindow();
 		frame.addWindowListener(

@@ -23,6 +23,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
 	private void connectToZagram() {
 		updateNick();
+		// DISABLED until zagram bugs would be fixed
 		if (guiController.zagram_server == null) {
 			String password = String.copyValueOf(jPasswordField_Password.getPassword());
 			guiController.zagram_server = new ServerZagram2(guiController, nick, password, false);
@@ -41,6 +42,8 @@ public class WelcomePanel extends javax.swing.JPanel {
 					);
 			guiController.pointsxt_vn91_server.connect();
 		}
+
+		
 		// if (guiController.pointsxt_tochkiorg_server == null) {
 		// guiController.pointsxt_tochkiorg_server = new ServerPointsxt(
 		// "tochki.org", guiController, nick, null, "1ppass1", true);
@@ -157,7 +160,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel_Links, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(jScrollPane_ServerOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -187,8 +190,8 @@ public class WelcomePanel extends javax.swing.JPanel {
         jPanel_Connections.setLayout(jPanel_ConnectionsLayout);
         jPanel_ConnectionsLayout.setHorizontalGroup(
             jPanel_ConnectionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton_ConnectToPointsxt, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-            .addComponent(jButton_ConnectToZagram, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+            .addComponent(jButton_ConnectToPointsxt, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+            .addComponent(jButton_ConnectToZagram, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
         );
         jPanel_ConnectionsLayout.setVerticalGroup(
             jPanel_ConnectionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +219,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 
         jLabel_Password.setFont(jLabel_Password.getFont().deriveFont(jLabel_Password.getFont().getSize()-3f));
         jLabel_Password.setLabelFor(jPasswordField_Password);
-        jLabel_Password.setText("<html> * при отсутствии пароля <br>будет осуществлён вход  <br>гостем <br> <br> ** не поддерживается <br> (новые функции <br> не пишутся) <br> <br> *** не дописано <br>(части необходимых <br>функций нет) </html>");
+        jLabel_Password.setText("<html> * при отсутствии пароля <br>\nбудет осуществлён вход  <br>\nгостем <br>\n <br>\n ** нету режима<br>\nвремени 3мин/5ходов,<br>\nигры на рейтинг.<br>\n <br>\n *** Не работает после<br>\nсмены API (протокола) сервера<br>\nНикаких предупреждений<br>\nили инструкций по адаптации<br>\nот разработчиков не поступало,<br>\nпока-что сервис выключен.<br>\nhttp://zagram.org/komentarze.html<br>\n</html>");
 
         javax.swing.GroupLayout jPanel_LeftLayout = new javax.swing.GroupLayout(jPanel_Left);
         jPanel_Left.setLayout(jPanel_LeftLayout);
@@ -242,7 +245,7 @@ public class WelcomePanel extends javax.swing.JPanel {
                 .addComponent(jPanel_Connections, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel_Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
