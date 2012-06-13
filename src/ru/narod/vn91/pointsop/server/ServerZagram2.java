@@ -890,7 +890,8 @@ public class ServerZagram2 implements ServerInterface {
 										} else if (propertyName.matches("B|W|AB|AW|")) {
 											boolean isWhite = propertyName.matches("W|AW") 
 													|| (propertyName.equals("") && lastMovePropertyName.matches("A|AW"));
-											lastMovePropertyName = propertyName;
+											if (!propertyName.equals(""))
+												lastMovePropertyName = propertyName;
 											gui.makedMove(
 													server, currentRoom,
 													message.startsWith("sr"),

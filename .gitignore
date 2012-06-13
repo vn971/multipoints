@@ -4,14 +4,14 @@
 bin/*
 build/*
 dist/*
-lib/*
+//*.jar
 nbproject/*
 .classpath
 .project
 .config/vasya.ks
 
 *.class
-*.jar
+//*.jar
 *.svn/*
 *.orig
 
