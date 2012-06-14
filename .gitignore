@@ -1,15 +1,10 @@
-*.iml
-*.iws
-.idea/*
 bin/*
 build/*
 dist/*
-//*.jar
-nbproject/*
 .classpath
 .project
-.config/vasya.ks
 
+*.ks
 *.class
 //*.jar
 *.svn/*
