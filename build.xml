@@ -32,10 +32,11 @@
   </target>
 
   <target name="sign" depends="jar" description="sign jar file" >
+    <property file="${dist}/vasya.build.properties"/>
 		<signjar jar="${dist}/PointsOnPaper-${DSTAMP}.jar" 
-						 keystore="${dist}/***" 
-						 alias="***"
-						 storepass="***"
+						 keystore="${dist}/vasya.ks" 
+						 alias="mykey" 
+						 storepass="${sign.jar.password}"
 						 />
   </target>
 
