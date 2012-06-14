@@ -1,29 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MultiPoints" default="dist" basedir=".">
+<project name="MultiPoints" default="jar" basedir=".">
 	<description>MultiPoints</description>
   <property name="src" location="src"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
 
-<!--	<target name="jar-without-sign">
-		<delete dir="build" />
-
-		<mkdir dir="build/classes" />
-		<mkdir dir="build/lib"/>
-		<javac srcdir="src" destdir="build/classes" target="1.6" />
-
-		<mkdir dir="build/jar" />
-		<copy todir="build/jar">
-			<fileset dir="build/classes" />
-			<fileset dir="src" />
-		</copy>
-		<jar destfile="build/${project.name}-${project.version}.jar" basedir="build/jar" />
-	</target> -->
-
 	<target name="init">
-    <!-- Create the time stamp -->
     <tstamp/>
-    <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
   </target>
 
@@ -31,9 +14,7 @@
     <javac srcdir="${src}" destdir="${build}" classpath="lib/javaws.jar" />
   </target>
 
-  <target name="dist" depends="compile"
-        description="generate the distribution" >
-
+  <target name="jar" depends="compile" description="generate the distribution" >
     <mkdir dir="${dist}/lib"/>
 
 		<copy todir="${build}">
@@ -42,7 +23,7 @@
 			</fileset>
 		</copy>
 
-		<jar destfile="${dist}/MultiPoints-${DSTAMP}.jar">
+		<jar destfile="${dist}/PointsOnPaper-${DSTAMP}.jar">
 			<fileset dir="${build}" />
 			<manifest>
 				<attribute name="Main-Class" value="ru.narod.vn91.pointsop.gui.SelfishGuiStarter" />
@@ -50,11 +31,17 @@
 		</jar>
   </target>
 
-  <target name="clean"
-        description="clean up" >
-    <!-- Delete the ${build} and ${dist} directory trees -->
+  <target name="sign" depends="jar" description="sign jar file" >
+		<signjar jar="${dist}/PointsOnPaper-${DSTAMP}.jar" 
+						 keystore="${dist}/***" 
+						 alias="***"
+						 storepass="***"
+						 />
+  </target>
+
+  <target name="clean" description="clean up" >
     <delete dir="${build}"/>
-    <!-- <delete dir="${dist}"/> -->
   </target>
 
 </project>
+

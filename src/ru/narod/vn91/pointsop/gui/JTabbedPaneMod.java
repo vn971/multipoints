@@ -73,7 +73,8 @@ public class JTabbedPaneMod {
 			public void run() {
 				try {
 					tabbedPane.setSelectedComponent(component);
-				} catch (IllegalArgumentException ex) {
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -101,21 +102,9 @@ public class JTabbedPaneMod {
 						tabbedPane.setBackgroundAt(tabIndex, boldColor);
 					}
 				});
-			} catch (IndexOutOfBoundsException ex) {
-				System.out.println(ex);
-			} catch (NullPointerException ex) {
-				System.out.println(ex); // SWING is buggy? I have lot's of exceptions here... :-/
+			} catch (Exception ex) {
+				ex.printStackTrace(); // SWING is buggy? I have lot's of exceptions here... :-/
 			}
-
-			// Component panel = tabbedPane.getTabComponentAt(tabIndex);
-			// try {
-			// TabCloseable tab = TabCloseable.class.cast(panel);
-			// String newTitle = getBold(tab.getText());
-			// if (newTitle.equals(tab.getText()) == false) {
-			// tab.setText(newTitle);
-			// }
-			// } catch (ClassCastException e) {
-			// }
 		}
 	}
 
