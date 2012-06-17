@@ -1,6 +1,7 @@
 package ru.narod.vn91.pointsop.server;
 
 import ru.narod.vn91.pointsop.data.TimeSettings;
+import ru.narod.vn91.pointsop.model.StartingPosition;
 
 public interface ServerInterface {
 
@@ -20,7 +21,7 @@ public interface ServerInterface {
 	void rejectGameVacancyOpponent(String roomName, String notWantedOpponent);
 
 	// personal invites:
-	void addPersonalGameInvite(String playerId, TimeSettings timeSettings, int fieldX, int fieldY, boolean isRanked);
+	void addPersonalGameInvite(String playerId, TimeSettings timeSettings, int fieldX, int fieldY, boolean isRanked, StartingPosition startingPosition);
 
 	void cancelPersonalGameInvite(String playerId);
 

@@ -4,6 +4,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.TimeSettings;
+import ru.narod.vn91.pointsop.model.StartingPosition;
 import ru.narod.vn91.pointsop.server.MockServerForGui;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
@@ -324,7 +325,12 @@ public class GameInvitePersonal extends javax.swing.JDialog {
 						spinnerPeriodTransient.getNumber().intValue(),
 						spinnerPeriodLength.getNumber().intValue(),
 						0);
-		server.addPersonalGameInvite(player.id, timeSettings, fieldX, fieldY, jRadioButton_Ranked.isSelected());
+		StartingPosition startingPosition;
+		if (jRadioButton_StartingEmpty.isSelected()) startingPosition = StartingPosition.CLEAN;
+		else if (jRadioButton_StartingCross.isSelected()) startingPosition = StartingPosition.ONE_CROSS;
+		else startingPosition = StartingPosition.FOUR_CROSSES;
+
+		server.addPersonalGameInvite(player.id, timeSettings, fieldX, fieldY, jRadioButton_Ranked.isSelected(), startingPosition);
 		this.dispose();
 	}//GEN-LAST:event_jButton_InviteActionPerformed
 

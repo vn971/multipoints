@@ -33,6 +33,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract;
 import ru.narod.vn91.pointsop.model.GuiForServerInterface;
+import ru.narod.vn91.pointsop.model.StartingPosition;
 import ru.narod.vn91.pointsop.server.irc.IrcNicknameManager;
 import ru.narod.vn91.pointsop.server.irc.IrcRegexp;
 import ru.narod.vn91.pointsop.server.irc.SimpleMove;
@@ -227,16 +228,17 @@ public class ServerPointsxt
 //		);
 		{
 			// chat notify...
-			 String notifyMessage =
-			 "оставил(а) заявку на БЛИЦ";
-			 super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
-			 gui.chatReceived(
-			 this,
-			 defaultChannel,
-			 getMyName(),
-			 "*** " + notifyMessage,
-			 null
-			 );
+			String notifyMessage =
+					"оставил(а) заявку на БЛИЦ. " +
+						"См. команду !mpstart для игры между PointsXT и MultiPoints";
+			super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
+			gui.chatReceived(
+				this,
+				defaultChannel,
+				getMyName(),
+				"*** " + notifyMessage,
+				null
+					);
 		}
 	}
 
@@ -1386,7 +1388,7 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked, StartingPosition startingPosition) {
 		throw new UnsupportedOperationException();
 	}
 

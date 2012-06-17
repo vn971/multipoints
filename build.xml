@@ -23,7 +23,8 @@
 			</fileset>
 		</copy>
 
-		<jar destfile="${dist}/PointsOnPaper-${DSTAMP}.jar">
+		<!-- you can use ${DSTAMP} inside the name to insert current date -->
+		<jar destfile="${dist}/PointsOnPaper.jar">
 			<fileset dir="${build}" />
 			<manifest>
 				<attribute name="Main-Class" value="ru.narod.vn91.pointsop.gui.SelfishGuiStarter" />
@@ -33,7 +34,7 @@
 
   <target name="sign" depends="jar" description="sign jar file" >
     <property file="${dist}/vasya.build.properties"/>
-		<signjar jar="${dist}/PointsOnPaper-${DSTAMP}.jar" 
+		<signjar jar="${dist}/PointsOnPaper.jar" 
 						 keystore="${dist}/vasya.ks" 
 						 alias="mykey" 
 						 storepass="${sign.jar.password}"

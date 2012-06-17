@@ -1,6 +1,7 @@
 package ru.narod.vn91.pointsop.server;
 
 import ru.narod.vn91.pointsop.data.TimeSettings;
+import ru.narod.vn91.pointsop.model.StartingPosition;
 
 public class MockServerForGui implements ServerInterface{
 
@@ -279,7 +280,7 @@ public class MockServerForGui implements ServerInterface{
 	}
 
 	@Override
-	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked, StartingPosition startingPosition) {
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import ru.narod.vn91.pointsop.ai.Ai2Gui_Interface;
 import ru.narod.vn91.pointsop.ai.Gui2Ai_Interface;
 import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.model.GuiForServerInterface;
+import ru.narod.vn91.pointsop.model.StartingPosition;
 
 /**
  * Чтобы присоединить свой ИИ к Op теперь можно:
@@ -283,7 +284,7 @@ public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 	}
 
 	@Override
-	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked) {
+	public void addPersonalGameInvite(String playerId, TimeSettings settings, int fieldX, int fieldY, boolean isRanked, StartingPosition startingPosition) {
 		throw new UnsupportedOperationException();
 	}
 
