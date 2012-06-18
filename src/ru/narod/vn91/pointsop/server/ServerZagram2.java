@@ -33,7 +33,6 @@ import ru.narod.vn91.pointsop.server.zagram.MessageQueue;
 import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Wait;
 
-@SuppressWarnings("serial")
 public class ServerZagram2 implements ServerInterface {
 
 	final String myNameOnServer;
@@ -119,15 +118,14 @@ public class ServerZagram2 implements ServerInterface {
 			isRanked ? "R" : "F",
 			startingTime,
 			periodAdditionalTime);
-		// return "" + fieldX + fieldY + "stanF0." + startingTime + "." + periodAdditionalTime;
 	}
 
 	ZagramGameTyme getZagramGameTyme(String str) {
-		// 2525noT4R0.180.15
+		// 2525noT4R0.180.15  or  "3932noT1r0.180.20_PWC 2012"
 		String[] dotSplitted = str.split("\\.");
 		try {
 			int startingTime = Integer.parseInt(dotSplitted[1]);
-			int addTime = Integer.parseInt(dotSplitted[2]);
+			int addTime = Integer.parseInt(dotSplitted[2].split("_")[0]);
 			String hellishString = dotSplitted[0];
 			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
 			int sizeY = Integer.parseInt(hellishString.substring(2, 4));
@@ -162,8 +160,9 @@ public class ServerZagram2 implements ServerInterface {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i + 2 < input.length(); i = i + 3) {
-			// 111122223333
-			// aaaaaabbbbbb
+			// see intersections between groups:
+			// ____----^^^^
+			// ++++++======
 			int hex0 = Integer.parseInt(input.substring(i, i + 1), 16);
 			int hex1 = Integer.parseInt(input.substring(i + 1, i + 2), 16);
 			int hex2 = Integer.parseInt(input.substring(i + 2, i + 3), 16);
@@ -216,7 +215,6 @@ public class ServerZagram2 implements ServerInterface {
 						gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
 						isAuthorized = true;
 					} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
-						// avatarUrls.put(myNameOnServer, authorizationResult.split("\\.")[2]);
 						gui.rawConnectionState(ServerZagram2.this,
 							"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
 						isAuthorized = true;
@@ -237,7 +235,6 @@ public class ServerZagram2 implements ServerInterface {
 						Thread killUltimatively = new Thread() {
 							@Override
 							public void run() {
-								// give the "disconnectThread" a little time, and after that kill it
 								Wait.waitExactly(1000L);
 								disconnectThread.interrupt();
 							};
@@ -324,11 +321,9 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void acceptPersonalGameInvite(String playerId) {
-		// if (personalInvites.contains(playerId)) {
 		String message = "v" + queue.sizePlusOne() +
 			"." + getMainRoom() + "." + "a";
 		sendCommandToServer(message);
-		// }
 	}
 
 	@Override
@@ -358,7 +353,6 @@ public class ServerZagram2 implements ServerInterface {
 		gui.updateGameInfo(this, playerId + "@outgoing", getMainRoom(), getMyName(), null,
 			fieldX, fieldY, false, false, 0, 0, false,
 			false, false, null, 0, time.periodAdditional, time.starting, 1, playerId);
-		// gui.yourPersonalInviteSent(this, playerId, playerId + "@outgoing");
 	}
 
 	@Override
@@ -375,7 +369,8 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public void sendPrivateMsg(String target, String message) {
-		gui.rawError(this, "невозможно писать приватные сообщения на этом сервере");
+		String msgToSend = "c" + queue.sizePlusOne() + "._" + getServerEncoded(target) + "." + getServerEncoded(message);
+		sendCommandToServer(msgToSend);
 	}
 
 	@Override
@@ -393,7 +388,6 @@ public class ServerZagram2 implements ServerInterface {
 	public void unsubscribeRoom(String room) {
 		String msgToSend = "q" + queue.sizePlusOne() + "." + room + ".";
 		sendCommandToServer(msgToSend);
-		// gui.unsubscribedRoom(this, room);
 	}
 
 	@Override
@@ -671,14 +665,9 @@ public class ServerZagram2 implements ServerInterface {
 		private synchronized void handleText(String text) {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
 			ServerInterface server = ServerZagram2.this;
-			if (text.matches("ok.*(end|oend)") ||
-				(text.matches("sd.*(end|oend)") && isInvisible)) {
-				String[] splitted =
-						text
-								// .substring(
-								// text.indexOf("ok/") + "ok/".length(),
-								// text.length() - "/end".length())
-								.split("/");
+			if ((text.startsWith("ok") && text.endsWith("end"))
+				|| (text.startsWith("sd") && text.endsWith("end") && isInvisible)) {
+				String[] splitted = text.split("/");
 				Set<String> personalInvitesIncomingNew = new LinkedHashSet<String>();
 				Set<String> personalInvitesOutgoingNew = new LinkedHashSet<String>();
 				Set<String> modifiedSubscribedRooms = new HashSet<String>();
@@ -723,10 +712,35 @@ public class ServerZagram2 implements ServerInterface {
 							long time = Long.parseLong(dotSplitted[0]) * 1000L;
 							String nick = dotSplitted[1];
 							// String nickType = dotSplitted[2];
-							String chatMessage =
-									getServerDecoded(dotSplitted[3]);
-							gui.chatReceived(server,
-								currentRoom, nick, chatMessage, time);
+							String chatMessage = getServerDecoded(dotSplitted[3]);
+							if (nick.contains("-")) {
+								// this is private message
+								String[] nicks = nick.split("-");
+								String nickType = dotSplitted[2];
+								// who may be 0,1,2
+								// or -, nochat, del (which would raise an exception)
+								Integer who = Integer.parseInt(nickType);
+								if (who == 0) {
+									nick = ""; // message from the server
+								}
+								else if (who == 1 || who == 2) {
+									nick = nicks[who - 1];
+								}
+								String withWhom = nicks[0].equals(myNameOnServer) ? nicks[1] : nicks[0];
+								// I talk 'withWhom', received a message from 'nick'
+								// there's a problem receiving messages from myself...
+								if (nick.equals(myNameOnServer)) {
+									// TODO equalsIgnoreCase ?
+									// received message from myself, ignore
+								}
+								else {
+									gui.privateMessageReceived(server, withWhom, chatMessage);
+								}
+							}
+							else {
+							    gui.chatReceived(server,
+									     currentRoom, nick, chatMessage, time);
+							}
 						} catch (NumberFormatException e) {
 							gui.raw(server, "unkown chat: " + message.substring(2));
 						} catch (ArrayIndexOutOfBoundsException e) {
@@ -819,24 +833,11 @@ public class ServerZagram2 implements ServerInterface {
 						int i2 = Integer.parseInt(a2);
 						int i3 = Integer.parseInt(a3);
 						if (i1 > lastServerMessageNumber + 1) {
-							// break; no, don't break on this step -- we
+							// don't thow exceptions -- we
 							// want to stay alive in case of a server restart.
 						}
 						lastServerMessageNumber = i2;
 						lastSentCommandNumber = i3;
-						// } catch (IndexOutOfBoundsException ignore) {
-						// } catch (NumberFormatException e) {
-						// }
-						// don't catch anything.
-						// If an exception would be thrown then we are completely
-						// unfamiliar with this server protocol.
-						// } else if (message.startsWith("b")) { // player in tables
-						// String playerId = message.replaceAll("\\..*", "");
-						// String[] roomList = message.replaceFirst(".*\\.",
-						// "").split("\\.");
-						// for (String roomId : roomList) {
-						// gui.userJoinedRoom(server, roomId, playerId, false);
-						// }
 					} else if (message.startsWith("pa") || message.startsWith("pr")) { // player joined
 						String[] dotSplitted = message.substring("pa".length()).split("\\.");
 						for (String player : dotSplitted) {
@@ -922,14 +923,10 @@ public class ServerZagram2 implements ServerInterface {
 						String playerAsString = isRed ? "red" : "blue";
 						gui.chatReceived(
 							server,
-							currentRoom,
-							"",
-							"player "
-								+ playerAsString
-								+
-								" Запрос на 'undo'. Клиент MultiPoints пока-что не умеет обрабатывать этот вызов.:(",
-							null
-								);
+							currentRoom, "",
+							"player " + playerAsString + " Запрос на 'undo'. Клиент MultiPoints " +
+								"пока-что не умеет обрабатывать этот вызов.:(",
+							null);
 					} else if (message.startsWith("vg")) { // game invite
 						String usefulPart = message.substring(2);
 						String sender = usefulPart.replaceAll("\\..*", ""); // first part
@@ -1025,7 +1022,7 @@ public class ServerZagram2 implements ServerInterface {
 				}
 
 			} else if (text.equals("")) {
-				// we got an empty result. Well, lets treat that as normal.
+				// we got an empty result. Well, lets treat this as normal.
 			} else {
 				gui.serverClosed(server);
 				isDisposed = true;
@@ -1075,8 +1072,6 @@ public class ServerZagram2 implements ServerInterface {
 		try {
 			if (avatarImages.get(user) != null) {
 			} else if (avatarUrls.get(user) != null
-			// && !avatarUrls.get(user).equals("")
-			// && !avatarUrls.get(user).equals("0")
 			) {
 				URL url;
 				if (avatarUrls.get(user).equals("") ||
@@ -1087,7 +1082,6 @@ public class ServerZagram2 implements ServerInterface {
 				}
 				// URL url = new URL("http://www.citilink.com/~grizzly/anigifs/bear.gif"); // animation
 				ImageIcon imageIcon = new ImageIcon(url);
-				// imageIcon.getImage().
 				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null, null);
 			}
 		} catch (Exception ex) {
@@ -1106,7 +1100,7 @@ public class ServerZagram2 implements ServerInterface {
 
 	@Override
 	public boolean isPrivateChatEnabled() {
-		return false;
+		return true;
 	}
 
 	@Override

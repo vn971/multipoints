@@ -6,11 +6,9 @@ package ru.narod.vn91.pointsop.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;

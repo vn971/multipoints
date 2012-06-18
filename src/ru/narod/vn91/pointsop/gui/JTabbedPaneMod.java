@@ -33,22 +33,30 @@ public class JTabbedPaneMod {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				tabbedPane.addTab(title /*may be ""*/, component);
-				TabCloseable tabCloseable = new TabCloseable(title, isCloseable);
-				tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
-					@Override
-					public Void call(TabCloseable input) {
-						Function0<Boolean> closeListener = closeListeners.get(component);
-						if (closeListener != null &&
-								closeListener.call() == false) {
-							// do nothing. Calling listeners is enough.
-						} else {
-							remove(component);
+				try {
+					tabbedPane.addTab(title /* may be "" */, component);
+					TabCloseable tabCloseable = new TabCloseable(title, isCloseable);
+					tabCloseable.addCloseListener(new Function<TabCloseable, Void>() {
+						@Override
+						public Void call(TabCloseable input) {
+							try {
+								Function0<Boolean> closeListener = closeListeners.get(component);
+								if (closeListener != null &&
+									closeListener.call() == false) {
+									// do nothing. Calling listeners is enough.
+								} else {
+									remove(component);
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+							return null;
 						}
-						return null;
-					}
-				});
-				tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabCloseable);
+					});
+					tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabCloseable);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 	}
