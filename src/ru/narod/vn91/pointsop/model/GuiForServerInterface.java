@@ -85,7 +85,7 @@ public interface GuiForServerInterface {
 			String message,
 			Long time);
 
-	public void privateMessageReceived(ServerInterface server, String user, String message);
+	public void privateMessageReceived(ServerInterface server, String withWhom, String source, String message);
 
 	public void soundReceived(ServerInterface server, String user);
 

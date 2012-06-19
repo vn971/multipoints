@@ -315,10 +315,11 @@ public class GuiController implements GuiForServerInterface {
 
 	public synchronized void privateMessageReceived(
 			final ServerInterface server,
-			final String userId,
+			final String withWhom,
+			final String source,
 			String message) {
 
-		Player player = playerPool.get(server, userId);
+		Player player = playerPool.get(server, withWhom);
 		PrivateChat privateChat = privateChatList.get(player);
 		if (privateChat == null) {
 			// creating new panel
@@ -335,19 +336,19 @@ public class GuiController implements GuiForServerInterface {
 		tabbedPane.setCloseListener_FalseIfStopClosing(privateChat, new Function0<Boolean>() {
 			@Override
 			public Boolean call() {
-				server.rejectPersonalGameInvite(userId);
+				server.rejectPersonalGameInvite(withWhom);
 				// server.cancelPersonalGameInvite(userId);
 				return true;
 			}
 		});
 
 		tabbedPane.makeBold(privateChat);
-		privateChat.addChat(player.guiName, message, false);
+		privateChat.addChat(source, message, false);
 	}
 
 	@Override
 	public synchronized void soundReceived(ServerInterface server, String user) {
-		privateMessageReceived(server, user, "послан звуковой сигнал");
+		privateMessageReceived(server, user, "", "послан звуковой сигнал");
 		Sounds.playAlarmSignal();
 	}
 
@@ -745,11 +746,8 @@ public class GuiController implements GuiForServerInterface {
 	public synchronized void raw(ServerInterface server, String info) {
 		String add = new Date() + " " + server.getServerName() + ": " + info + "\n";
 
-		this.privateMessageReceived(server, server.getServerName(), info);
-//		if (Settings.isDebug() == true) {
-			System.out.print(add);
-//		} else {
-//		}
+		this.privateMessageReceived(server, server.getServerName(), server.getServerName(), info);
+		System.out.print(add);
 	}
 
 	@Override

@@ -5,7 +5,6 @@
  */
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.text.DefaultStyledDocument;
@@ -21,10 +20,8 @@ import ru.narod.vn91.pointsop.sounds.Sounds;
 public class PrivateChat extends javax.swing.JPanel {
 
 	private final Player companion;
-	// GuiForServerInterface guiController;
 	private StyledDocument document = new DefaultStyledDocument();
 	private Date lastPingSent = new Date();
-	// SingleGameEngineInterface engine;
 	private Paper paper;
 	private boolean lastMoveWasMine;
 	private static String prefixPointsop = "OpCmd ";
@@ -241,6 +238,7 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
+        jButton_Ping.setEnabled(false);
         jButton_Ping.setText("померить ping");
         jButton_Ping.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,6 +246,7 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
+        jButton_Sound.setEnabled(false);
         jButton_Sound.setText("отправить звук");
         jButton_Sound.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,19 +352,18 @@ public class PrivateChat extends javax.swing.JPanel {
 			String message = jTextField_Chat.getText().trim();
 
 			companion.server.sendPrivateMsg(companion.id, message);
-			addChat(companion.server.getMyName(), message, true);
 			Sounds.playSendChat();
 			jTextField_Chat.setText("");
 		}
 }//GEN-LAST:event_jTextField_ChatKeyPressed
 
 	private void jButton_SoundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SoundActionPerformed
-		companion.server.sendPrivateMsg(companion.id, "/SendSOUND");
+	// companion.server.sendPrivateMsg(companion.id, "/SendSOUND");
 	}//GEN-LAST:event_jButton_SoundActionPerformed
 
 	private void jButton_PingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PingActionPerformed
-		lastPingSent = new Date();
-		companion.server.sendPrivateMsg(companion.id, "/Ping");
+	// lastPingSent = new Date();
+	// companion.server.sendPrivateMsg(companion.id, "/Ping");
 	}//GEN-LAST:event_jButton_PingActionPerformed
 
 	private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown

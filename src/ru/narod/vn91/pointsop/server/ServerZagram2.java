@@ -729,12 +729,11 @@ public class ServerZagram2 implements ServerInterface {
 								String withWhom = nicks[0].equals(myNameOnServer) ? nicks[1] : nicks[0];
 								// I talk 'withWhom', received a message from 'nick'
 								// there's a problem receiving messages from myself...
-								if (nick.equals(myNameOnServer)) {
-									// TODO equalsIgnoreCase ?
-									// received message from myself, ignore
+								if (nick.equalsIgnoreCase(myNameOnServer)) {
+									gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
 								}
 								else {
-									gui.privateMessageReceived(server, withWhom, chatMessage);
+									gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
 								}
 							}
 							else {

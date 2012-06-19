@@ -757,7 +757,7 @@ public class ServerPointsxt
 //			gui.privateMessageReceived(this, user, messageGui);
 		} else {
 			String nick = nicknameManager.irc2id(sender);
-			gui.privateMessageReceived(this, nick, IrcRegexp.cutIrcText(message));
+			gui.privateMessageReceived(this, nick, nick, IrcRegexp.cutIrcText(message));
 		}
 	}
 
@@ -1220,6 +1220,11 @@ public class ServerPointsxt
 		String fullTargetName = nicknameManager.id2irc(target);
 		if (fullTargetName != null) {
 			super.sendMessage(fullTargetName, message);
+
+			if (!message.startsWith("/SendSOUND") && !message.startsWith("/Ping") && !message.startsWith("!mppersinf")) {
+				gui.privateMessageReceived(this, target, getMyName(), IrcRegexp.cutIrcText(message));
+			}
+
 		} else {
 			gui.rawError(this,
 					"Не удалось отправить приватное сообщение пользователю " + target);
