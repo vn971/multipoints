@@ -238,7 +238,6 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
-        jButton_Ping.setEnabled(false);
         jButton_Ping.setText("померить ping");
         jButton_Ping.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,7 +245,6 @@ public class PrivateChat extends javax.swing.JPanel {
             }
         });
 
-        jButton_Sound.setEnabled(false);
         jButton_Sound.setText("отправить звук");
         jButton_Sound.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -290,6 +288,10 @@ public class PrivateChat extends javax.swing.JPanel {
         jTextArea1.setEditable(false);
         jTextArea1.setLineWrap(true);
         jTextArea1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextArea1.setDisabledTextColor(new java.awt.Color(60, 60, 60));
+        jTextArea1.setEnabled(false);
+        jTextArea1.setFocusable(false);
+        jTextArea1.setHighlighter(null);
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel_InfoLayout = new javax.swing.GroupLayout(jPanel_Info);
