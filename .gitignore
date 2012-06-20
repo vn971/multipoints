@@ -1,12 +1,12 @@
 bin/*
 build/*
 dist/*
-.classpath
-.project
+//.classpath
+//.project
 
 *.ks
 *.class
-//*.jar
+*.jar
 *.svn/*
 *.orig
 

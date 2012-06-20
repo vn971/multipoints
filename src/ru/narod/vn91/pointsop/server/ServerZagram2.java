@@ -731,8 +731,7 @@ public class ServerZagram2 implements ServerInterface {
 								// there's a problem receiving messages from myself...
 								if (nick.equalsIgnoreCase(myNameOnServer)) {
 									gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
-								}
-								else {
+								} else {
 									gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
 								}
 							}
