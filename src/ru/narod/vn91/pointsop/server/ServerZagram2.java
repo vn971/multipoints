@@ -87,7 +87,7 @@ public class ServerZagram2 implements ServerInterface {
 		}
 	}
 
-	class ZagramGameTyme {
+	class ZagramGameType {
 		final int fieldX, FieldY;
 		final boolean isStopEnabled, isEmptyScored;
 		final int timeStarting, timeAdditional;
@@ -95,7 +95,7 @@ public class ServerZagram2 implements ServerInterface {
 		final boolean isRated;
 		final int instantWin;
 
-		public ZagramGameTyme(int fieldX, int fieldY, boolean isStopEnabled, boolean isEmptyScored, int timeStarting, int timeAdditional,
+		public ZagramGameType(int fieldX, int fieldY, boolean isStopEnabled, boolean isEmptyScored, int timeStarting, int timeAdditional,
 				String startingPosition, boolean isRated, int instantWin) {
 			this.fieldX = fieldX;
 			this.FieldY = fieldY;
@@ -120,28 +120,50 @@ public class ServerZagram2 implements ServerInterface {
 			periodAdditionalTime);
 	}
 
-	ZagramGameTyme getZagramGameTyme(String str) {
+	private ZagramGameType getZagramGameType(String str) {
 		// 2525noT4R0.180.15  or  "3932noT1r0.180.20_PWC 2012"
 		String[] dotSplitted = str.split("\\.");
 		try {
+		    if (str.charAt(5) == 't' || str.charAt(5) == 'e' || str.charAt(5) == 'o') {  // old type
 			int startingTime = Integer.parseInt(dotSplitted[1]);
 			int addTime = Integer.parseInt(dotSplitted[2].split("_")[0]);
 			String hellishString = dotSplitted[0];
 			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
 			int sizeY = Integer.parseInt(hellishString.substring(2, 4));
 			String rulesAsString = hellishString.substring(4, 8);
-			boolean isStopEnabled = rulesAsString.matches("noT4|noT1|terr");
-			boolean isEmptyScored = rulesAsString.matches("terr");
+			boolean isStopEnabled = rulesAsString.matches("noT4|noT1");
+			boolean isEmptyScored = rulesAsString.matches("terr|stan");
 			// boolean manualEnclosings = rulesAsString.matches("terr");
 			// boolean stopEnabled = rulesAsString.matches("noT4|noT1");
 			String startingPosition = rulesAsString.replaceAll("no|terr|stan", "");
 			boolean isRated = !(hellishString.substring(8, 9).equals("F"));
 			Integer instantWin = Integer.parseInt(hellishString.substring(9));
-			return new ZagramGameTyme(
+			return new ZagramGameType(
 				sizeX, sizeY, isStopEnabled, isEmptyScored,
 				startingTime, addTime,
 				startingPosition,
 				isRated, instantWin);
+		    } else {
+			// new format: XXYYrI.(starting position).(who starts).(type).(time method).t0.t1.opt.tourn
+                        int startingTime = (dotSplitted[4].charAt(0) == 'a') ? Integer.parseInt(dotSplitted[5]) : 0;
+                        int addTime = (dotSplitted[4].charAt(0) == 'a') ? Integer.parseInt(dotSplitted[6]) : 0;
+                        String hellishString = dotSplitted[0];
+			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
+                        int sizeY = Integer.parseInt(hellishString.substring(2, 4));
+                        String rulesAsString = hellishString.substring(4, 5);
+			boolean isStopEnabled = rulesAsString.matches("n");
+			boolean isEmptyScored = rulesAsString.matches("t|s");
+			String startingPosition = dotSplitted[1];
+                        // boolean manualEnclosings = rulesAsString.matches("t");
+			// boolean stopEnabled = rulesAsString.matches("n");
+			boolean isRated = (dotSplitted[3].charAt(0) == 'R');
+                        Integer instantWin = Integer.parseInt(hellishString.substring(5));
+                        return new ZagramGameType(
+						  sizeX, sizeY, isStopEnabled, isEmptyScored,
+						  startingTime, addTime,
+						  startingPosition,
+						  isRated, instantWin);
+		    }
 		} catch (NumberFormatException e) {
 			return null;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -731,7 +753,8 @@ public class ServerZagram2 implements ServerInterface {
 								// there's a problem receiving messages from myself...
 								if (nick.equalsIgnoreCase(myNameOnServer)) {
 									gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
-								} else {
+								}
+								else {
 									gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
 								}
 							}
@@ -752,7 +775,7 @@ public class ServerZagram2 implements ServerInterface {
 								replaceFirst("[^.]*.", "").
 								replaceFirst("\\.[^.]*$", "").
 								replaceFirst("\\.[^.]*$", "");
-						ZagramGameTyme gameType = getZagramGameTyme(suffecientPart);
+						ZagramGameType gameType = getZagramGameType(suffecientPart);
 
 						String[] dotSplitted = message.split("\\.");
 						String roomId = dotSplitted[0].replaceFirst("d", "");
@@ -930,7 +953,7 @@ public class ServerZagram2 implements ServerInterface {
 						String sender = usefulPart.replaceAll("\\..*", ""); // first part
 						if (personalInvitesIncoming.contains(sender) == false) {
 							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
-							ZagramGameTyme gameType = getZagramGameTyme(gameDescription);
+							ZagramGameType gameType = getZagramGameType(gameDescription);
 							if (isBusy == true) {
 								personalInvitesIncoming.add(sender);
 								server.rejectPersonalGameInvite(sender);

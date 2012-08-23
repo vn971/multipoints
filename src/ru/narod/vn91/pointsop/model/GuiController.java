@@ -337,7 +337,6 @@ public class GuiController implements GuiForServerInterface {
 			@Override
 			public Boolean call() {
 				server.rejectPersonalGameInvite(withWhom);
-				// server.cancelPersonalGameInvite(userId);
 				return true;
 			}
 		});

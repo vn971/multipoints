@@ -83,7 +83,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel_Links" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="jScrollPane_ServerOutput" pref="96" max="32767" attributes="0"/>
+                  <Component id="jScrollPane_ServerOutput" pref="125" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -216,7 +216,7 @@
                   <Component id="jPanel_Connections" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel_Password" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="41" max="32767" attributes="0"/>
+                  <EmptySpace pref="161" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -252,7 +252,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="jButton_ConnectToZagram">
               <Properties>
-                <Property name="text" type="java.lang.String" value="zagram ***"/>
+                <Property name="text" type="java.lang.String" value="zagram"/>
                 <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jTextField_Username"/>
                 </Property>
@@ -316,7 +316,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="jPasswordField_Password"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt; * &#x43f;&#x440;&#x438; &#x43e;&#x442;&#x441;&#x443;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44f; &lt;br&gt;&#xa;&#x431;&#x443;&#x434;&#x435;&#x442; &#x43e;&#x441;&#x443;&#x449;&#x435;&#x441;&#x442;&#x432;&#x43b;&#x451;&#x43d; &#x432;&#x445;&#x43e;&#x434;  &lt;br&gt;&#xa;&#x433;&#x43e;&#x441;&#x442;&#x435;&#x43c; &lt;br&gt;&#xa; &lt;br&gt;&#xa; ** &#x43d;&#x435;&#x442;&#x443; &#x440;&#x435;&#x436;&#x438;&#x43c;&#x430;&lt;br&gt;&#xa;&#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x438; 3&#x43c;&#x438;&#x43d;/5&#x445;&#x43e;&#x434;&#x43e;&#x432;,&lt;br&gt;&#xa;&#x438;&#x433;&#x440;&#x44b; &#x43d;&#x430; &#x440;&#x435;&#x439;&#x442;&#x438;&#x43d;&#x433;.&lt;br&gt;&#xa; &lt;br&gt;&#xa; *** &#x41d;&#x435; &#x440;&#x430;&#x431;&#x43e;&#x442;&#x430;&#x435;&#x442; &#x43f;&#x43e;&#x441;&#x43b;&#x435;&lt;br&gt;&#xa;&#x441;&#x43c;&#x435;&#x43d;&#x44b; API (&#x43f;&#x440;&#x43e;&#x442;&#x43e;&#x43a;&#x43e;&#x43b;&#x430;) &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430;&lt;br&gt;&#xa;&#x41d;&#x438;&#x43a;&#x430;&#x43a;&#x438;&#x445; &#x43f;&#x440;&#x435;&#x434;&#x443;&#x43f;&#x440;&#x435;&#x436;&#x434;&#x435;&#x43d;&#x438;&#x439;&lt;br&gt;&#xa;&#x438;&#x43b;&#x438; &#x438;&#x43d;&#x441;&#x442;&#x440;&#x443;&#x43a;&#x446;&#x438;&#x439; &#x43f;&#x43e; &#x430;&#x434;&#x430;&#x43f;&#x442;&#x430;&#x446;&#x438;&#x438;&lt;br&gt;&#xa;&#x43e;&#x442; &#x440;&#x430;&#x437;&#x440;&#x430;&#x431;&#x43e;&#x442;&#x447;&#x438;&#x43a;&#x43e;&#x432; &#x43d;&#x435; &#x43f;&#x43e;&#x441;&#x442;&#x443;&#x43f;&#x430;&#x43b;&#x43e;,&lt;br&gt;&#xa;&#x43f;&#x43e;&#x43a;&#x430;-&#x447;&#x442;&#x43e; &#x441;&#x435;&#x440;&#x432;&#x438;&#x441; &#x432;&#x44b;&#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x43d;.&lt;br&gt;&#xa;http://zagram.org/komentarze.html&lt;br&gt;&#xa;&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt; * &#x43f;&#x440;&#x438; &#x43e;&#x442;&#x441;&#x443;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44f; &lt;br&gt;&#xa;&#x431;&#x443;&#x434;&#x435;&#x442; &#x43e;&#x441;&#x443;&#x449;&#x435;&#x441;&#x442;&#x432;&#x43b;&#x451;&#x43d; &#x432;&#x445;&#x43e;&#x434;  &lt;br&gt;&#xa;&#x433;&#x43e;&#x441;&#x442;&#x435;&#x43c; &lt;br&gt;&#xa; &lt;br&gt;&#xa; ** &#x43d;&#x435;&#x442;&#x443; &#x440;&#x435;&#x436;&#x438;&#x43c;&#x430;&lt;br&gt;&#xa;&#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x438; 3&#x43c;&#x438;&#x43d;/5&#x445;&#x43e;&#x434;&#x43e;&#x432;,&lt;br&gt;&#xa;&#x438;&#x433;&#x440;&#x44b; &#x43d;&#x430; &#x440;&#x435;&#x439;&#x442;&#x438;&#x43d;&#x433;.&lt;br&gt;&#xa;&lt;/html&gt;"/>
           </Properties>
         </Component>
       </SubComponents>
