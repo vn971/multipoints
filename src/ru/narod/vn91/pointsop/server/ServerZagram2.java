@@ -1099,7 +1099,7 @@ public class ServerZagram2 implements ServerInterface {
 					avatarUrls.get(user).equals("0")) {
 					url = new URL("http://zagram.org/awatar2.png");
 				} else {
-					url = new URL("http://zagram.org/awatary/" + avatarUrls.get(user) + ".gif");
+					url = new URL("http://zagram.org/awatary/" + avatarUrls.get(user) + ".png");
 				}
 				// URL url = new URL("http://www.citilink.com/~grizzly/anigifs/bear.gif"); // animation
 				ImageIcon imageIcon = new ImageIcon(url);
