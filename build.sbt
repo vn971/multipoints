@@ -25,6 +25,9 @@ crossPaths := false // pure java project (except testing)
 
 autoScalaLibrary := false // pure java project (except testing)
 
+packageOptions in(Compile, packageBin) +=
+		Package.ManifestAttributes("Permissions" -> "all-permissions", "Codebase" -> "*")
+
 assemblySettings
 
 jarName in assembly := "PointsOnPaper.jar"
@@ -33,7 +36,7 @@ val createSignedJar = TaskKey[Unit]("createSignedJar")
 
 createSignedJar := {
 	val pass = System.getProperty("jarsigner.storepass")
-	val toExecute = "jarsigner -keystore project/vasya.ks -storepass " + pass + " target/PointsOnPaper.jar mykey"
+	val toExecute = "jarsigner -keystore project/vasya.ks -storepass " + pass + " target/PointsOnPaper.jar mp"
 	toExecute.!
 }
 

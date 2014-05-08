@@ -16,7 +16,7 @@
 		<all-permissions/>
 	</security>
 	<resources>
-		<j2se version="1.5+"/>
+		<j2se version="1.6+"/>
 		<jar eager="false" href="PointsOnPaper.jar" main="true"/>
 	</resources>
 	<application-desc main-class="ru.narod.vn91.pointsop.gui.SelfishGuiStarter"/>
