@@ -1,0 +1,51 @@
+// plugins.sbt
+libraryDependencies ++= Seq(
+  "net.sf.proguard" % "proguard-base" % "4.11"
+)
+
+
+
+val proguardTask = TaskKey[Unit]("proguard")
+
+(proguardTask in Compile) <<= (proguardTask in Compile) dependsOn (assembly in Compile)
+
+proguardTask <<= (jarName in assembly) map { jarName =>
+	val args = Array(
+		"-injars", "target/" + jarName,
+		"-verbose",
+		"-keep", "ru.narod.vn91.pointsop.gui.SelfishGuiStarter"
+	)
+	proguard.ProGuard.main(args)
+}
+
+proguardTask <<= (
+		Keys.`package` in Compile,
+		baseDirectory,
+		fullClasspath in Compile
+		) map { (inputJar, base, fullClasspath) =>
+	import proguard._
+	val config = new Configuration
+	val libs =
+		IO.listFiles(file("assets")).filter(_.getName != "javaws.jar") ++
+				fullClasspath.files.filter(f =>
+					f.getName.startsWith("scala-swing") || f.getName.startsWith("scala-library")
+				)
+	val args = IO.read(file("project/proguard.conf"))
+			.replace("${input.jar}", inputJar.toString)
+			.replace("${java.home}", sys.props("java.home"))
+			.replace("${optpass}", sys.props.getOrElse("optpass", "0"))
+			.replace("${libs}", libs.map(
+		_ + "(!META-INF/MANIFEST.MF,!META-INF/NOTICE*,!META-INF/LICENSE*)").mkString(":")
+			)
+	new proguard.Configuration().keep
+	new proguard.ConfigurationParser(args, "", base, new java.util.Properties).parse(config)
+	new proguard.ProGuard(config).execute
+}
+
+
+
+// sbt-12.4 plugin:
+//addSbtPlugin("org.scala-sbt" % "xsbt-proguard-plugin" % "0.1.3")
+// proguardSettings
+// proguardOptions += keepMain("ru.narod.vn91.pointsop.gui.SelfishGuiStarter")
+

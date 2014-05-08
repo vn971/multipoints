@@ -1,12 +1,21 @@
-bin/*
-build/*
-dist/*
-//.classpath
-//.project
+#### unmanaged SBT dependencies (javaws)
+/lib
 
+#### IDE
+/.cache
+/.classpath
+/.ensime
+/.idea*
+/.project
+/.settings
+
+
+#### SBT output
+/target
+/project/project
+/project/target
+
+
+#### private info
 *.ks
-*.class
-*.jar
-*.svn/*
-*.orig
-
+vasya*
