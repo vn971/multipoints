@@ -1,13 +1,13 @@
 package ru.narod.vn91.pointsop.server.irc;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class IrcNicknameManager {
 
-	Map<String, String> fromId = new LinkedHashMap<String, String>();
-	Map<String, String> fromIrc = new LinkedHashMap<String, String>();
+	Map<String, String> fromId = new ConcurrentHashMap<>();
+	Map<String, String> fromIrc = new ConcurrentHashMap<>();
 
 	public String irc2id(String ircNick) {
 		// inDI_X220111123511[g101]

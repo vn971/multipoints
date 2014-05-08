@@ -64,7 +64,7 @@ public class ServerPointsxt
 	IrcNicknameManager nicknameManager = new IrcNicknameManager();
 	MyGame myGame = new MyGame();
 
-	public void connect() {
+	public synchronized void connect() {
 		new Thread() {
 			public void run() {
 				Function<Integer, Boolean> connector = new Function<Integer, Boolean>() {
@@ -131,7 +131,7 @@ public class ServerPointsxt
 		}.start();
 	}
 
-	public void disconnectServer() {
+	public synchronized void disconnectServer() {
 		super.disconnect();
 		super.dispose();
 	}
@@ -240,7 +240,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public void acceptGameVacancyOpponent(
+	public synchronized void acceptGameVacancyOpponent(
 			String roomName,
 			String newOpponent) {
 		if (! roomName.equals(myGame.roomName)) {
@@ -271,17 +271,17 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
+	public synchronized void rejectGameVacancyOpponent(String roomName, String notWantedOpponent) {
 		super.sendMessage(
 				nicknameManager.id2irc(notWantedOpponent),
 				"Приглашение на игру отклонено.");
 	}
 
-	public void stopGameVacancy() {
+	public synchronized void stopGameVacancy() {
 		myGame.leaveGame(false);
 	}
 
-	public void askGameVacancyPlay(String gameRoomName) {
+	public synchronized void askGameVacancyPlay(String gameRoomName) {
 		super.joinChannel(gameRoomName);
 		super.sendMessage(
 				gameRoomName,
@@ -301,7 +301,7 @@ public class ServerPointsxt
 	public void rejectPersonalGameInvite(String playerId) {
 	}
 
-	public void tryInvitePointsxt(String target, boolean isVerbose) {
+	public synchronized void tryInvitePointsxt(String target, boolean isVerbose) {
 //		if (target.startsWith("\\^")) {
 //			super.sendMessage(
 //					target,
@@ -349,7 +349,7 @@ public class ServerPointsxt
 		return result;
 	}
 
-	public void subscribeRoom(String roomName) {
+	public synchronized void subscribeRoom(String roomName) {
 		if (roomName.equals(defaultChannel)) {
 			gui.subscribedLangRoom(
 					roomName,
@@ -368,7 +368,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public void unsubscribeRoom(String roomName) {
+	public synchronized void unsubscribeRoom(String roomName) {
 		if ((new Date()).getTime() - lastSpectrTime.getTime() >= 0) {
 			// limit the users from joining-leaving too fast
 			// because it causes a bug in pointsxt
@@ -383,7 +383,7 @@ public class ServerPointsxt
 	}
 
 	@Override
-	public void setStatus(boolean isBusy) {
+	public synchronized void setStatus(boolean isBusy) {
 		gui.raw(this, "Статусы 'занят'/'свободен' не поддерживаются на этом сервере.");
 	}
 	
@@ -915,7 +915,7 @@ public class ServerPointsxt
 						".*" + "_X" + pointsxtVersion + "[0-9]{9,9}\\[....\\]" + ".*");
 	}
 
-	public void userConnected_PointsxtStyle(
+	public synchronized void userConnected_PointsxtStyle(
 			String room,
 			String ircNick,
 			boolean silent) {
@@ -993,7 +993,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public void userDisconnected_PointsxtStyle(
+	public synchronized void userDisconnected_PointsxtStyle(
 			String room,
 			String user,
 			String reason) {
@@ -1026,7 +1026,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public void clearCreatedGames_PointsxtStyle(String user) {
+	public synchronized void clearCreatedGames_PointsxtStyle(String user) {
 		if (getPlayerRoom(user).length() > 0) {
 			gui.gameRowDestroyed(this, getPlayerRoom(user));
 		}
@@ -1097,7 +1097,7 @@ public class ServerPointsxt
 		}
 	}
 
-	public void surrender(String roomName) {
+	public synchronized void surrender(String roomName) {
 		myGame.surrender(roomName);
 	}
 
@@ -1187,14 +1187,14 @@ public class ServerPointsxt
 	}
 
 	@Override
-	synchronized public void makeMove(
+	public synchronized void makeMove(
 			String roomName,
 			int x,
 			int y) {
 		myGame.makeMove(roomName, x, y, myGame.getDefaultTime());
 	}
 
-	public void sendChat(
+	public synchronized void sendChat(
 			String room,
 			String message) {
 		if (room.equals(defaultChannel)) {
@@ -1214,7 +1214,7 @@ public class ServerPointsxt
 	}
 	}
 
-	public void sendPrivateMsg(
+	public synchronized void sendPrivateMsg(
 			String target,
 			String message) {
 		String fullTargetName = nicknameManager.id2irc(target);
@@ -1251,7 +1251,7 @@ public class ServerPointsxt
 		return 340;
 	}
 
-	public String int2SpectrGameCharacter(int i) {
+	private String int2SpectrGameCharacter(int i) {
 		return Character.toString((char) (i + '0'));
 	}
 
@@ -1306,7 +1306,7 @@ public class ServerPointsxt
 		return result.toString();
 	}
 
-	public void sendSpectr(String targetIrcNick) {
+	private void sendSpectr(String targetIrcNick) {
 		String mainSpectrData = getSpectr_MainPart();
 		final int blockStep = getMaximumMessageLength();
 		int blockStart = 0;
