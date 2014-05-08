@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp codebase="http://pointsgame.net/mp" href="game.jnlp" spec="1.0+">
+	<information>
+		<title>MultiPoints</title>
+		<vendor>Vasya Novikov and Priymak Alexey</vendor>
+		<homepage href="http://pointsgame.net/site/mp"/>
+		<description>a program for the game Points</description>
+		<description kind="short">MultiPoints - программа для игры в Точки.</description>
+		<icon href="ru/narod/vn91/pointsop/gui/vp.jpg"/>
+		<shortcut online="true">
+			<desktop/>
+			<menu submenu="MultiPoints"/>
+		</shortcut>
+	</information>
+	<security>
+		<all-permissions/>
+	</security>
+	<resources>
+		<j2se version="1.5+"/>
+		<jar eager="false" href="PointsOnPaper.jar" main="true"/>
+	</resources>
+	<application-desc main-class="ru.narod.vn91.pointsop.gui.SelfishGuiStarter"/>
+</jnlp>

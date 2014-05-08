@@ -1,7 +1,17 @@
 package ru.narod.vn91.pointsop.server;
 
-import java.awt.Point;
+import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
+import ru.narod.vn91.pointsop.data.TimeLeft;
+import ru.narod.vn91.pointsop.data.TimeSettings;
+import ru.narod.vn91.pointsop.model.GuiForServerInterface;
+import ru.narod.vn91.pointsop.model.StartingPosition;
+import ru.narod.vn91.pointsop.server.zagram.MessageQueue;
+import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Sha1;
+import ru.narod.vn91.pointsop.utils.Wait;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,30 +20,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.ImageIcon;
-
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
-
-import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
-import ru.narod.vn91.pointsop.data.TimeLeft;
-import ru.narod.vn91.pointsop.data.TimeSettings;
-import ru.narod.vn91.pointsop.model.GuiForServerInterface;
-import ru.narod.vn91.pointsop.model.StartingPosition;
-import ru.narod.vn91.pointsop.server.zagram.MessageQueue;
-import ru.narod.vn91.pointsop.utils.Function;
-import ru.narod.vn91.pointsop.utils.Wait;
 
 public class ServerZagram2 implements ServerInterface {
 
@@ -196,16 +184,6 @@ public class ServerZagram2 implements ServerInterface {
 			stringBuilder.append(base64ZagramStyle[base64_2]);
 		}
 		return stringBuilder.toString();
-	}
-
-	private static String getSha1(String input) {
-		try {
-			MessageDigest sha1 = MessageDigest.getInstance("SHA1");
-			byte[] digest = sha1.digest(input.getBytes());
-			return HexBin.encode(digest);
-		} catch (NoSuchAlgorithmException ex) {
-			return input;
-		}
 	}
 
 	@Override
@@ -686,6 +664,33 @@ public class ServerZagram2 implements ServerInterface {
 			}
 		}
 
+		private String nonEmpty(String s) {
+			if (s == null || s.isEmpty()) return null; else return s;
+		}
+
+		private void handlePlayerInfo(String message, ServerInterface server) {
+			System.out.println(message);
+			String player = null, myStatus = null;
+			Integer rating = null, winCount = null, lossCount = null, drawCount = null;
+			try {
+				String[] dotSplitted = message.substring("i".length()).split("\\.");
+				player = nonEmpty(dotSplitted[0]);
+				String avatar = nonEmpty(dotSplitted[1]);
+				avatarUrls.put(player, avatar);
+				String status = (dotSplitted[2].matches(".*(N|b).*") ? "" : "free");
+				String language = nonEmpty(dotSplitted[3]);
+				myStatus = language + " (" + status + ")";
+				rating = Integer.parseInt(dotSplitted[4]);
+				winCount = Integer.parseInt(dotSplitted[5]);
+				lossCount = Integer.parseInt(dotSplitted[7]);
+				drawCount = Integer.parseInt(dotSplitted[6]);
+			} catch (Exception ex) {
+			} finally {
+				gui.updateUserInfo(server, player, player, null, rating,
+					winCount, lossCount, drawCount, myStatus, null);
+			}
+		}
+
 		private synchronized void handleText(String text) {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
 			ServerInterface server = ServerZagram2.this;
@@ -823,28 +828,7 @@ public class ServerZagram2 implements ServerInterface {
 						}
 					} else if (message.startsWith("h")) { // additional flags
 					} else if (message.startsWith("i")) { // player info
-						String[] dotSplitted = message.substring("i".length()).split("\\.");
-						String player = null, status = null, language = null, myStatus = null;
-						Integer rating = null, winCount = null, lossCount = null, drawCount = null;
-						if (dotSplitted.length == 4 || dotSplitted.length == 8) {
-							player = dotSplitted[0];
-							avatarUrls.put(player, dotSplitted[1]);
-							status = (dotSplitted[2].matches(".*(N|b).*") ? "" : "free");
-							// + (dotSplitted[2].contains("J") ? " java" : "web");
-							language = dotSplitted[3];
-							myStatus = language + " (" + status + ")";
-						}
-						if (dotSplitted.length == 8) {
-							try {
-								rating = Integer.parseInt(dotSplitted[4]);
-								winCount = Integer.parseInt(dotSplitted[5]);
-								lossCount = Integer.parseInt(dotSplitted[7]);
-								drawCount = Integer.parseInt(dotSplitted[6]);
-							} catch (NumberFormatException e) {
-							}
-						}
-						gui.updateUserInfo(server, player, player, null, rating,
-							winCount, lossCount, drawCount, myStatus, null);
+						handlePlayerInfo(message, server);
 					} else if (message.startsWith("m")) { // message numbers info
 						// try {
 						String tail = message.substring(1);
