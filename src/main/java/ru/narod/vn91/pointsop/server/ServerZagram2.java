@@ -1,6 +1,7 @@
 package ru.narod.vn91.pointsop.server;
 
 import java.awt.Point;
+import ru.narod.vn91.pointsop.utils.Sha1;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -73,7 +75,7 @@ public class ServerZagram2 implements ServerInterface {
 			this.gui = gui;
 			this.secretId =
 					getBase64ZagramVersion(
-						getSha1(myNameOnServer + "9WB2qGYzzWry1vbVjoSK" + password)).
+						Sha1.getSha1(myNameOnServer + "9WB2qGYzzWry1vbVjoSK" + password)).
 							substring(0, 10);
 		} else {
 			if (myNameOnServer.equals("")) {
