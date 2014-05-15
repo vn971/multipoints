@@ -235,7 +235,9 @@ public class SelfishGuiStarter {
 										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(1);
 										tabbedPane.addTab("PointsIQ level 1", pointsIQ, true);
 										tabbedPane.setSelectedComponent(pointsIQ);
-									} catch (Exception ignored) {	}
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
 								}
 							}
 					);
@@ -251,7 +253,9 @@ public class SelfishGuiStarter {
 										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(2);
 										tabbedPane.addTab("PointsIQ level 2", pointsIQ, true);
 										tabbedPane.setSelectedComponent(pointsIQ);
-									} catch (Exception ignored) {	}
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
 								}
 							}
 					);
@@ -267,7 +271,9 @@ public class SelfishGuiStarter {
 										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(3);
 										tabbedPane.addTab("PointsIQ level 3", pointsIQ, true);
 										tabbedPane.setSelectedComponent(pointsIQ);
-									} catch (Exception ignored) {	}
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
 								}
 							}
 					);
@@ -282,7 +288,9 @@ public class SelfishGuiStarter {
 										javax.swing.JPanel pointsIQ=new com.google.sites.priymakpoints.pointsiq.PointsIQ(4);
 										tabbedPane.addTab("PointsIQ level 4", pointsIQ, true);
 										tabbedPane.setSelectedComponent(pointsIQ);
-									} catch (Exception ignored) {	}
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
 								}
 							}
 					);
@@ -540,7 +548,8 @@ class JMenuItemWithLink extends JMenuItem {
 				if (doOpen) {
 					try {
 						java.awt.Desktop.getDesktop().browse(new URI(url));
-					} catch (Exception ignored) {
+					} catch (Exception ex) {
+						ex.printStackTrace();
 					}
 				}
 			}
