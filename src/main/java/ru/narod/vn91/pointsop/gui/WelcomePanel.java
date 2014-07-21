@@ -336,9 +336,8 @@ class LinkedLabel extends JLabel {
 						if (e.getButton() == MouseEvent.BUTTON1) {
 							try {
 								java.awt.Desktop.getDesktop().browse(new URI(link));
-							} catch (Exception e1) {
+							} catch (Exception ignored) {
 							}
-						} else {
 						}
 					}
 				}

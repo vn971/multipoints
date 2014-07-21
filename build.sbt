@@ -7,7 +7,7 @@ name := "PointsOnPaper"
 
 version := "1.0"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.1"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
@@ -35,12 +35,12 @@ jarName in assembly := "PointsOnPaper.jar"
 val createSignedJar = TaskKey[Unit]("createSignedJar")
 
 createSignedJar := {
-	val pass = System.getProperty("jarsigner.storepass")
-	val toExecute = "jarsigner -keystore project/vasya.ks -storepass " + pass + " target/PointsOnPaper.jar mp"
-	toExecute.!
+	"jarsigner -keystore project/vasya.ks -storepass:env pass target/PointsOnPaper.jar mp".run()
 }
 
 createSignedJar <<= createSignedJar dependsOn assembly
+
+assembly <<= assembly dependsOn (test in Test)
 
 
 mergeStrategy in assembly := {
@@ -54,6 +54,4 @@ resolvers ++= Seq(
 	"Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
 )
 
-libraryDependencies ++= Seq(
-	"org.scalatest" %% "scalatest" % "2.1.0" % "test"
-)
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"

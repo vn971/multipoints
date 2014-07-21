@@ -610,6 +610,10 @@ public class ServerPointsxt
 		}
 	}
 
+	public void log(String line) {
+		System.out.println(new Date().toString() + " " + line);
+	}
+
 	@Override
 	protected void onPrivateMessage(
 			String sender,
