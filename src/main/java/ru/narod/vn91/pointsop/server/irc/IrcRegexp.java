@@ -2,6 +2,7 @@ package ru.narod.vn91.pointsop.server.irc;
 
 public class IrcRegexp {
 	
+	// inDI_X220111123511[g101]
 	public static String pointsxtTail_RegExp = "_X[0-9]{12,12}\\[....\\]";
 
 	public static boolean isGamerNickname(String fullNick) {

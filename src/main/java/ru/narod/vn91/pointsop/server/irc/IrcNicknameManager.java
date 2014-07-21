@@ -6,18 +6,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class IrcNicknameManager {
 
-	Map<String, String> fromId = new ConcurrentHashMap<>();
-	Map<String, String> fromIrc = new ConcurrentHashMap<>();
+	protected final Map<String, String> fromId = new ConcurrentHashMap<>();
+	protected final Map<String, String> fromIrc = new ConcurrentHashMap<>();
 
 	public String irc2id(String ircNick) {
-		// inDI_X220111123511[g101]
 		if (fromIrc.get(ircNick) != null) {
 			// we already had him
 			return fromIrc.get(ircNick);
 		} else {
-			String shortBasic = ircNick.replaceAll(
-					IrcRegexp.pointsxtTail_RegExp, ""
-			);
+			String shortBasic = ircNick.replaceAll(IrcRegexp.pointsxtTail_RegExp, "");
 			String shortResult;
 			if (fromId.containsKey(shortBasic)) {
 				int i = 2;
@@ -53,7 +50,6 @@ public class IrcNicknameManager {
 	}
 
 	public void removeIrcNick(String ircNick) {
-		ircNick = ircNick.toLowerCase();
 		String shortNick = fromIrc.get(ircNick);
 		fromId.remove(shortNick);
 		for (Entry<String,String> mapEntry : fromIrc.entrySet()) {
@@ -61,10 +57,6 @@ public class IrcNicknameManager {
 				fromIrc.remove(mapEntry.getKey());
 			}
 		}
-	}
-
-	public String getGuiNick(String ircNick) {
-		return ircNick.replaceAll(IrcRegexp.pointsxtTail_RegExp, "");
 	}
 
 }

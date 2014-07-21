@@ -922,7 +922,7 @@ public class ServerPointsxt
 		String shortNick = nicknameManager.irc2id(ircNick);
 		gui.updateUserInfo(
 				this, shortNick,
-				nicknameManager.getGuiNick(ircNick), null, IrcRegexp.getPlayerRank(ircNick),
+				IrcRegexp.cutIrcTail(ircNick), null, IrcRegexp.getPlayerRank(ircNick),
 				0, 0, 0, IrcRegexp.extractUserStatus(ircNick), null);
 		if (room.equals(defaultChannel)) {
 			// join Lang room
