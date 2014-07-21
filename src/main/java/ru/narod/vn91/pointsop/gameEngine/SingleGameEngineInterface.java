@@ -85,8 +85,8 @@ public interface SingleGameEngineInterface {
 
 		static boolean dotTypeIsIn(DotType element,
 				DotType... set) {
-			for (int i = 0; i < set.length; i++) {
-				if (set[i] == element) {
+			for (DotType aSet : set) {
+				if (aSet == element) {
 					return true;
 				}
 			}
@@ -108,7 +108,7 @@ public interface SingleGameEngineInterface {
 
 	public enum MoveType {
 
-		BLUE, RED;
+		BLUE, RED
 	}
 
 	public enum MoveResult {
@@ -125,23 +125,7 @@ public interface SingleGameEngineInterface {
 		public MoveResult moveResult;
 		public List<SurroundingAbstract> newSurroundings;
 
-		public boolean isRed() {
-			return moveType == MoveType.RED;
-		}
-
 		public MoveInfoAbstract() {
-		}
-
-		public MoveInfoAbstract(int coordX,
-				int coordY,
-				MoveType moveType,
-				MoveResult moveResult,
-				List<SurroundingAbstract> newSurroundings) {
-			this.coordX = coordX;
-			this.coordY = coordY;
-			this.moveType = moveType;
-			this.moveResult = moveResult;
-			this.newSurroundings = newSurroundings;
 		}
 	}
 

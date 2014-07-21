@@ -4,26 +4,13 @@
 //
 package ru.narod.vn91.pointsop.server;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.ImageIcon;
-
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 import ru.narod.vn91.pointsop.data.Dot;
-import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.gameEngine.RandomMovesProvider;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngine;
@@ -40,29 +27,36 @@ import ru.narod.vn91.pointsop.utils.Function2;
 import ru.narod.vn91.pointsop.utils.Settings;
 import ru.narod.vn91.pointsop.utils.Sha1;
 
+import javax.swing.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.URL;
+import java.util.*;
+
 public class ServerPointsxt
 		extends PircBot
 		implements ServerInterface {
 
-	GuiForServerInterface gui;
-	String myNickOnServ, myNick_Originally;
-	String myPassword;
+	final GuiForServerInterface gui;
+	String myNickOnServ;
+	final String myNick_Originally;
+	final String myPassword;
 	private int myRank;
-	private String defaultServ;
-	private String defaultChannel;
-	private String defaultChannelPass;
-	private String defaultServer_Visible;
-	protected String ircPassword;
-	protected boolean ircAcceptsRussianNicks;
-	String pointsxtVersion = "187";
-	static String gamePrefix = "#pxt";
-	static String commandCommonPrefix = "OpCmd ";
-	static String commandIWantJoinGame = "I want to join this game.";
-	static String commandAcceptOpponent = "I accept opponent ";
+	private final String defaultServ;
+	private final String defaultChannel;
+	private final String defaultChannelPass;
+	private final String defaultServer_Visible;
+	protected final String ircPassword;
+	final String pointsxtVersion = "187";
+	static final String gamePrefix = "#pxt";
+	static final String commandCommonPrefix = "OpCmd ";
+	static final String commandIWantJoinGame = "I want to join this game.";
+	static final String commandAcceptOpponent = "I accept opponent ";
 	Date lastSpectrTime = new Date(0);
-	HashMap<String, String> spectrGameData = new HashMap<String, String>();
-	IrcNicknameManager nicknameManager = new IrcNicknameManager();
-	MyGame myGame = new MyGame();
+	final HashMap<String, String> spectrGameData = new HashMap<>();
+	final IrcNicknameManager nicknameManager = new IrcNicknameManager();
+	final MyGame myGame = new MyGame();
 
 	public synchronized void connect() {
 		new Thread() {
@@ -104,7 +98,7 @@ public class ServerPointsxt
 				// in reality, I just try out FP methods
 				// like "foreach" and others :)
 				// int[] portList = { Settings.getIrcPort(), 6667, 6029, 7029, 46175 };
-				Set<Integer> portSet = new LinkedHashSet<Integer>();
+				Set<Integer> portSet = new LinkedHashSet<>();
 				portSet.add(Settings.getIrcPort());
 				portSet.add(6667);
 				portSet.add(6029);
@@ -127,7 +121,7 @@ public class ServerPointsxt
 				// connector.call(5190);
 				// }
 				// }
-			};
+			}
 		}.start();
 	}
 
@@ -152,7 +146,6 @@ public class ServerPointsxt
 		this.ircPassword = ircPassword;
 		defaultChannel = "#pointsxt";
 		defaultChannelPass = roomPassword;
-		this.ircAcceptsRussianNicks = ircAcceptsRussianNicks;
 		defaultServer_Visible = defaultServ;
 
 		String login = "";
@@ -194,7 +187,7 @@ public class ServerPointsxt
 		myGame.leaveGame(false);
 		int roomNumber;
 		String roomAsString;
-		boolean unoccupiedFound = false;
+		boolean unoccupiedFound;
 		do {
 			roomNumber = (int) (Math.random() * 99999);
 			roomAsString = gamePrefix + String.format("%05d", roomNumber);
@@ -557,7 +550,7 @@ public class ServerPointsxt
 						true, false);
 				myGame.amIRed = false;
 				myGame.engine = new SingleGameEngine(39, 32);
-				myGame.moveList = new ArrayList<SimpleMove>();
+				myGame.moveList = new ArrayList<>();
 				myGame.opponentName = nick;
 				myGame.roomName = channel;
 				gui.subscribedGame(this, channel);
@@ -579,7 +572,7 @@ public class ServerPointsxt
 			}
 		} else {
 			// game channel
-			if ((playerNumb != - 1) && (message.matches("..[0-9]{3,3}"))) {
+			if ((playerNumb != - 1) && (message.matches("..[0-9]{3}"))) {
 				// new move
 				int x = getCoordinate(message.charAt(0));
 				int y = getCoordinate(message.charAt(1));
@@ -669,7 +662,7 @@ public class ServerPointsxt
 					super.joinChannel(room);
 					myGame.amIRed = true;
 					myGame.engine = new SingleGameEngine(39, 32);
-					myGame.moveList = new ArrayList<SimpleMove>();
+					myGame.moveList = new ArrayList<>();
 					myGame.opponentName = nicknameManager.irc2id(sender);
 					myGame.roomName = room;
 					gui.subscribedGame(this, room);
@@ -867,7 +860,7 @@ public class ServerPointsxt
 //			boolean isRanked,
 //			boolean isBlits
 			) {
-		String result = "";
+		String result;
 		result = getMyName();
 		result += "_X";
 //		result += String.format("%03d", programVersion);
@@ -916,7 +909,7 @@ public class ServerPointsxt
 	private boolean isPointsopSameVersionNickname(String ircNick) {
 		return ircNick.startsWith("^")
 				&& ircNick.matches(
-						".*" + "_X" + pointsxtVersion + "[0-9]{9,9}\\[....\\]" + ".*");
+						".*" + "_X" + pointsxtVersion + "[0-9]{9}\\[....\\]" + ".*");
 	}
 
 	public synchronized void userConnected_PointsxtStyle(
@@ -1367,7 +1360,7 @@ public class ServerPointsxt
 		new Thread() {
 			public void run() {
 				sendPrivateMsg("Podbot", "!mppersinf " + user.replaceAll("\\(.*\\)", ""));
-			};
+			}
 		}.start();
 	}
 
@@ -1455,7 +1448,7 @@ public class ServerPointsxt
 		String opponentName = "";
 		boolean amIRed;
 		SingleGameEngineInterface engine;
-		ArrayList<SimpleMove> moveList = new ArrayList<SimpleMove>();
+		ArrayList<SimpleMove> moveList = new ArrayList<>();
 		Thread lastTimeoutThread = null;
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
 		final int timeAllowedPerTurn = 5;

@@ -1,16 +1,17 @@
 package ru.narod.vn91.pointsop.gameEngine;
 
+import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract.SurroundingType;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.SurroundingAbstract.SurroundingType;
-
 public class SingleGameEngine implements SingleGameEngineInterface {
 
-	private int sizeX, sizeY;
+	private final int sizeX;
+	private final int sizeY;
 	private int redScore = 0, blueScore = 0;
-	private Dot[][] field;
-	private List<Surrounding> allSurroundings = new ArrayList<Surrounding>();
+	private final Dot[][] field;
+	private final List<Surrounding> allSurroundings = new ArrayList<>();
 	private MoveInfo lastMoveInfo;
 	private DotAbstract lastDot = null;
 	RandomMovesProvider randomMovesProvider;
@@ -79,7 +80,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 
 				if (surroundedSomething == false) {
 					// eat back if the player didn't surround anything
-					ctrlSurrounding.wasDestroyed = false;
 					ctrlSurrounding.type =
 							(moveType == MoveType.BLUE) ? SurroundingType.RED
 							: SurroundingType.BLUE;
@@ -97,7 +97,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 					// survived (surrounded himself)
 					{
 						// clear the old surrounding
-						ctrlSurrounding.wasDestroyed = true;
 						for (int i = 0; i < ctrlSurrounding.capturedPoints.size(); i++) {
 							Dot dotToClear =
 									(Dot)ctrlSurrounding.capturedPoints.get(i);
@@ -278,19 +277,15 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 		if ((x < 1) || (y < 1) || (x > getSizeX()) || (y > getSizeY())) {
 			return false;
 		}
-		if (!field[x][y].isEmptyToPlace()) {
-			return false;
-		}
-		return true;
+		return field[x][y].isEmptyToPlace();
 	}
 
 	@Override
 	public List<SurroundingAbstract> getSurroundings() {
-		List<SurroundingAbstract> result = new ArrayList<SurroundingAbstract>();
-		for (int index = 0; index < allSurroundings.size(); index++) {
-			Surrounding surrounding = allSurroundings.get(index);
+		List<SurroundingAbstract> result = new ArrayList<>();
+		for (Surrounding surrounding : allSurroundings) {
 			if (surrounding.isCtrl() == false) {
-				result.add(allSurroundings.get(index));
+				result.add(surrounding);
 			}
 		}
 		return result;
@@ -366,8 +361,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 
 	class Surrounding extends SurroundingAbstract {
 
-		boolean wasDestroyed = false;
-
 		boolean isCtrl() {
 			return (type == SurroundingType.BLUE_CTRL)
 					|| (type == SurroundingType.RED_CTRL);
@@ -379,8 +372,8 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 		}
 
 		public Surrounding() {
-			path = new ArrayList<DotAbstract>();
-			capturedPoints = new ArrayList<DotAbstract>();
+			path = new ArrayList<>();
+			capturedPoints = new ArrayList<>();
 		}
 	}
 
@@ -394,7 +387,7 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 			this.coordY = coordY;
 			this.moveType = moveType;
 			this.moveResult = moveResult;
-			this.newSurroundings = new ArrayList<SurroundingAbstract>();
+			this.newSurroundings = new ArrayList<>();
 		}
 	}
 
@@ -432,10 +425,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 		boolean isEnemy(MoveType moveType) {
 			return ((moveType == MoveType.BLUE) && (this.type == DotType.RED))
 					|| ((moveType == MoveType.RED) && (this.type == DotType.BLUE));
-		}
-
-		boolean isUneatableFor(MoveType moveType) {
-			return false;
 		}
 
 		boolean isSurrBuilder(MoveType moveType) {
@@ -536,7 +525,6 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 				// do nothing
 			} else {
 				if (this.masterSurrounding == outerCtrlSurrounding) {
-					masterSurrounding.wasDestroyed = true;
 					if (masterSurrounding.isCtrl()) {
 						Surrounding surroundingToClear = masterSurrounding;
 						for (int i = 0; i < surroundingToClear.capturedPoints.size(); i++) {

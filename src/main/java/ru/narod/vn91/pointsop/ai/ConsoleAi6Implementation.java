@@ -1,15 +1,11 @@
 package ru.narod.vn91.pointsop.ai;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.Date;
 
 public class ConsoleAi6Implementation implements ConsoleAi6 {
 
-	ConsoleGui6 gui;
+	final ConsoleGui6 gui;
 
 	Process process;
 
@@ -19,7 +15,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 	volatile boolean isDisposed = false;
 	volatile int messageNumber = 0;
 
-	StringBuffer fullLog = new StringBuffer();
+	final StringBuffer fullLog = new StringBuffer();
 
 	public ConsoleAi6Implementation(
 			ConsoleGui6 gui,
@@ -168,7 +164,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 
 	class ListenThread
 			extends Thread {
-		BufferedReader reader;
+		final BufferedReader reader;
 
 		public ListenThread(BufferedReader reader) {
 			this.reader = reader;

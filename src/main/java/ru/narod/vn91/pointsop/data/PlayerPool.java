@@ -1,13 +1,13 @@
 package ru.narod.vn91.pointsop.data;
 
+import ru.narod.vn91.pointsop.server.ServerInterface;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.narod.vn91.pointsop.server.ServerInterface;
-
 public class PlayerPool {
 
-	Map<PlayerShort, Player> map = new HashMap<PlayerShort, Player>();
+	final Map<PlayerShort, Player> map = new HashMap<>();
 
 	public Player get(ServerInterface server, String id) {
 		PlayerShort playerShort = new PlayerShort(server, id);
@@ -27,8 +27,8 @@ public class PlayerPool {
 
 	class PlayerShort {
 
-		ServerInterface server;
-		String id;
+		final ServerInterface server;
+		final String id;
 
 		public PlayerShort(ServerInterface server, String id) {
 			super();

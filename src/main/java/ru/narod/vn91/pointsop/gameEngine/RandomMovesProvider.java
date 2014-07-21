@@ -5,8 +5,8 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.DotType;
 
 public class RandomMovesProvider {
 
-	int dimX;
-	int dimY;
+	final int dimX;
+	final int dimY;
 	int cursor;
 	int[] moves = null;
 
@@ -49,7 +49,7 @@ public class RandomMovesProvider {
 	}
 
 	public Dot findEmptyRandomPlace(SingleGameEngineInterface engine) {
-		Dot dot = null;
+		Dot dot;
 		do {
 			dot = getNextDot();
 		} while (dot != null &&

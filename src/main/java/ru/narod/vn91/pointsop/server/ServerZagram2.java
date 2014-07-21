@@ -16,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -32,18 +31,17 @@ public class ServerZagram2 implements ServerInterface {
 	final String secretId;
 	volatile boolean isDisposed = false;
 	final MessageQueue queue = new MessageQueue(10);
-	final List<String> transiendQueue = new ArrayList<String>();
+	final List<String> transiendQueue = new ArrayList<>();
 
 	volatile boolean isBusy = false;
-	Set<String> personalInvitesIncoming = new LinkedHashSet<String>();
-	Set<String> personalInvitesOutgoing = new LinkedHashSet<String>();
-	String currentInvitationPlayer = "";
-	Set<String> subscribedRooms = new LinkedHashSet<String>();
-	Map<String, Set<String>> playerRooms = new HashMap<String, Set<String>>();
+	Set<String> personalInvitesIncoming = new LinkedHashSet<>();
+	Set<String> personalInvitesOutgoing = new LinkedHashSet<>();
+	Set<String> subscribedRooms = new LinkedHashSet<>();
+	final Map<String, Set<String>> playerRooms = new HashMap<>();
 	ThreadMain threadMain;
 
-	final Map<String, String> avatarUrls = new HashMap<String, String>();
-	final Map<String, ImageIcon> avatarImages = new HashMap<String, ImageIcon>();
+	final Map<String, String> avatarUrls = new HashMap<>();
+	final Map<String, ImageIcon> avatarImages = new HashMap<>();
 
 	public ServerZagram2(GuiForServerInterface gui, String myNameOnServer, String password, boolean isInvisible) {
 
@@ -81,7 +79,6 @@ public class ServerZagram2 implements ServerInterface {
 		final int fieldX, FieldY;
 		final boolean isStopEnabled, isEmptyScored;
 		final int timeStarting, timeAdditional;
-		final String startingPosition;
 		final boolean isRated;
 		final int instantWin;
 
@@ -93,7 +90,6 @@ public class ServerZagram2 implements ServerInterface {
 			this.isEmptyScored = isEmptyScored;
 			this.timeStarting = timeStarting;
 			this.timeAdditional = timeAdditional;
-			this.startingPosition = startingPosition;
 			this.isRated = isRated;
 			this.instantWin = instantWin;
 		}
@@ -239,7 +235,7 @@ public class ServerZagram2 implements ServerInterface {
 							public void run() {
 								Wait.waitExactly(1000L);
 								disconnectThread.interrupt();
-							};
+							}
 						};
 						killUltimatively.setDaemon(true);
 						Runtime.getRuntime().addShutdownHook(killUltimatively);
@@ -248,7 +244,7 @@ public class ServerZagram2 implements ServerInterface {
 						threadMain.start();
 					}
 				}
-			};
+			}
 		};
 		threadStartup.setDaemon(true);
 		threadStartup.setPriority(Thread.MIN_PRIORITY);
@@ -546,8 +542,7 @@ public class ServerZagram2 implements ServerInterface {
 					break;
 				}
 			}
-		} catch (MalformedURLException e) {
-		} catch (IOException e) {
+		} catch (IOException ignored) {
 		}
 		// if (Settings.isDebug()) {
 		System.out.println("visiting: " + link);
@@ -684,7 +679,7 @@ public class ServerZagram2 implements ServerInterface {
 				winCount = Integer.parseInt(dotSplitted[5]);
 				lossCount = Integer.parseInt(dotSplitted[7]);
 				drawCount = Integer.parseInt(dotSplitted[6]);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			} finally {
 				gui.updateUserInfo(server, player, player, null, rating,
 					winCount, lossCount, drawCount, myStatus, null);
@@ -697,9 +692,9 @@ public class ServerZagram2 implements ServerInterface {
 			if ((text.startsWith("ok") && text.endsWith("end"))
 				|| (text.startsWith("sd") && text.endsWith("end") && isInvisible)) {
 				String[] splitted = text.split("/");
-				Set<String> personalInvitesIncomingNew = new LinkedHashSet<String>();
-				Set<String> personalInvitesOutgoingNew = new LinkedHashSet<String>();
-				Set<String> modifiedSubscribedRooms = new HashSet<String>();
+				Set<String> personalInvitesIncomingNew = new LinkedHashSet<>();
+				Set<String> personalInvitesOutgoingNew = new LinkedHashSet<>();
+				Set<String> modifiedSubscribedRooms = new HashSet<>();
 
 				String currentRoom = "";
 				for (String message : splitted) {
@@ -708,7 +703,7 @@ public class ServerZagram2 implements ServerInterface {
 						String player = message.replaceAll("\\..*", "").substring(1);
 						String[] dotSplitted = message.replaceFirst(".*?\\.", "").split("\\.");
 
-						final Set<String> newRooms = new LinkedHashSet<String>();
+						final Set<String> newRooms = new LinkedHashSet<>();
 						for (String room : dotSplitted) {
 							newRooms.add(room);
 						}
@@ -808,7 +803,7 @@ public class ServerZagram2 implements ServerInterface {
 								gui.timeUpdate(server, currentRoom,
 									new TimeLeft(time1, time2, null, null));
 							}
-						} catch (Exception e) {
+						} catch (Exception ignored) {
 						}
 					} else if (message.startsWith("ga") || message.startsWith("gr")) { // +game
 						String[] dotSplitted = message.substring("ga".length())
@@ -994,8 +989,7 @@ public class ServerZagram2 implements ServerInterface {
 					// now I have to compare two sets of player invitations
 					// if I don't have a player in the new set -
 					// then the invitation is closed and I should delete it.
-					for (Iterator<String> iterator = personalInvitesIncoming.iterator(); iterator.hasNext();) {
-						String player = iterator.next();
+					for (String player : personalInvitesIncoming) {
 						if (personalInvitesIncomingNew.contains(player) == false) {
 							// invitation cancelled
 							gui.personalInviteCancelled(server, player, player + "@incoming");
@@ -1003,29 +997,24 @@ public class ServerZagram2 implements ServerInterface {
 						}
 					}
 					personalInvitesIncoming = personalInvitesIncomingNew;
-					personalInvitesIncomingNew = new LinkedHashSet<String>();
 				}
 				{
-					for (Iterator<String> iterator = personalInvitesOutgoing.iterator(); iterator.hasNext();) {
-						String player = iterator.next();
+					for (String player : personalInvitesOutgoing) {
 						if (personalInvitesOutgoingNew.contains(player) == false) {
 							// invitation cancelled
 							gui.yourPersonalInviteRejected(server, player, player + "@outgoing");
 						}
 					}
 					personalInvitesOutgoing = personalInvitesOutgoingNew;
-					personalInvitesOutgoingNew = new LinkedHashSet<String>();
 				}
 				{
-					for (Iterator<String> iterator = subscribedRooms.iterator(); iterator.hasNext();) {
-						String room = iterator.next();
+					for (String room : subscribedRooms) {
 						if (modifiedSubscribedRooms.contains(room) == false) {
 							// unsubscribed room
 							gui.unsubscribedRoom(server, room);
 						}
 					}
 					subscribedRooms = modifiedSubscribedRooms;
-					modifiedSubscribedRooms = new LinkedHashSet<String>();
 				}
 
 			} else if (text.equals("")) {
@@ -1091,7 +1080,7 @@ public class ServerZagram2 implements ServerInterface {
 				ImageIcon imageIcon = new ImageIcon(url);
 				gui.updateUserInfo(this, user, null, imageIcon, null, null, null, null, null, null);
 			}
-		} catch (Exception ex) {
+		} catch (Exception ignored) {
 		}
 	}
 

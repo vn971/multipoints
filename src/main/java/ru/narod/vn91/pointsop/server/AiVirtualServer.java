@@ -21,7 +21,7 @@ import ru.narod.vn91.pointsop.model.StartingPosition;
  */
 public class AiVirtualServer implements ServerInterface, Ai2Gui_Interface {
 
-	GuiForServerInterface gui;
+	final GuiForServerInterface gui;
 	Gui2Ai_Interface ai;
 
 	public AiVirtualServer(GuiForServerInterface gui) {

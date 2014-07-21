@@ -6,9 +6,9 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 
 public class RandomAi implements Gui2Ai_Interface {
 
-	Ai2Gui_Interface gui;
-	SingleGameEngineInterface engine;
-	boolean aiColor = false;
+	final Ai2Gui_Interface gui;
+	final SingleGameEngineInterface engine;
+	final boolean aiColor = false;
 
 	public RandomAi(Ai2Gui_Interface gui,
 			int sizeX,

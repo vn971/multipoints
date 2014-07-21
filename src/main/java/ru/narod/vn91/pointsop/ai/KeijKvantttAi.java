@@ -1,15 +1,11 @@
 package ru.narod.vn91.pointsop.ai;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 public class KeijKvantttAi
 		implements Gui2Ai_Interface {
 
-	Ai2Gui_Interface gui;
+	final Ai2Gui_Interface gui;
 
 	Process process;
 	BufferedReader reader;
@@ -17,7 +13,8 @@ public class KeijKvantttAi
 	ListenThread listenThread;
 	
 	boolean isDisposed = false;
-	int sizeX, sizeY;
+	final int sizeX;
+	final int sizeY;
 
 	public KeijKvantttAi(
 			Ai2Gui_Interface gui,
@@ -54,7 +51,7 @@ public class KeijKvantttAi
 						}
 					}
 			);
-		} catch (Exception ex) {
+		} catch (Exception ignored) {
 		}
 	}
 

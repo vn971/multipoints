@@ -1,11 +1,8 @@
 package ru.narod.vn91.pointsop.utils;
 
-import java.awt.Color;
+import java.awt.*;
 
-/**
- *
- * @author vasya
- */
+
 public class CustomColors {
 
 	public static Color getContrastColor(Color source) {
@@ -29,13 +26,12 @@ public class CustomColors {
 			Color c1,
 			Color c2,
 			float color1Share) {
-		float p = color1Share;
-		float q = 1 - p;
+		float q = 1 - color1Share;
 		return new Color(
-				(int)(c1.getRed() * p + c2.getRed() * q),
-				(int)(c1.getGreen() * p + c2.getGreen() * q),
-				(int)(c1.getBlue() * p + c2.getBlue() * q),
-				(int)(c1.getAlpha() * p + c2.getAlpha() * q));
+				(int)(c1.getRed() * color1Share + c2.getRed() * q),
+				(int)(c1.getGreen() * color1Share + c2.getGreen() * q),
+				(int)(c1.getBlue() * color1Share + c2.getBlue() * q),
+				(int)(c1.getAlpha() * color1Share + c2.getAlpha() * q));
 	}
 
 	public static Color getMiddleColor(Color c1,

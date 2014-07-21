@@ -1,12 +1,10 @@
 package ru.narod.vn91.pointsop.data;
 
+
 public class Dot {
 
-	public int x;
-	public int y;
-
-//	public Dot() {
-//	}
+	public final int x;
+	public final int y;
 
 	public Dot(int x,
 			int y) {
@@ -19,11 +17,4 @@ public class Dot {
 		return "[" + x + ":" + y + "]";
 	}
 
-	public Dot zero2one() {
-		return new Dot(this.x + 1, this.y + 1);
-	}
-
-	public Dot one2zero() {
-		return new Dot(this.x - 1, this.y - 1);
-	}
 }

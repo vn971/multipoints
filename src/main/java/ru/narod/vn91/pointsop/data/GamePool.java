@@ -1,13 +1,13 @@
 package ru.narod.vn91.pointsop.data;
 
+import ru.narod.vn91.pointsop.server.ServerInterface;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.narod.vn91.pointsop.server.ServerInterface;
-
 public class GamePool {
 
-	Map<GameShort, GameOuterInfo> map = new HashMap<GameShort, GameOuterInfo>();
+	final Map<GameShort, GameOuterInfo> map = new HashMap<>();
 
 	public GameOuterInfo get(ServerInterface server, String id) {
 		GameShort gameShort = new GameShort(server, id);
@@ -20,14 +20,14 @@ public class GamePool {
 		}
 	}
 
-	public void remove(ServerInterface server, String id, String masterRoomId) {
+	public void remove(ServerInterface server, String id) {
 		GameShort gameShort = new GameShort(server, id);
 		map.remove(gameShort);
 	}
 
 	class GameShort {
-		ServerInterface server;
-		String id;
+		final ServerInterface server;
+		final String id;
 		public GameShort(ServerInterface server, String id) {
 			super();
 			this.server = server;

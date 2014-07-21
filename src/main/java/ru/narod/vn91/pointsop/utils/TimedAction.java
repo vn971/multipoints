@@ -1,6 +1,5 @@
 package ru.narod.vn91.pointsop.utils;
 
-import java.util.Date;
 
 public abstract class TimedAction {
 
@@ -17,30 +16,5 @@ public abstract class TimedAction {
 	 * action to run on time-out
 	 */
 	public abstract void run();
-
-	public final void executeWhen(final long timeOut) {
-		new Thread() {
-			public void run() {
-				long estimatedTime;
-				while (((estimatedTime = timeOut - new Date().getTime()) > 0)
-						&& isAlive()) {
-					Object o = new Object();
-					synchronized (o) {
-						try {
-							o.wait(estimatedTime + 10);
-						} catch (Exception ignored) {
-						}
-					}
-				}
-				if (isAlive()) {
-					TimedAction.this.run();
-				}
-			};
-		}.start();
-	}
-
-	public final void executeAfter(final long millis) {
-		this.executeWhen(new Date().getTime()+millis);
-	}
 
 }

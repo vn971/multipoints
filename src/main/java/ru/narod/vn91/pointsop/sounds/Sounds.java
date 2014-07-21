@@ -1,16 +1,16 @@
 package ru.narod.vn91.pointsop.sounds;
 
+import ru.narod.vn91.pointsop.utils.Settings;
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.narod.vn91.pointsop.utils.Settings;
-
 public class Sounds {
 
 
-	private static Map<String,AudioClip> clips = new HashMap<String, AudioClip>();
+	private static final Map<String,AudioClip> clips = new HashMap<>();
 
 	private static void playInNewThread(final String fileName) {
 		new Thread() {
@@ -27,7 +27,7 @@ public class Sounds {
 					}
 				}
 				audioClip.play();
-			};
+			}
 		}.start();
 	}
 

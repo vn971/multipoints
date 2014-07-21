@@ -1,12 +1,12 @@
 package ru.narod.vn91.pointsop.data;
 
-import java.awt.Color;
+import ru.narod.vn91.pointsop.server.ServerInterface;
+import ru.narod.vn91.pointsop.utils.Settings;
+
+import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedList;
-
-import ru.narod.vn91.pointsop.server.ServerInterface;
-import ru.narod.vn91.pointsop.utils.Settings;
 
 /**
  * information about the game that can be achieved not joining the game itself
@@ -24,14 +24,9 @@ public class GameOuterInfo {
 	// public Boolean invertIncomingY = false;
 	public Boolean isRedFirst = true;
 	public Boolean isRated = false;
-	// public Boolean iAmPlaying = false;
-	public Integer handicapRed = 0;
 	public Integer instantWin = 0;
-	public Boolean manualEnclosings = false;
 	public Boolean stopEnabled = true;
-	public Boolean isEmptyScored = false;
 
-	public String comment = "";
 	public GameState state = GameState.Playing;
 
 	// time is given in seconds
@@ -54,25 +49,22 @@ public class GameOuterInfo {
 	// period in turns. See above.
 	public Integer periodLength = 0;
 
-//	Collection<WeakReference<GameInfoListener>> weak = new LinkedList<WeakReference<GameInfoListener>>();
-	 private Collection<GameInfoListener> listeners = new LinkedList<GameInfoListener>();
+	 private final Collection<GameInfoListener> listeners = new LinkedList<>();
 
 	public GameOuterInfo(ServerInterface server, String id) {
 		this.server = server;
 		this.id = id;
 		this.first = null;
 		this.first = null;
-//		this.first = new Player(server, "first"); // avoid nulls
-//		this.second = new Player(server, "second"); // avoid nulls
 	}
 
 	public GameOuterInfo(ServerInterface server, String id, String masterRoomId,
-			Player first, Player second, Integer sizeX, Integer sizeY,
-			Boolean isRedFirst, Boolean isRated, Integer handicapRed,
-			Integer instantWin, Boolean manualEnclosings, Boolean stopEnabled,
-			Boolean isEmptyScored, GameState state, Integer freeTemporalTime,
-			Integer additionalAccumulatingTime, Integer startingTime,
-			Integer periodLength, String comment) {
+						 Player first, Player second, Integer sizeX, Integer sizeY,
+						 Boolean isRedFirst, Boolean isRated,
+						 Integer instantWin, Boolean stopEnabled,
+						 GameState state, Integer freeTemporalTime,
+						 Integer additionalAccumulatingTime, Integer startingTime,
+						 Integer periodLength) {
 		this.server = server;
 		this.id = id;
 		this.masterRoomId = masterRoomId;
@@ -82,17 +74,13 @@ public class GameOuterInfo {
 		this.sizeY = sizeY;
 		this.isRedFirst = isRedFirst;
 		this.isRated = isRated;
-		this.handicapRed = handicapRed;
 		this.instantWin = instantWin;
-		this.manualEnclosings = manualEnclosings;
 		this.stopEnabled = stopEnabled;
-		this.isEmptyScored = isEmptyScored;
 		this.state = state;
 		this.freeTemporalTime = freeTemporalTime;
 		this.additionalAccumulatingTime = additionalAccumulatingTime;
 		this.startingTime = startingTime;
 		this.periodLength = periodLength;
-		this.comment = comment;
 	}
 
 	public void updateFrom(GameOuterInfo g) {
@@ -101,7 +89,7 @@ public class GameOuterInfo {
 				if (field.get(g) != null) {
 					field.set(this, field.get(g));
 				}
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 		}
 
@@ -123,10 +111,6 @@ public class GameOuterInfo {
 	public void addChangeListener(GameInfoListener changeListener) {
 //		weak.add(new WeakReference<GameInfoListener>(changeListener));
 		listeners.add(changeListener);
-	}
-
-	public static int compare(GameOuterInfo game1, GameOuterInfo game2) {
-		return 1; // game 1 is always bigger
 	}
 
 	public String getTimeAsString() {
@@ -156,10 +140,8 @@ public class GameOuterInfo {
 	public Boolean amIRed() {
 		if (amIPlaying() == false || first == null || second == null) {
 			return null;
-		} else if (server.getMyName().equals(first.id)) {
-			return true;
 		} else {
-			return false;
+			return server.getMyName().equals(first.id);
 		}
 	}
 
@@ -192,7 +174,7 @@ public class GameOuterInfo {
 	}
 
 	public enum GameState {
-		SearchingOpponent, Playing, Reviewing, Closed
+		SearchingOpponent, Playing
 	}
 
 }

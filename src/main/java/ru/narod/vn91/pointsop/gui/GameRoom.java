@@ -11,7 +11,7 @@ import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveResult;
 import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.model.GuiForServerInterface;
-import ru.narod.vn91.pointsop.php.PhpBackupServer;
+import ru.narod.vn91.pointsop.server.irc.BackupToServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
 import ru.narod.vn91.pointsop.utils.Function2;
@@ -195,18 +195,15 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 			public void run() {
 				String eidokropkiLink = "";
 				if ((gameOuterInfo.isRated == true) && (wantToSave == true)) {
-					eidokropkiLink = PhpBackupServer.sendToEidokropki(
-							gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
-							gameOuterInfo.first.rating, gameOuterInfo.second.rating,
-							gameOuterInfo.sizeX, gameOuterInfo.sizeY,
-							gameOuterInfo.getTimeAsString(), gameResult, moveList);
+					eidokropkiLink = BackupToServer.sendToEidokropki(
+						gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
+						gameOuterInfo.first.rating, gameOuterInfo.second.rating,
+						gameOuterInfo.sizeX, gameOuterInfo.sizeY,
+						gameOuterInfo.getTimeAsString(), gameResult, moveList);
 					getServer().sendChat(gameOuterInfo.server.getMainRoom(),
 							"Закончена игра " + gameOuterInfo.first.guiName + "-" + gameOuterInfo.second.guiName
 							+ " ( " + eidokropkiLink + " ), победитель - " + whoWon + ". Поздравляем!");
 				}
-//				PhpBackupServer.sendToPointsgt(gameInfo.first.guiName, gameInfo.second.guiName,
-//						gameInfo.isRated, gameInfo.getTimeAsString(), isRedLooser, moveList,
-//						eidokropkiLink);
 			}
 		}.start();
 

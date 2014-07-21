@@ -1,12 +1,11 @@
 package ru.narod.vn91.pointsop.data;
 
+import ru.narod.vn91.pointsop.server.ServerInterface;
+
+import javax.swing.*;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedList;
-
-import javax.swing.ImageIcon;
-
-import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public class Player {
 
@@ -15,15 +14,12 @@ public class Player {
 
 	public String guiName = "";
 	public Integer rating = 0;
-	public Integer winCount = 0;
-	public Integer lossCount = 0;
-	public Integer drawCount = 0;
 	public ImageIcon imageIcon;
 	public String status = "";
 	public String userInfo = "";
 
 //	Collection<WeakReference<PlayerChangeListener>> weakListeners = new LinkedList<WeakReference<PlayerChangeListener>>();
-	Collection<PlayerChangeListener> listeners = new LinkedList<PlayerChangeListener>();
+final Collection<PlayerChangeListener> listeners = new LinkedList<>();
 
 	public Player(final ServerInterface server, final String id) {
 		super();
@@ -41,9 +37,6 @@ public class Player {
 		this.id = id;
 		this.guiName = guiName;
 		this.rating = rating;
-		this.winCount = winCount;
-		this.lossCount = lossCount;
-		this.drawCount = drawCount;
 		this.imageIcon = imageIcon;
 		this.status = status;
 		this.userInfo = userInfo;
@@ -55,7 +48,7 @@ public class Player {
 				if (field.get(p) != null) {
 					field.set(this, field.get(p));
 				}
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 		}
 

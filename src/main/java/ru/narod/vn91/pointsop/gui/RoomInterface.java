@@ -3,10 +3,7 @@ package ru.narod.vn91.pointsop.gui;
 import javax.swing.JPanel;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
-/**
- *
- * @author vasya
- */
+
 public interface RoomInterface {
 
 	JPanel getMainJPanel();

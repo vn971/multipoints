@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class MessageQueue {
 
-	volatile ArrayList<String> stringList;
+	final ArrayList<String> stringList;
 	volatile int size = 0;
 	final int stackSize;
 
 	public MessageQueue(int stackSize) {
 		this.stackSize = stackSize;
-		stringList = new ArrayList<String>(stackSize);
+		stringList = new ArrayList<>(stackSize);
 		for (int i = 0; i < stackSize; i++) {
 			stringList.add("");
 		}

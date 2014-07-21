@@ -1,6 +1,6 @@
 package ru.narod.vn91.pointsop.utils;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -10,11 +10,11 @@ public class Settings {
 	private static boolean isDebug = false;
 	private static String ircAddress = "pointsgame.net";
 
-	static private Set<Function<Void, Void>> colorChangeListenerList =
-			new LinkedHashSet<Function<Void, Void>>();
+	static private final Set<Function<Void, Void>> colorChangeListenerList =
+			new LinkedHashSet<>();
 
-	static public int newestVersion = 4;
-	static Preferences memory = Preferences.userRoot().node(
+	static public final int newestVersion = 4;
+	static final Preferences memory = Preferences.userRoot().node(
 		"ru.narod.ru.pointsop.userdata");
 
 	public static int getIrcPort() {
@@ -202,9 +202,9 @@ public class Settings {
 	public static void setDrawConnections(boolean b) {
 		memory.putBoolean("DrawConnections", b);
 	}
-	static Color defaultColor1 = new Color(255, 0, 0);
-	static Color defaultColor2 = new Color(21, 96, 189);
-	static Color defaultColorBackground = new Color(255, 255, 255);
+	static final Color defaultColor1 = new Color(255, 0, 0);
+	static final Color defaultColor2 = new Color(21, 96, 189);
+	static final Color defaultColorBackground = new Color(255, 255, 255);
 
 	public static Color getPlayer1Color() {
 		int r = memory.getInt("1Red", defaultColor1.getRed());
@@ -265,7 +265,7 @@ public class Settings {
 		for (Function<Void, Void> listener : colorChangeListenerList) {
 			try {
 				listener.call(null);
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 		}
 	}

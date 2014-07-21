@@ -1,23 +1,21 @@
 package ru.narod.vn91.pointsop.data;
 
+import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
+import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
-import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveInfoAbstract;
-import ru.narod.vn91.pointsop.gameEngine.SingleGameEngineInterface.MoveType;
 
-/**
- *
- * @author vasya
- */
+
 public class Sgf {
 
-	static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	{
+	static {
 		simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
@@ -47,13 +45,13 @@ public class Sgf {
 		}
 	}
 
-	public static String constructSgfForPhp(
-			String redName, String blueName,
-			int rank1, int rank2,
-			int fieldSizeX, int fieldSizeY,
-			String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
-			ArrayList<MoveInfoAbstract> moves, boolean upsideDown) {
-		String content = "";
+	public static String constructSgfForHttp(
+		String redName, String blueName,
+		int rank1, int rank2,
+		int fieldSizeX, int fieldSizeY,
+		String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
+		ArrayList<MoveInfoAbstract> moves, boolean upsideDown) {
+		String content;
 		String sizeProperty = (fieldSizeX == fieldSizeY)
 				? "" + fieldSizeX
 				: "" + fieldSizeX + ":" + fieldSizeY;
@@ -94,8 +92,6 @@ public class Sgf {
 			}
 		}
 
-		content = "type=paste&"
-				+ "sgf=";
 		content = ""
 				+ "(;FF[4]GM[40]CA[UTF-8]SZ[" + sizeProperty + "]"
 				+ "RU[Punish=0,Holes=1,AddTurn=0,MustSurr=1,MinArea=1,Pass=0,Stop=1,LastSafe=0,ScoreTerr=0,InstantWin=0]"
@@ -115,10 +111,9 @@ public class Sgf {
 				+ "\n";
 		try {
 			content = "type=paste&" + "sgf=" + URLEncoder.encode(content, "UTF-8");
-		} catch (UnsupportedEncodingException ex) {
+		} catch (UnsupportedEncodingException ignored) {
 		}
-		for (int moveNumber = 0; moveNumber < moves.size(); moveNumber++) {
-			MoveInfoAbstract move = moves.get(moveNumber);
+		for (MoveInfoAbstract move : moves) {
 			content += ";" + ((move.moveType == MoveType.RED) ? "W" : "B");
 			if (upsideDown) {
 				content += "[" + get1SgfCoord(move.coordX) + "" + get1SgfCoord(fieldSizeY + 1 - move.coordY) + "]\n";
@@ -137,7 +132,7 @@ public class Sgf {
 			int fieldSizeX, int fieldSizeY,
 			String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
 			ArrayList<DotColored> moveList, boolean upsideDown) {
-		String content = "";
+		String content;
 		String sizeProperty = (fieldSizeX == fieldSizeY)
 				? "" + fieldSizeX
 				: "" + fieldSizeX + ":" + fieldSizeY;
@@ -181,8 +176,6 @@ public class Sgf {
 			}
 		}
 
-		content = "type=paste&"
-				+ "sgf=";
 		content = ""
 				+ "(;FF[4]GM[40]CA[UTF-8]SZ[" + sizeProperty + "]"
 				+ "RU[Punish=0,Holes=1,AddTurn=0,MustSurr=1,MinArea=1,Pass=0,Stop=1,LastSafe=0,ScoreTerr=0,InstantWin=0]"
@@ -200,8 +193,7 @@ public class Sgf {
 				+ "\n"
 				+ "WR[" + rank1 + "]BR[" + rank2 + "]"
 				+ "\n";
-		for (int moveNumber = 0; moveNumber < moveList.size(); moveNumber++) {
-			DotColored dot = moveList.get(moveNumber);
+		for (DotColored dot : moveList) {
 			content += ";" + (dot.isRed ? "W" : "B");
 			if (upsideDown) {
 				content += "[" + get1SgfCoord(dot.x) + "" + get1SgfCoord(fieldSizeY + 1 - dot.y) + "]\n";
@@ -222,7 +214,7 @@ public class Sgf {
 			String timeLimits, GameResult gameResult, int scoreRedMinusBlue,
 			ArrayList<MoveInfoAbstract> moveList, boolean upsideDown) {
 
-		ArrayList<DotColored> moveListNew = new ArrayList<DotColored>();
+		ArrayList<DotColored> moveListNew = new ArrayList<>();
 		for (MoveInfoAbstract moveInfo : moveList) {
 			DotColored dot = new DotColored(
 					moveInfo.coordX, moveInfo.coordY,

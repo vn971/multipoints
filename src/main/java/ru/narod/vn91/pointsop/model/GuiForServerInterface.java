@@ -1,16 +1,12 @@
 package ru.narod.vn91.pointsop.model;
 
-import javax.swing.ImageIcon;
-import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
+import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
+import javax.swing.*;
+
 public interface GuiForServerInterface {
-
-	public enum MessageType {
-
-		INFO, ERROR,
-	}
 
 	/**
 	 * Server implementations should execute this method if they get disconnected
@@ -66,7 +62,7 @@ public interface GuiForServerInterface {
 	public void gameRowDestroyed( ServerInterface server, String oldRoom);
 
 	void statusSet(ServerInterface server, boolean isBusy);
-	
+
 	// personal gameInvites
 	public void personalInviteReceived(ServerInterface server, String userId, String gameId);
 

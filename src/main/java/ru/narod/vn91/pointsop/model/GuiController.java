@@ -1,28 +1,8 @@
 package ru.narod.vn91.pointsop.model;
 
-import java.awt.Component;
-import java.util.Date;
-import java.util.HashMap;
-
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
-
-import ru.narod.vn91.pointsop.data.GameInfoListener;
-import ru.narod.vn91.pointsop.data.GameOuterInfo;
-import ru.narod.vn91.pointsop.data.GamePool;
-import ru.narod.vn91.pointsop.data.Player;
-import ru.narod.vn91.pointsop.data.PlayerPool;
-import ru.narod.vn91.pointsop.data.TimeLeft;
+import ru.narod.vn91.pointsop.data.*;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
-import ru.narod.vn91.pointsop.gui.GameRoom;
-import ru.narod.vn91.pointsop.gui.GuiCommon;
-import ru.narod.vn91.pointsop.gui.JTabbedPaneMod;
-import ru.narod.vn91.pointsop.gui.LangRoom;
-import ru.narod.vn91.pointsop.gui.PrivateChat;
-import ru.narod.vn91.pointsop.gui.RoomInterface;
-import ru.narod.vn91.pointsop.gui.RoomPart_Chat;
-import ru.narod.vn91.pointsop.gui.RoomPart_Userlist;
+import ru.narod.vn91.pointsop.gui.*;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 import ru.narod.vn91.pointsop.sounds.Sounds;
@@ -30,22 +10,25 @@ import ru.narod.vn91.pointsop.utils.Function;
 import ru.narod.vn91.pointsop.utils.Function0;
 import ru.narod.vn91.pointsop.utils.Settings;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.Date;
+import java.util.HashMap;
+
 public class GuiController implements GuiForServerInterface {
 
-	World world;
-	JTabbedPaneMod tabbedPane;
+	final JTabbedPaneMod tabbedPane;
 	public JTextPane serverOutput;
 	ServerInterface pointsxt_tochkiorg_server;
 	ServerInterface pointsxt_ircworldru_server;
 	public ServerInterface pointsxt_vn91_server;
 	public ServerInterface zagram_server;
-	ServerInterface pointsopServer;
-	HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<ServerRoom, RoomInterface>();
-	HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<ServerRoom, GameRoom>();
-	HashMap<ServerRoom, LangRoom> langRooms = new HashMap<ServerRoom, LangRoom>();
-	HashMap<Player, PrivateChat> privateChatList = new HashMap<Player, PrivateChat>();
-	PlayerPool playerPool = new PlayerPool();
-	GamePool gamePool = new GamePool();
+	final HashMap<ServerRoom, RoomInterface> roomInterfaces = new HashMap<>();
+	final HashMap<ServerRoom, GameRoom> gameRooms = new HashMap<>();
+	final HashMap<ServerRoom, LangRoom> langRooms = new HashMap<>();
+	final HashMap<Player, PrivateChat> privateChatList = new HashMap<>();
+	final PlayerPool playerPool = new PlayerPool();
+	final GamePool gamePool = new GamePool();
 
 	public GuiController(final JTabbedPaneMod tabbedPane) {
 		this.tabbedPane = tabbedPane;
@@ -108,9 +91,9 @@ public class GuiController implements GuiForServerInterface {
 		GameOuterInfo updateInstance = new GameOuterInfo(
 			server, secondId, masterRoomId, first, second,
 			sizeX, sizeY,
-			isRedFirst, isRated, handicapRed, instantWin,
-			manualEnclosings, stopEnabled, isEmptyScored, state, freeTemporalTime,
-			additionalAccumulatingTime, startingTime, periodLength, comment);
+			isRedFirst, isRated, instantWin,
+			stopEnabled, state, freeTemporalTime,
+			additionalAccumulatingTime, startingTime, periodLength);
 		gameOuterInfo.updateFrom(updateInstance);
 	}
 
@@ -274,7 +257,7 @@ public class GuiController implements GuiForServerInterface {
 				}
 		);
 
-	};
+	}
 
 	public synchronized void unsubscribedRoom(
 			ServerInterface server,
@@ -559,17 +542,6 @@ public class GuiController implements GuiForServerInterface {
 		}
 	}
 
-	public synchronized void makedMove(
-			ServerInterface server,
-			String room,
-			boolean silent,
-			int x,
-			int y,
-			boolean isRed,
-			boolean nowPlays,
-			int timeLeftRed, int timeLeftBlue) {
-	}
-
 	@Override
 	public synchronized void timeUpdate(
 			ServerInterface server,
@@ -760,7 +732,7 @@ public class GuiController implements GuiForServerInterface {
 					"Error: " + info,
 					JOptionPane.ERROR_MESSAGE
 						);
-			};
+			}
 		}.start();
 	}
 
@@ -794,8 +766,8 @@ public class GuiController implements GuiForServerInterface {
 
 class ServerRoom {
 
-	String roomName;
-	ServerInterface serverInterface;
+	final String roomName;
+	final ServerInterface serverInterface;
 
 	public ServerRoom(
 			String roomName,
