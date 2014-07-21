@@ -1,15 +1,17 @@
 package com.google.sites.priymakpoints.pointsai.pointsAI_1_10;
 
-public class MakrosEngine implements Variables{
-	
-public Makros[] base;
-private MakrosIO io=new MakrosIO();
+public class MakrosEngine implements Variables {
 
-public MakrosEngine(){base=io.getBase();}
+	public final Makros[] base;
 
-public Makros getMakros(int index){
-	for(int i=0;i<base.length;i++)if(base[i].getMakrosIndex()==index)return base[i];
-	return null;
-}
+	public MakrosEngine() {
+		MakrosIO io = new MakrosIO();
+		base = io.getBase();
+	}
+
+	public Makros getMakros(int index) {
+		for (Makros aBase : base) if (aBase.getMakrosIndex() == index) return aBase;
+		return null;
+	}
 
 }

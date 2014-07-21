@@ -1,7 +1,7 @@
 package com.google.sites.priymakpoints.pointsai.pointsAI_1_10;
 
 public enum DotType {
-	
+
 	GLOBAL,ANY,NULL,OUT,LAND,BLUE,RED,RED_EMPTY,BLUE_EMPTY,BLUE_TARGET,
 	RED_NORMAL,RED_ATTACK,RED_PROTECTION,RED_GROUND,RED_CAPTURE,RED_DEFENCE,
 	BLUE_NORMAL,MAKROS_BLUE,MAKROS_RED;
@@ -30,5 +30,5 @@ public enum DotType {
 			default:return "$";
 		}
 	}
-	
+
 }
