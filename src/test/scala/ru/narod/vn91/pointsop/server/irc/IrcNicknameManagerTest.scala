@@ -2,7 +2,7 @@ package ru.narod.vn91.pointsop.server.irc
 
 import org.scalatest._
 
-class IrcNicknameManagerTest extends FunSuite {
+class IrcNicknameManagerTest extends FunSuite with DiagrammedAssertions {
 	test("nicknames") {
 		val nicks = new IrcNicknameManager
 		assert(nicks.fromIrc.size() == 0)

@@ -6,7 +6,7 @@
 		<homepage href="http://pointsgame.net/site/mp"/>
 		<description>a program for the game Points</description>
 		<description kind="short">MultiPoints - программа для игры в Точки.</description>
-		<icon href="ru/narod/vn91/pointsop/gui/vp.jpg"/>
+		<icon href="mp-logo.png"/>
 		<shortcut online="true">
 			<desktop/>
 			<menu submenu="MultiPoints"/>
