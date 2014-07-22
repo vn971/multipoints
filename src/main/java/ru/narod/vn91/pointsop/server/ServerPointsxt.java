@@ -49,6 +49,7 @@ public class ServerPointsxt
 	private final String defaultServer_Visible;
 	protected final String ircPassword;
 	final String pointsxtVersion = "187";
+	final String podbotName = "Podbot";
 	static final String gamePrefix = "#pxt";
 	static final String commandCommonPrefix = "OpCmd ";
 	static final String commandIWantJoinGame = "I want to join this game.";
@@ -75,12 +76,12 @@ public class ServerPointsxt
 							myNickOnServ = getNick();
 							if (myPassword==null || myPassword.equals("")) {
 								ServerPointsxt.super.sendMessage(
-									"podbot",
+									podbotName,
 									"!opConnect0423"
 										);
 							} else {
 								ServerPointsxt.super.sendMessage(
-									"podbot",
+									podbotName,
 									"mpPasswordedLogin " + Sha1.getSha1PodbotPassword(myPassword)
 									);
 							}
@@ -169,6 +170,10 @@ public class ServerPointsxt
 		myNick_Originally = myName;
 		myName = "^" + myName;
 		myName = myName + "_X" + pointsxtVersion + "000000000[free]";
+
+		nicknameManager.irc2id(podbotName);
+		nicknameManager.irc2id(myName);
+
 		super.setName(myName);
 		this.myNickOnServ = myName;
 		super.setAutoNickChange(false);
@@ -320,7 +325,6 @@ public class ServerPointsxt
 	public static String getAllowedNick(
 			final String myNameOnServer,
 			final boolean acceptNonEnglish) {
-		// final = I'm testing Functional Programming approach:)
 		final String filtered;
 		if (myNameOnServer.matches(".*[a-zA-Z].*")) {
 			filtered = myNameOnServer.replaceAll("[^a-zA-Z0-9]", "");
@@ -416,9 +420,9 @@ public class ServerPointsxt
 				return false;
 			}
 		};
-		if (sender.equalsIgnoreCase("podbot") &&
+		if (sender.equalsIgnoreCase(podbotName) &&
 				amIOp.call(getUsers(defaultChannel), getNick())) {
-			super.op(defaultChannel, "podbot");
+			super.op(defaultChannel, podbotName);
 		}
 	}
 
@@ -680,10 +684,10 @@ public class ServerPointsxt
 						|| message.equalsIgnoreCase("!ы")) {
 //			tryInvitePointsxt(sender, true);
 		} else if (message.startsWith("/PASSOK")
-				&& (sender.equalsIgnoreCase("podbot"))) {
+				&& (sender.equalsIgnoreCase(podbotName))) {
 			subscribeRoom("#pointsxt");
 		} else if (message.startsWith("mpPasswordedLoginAccepted ")
-				&& (sender.equalsIgnoreCase("podbot"))) {
+				&& (sender.equalsIgnoreCase(podbotName))) {
 			try {
 				// TODO
 				String rankAsString = message.split(" ", 2)[1];
@@ -744,10 +748,10 @@ public class ServerPointsxt
 			super.sendMessage(sender, "/Pong");
 		} else if (message.equals("/GameMinimaze")) {
 		} else if (message.equals("/GameMaximaze")) {
-		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">server ")) {
+		} else if (sender.equalsIgnoreCase(podbotName) && message.startsWith(">server ")) {
 			// TODO
 			gui.raw(this, message.substring(">server ".length()));
-		} else if (sender.equalsIgnoreCase("podbot") && message.startsWith(">mpinf ")) {
+		} else if (sender.equalsIgnoreCase(podbotName) && message.startsWith(">mpinf ")) {
 			String user = message.split(" ", 4)[2];
 			String messageGui = message.split(" ", 2)[1];
 			gui.updateUserInfo(this, user, null, null, null, null, null, null, null, messageGui);
@@ -926,7 +930,7 @@ public class ServerPointsxt
 			gui.userJoinedRoom(this, room, shortNick, silent);
 		} else {
 			// join Game room
-			if (ircNick.equalsIgnoreCase("podbot") == false) {
+			if (ircNick.equalsIgnoreCase(podbotName) == false) {
 				gui.userJoinedRoom(this, room, shortNick, silent);
 			}
 		}
@@ -1003,7 +1007,7 @@ public class ServerPointsxt
 			);
 			clearCreatedGames_PointsxtStyle(user);
 		} else {
-			if (user.equalsIgnoreCase("podbot") == false) {
+			if (user.equalsIgnoreCase(podbotName) == false) {
 				if (userShort.equals(getMyName())) {
 					gui.unsubscribedRoom(this, room);
 				} else {
@@ -1359,7 +1363,7 @@ public class ServerPointsxt
 	public void getUserInfoText(final String user) {
 		new Thread() {
 			public void run() {
-				sendPrivateMsg("Podbot", "!mppersinf " + user.replaceAll("\\(.*\\)", ""));
+				sendPrivateMsg(podbotName, "!mppersinf " + user.replaceAll("\\(.*\\)", ""));
 			}
 		}.start();
 	}

@@ -28,18 +28,16 @@ public class SelfishGuiStarter {
 		try {
 			// Set cross-platform Java L&F (also called "Metal")
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException e) {
-		} catch (ClassNotFoundException e) {
-		} catch (InstantiationException e) {
-		} catch (IllegalAccessException e) {
+		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+			ex.printStackTrace();
 		}
 
 
 		for (String argument : args) {
-			// System.out.println("argument = " + argument);
+			System.out.println("argument = " + argument);
 			if (argument.matches("--version|-v|-h|--help")) {
 				System.out.println("MultiPoints. Sorry, no info is aviable here...");
-				System.exit(0);
+				System.exit(-1);
 			}
 			else if (argument.startsWith("debug") || argument.startsWith("--debug")) {
 				Settings.setDebug(true);
@@ -48,56 +46,10 @@ public class SelfishGuiStarter {
 			else if (argument.matches("ircAddress=.*")) {
 				String address = argument.replaceFirst(".*=", "");
 				Settings.setIrcAddress(address);
-				System.out.println(argument);
 			}
 		}
 
-//	//Create a file chooser
-//		final JFileChooser fc = new JFileChooser();
-//
-//		int returnVal = fc.showOpenDialog(null);
-//
-//		System.out.println("start file tests...");
-//		if (returnVal == JFileChooser.APPROVE_OPTION) {
-//			try {
-//				File file = fc.getSelectedFile();
-//				// This is where a real application would open the file.
-//				System.out.println(file.getAbsolutePath());
-//				System.out.println("file.isDirectory() = " + file.isDirectory());
-//				System.out.println("file.canExecute() = " + file.canExecute());
-//				System.out.println("file.canRead() = " + file.canRead());
-//				System.out.println("file.canWrite() = " + file.canWrite());
-//				
-//
-//				FileInputStream fileInputStream;
-//				fileInputStream = new FileInputStream(file);
-//				DataInputStream dataInputStream = new DataInputStream(fileInputStream);
-//				InputStreamReader inputStreamReader =
-//						new InputStreamReader(dataInputStream, "UTF-8") {
-//						};
-//				BufferedReader br = new BufferedReader(inputStreamReader);
-//
-//				String strLine;
-//				while ((strLine = br.readLine()) != null) {
-//					System.out.println("strLine = " + strLine);
-//				}
-//				dataInputStream.close();
-//			} catch (FileNotFoundException ex) {
-//				ex.printStackTrace();
-//			} catch (UnsupportedEncodingException ex) {
-//				ex.printStackTrace();
-//			} catch (IOException ex) {
-//				ex.printStackTrace();
-//			}
-//		} else {
-//			System.out.println("error");
-//		}
-////		while("".equals("")) {}
-//		System.exit(0);
-
-		if (Settings.getVersion() <= 1 &&
-				Settings.getKeijKvantttAiPath().equals("keijkvantttai"))
-		{
+		if (Settings.getVersion() <= 1 && Settings.getKeijKvantttAiPath().equals("keijkvantttai")) {
 			Settings.setKeijKvantttAiPath("");
 		}
 		if (Settings.getVersion() < 4) {
@@ -110,17 +62,9 @@ public class SelfishGuiStarter {
 		frame.setIconImage(new ImageIcon(url).getImage());
 
 		if (Settings.isRestoreSize() &&
-				Settings.getFrameWidth() > 0 &&
-				Settings.getFrameHeight() > 0) {
-			// && Memory.getFrameX() > 0
-			// && Memory.getFrameY() > 0
+			Settings.getFrameWidth() > 0 &&
+			Settings.getFrameHeight() > 0) {
 			frame.setSize(Settings.getFrameWidth(), Settings.getFrameHeight());
-//				frame.setBounds(
-//						Settings.getFrameX(),
-//						Settings.getFrameY(),
-//						Settings.getFrameWidth(),
-//						Settings.getFrameHeight()
-//				);
 		} else {
 			frame.setSize(925, 670);
 		}
@@ -144,7 +88,8 @@ public class SelfishGuiStarter {
 		// frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		// frame.setUndecorated(true);
 
-		int x = frame.getX(), y = frame.getY();
+		int x = frame.getX();
+		int y = frame.getY();
 		x = Math.max(x, 0);
 		y = Math.max(y, 0);
 		frame.setLocation(x, y);
@@ -393,7 +338,7 @@ public class SelfishGuiStarter {
 														"Попробуйте теперь запустить ИИ. :)"
 										);
 										jMenuItem_KeijkvantttaiExecute.setEnabled(
-												! Settings.getKeijKvantttAiPath().equals("")
+												! Settings.getKeijKvantttAiPath().isEmpty()
 										);
 									}
 								}
@@ -450,7 +395,6 @@ public class SelfishGuiStarter {
 									// ai as server
 									AiVirtualServer aiWrapper =
 											new AiVirtualServer(
-//													(GuiForServerInterface)guiController
 													guiController
 											);
 									aiWrapper.setAi(new RandomAi(aiWrapper, 39, 32));
