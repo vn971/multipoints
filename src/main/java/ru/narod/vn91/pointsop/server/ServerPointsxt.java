@@ -383,7 +383,7 @@ public class ServerPointsxt
 	public synchronized void setStatus(boolean isBusy) {
 		gui.raw(this, "Статусы 'занят'/'свободен' не поддерживаются на этом сервере.");
 	}
-	
+
 	@Override
 	protected void onConnect() {
 		if (super.isConnected()) {
@@ -523,11 +523,6 @@ public class ServerPointsxt
 						|| message.equalsIgnoreCase("!ы"))) {
 
 			if (IrcRegexp.isPointsopNickname(sender)) {
-//				super.sendMessage(
-//						target,
-//						"чтобы принять заявку клиентом pointsOp надо дважды кликнуть по заявке."
-//				);
-//				return;
 			} else if (myGame.isSearching() == false) {
 			} else {
 				gui.askedPlay(
@@ -569,7 +564,7 @@ public class ServerPointsxt
 			And this message shouldn't be visible as text in this case */
 		} else if (channel.equals(defaultChannel)) {
 			if (message.startsWith("ACTION")) {
-				gui.chatReceived(this, channel, "***" + nick, 
+				gui.chatReceived(this, channel, "***" + nick,
 					IrcRegexp.cutIrcText(message.substring(7)), null);
 			} else {
 				gui.chatReceived(this, channel, nick, IrcRegexp.cutIrcText(message), null);
@@ -707,7 +702,6 @@ public class ServerPointsxt
 			tailStartsPosition = message.lastIndexOf(" ");
 			if (tailStartsPosition < headerEndsPosition) {
 				tailStartsPosition = message.length();
-			} else {
 			}
 
 			String suffPartAsString = message.substring(
@@ -721,12 +715,12 @@ public class ServerPointsxt
 			spectrGameData.put(targetRoom, previousData + suffPartAsString);
 
 			if (message.endsWith("-")) {
-				byte[] sufficiendPart = spectrGameData.get(targetRoom).getBytes();
+				byte[] sufficientPart = spectrGameData.get(targetRoom).getBytes();
 
 				for (
-						int moveN = 0; ((moveN * 2 + 1) < sufficiendPart.length); moveN++) {
-					int y = sufficiendPart[moveN * 2 + 1];
-					int x = sufficiendPart[moveN * 2];
+						int moveN = 0; ((moveN * 2 + 1) < sufficientPart.length); moveN++) {
+					int y = sufficientPart[moveN * 2 + 1];
+					int x = sufficientPart[moveN * 2];
 					boolean isRed = (x >= 88);
 					x = (x >= 88) ? x - 88 : x - 48;
 					y = (y >= 88) ? y - 88 : y - 48;
