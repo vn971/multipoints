@@ -213,7 +213,7 @@ public abstract class PircBot implements ReplyConstants {
 
         // This makes the socket timeout on read operations after 5 minutes.
         // Maybe in some future version I will let the user change this at runtime.
-        socket.setSoTimeout(60 * 1000); // n1m5 was 5 minutes
+        socket.setSoTimeout(60 * 1000); // vn971 MultiPoints override
 
         // Now start the InputThread to read all other lines from the server.
         _inputThread.start();
@@ -807,7 +807,6 @@ public abstract class PircBot implements ReplyConstants {
             if (inetAddress == null) {
                 inetAddress = getInetAddress();
             }
-			System.out.println("requesting DCC Chat, adress="+inetAddress);
             byte[] ip = inetAddress.getAddress();
             long ipNum = ipToLong(ip);
 
@@ -2848,7 +2847,6 @@ public abstract class PircBot implements ReplyConstants {
         User[] userArray = new User[0];
         synchronized (_channels) {
             Hashtable users = (Hashtable) _channels.get(channel);
-
             if (users != null) {
                 userArray = new User[users.size()];
                 Enumeration enumeration = users.elements();
@@ -3069,7 +3067,7 @@ public abstract class PircBot implements ReplyConstants {
 
     // Outgoing message stuff.
     private Queue _outQueue = new Queue();
-    private long _messageDelay = 100;
+    private long _messageDelay = 1000;
 
     // A Hashtable of channels that points to a selfreferential Hashtable of
     // User objects (used to remember which users are in which channels).
@@ -3085,7 +3083,7 @@ public abstract class PircBot implements ReplyConstants {
     private InetAddress _dccInetAddress = null;
 
     // Default settings for the PircBot.
-    private boolean _autoNickChange = true;
+    private boolean _autoNickChange = false;
     private boolean _verbose = false;
     private String _name = "PircBot";
     private String _nick = _name;

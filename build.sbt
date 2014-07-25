@@ -3,7 +3,7 @@ import sbtassembly.Plugin._
 import sbtassembly.Plugin.AssemblyKeys._
 import spray.revolver.RevolverPlugin.Revolver
 
-name := "PointsOnPaper"
+name := "MultiPoints"
 
 version := "1.0"
 
@@ -25,8 +25,11 @@ crossPaths := false // pure java project (except testing)
 
 autoScalaLibrary := false // pure java project (except testing)
 
-packageOptions in(Compile, packageBin) +=
-		Package.ManifestAttributes("Permissions" -> "all-permissions", "Codebase" -> "*")
+packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
+	"Permissions" -> "all-permissions",
+	"Codebase" -> "*",
+	"Application-Name" -> name.value
+)
 
 assemblySettings
 
