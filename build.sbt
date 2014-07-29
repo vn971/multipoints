@@ -1,6 +1,6 @@
 import com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys
-import sbtassembly.Plugin._
 import sbtassembly.Plugin.AssemblyKeys._
+import sbtassembly.Plugin._
 import spray.revolver.RevolverPlugin.Revolver
 
 name := "MultiPoints"
@@ -48,6 +48,8 @@ assembly <<= assembly dependsOn (test in Test)
 
 mergeStrategy in assembly := {
 	case PathList("javax", "jnlp", _*) => MergeStrategy.discard
+	case PathList("com", "sun", _*) => MergeStrategy.discard
+	case PathList("build.id", _*) => MergeStrategy.discard
 	case PathList("META-INF", _*) => MergeStrategy.discard
 	case x => MergeStrategy.deduplicate
 }
