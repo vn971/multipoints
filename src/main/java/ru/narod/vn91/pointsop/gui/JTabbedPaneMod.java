@@ -19,8 +19,7 @@ public class JTabbedPaneMod {
 	final Color boldColor = Color.GRAY;
 	final Color normalColor = tabbedPane.getBackground();
 
-	Map<Component, Function0<Boolean>> closeListeners =
-			new HashMap<Component, Function0<Boolean>>();
+	Map<Component, Function0<Boolean>> closeListeners = new HashMap<>();
 
 	public Component getComponent() {
 		return Component.class.cast(tabbedPane);
@@ -41,10 +40,8 @@ public class JTabbedPaneMod {
 						public Void call(TabCloseable input) {
 							try {
 								Function0<Boolean> closeListener = closeListeners.get(component);
-								if (closeListener != null &&
-									closeListener.call() == false) {
-									// do nothing. Calling listeners is enough.
-								} else {
+								if (closeListener == null || closeListener.call() != false) {
+									// calling listeners is not enough
 									remove(component);
 								}
 							} catch (Exception ex) {
@@ -71,16 +68,14 @@ public class JTabbedPaneMod {
 		return tabbedPane.indexOfComponent(component) >= 0;
 	}
 
-	public synchronized boolean isSelected(Component component) {
-		return tabbedPane.getSelectedComponent().equals(component);
-	}
-
 	public synchronized void setSelectedComponent(final Component component) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					tabbedPane.setSelectedComponent(component);
+					if (tabbedPane.indexOfComponent(component) >= 0) {
+						tabbedPane.setSelectedComponent(component);
+					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -98,22 +93,22 @@ public class JTabbedPaneMod {
 		});
 	}
 
-	public synchronized void makeBold(Component component) {
-		final int tabIndex = tabbedPane.indexOfComponent(component);
-		if (tabIndex >= 0 &&
-			tabIndex != tabbedPane.getSelectedIndex() &&
-			tabIndex < tabbedPane.getTabCount()) {
-			try {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
+	public synchronized void makeBold(final Component component) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				final int tabIndex = tabbedPane.indexOfComponent(component);
+				if (tabIndex >= 0 &&
+					tabIndex != tabbedPane.getSelectedIndex() &&
+					tabIndex < tabbedPane.getTabCount()) {
+					try {
 						tabbedPane.setBackgroundAt(tabIndex, boldColor);
+					} catch (Exception ex) {
+						ex.printStackTrace(); // SWING is buggy? I have lot's of exceptions here... :-/
 					}
-				});
-			} catch (Exception ex) {
-				ex.printStackTrace(); // SWING is buggy? I have lot's of exceptions here... :-/
+				}
 			}
-		}
+		});
 	}
 
 	public synchronized void updateTabText(

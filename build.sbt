@@ -7,7 +7,7 @@ name := "MultiPoints"
 
 version := "1.0"
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
@@ -59,4 +59,4 @@ resolvers ++= Seq(
 	"Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
 )
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % Test
