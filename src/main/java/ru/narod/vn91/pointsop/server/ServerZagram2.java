@@ -622,8 +622,13 @@ public class ServerZagram2 implements ServerInterface {
 
 	private class ThreadMain extends Thread {
 
+		final ServerInterface server = ServerZagram2.this;
+		Set<String> personalInvitesIncomingNew = new LinkedHashSet<>();
+		Set<String> personalInvitesOutgoingNew = new LinkedHashSet<>();
+		Set<String> modifiedSubscribedRooms = new HashSet<>();
 		int lastSentCommandNumber = 0;
 		int lastServerMessageNumber = 0;
+		String currentRoom = "";
 
 		@Override
 		public void run() {
@@ -663,8 +668,7 @@ public class ServerZagram2 implements ServerInterface {
 			if (s == null || s.isEmpty()) return null; else return s;
 		}
 
-		private void handlePlayerInfo(String message, ServerInterface server) {
-			System.out.println(message);
+		private void handlePlayerInfo(String message) {
 			String player = null, myStatus = null;
 			Integer rating = null, winCount = null, lossCount = null, drawCount = null;
 			try {
@@ -679,310 +683,59 @@ public class ServerZagram2 implements ServerInterface {
 				winCount = Integer.parseInt(dotSplitted[5]);
 				lossCount = Integer.parseInt(dotSplitted[7]);
 				drawCount = Integer.parseInt(dotSplitted[6]);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception ignore) {
+				// Hack-ish way quit on the first error.
+				// The `finally` clause is aware of nulls and can handle them
 			} finally {
 				gui.updateUserInfo(server, player, player, null, rating,
 					winCount, lossCount, drawCount, myStatus, null);
 			}
 		}
 
+		private void handleGameFlags(String message) {
+			String[] underlineSplit = message.substring("f".length()).split("_");
+			final String timeLimitsAsString;
+			if (underlineSplit.length >= 2) {
+				timeLimitsAsString = message.split("_")[1];
+			} else {
+				timeLimitsAsString = "";
+			}
+			if (timeLimitsAsString.equals("")) {
+				// no limits
+			} else {
+				String part1 = timeLimitsAsString.split("\\.")[0];
+				String part2 = timeLimitsAsString.split("\\.")[1];
+				boolean paused1 = part1.startsWith("p");
+				boolean paused2 = part2.startsWith("p");
+				Integer time1 = Integer.parseInt(part1.replaceFirst("p", ""));
+				Integer time2 = Integer.parseInt(part2.replaceFirst("p", ""));
+				// Unfortunately, the paused state can't be use.
+				// This is because the GUI is very stupid and doesn't know who's turn it is now,
+				// and if we pass him "not paused", he will start counting down time for the player that doesn't move.
+				gui.timeUpdate(server, currentRoom, new TimeLeft(time1, time2, null, null));
+			}
+		}
+
+
 		private synchronized void handleText(String text) {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
-			ServerInterface server = ServerZagram2.this;
 			if ((text.startsWith("ok") && text.endsWith("end"))
 				|| (text.startsWith("sd") && text.endsWith("end") && isInvisible)) {
-				String[] splitted = text.split("/");
-				Set<String> personalInvitesIncomingNew = new LinkedHashSet<>();
-				Set<String> personalInvitesOutgoingNew = new LinkedHashSet<>();
-				Set<String> modifiedSubscribedRooms = new HashSet<>();
+				String[] split = text.split("/");
 
-				String currentRoom = "";
-				for (String message : splitted) {
-					if (message.startsWith("b")) { // room subscriptions
-						// b*Вася.0.234.1234.1451.21
-						String player = message.replaceAll("\\..*", "").substring(1);
-						String[] dotSplitted = message.replaceFirst(".*?\\.", "").split("\\.");
+				personalInvitesIncomingNew = new LinkedHashSet<>();
+				personalInvitesOutgoingNew = new LinkedHashSet<>();
+				modifiedSubscribedRooms = new HashSet<>();
+				currentRoom = "";
 
-						final Set<String> newRooms = new LinkedHashSet<>();
-						for (String room : dotSplitted) {
-							newRooms.add(room);
-						}
-
-						final Set<String> oldRooms = playerRooms.get(player);
-						if (oldRooms == null) {
-							// for (String room : newRooms) {
-							// gui.userJoinedRoom(server, room, player, true);
-							// }
-						}
-						else {
-							for (String room : oldRooms) {
-								if (newRooms.contains(room) == false) {
-									// gui.userLeftRoom(server, room, player, "");
-								}
-							}
-
-							for (String room : newRooms) {
-								if (oldRooms.contains(room) == false) {
-									// gui.userJoinedRoom(server, room, player, false);
-								}
-							}
-						}
-
-					}
-					else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
-						String[] dotSplitted = message.substring("ca".length())
-								.split("\\.", 4);
-						try {
-							String timeString = dotSplitted[0].replaceAll("[^0-9].*","");
-							long time = Long.parseLong(timeString) * 1000L;
-							String nick = dotSplitted[1];
-							String chatMessage = getServerDecoded(dotSplitted[3]);
-							if (nick.contains("-")) {
-								// this is private message
-								String[] nicks = nick.split("-");
-								String nickType = dotSplitted[2];
-								// who may be 0,1,2
-								// or -, nochat, del (which would raise an exception)
-								Integer who = Integer.parseInt(nickType);
-								if (who == 0) {
-									nick = ""; // message from the server
-								}
-								else if (who == 1 || who == 2) {
-									nick = nicks[who - 1];
-								}
-								String withWhom = nicks[0].equals(myNameOnServer) ? nicks[1] : nicks[0];
-								// I talk 'withWhom', received a message from 'nick'
-								// there's a problem receiving messages from myself...
-								if (nick.equalsIgnoreCase(myNameOnServer)) {
-									gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
-								}
-								else {
-									gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
-								}
-							}
-							else {
-							    gui.chatReceived(server,
-									     currentRoom, nick, chatMessage, time);
-							}
-						} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-							e.printStackTrace();
-							gui.raw(server, "unknown chat: " + message.substring(2));
-						}
-					}
-					else if (message.startsWith("d")) { // game description
-
-						// first section and last two sections
-						String suffecientPart = message.
-								replaceFirst("[^.]*.", "").
-								replaceFirst("\\.[^.]*$", "").
-								replaceFirst("\\.[^.]*$", "");
-						ZagramGameType gameType = getZagramGameType(suffecientPart);
-
-						String[] dotSplitted = message.split("\\.");
-						String roomId = dotSplitted[0].replaceFirst("d", "");
-						String player1 = dotSplitted[dotSplitted.length - 2];
-						String player2 = dotSplitted[dotSplitted.length - 1];
-						gui.updateGameInfo(
-							server, roomId,
-							currentRoom, player1, player2,
-							gameType.fieldX, gameType.FieldY,
-							false, gameType.isRated, 0, gameType.instantWin,
-							false, gameType.isStopEnabled, false, null, 0,
-							gameType.timeAdditional, gameType.timeStarting, 1,
-							null);
-					} else if (message.startsWith("f")) { // flags
-						try {
-							String timeLimitsAsString = message.split("_")[1];
-							if (timeLimitsAsString.equals("")) {
-								// nothing's changend?
-							} else {
-								Integer time1 = Integer.parseInt(
-										timeLimitsAsString.split("\\.")[0]);
-								Integer time2 = Integer.parseInt(
-										timeLimitsAsString.split("\\.")[1]);
-								gui.timeUpdate(server, currentRoom,
-									new TimeLeft(time1, time2, null, null));
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					} else if (message.startsWith("ga") || message.startsWith("gr")) { // +game
-						String[] dotSplitted = message.substring("ga".length())
-								.split("\\.");
-						for (String gameId : dotSplitted) {
-							if (gameId.length() != 0) {
-								gui.gameRowCreated(server, currentRoom, gameId);
-							}
-						}
-					} else if (message.startsWith("gd")) { // - game
-						String[] dotSplitted = message.substring("gd".length())
-								.split("\\.");
-						for (String gameId : dotSplitted) {
-							if (gameId.length() != 0) {
-								gui.gameRowDestroyed(server, gameId);
-							}
-						}
-					} else if (message.startsWith("h")) { // additional flags
-					} else if (message.startsWith("i")) { // player info
-						handlePlayerInfo(message, server);
-					} else if (message.startsWith("m")) { // message numbers info
-						// try {
-						String tail = message.substring(1);
-						String[] dotSplitted = tail.split("\\.");
-						String a1 = dotSplitted.length >= 1 ? dotSplitted[0] : "";
-						String a2 = dotSplitted.length >= 2 ? dotSplitted[1] : "";
-						String a3 = dotSplitted.length >= 3 ? dotSplitted[2] : "";
-						int i1 = Integer.parseInt(a1);
-						int i2 = Integer.parseInt(a2);
-						int i3 = Integer.parseInt(a3);
-						if (i1 > lastServerMessageNumber + 1) {
-							// don't thow exceptions -- we
-							// want to stay alive in case of a server restart.
-						}
-						lastServerMessageNumber = i2;
-						lastSentCommandNumber = i3;
-					} else if (message.startsWith("pa") || message.startsWith("pr")) { // player joined
-						String[] dotSplitted = message.substring("pa".length()).split("\\.");
-						for (String player : dotSplitted) {
-							if (player.length() != 0) {
-								gui.userJoinedRoom(
-									server, currentRoom, player, message.startsWith("pr"));
-							}
-						}
-					} else if (message.startsWith("pd")) { // - player
-						String[] dotSplitted = message.substring("pd".length())
-								.split("\\.");
-						for (String player : dotSplitted) {
-							if (player.length() != 0) {
-								gui.userLeftRoom(server, currentRoom, player, "");
-							}
-						}
-					} else if (message.startsWith("q")) { // current room
-						String room = message.substring(1);
-						currentRoom = room;
-
-						modifiedSubscribedRooms.add(room);
-						if (subscribedRooms.contains(room)) {
-							// old set
-						} else {
-							if (currentRoom.equals("0")) {
-								gui.subscribedLangRoom(
-									currentRoom,
-									server,
-									"общий чат: zagram",
-									true);
-							} else {
-								gui.subscribedGame(server, currentRoom);
-							}
-						}
-					} else if (message.matches("sa.*|sr.*")) { // game actions
-						message = message.replaceAll("\\(|\\)", "");
-						class FatalGameRoomError extends Exception {
-							public FatalGameRoomError(String s) {
-								super(s);
-							}
-						}
-						try {
-							String usefulPart = message.replaceFirst("sa;|sr;", "");
-							String[] semiSplitted = usefulPart.split(";");
-							for (String sgfNode : semiSplitted) {
-								// ([A-Z]{1,2}\[([^\]|\\\\)*?\])*
-								// ([A-Z]{1,2}\[.*?\])*
-								if (sgfNode.matches("([A-Z]{1,2}\\[.*\\])*") == false) {
-									gui.raw(server, "unknown message structure: " + message);
-								} else {
-									String lastMovePropertyName = "";
-									String[] sgfPropertyList = sgfNode.split("\\]");
-									for (String sgfProperty : sgfPropertyList) {
-										String propertyName = sgfProperty.replaceAll("\\[.*", "");
-										String propertyValue = sgfProperty.replaceFirst(".*\\[", "");
-										if (propertyName.matches("U(B|W)")) {
-											throw new FatalGameRoomError("UNDO is unsupported");
-										} else if (propertyName.matches("B|W|AB|AW|")) {
-											boolean isWhite = propertyName.matches("W|AW")
-												|| (propertyName.equals("") && lastMovePropertyName.matches("A|AW"));
-											if (!propertyName.equals(""))
-												lastMovePropertyName = propertyName;
-											gui.makedMove(
-												server, currentRoom,
-												message.startsWith("sr"),
-												stringToCoordinates(propertyValue).x,
-												stringToCoordinates(propertyValue).y,
-												isWhite, !isWhite
-													);
-										}
-									}
-								}
-							}
-							gui.makedMove(server, currentRoom, false, -1, -1, true, false);
-						} catch (FatalGameRoomError e) {
-							// server.unsubscribeRoom(currentRoom);
-							gui.raw(server, "ERROR in game room '" +
-								e.getMessage() +
-								"'. The game position is not guaranteed to be correct in this game for now on.");
-						}
-					} else if (message.matches("u.undo")) {
-						boolean isRed = message.charAt(1) == '1';
-						String playerAsString = isRed ? "red" : "blue";
-						gui.chatReceived(
-							server,
-							currentRoom, "",
-							"player " + playerAsString + " Запрос на 'undo'. Клиент MultiPoints " +
-								"пока-что не умеет обрабатывать этот вызов.:(",
-							null);
-					} else if (message.startsWith("vg")) { // game invite
-						String usefulPart = message.substring(2);
-						String sender = usefulPart.replaceAll("\\..*", ""); // first part
-						if (personalInvitesIncoming.contains(sender) == false) {
-							String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
-							ZagramGameType gameType = getZagramGameType(gameDescription);
-							if (isBusy == true) {
-								personalInvitesIncoming.add(sender);
-								server.rejectPersonalGameInvite(sender);
-								personalInvitesIncoming.remove(sender); // kind of a hack
-							}
-							else if (gameType.isEmptyScored == true) {
-
-								personalInvitesIncoming.add(sender);
-								server.rejectPersonalGameInvite(sender);
-								personalInvitesIncoming.remove(sender); // kind of a hack
-
-								gui.raw(server, String.format(
-									"Игрок '%s' вызвал(а) тебя на игру: " +
-										"К сожалению, принять заявку невозможно, " +
-										"т.к. польские правила с ручными обводами территории " +
-										"пока-что не поддерживаютяс программой. " +
-										"Отослан отказ от игры. ",
-									sender));
-							} else {
-								gui.updateGameInfo(
-									server, sender + "@incoming", currentRoom,
-									sender, null,
-									gameType.fieldX, gameType.FieldY, false,
-									gameType.isRated, 0,
-									gameType.instantWin, false, gameType.isStopEnabled, false,
-									GameState.SearchingOpponent,
-									0, gameType.timeAdditional, gameType.timeStarting, 1,
-									sender + "to YOU");
-								gui.personalInviteReceived(server, sender, sender + "@incoming");
-								personalInvitesIncomingNew.add(sender);
-							}
-						} else {
-							personalInvitesIncomingNew.add(sender);
-						}
-					} else if (message.startsWith("vr")) {
-						String user = message.substring(2);
-						gui.yourPersonalInviteRejected(server, user, user + "@outgoing");
-
-						// "OK to the fact that someone rejected your invitation" :-/
-						sendCommandToServer("v" + queue.sizePlusOne() + "." + "0" + "." + "o");
-					} else if (message.startsWith("vs")) {
-						String user = message.substring(2).split("\\.")[0];
-						if (personalInvitesOutgoing.contains(user) == false) {
-							gui.yourPersonalInviteSent(server, user, user + "@outgoing");
-						}
-						personalInvitesOutgoingNew.add(user);
+				for (String message : split) {
+					try {
+						handleMessage(message);
+					} catch (Exception e) {
+						System.out.println(ServerZagram2.class.getName() +
+							" failed to parse the message " + message +
+							". Exception below...");
+						e.printStackTrace();
 					}
 				}
 
@@ -1022,10 +775,282 @@ public class ServerZagram2 implements ServerInterface {
 			} else if (text.equals("")) {
 				// we got an empty result. Well, lets treat this as normal.
 			} else {
+				gui.rawError(server, "error handling server response, exiting. Technical details: message: " + text);
 				gui.serverClosed(server);
 				isDisposed = true;
 			}
 		}
+
+
+		private void handleMessage(String message) {
+			if (message.startsWith("b")) { // room subscriptions
+				// b*Вася.0.234.1234.1451.21
+				String player = message.replaceAll("\\..*", "").substring(1);
+				String[] dotSplitted = message.replaceFirst(".*?\\.", "").split("\\.");
+
+				final Set<String> newRooms = new LinkedHashSet<>();
+				for (String room : dotSplitted) {
+					newRooms.add(room);
+				}
+
+				final Set<String> oldRooms = playerRooms.get(player);
+				if (oldRooms == null) {
+					// for (String room : newRooms) {
+					// gui.userJoinedRoom(server, room, player, true);
+					// }
+				}
+				else {
+					for (String room : oldRooms) {
+						if (newRooms.contains(room) == false) {
+							// gui.userLeftRoom(server, room, player, "");
+						}
+					}
+
+					for (String room : newRooms) {
+						if (oldRooms.contains(room) == false) {
+							// gui.userJoinedRoom(server, room, player, false);
+						}
+					}
+				}
+
+			}
+			else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
+				String[] dotSplitted = message.substring("ca".length())
+					.split("\\.", 4);
+				try {
+					String timeString = dotSplitted[0].replaceAll("[^0-9].*","");
+					long time = Long.parseLong(timeString) * 1000L;
+					String nick = dotSplitted[1];
+					String chatMessage = getServerDecoded(dotSplitted[3]);
+					if (nick.contains("-")) {
+						// this is private message
+						String[] nicks = nick.split("-");
+						String nickType = dotSplitted[2];
+						// who may be 0,1,2
+						// or -, nochat, del (which would raise an exception)
+						Integer who = Integer.parseInt(nickType);
+						if (who == 0) {
+							nick = ""; // message from the server
+						}
+						else if (who == 1 || who == 2) {
+							nick = nicks[who - 1];
+						}
+						String withWhom = nicks[0].equals(myNameOnServer) ? nicks[1] : nicks[0];
+						// I talk 'withWhom', received a message from 'nick'
+						// there's a problem receiving messages from myself...
+						if (nick.equalsIgnoreCase(myNameOnServer)) {
+							gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
+						}
+						else {
+							gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
+						}
+					}
+					else {
+						gui.chatReceived(server,
+							currentRoom, nick, chatMessage, time);
+					}
+				} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+					e.printStackTrace();
+					gui.raw(server, "unknown chat: " + message.substring(2));
+				}
+			}
+			else if (message.startsWith("d")) { // game description
+
+				// first section and last two sections
+				String suffecientPart = message.
+					replaceFirst("[^.]*.", "").
+					replaceFirst("\\.[^.]*$", "").
+					replaceFirst("\\.[^.]*$", "");
+				ZagramGameType gameType = getZagramGameType(suffecientPart);
+
+				String[] dotSplitted = message.split("\\.");
+				String roomId = dotSplitted[0].replaceFirst("d", "");
+				String player1 = dotSplitted[dotSplitted.length - 2];
+				String player2 = dotSplitted[dotSplitted.length - 1];
+				gui.updateGameInfo(
+					server, roomId,
+					currentRoom, player1, player2,
+					gameType.fieldX, gameType.FieldY,
+					false, gameType.isRated, 0, gameType.instantWin,
+					false, gameType.isStopEnabled, false, null, 0,
+					gameType.timeAdditional, gameType.timeStarting, 1,
+					null);
+			} else if (message.startsWith("f")) {
+				handleGameFlags(message.replaceFirst("f", ""));
+			} else if (message.startsWith("ga") || message.startsWith("gr")) { // +game
+				String[] dotSplitted = message.substring("ga".length()).split("\\.");
+				for (String gameId : dotSplitted) {
+					if (gameId.length() != 0) {
+						gui.gameRowCreated(server, currentRoom, gameId);
+					}
+				}
+			} else if (message.startsWith("gd")) { // - game
+				String[] dotSplitted = message.substring("gd".length())
+					.split("\\.");
+				for (String gameId : dotSplitted) {
+					if (gameId.length() != 0) {
+						gui.gameRowDestroyed(server, gameId);
+					}
+				}
+			} else if (message.startsWith("h")) { // additional flags
+			} else if (message.startsWith("i")) { // player info
+				handlePlayerInfo(message);
+			} else if (message.startsWith("m")) { // message numbers info
+				// try {
+				String tail = message.substring(1);
+				String[] dotSplitted = tail.split("\\.");
+				String a1 = dotSplitted.length >= 1 ? dotSplitted[0] : "";
+				String a2 = dotSplitted.length >= 2 ? dotSplitted[1] : "";
+				String a3 = dotSplitted.length >= 3 ? dotSplitted[2] : "";
+				int i1 = Integer.parseInt(a1);
+				int i2 = Integer.parseInt(a2);
+				int i3 = Integer.parseInt(a3);
+				if (i1 > lastServerMessageNumber + 1) {
+					// don't thow exceptions -- we
+					// want to stay alive in case of a server restart.
+				}
+				lastServerMessageNumber = i2;
+				lastSentCommandNumber = i3;
+			} else if (message.startsWith("pa") || message.startsWith("pr")) { // player joined
+				String[] dotSplitted = message.substring("pa".length()).split("\\.");
+				for (String player : dotSplitted) {
+					if (player.length() != 0) {
+						gui.userJoinedRoom(
+							server, currentRoom, player, message.startsWith("pr"));
+					}
+				}
+			} else if (message.startsWith("pd")) { // - player
+				String[] dotSplitted = message.substring("pd".length())
+					.split("\\.");
+				for (String player : dotSplitted) {
+					if (player.length() != 0) {
+						gui.userLeftRoom(server, currentRoom, player, "");
+					}
+				}
+			} else if (message.startsWith("q")) { // current room
+				String room = message.substring(1);
+				currentRoom = room;
+
+				modifiedSubscribedRooms.add(room);
+				if (subscribedRooms.contains(room)) {
+					// old set
+				} else {
+					if (currentRoom.equals("0")) {
+						gui.subscribedLangRoom(currentRoom, server, "общий чат: zagram", true);
+					} else {
+						gui.subscribedGame(server, currentRoom);
+					}
+				}
+			} else if (message.matches("sa.*|sr.*")) { // game actions
+				message = message.replaceAll("\\(|\\)", "");
+				class FatalGameRoomError extends Exception {
+					public FatalGameRoomError(String s) {
+						super(s);
+					}
+				}
+				try {
+					String usefulPart = message.replaceFirst("sa;|sr;", "");
+					String[] semiSplitted = usefulPart.split(";");
+					for (String sgfNode : semiSplitted) {
+						// ([A-Z]{1,2}\[([^\]|\\\\)*?\])*
+						// ([A-Z]{1,2}\[.*?\])*
+						if (sgfNode.matches("([A-Z]{1,2}\\[.*\\])*") == false) {
+							gui.raw(server, "unknown message structure: " + message);
+						} else {
+							String lastMovePropertyName = "";
+							String[] sgfPropertyList = sgfNode.split("\\]");
+							for (String sgfProperty : sgfPropertyList) {
+								String propertyName = sgfProperty.replaceAll("\\[.*", "");
+								String propertyValue = sgfProperty.replaceFirst(".*\\[", "");
+								if (propertyName.matches("U(B|W)")) {
+									throw new FatalGameRoomError("UNDO is unsupported");
+								} else if (propertyName.matches("B|W|AB|AW|")) {
+									boolean isWhite = propertyName.matches("W|AW")
+										|| (propertyName.equals("") && lastMovePropertyName.matches("A|AW"));
+									if (!propertyName.equals(""))
+										lastMovePropertyName = propertyName;
+									gui.makedMove(
+										server, currentRoom,
+										message.startsWith("sr"),
+										stringToCoordinates(propertyValue).x,
+										stringToCoordinates(propertyValue).y,
+										isWhite, !isWhite
+									);
+								}
+							}
+						}
+					}
+					gui.makedMove(server, currentRoom, false, -1, -1, true, false);
+				} catch (FatalGameRoomError e) {
+					// server.unsubscribeRoom(currentRoom);
+					gui.raw(server, "ERROR in game room '" +
+						e.getMessage() +
+						"'. The game position is not guaranteed to be correct in this game for now on.");
+				}
+			} else if (message.matches("u.undo")) {
+				boolean isRed = message.charAt(1) == '1';
+				String playerAsString = isRed ? "red" : "blue";
+				gui.chatReceived(
+					server,
+					currentRoom, "",
+					"player " + playerAsString + " Запрос на 'undo'. Клиент MultiPoints " +
+						"пока-что не умеет обрабатывать этот вызов.:(",
+					null);
+			} else if (message.startsWith("vg")) { // game invite
+				String usefulPart = message.substring(2);
+				String sender = usefulPart.replaceAll("\\..*", ""); // first part
+				if (personalInvitesIncoming.contains(sender) == false) {
+					String gameDescription = usefulPart.replaceFirst("[^.]*\\.", ""); // other
+					ZagramGameType gameType = getZagramGameType(gameDescription);
+					if (isBusy == true) {
+						personalInvitesIncoming.add(sender);
+						server.rejectPersonalGameInvite(sender);
+						personalInvitesIncoming.remove(sender); // kind of a hack
+					}
+					else if (gameType.isEmptyScored == true) {
+
+						personalInvitesIncoming.add(sender);
+						server.rejectPersonalGameInvite(sender);
+						personalInvitesIncoming.remove(sender); // kind of a hack
+
+						gui.raw(server, String.format(
+							"Игрок '%s' вызвал(а) тебя на игру: " +
+								"К сожалению, принять заявку невозможно, " +
+								"т.к. польские правила с ручными обводами территории " +
+								"пока-что не поддерживаютяс программой. " +
+								"Отослан отказ от игры. ",
+							sender));
+					} else {
+						gui.updateGameInfo(
+							server, sender + "@incoming", currentRoom,
+							sender, null,
+							gameType.fieldX, gameType.FieldY, false,
+							gameType.isRated, 0,
+							gameType.instantWin, false, gameType.isStopEnabled, false,
+							GameState.SearchingOpponent,
+							0, gameType.timeAdditional, gameType.timeStarting, 1,
+							sender + "to YOU");
+						gui.personalInviteReceived(server, sender, sender + "@incoming");
+						personalInvitesIncomingNew.add(sender);
+					}
+				} else {
+					personalInvitesIncomingNew.add(sender);
+				}
+			} else if (message.startsWith("vr")) {
+				String user = message.substring(2);
+				gui.yourPersonalInviteRejected(server, user, user + "@outgoing");
+
+				// "OK to the fact that someone rejected your invitation" :-/
+				sendCommandToServer("v" + queue.sizePlusOne() + "." + "0" + "." + "o");
+			} else if (message.startsWith("vs")) {
+				String user = message.substring(2).split("\\.")[0];
+				if (personalInvitesOutgoing.contains(user) == false) {
+					gui.yourPersonalInviteSent(server, user, user + "@outgoing");
+				}
+				personalInvitesOutgoingNew.add(user);
+			}
+		}
+
 	}
 
 	@Override
