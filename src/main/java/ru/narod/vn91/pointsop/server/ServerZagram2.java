@@ -150,9 +150,8 @@ public class ServerZagram2 implements ServerInterface {
 						  startingPosition,
 						  isRated, instantWin);
 		    }
-		} catch (NumberFormatException e) {
-			return null;
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -162,7 +161,6 @@ public class ServerZagram2 implements ServerInterface {
 			input = input + "0";
 		} else if (input.length() % 3 == 1) {
 			input = input + "00";
-		} else {
 		}
 		final char[] base64ZagramStyle = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.".toCharArray();
 
@@ -542,11 +540,11 @@ public class ServerZagram2 implements ServerInterface {
 					break;
 				}
 			}
-		} catch (IOException ignored) {
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		// if (Settings.isDebug()) {
-		System.out.println("visiting: " + link);
-		System.out.println("received: " + result.toString());
+		System.out.println("GET " + link + "  -->  " + result.toString());
 		// }
 		return result.toString();
 	}
@@ -590,6 +588,7 @@ public class ServerZagram2 implements ServerInterface {
 					charToCoordinate(xAsChar),
 					charToCoordinate(yAsChar));
 			} catch (NullPointerException e) {
+				e.printStackTrace();
 				return null;
 			}
 		} else {
@@ -603,7 +602,8 @@ public class ServerZagram2 implements ServerInterface {
 		s = s.replaceAll("/", "@S");
 		try {
 			return URLEncoder.encode(s, "UTF-8");
-		} catch (UnsupportedEncodingException ignore) {
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 			return "";
 		}
 	}
@@ -679,7 +679,8 @@ public class ServerZagram2 implements ServerInterface {
 				winCount = Integer.parseInt(dotSplitted[5]);
 				lossCount = Integer.parseInt(dotSplitted[7]);
 				drawCount = Integer.parseInt(dotSplitted[6]);
-			} catch (Exception ignored) {
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				gui.updateUserInfo(server, player, player, null, rating,
 					winCount, lossCount, drawCount, myStatus, null);
@@ -764,9 +765,8 @@ public class ServerZagram2 implements ServerInterface {
 							    gui.chatReceived(server,
 									     currentRoom, nick, chatMessage, time);
 							}
-						} catch (NumberFormatException e) {
-							gui.raw(server, "unkown chat: " + message.substring(2));
-						} catch (ArrayIndexOutOfBoundsException e) {
+						} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+							e.printStackTrace();
 							gui.raw(server, "unknown chat: " + message.substring(2));
 						}
 					}
@@ -795,6 +795,7 @@ public class ServerZagram2 implements ServerInterface {
 						try {
 							String timeLimitsAsString = message.split("_")[1];
 							if (timeLimitsAsString.equals("")) {
+								// nothing's changend?
 							} else {
 								Integer time1 = Integer.parseInt(
 										timeLimitsAsString.split("\\.")[0]);
@@ -803,7 +804,8 @@ public class ServerZagram2 implements ServerInterface {
 								gui.timeUpdate(server, currentRoom,
 									new TimeLeft(time1, time2, null, null));
 							}
-						} catch (Exception ignored) {
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					} else if (message.startsWith("ga") || message.startsWith("gr")) { // +game
 						String[] dotSplitted = message.substring("ga".length())
@@ -861,7 +863,8 @@ public class ServerZagram2 implements ServerInterface {
 						currentRoom = room;
 
 						modifiedSubscribedRooms.add(room);
-						if (subscribedRooms.contains(room)) { // old set
+						if (subscribedRooms.contains(room)) {
+							// old set
 						} else {
 							if (currentRoom.equals("0")) {
 								gui.subscribedLangRoom(
@@ -908,7 +911,6 @@ public class ServerZagram2 implements ServerInterface {
 												stringToCoordinates(propertyValue).y,
 												isWhite, !isWhite
 													);
-										} else {
 										}
 									}
 								}
