@@ -5,9 +5,11 @@ import spray.revolver.RevolverPlugin.Revolver
 
 name := "MultiPoints"
 
-version := "1.0"
+version := "1.2"
 
-scalaVersion := "2.11.2"
+organization := "net.pointsgame"
+
+scalaVersion := "2.11.4"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 

@@ -6,7 +6,9 @@ public interface ConsoleAi6 {
 
 	void quit();
 
-	void boardsize(int x, int y);
+	@Deprecated void boardsize(int x, int y);
+
+	void init(int x, int y, int randomSeed);
 
 	void name();
 
@@ -14,13 +16,15 @@ public interface ConsoleAi6 {
 
 	void play(int x, int y, boolean color);
 
-	void genmove(boolean color);
+	@Deprecated void genmove(boolean color);
+	@Deprecated void reg_genmove(boolean color);
+	void gen_move(boolean color);
 
-	void reg_genmove(boolean color);
+	@Deprecated void reg_genmove_with_complexity(boolean color, Complexity complexity);
+	void gen_move_with_complexity(boolean color, Complexity complexity);
 
-	void reg_genmove_with_complexity(boolean color, Complexity complexity);
-
-	void reg_genmove_with_time(boolean color, long milliseconds);
+	@Deprecated void reg_genmove_with_time(boolean color, long milliseconds);
+	void gen_move_with_time(boolean color, long milliseconds);
 
 	void set_random_seed(int seed);
 

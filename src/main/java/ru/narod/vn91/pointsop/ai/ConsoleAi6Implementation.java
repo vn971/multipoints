@@ -53,6 +53,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 							)
 					);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			gui.error(ex.toString());
 		}
 	}
@@ -73,7 +74,8 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 			fullLog.append("\n");
 
 			writer.flush();
-		} catch (IOException e) {
+		} catch (IOException ex) {
+			ex.printStackTrace();
 			error();
 //			gui.error(e.toString());
 		}
@@ -100,8 +102,21 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 	}
 
 	@Override
+	public void init(int x, int y, int randomSeed) {
+		writeToProcess((messageNumber += 1) + " init " + x + " " + y + " " + randomSeed);
+	}
+
+	@Override
 	public void genmove(boolean color) {
 		writeToProcess((messageNumber += 1) + " genmove " + getColor(color));
+	}
+	@Override
+	public void reg_genmove(boolean color) {
+		writeToProcess((messageNumber += 1) + " reg_genmove " + getColor(color));
+	}
+	@Override
+	public void gen_move(boolean color) {
+		writeToProcess((messageNumber += 1) + " gen_move " + getColor(color));
 	}
 
 	@Override
@@ -127,13 +142,13 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 	}
 
 	@Override
-	public void reg_genmove(boolean color) {
-		writeToProcess((messageNumber += 1) + " reg_genmove " + getColor(color));
-	}
-
-	@Override
 	public void reg_genmove_with_complexity(boolean color, Complexity complexity) {
 		writeToProcess((messageNumber += 1) + " reg_genmove_with_complexity "
+				+ getColor(color) + " " + complexity);
+	}
+	@Override
+	public void gen_move_with_complexity(boolean color, Complexity complexity) {
+		writeToProcess((messageNumber += 1) + " gen_move_with_complexity "
 				+ getColor(color) + " " + complexity);
 	}
 
@@ -141,6 +156,10 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 	public void reg_genmove_with_time(boolean color, long milliseconds) {
 		writeToProcess((messageNumber += 1) + " reg_genmove_with_time "
 				+ getColor(color) + " " + (int) milliseconds);
+	}
+	@Override
+	public void gen_move_with_time(boolean color, long milliseconds) {
+		writeToProcess((messageNumber += 1) + " gen_move_with_time " + getColor(color) + " " + (int) milliseconds);
 	}
 
 	@Override
@@ -207,6 +226,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 							if (command.equals("list_commands")) {
 							} else if (command.equals("quit")) {
 							} else if (command.equals("boardsize")) {
+							} else if (command.equals("init")) {
 							} else if (command.equals("name")) {
 								gui.name(allArgs);
 							} else if (command.equals("version")) {
@@ -216,22 +236,21 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 										Integer.parseInt(arg1),
 										Integer.parseInt(arg2),
 										getColor(arg3));
-							} else if (command.equals("genmove")) {
+							} else if (command.equals("genmove")
+									|| command.equals("reg_genmove")
+									|| command.equals("gen_move")) {
 								gui.play(
 										Integer.parseInt(arg1),
 										Integer.parseInt(arg2),
 										getColor(arg3));
-							} else if (command.equals("reg_genmove")) {
+							} else if (command.equals("reg_genmove_with_complexity")
+									|| command.equals("gen_move_with_complexity")) {
 								gui.suggest(
 										Integer.parseInt(arg1),
 										Integer.parseInt(arg2),
 										getColor(arg3));
-							} else if (command.equals("reg_genmove_with_complexity")) {
-								gui.suggest(
-										Integer.parseInt(arg1),
-										Integer.parseInt(arg2),
-										getColor(arg3));
-							} else if (command.equals("reg_genmove_with_time")) {
+							} else if (command.equals("reg_genmove_with_time")
+									|| command.equals("gen_move_with_time")) {
 								gui.suggest(
 										Integer.parseInt(arg1),
 										Integer.parseInt(arg2),
