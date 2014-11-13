@@ -5,7 +5,7 @@ import spray.revolver.RevolverPlugin.Revolver
 
 name := "MultiPoints"
 
-version := "1.2"
+version := "1.4.2"
 
 organization := "net.pointsgame"
 

@@ -2,6 +2,8 @@ package ru.narod.vn91.pointsop.ai;
 
 public interface ConsoleAi6 {
 
+	String wrapperOutgoingHistory();
+
 	void list_commands();
 
 	void quit();

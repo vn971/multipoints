@@ -9,13 +9,14 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 
 	Process process;
 
-	BufferedWriter writer;
+	BufferedWriter processWriter;
 	ListenThread listenThread;
 
 	volatile boolean isDisposed = false;
 	volatile int messageNumber = 0;
 
-	final StringBuffer fullLog = new StringBuffer();
+	final StringBuffer fullInputOutputHistory = new StringBuffer();
+	final StringBuilder outgoingCommandHistory = new StringBuilder();
 
 	public ConsoleAi6Implementation(
 			ConsoleGui6 gui,
@@ -28,9 +29,10 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 						@Override
 						public void run() {
 							try {
-								writer.write("-1\n");
-								writer.flush();
-							} catch (IOException ignored) {
+								processWriter.write("-1\n");
+								processWriter.flush();
+							} catch (IOException ex) {
+								ex.printStackTrace();
 							}
 							process.destroy();
 						}
@@ -46,7 +48,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 			listenThread.setDaemon(true);
 			listenThread.start();
 
-			writer =
+			processWriter =
 					new BufferedWriter(
 							new OutputStreamWriter(
 									process.getOutputStream()
@@ -58,22 +60,14 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		}
 	}
 
-	// public void init(int sizeX, int sizeY) {
-	// this.boardsize(sizeX, sizeY);
-	// }
-
 	void writeToProcess(String string) {
 		try {
-			fullLog.append(new Date().getTime());
-			fullLog.append(" ");
+			fullInputOutputHistory.append(new Date()).append(" ").append(string).append("\n");
+			outgoingCommandHistory.append(string).append("\n");
 
-			fullLog.append(string);
-			writer.write(string);
-
-			writer.write("\n");
-			fullLog.append("\n");
-
-			writer.flush();
+			processWriter.write(string);
+			processWriter.write("\n");
+			processWriter.flush();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			error();
@@ -94,6 +88,11 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		} else {
 			throw new IllegalArgumentException("boolean value '" + color + "'");
 		}
+	}
+
+	@Override
+	public String wrapperOutgoingHistory() {
+		return outgoingCommandHistory.toString();
 	}
 
 	@Override
@@ -178,7 +177,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 	}
 
 	private void error() {
-		gui.error(fullLog.toString());
+		gui.error(fullInputOutputHistory.toString());
 	}
 
 	class ListenThread
@@ -198,10 +197,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 						break;
 						// dunno why this is needed
 					}
-					fullLog.append(new Date().getTime());
-					fullLog.append(" ");
-					fullLog.append(rawLine);
-					fullLog.append("\n");
+					fullInputOutputHistory.append(new Date()).append(" ").append(rawLine).append("\n");
 					try {
 						String[] splitted = rawLine.split(" ");
 						if (splitted.length < 3) {
@@ -267,13 +263,16 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 							error();
 						}
 					} catch (Exception e) {
+						e.printStackTrace();
 						error();
 					}
 				} catch (IOException ex) {
+					ex.printStackTrace();
 					boolean processFinished = true;
 					try {
 						process.exitValue();
 					} catch (Exception e) {
+						ex.printStackTrace();
 						processFinished = false;
 					}
 					if (processFinished) {
