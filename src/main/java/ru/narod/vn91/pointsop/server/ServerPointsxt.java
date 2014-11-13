@@ -54,7 +54,7 @@ public class ServerPointsxt
 	static final String commandCommonPrefix = "OpCmd ";
 	static final String commandIWantJoinGame = "I want to join this game.";
 	static final String commandAcceptOpponent = "I accept opponent ";
-	Date lastSpectrTime = new Date(0);
+	Date unsubscribeRoomLastAttempt = new Date(0);
 	final HashMap<String, String> spectrGameData = new HashMap<>();
 	final IrcNicknameManager nicknameManager = new IrcNicknameManager();
 	final MyGame myGame = new MyGame();
@@ -107,7 +107,7 @@ public class ServerPointsxt
 				portSet.add(46175);
 
 				for (int port : portSet) {
-					if (connector.call(port) == true) {
+					if (connector.call(port)) {
 						Settings.setIrcPort(port);
 						break;
 					} else {
@@ -326,6 +326,8 @@ public class ServerPointsxt
 			final String myNameOnServer,
 			final boolean acceptNonEnglish) {
 		final String filtered;
+
+		// we need to accept english-only, russian-only or polish-only nicknames
 		if (myNameOnServer.matches(".*[a-zA-Z].*")) {
 			filtered = myNameOnServer.replaceAll("[^a-zA-Z0-9]", "");
 		} else if (myNameOnServer.matches(".*[ёа-яЁА-Я].*") && acceptNonEnglish) {
@@ -335,15 +337,11 @@ public class ServerPointsxt
 		} else {
 			filtered = myNameOnServer.replaceAll("[^0-9]", "");
 		}
-		final String result;
 		if (filtered.length()>9) {
-			result = filtered.substring(0,9);
+			return filtered.substring(0,9);
 		} else {
-			result = filtered;
+			return filtered;
 		}
-		// myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Zёа-яЁА-Яa-żA-Ż0-9]",
-		// "");
-		return result;
 	}
 
 	public synchronized void subscribeRoom(String roomName) {
@@ -366,10 +364,10 @@ public class ServerPointsxt
 	}
 
 	public synchronized void unsubscribeRoom(String roomName) {
-		if ((new Date()).getTime() - lastSpectrTime.getTime() >= 0) {
+		if ((new Date()).getTime() - unsubscribeRoomLastAttempt.getTime() >= 0) {
 			// limit the users from joining-leaving too fast
 			// because it causes a bug in pointsxt
-			lastSpectrTime = new Date();
+			unsubscribeRoomLastAttempt = new Date();
 			if (roomName.equals(myGame.roomName)) {
 				myGame.leaveGame(true);
 			} else {
