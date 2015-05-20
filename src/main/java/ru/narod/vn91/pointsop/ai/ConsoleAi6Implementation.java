@@ -71,7 +71,6 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			error();
-//			gui.error(e.toString());
 		}
 	}
 

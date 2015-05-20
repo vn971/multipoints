@@ -4,7 +4,7 @@ import org.scalatest._
 
 class IrcNicknameManagerTest extends FunSuite with DiagrammedAssertions {
 	test("nicknames") {
-		val nicks = new IrcNicknameManager
+		val nicks = new IrcNicknameManager()
 		assert(nicks.fromIrc.size() == 0)
 		assert(nicks.fromId.size() == 0)
 
