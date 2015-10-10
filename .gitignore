@@ -12,9 +12,7 @@
 
 
 #### SBT output
-/target
-/project/project
-/project/target
+target/
 
 
 #### private info
