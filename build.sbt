@@ -3,7 +3,8 @@ name := "MultiPoints"
 version := "1.4.2"
 organization := "net.pointsgame"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.7"
+javacOptions ++= Seq("-source", "1.7", "-target", "1.7", "-g:none") // "-Xlint"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 mainClass in Compile := Some("ru.narod.vn91.pointsop.gui.SelfishGuiStarter")
@@ -11,18 +12,15 @@ mainClass in Compile := Some("ru.narod.vn91.pointsop.gui.SelfishGuiStarter")
 Revolver.settings.settings
 fork in Test := true
 
-crossPaths := false // pure java project (except testing)
-autoScalaLibrary := false // pure java project (except testing)
-compileOrder in Compile := CompileOrder.JavaThenScala
-
 packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
 	"Permissions" -> "all-permissions",
 	"Codebase" -> "*",
 	"Application-Name" -> name.value
 )
 
-assemblyJarName in assembly := "PointsOnPaper.jar"
+assemblyJarName in assembly := "../PointsOnPaper.jar"
 assembly <<= assembly dependsOn (test in Test)
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false) // pure java project
 
 val createSignedJar = TaskKey[Unit]("createSignedJar")
 createSignedJar := {
