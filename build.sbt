@@ -18,7 +18,9 @@ packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
 	"Application-Name" -> name.value
 )
 
-assemblyJarName in assembly := "../PointsOnPaper.jar"
+crossPaths := false // no Scala suffix for published jar-s
+
+assemblyJarName in assembly := "PointsOnPaper.jar"
 assembly <<= assembly dependsOn (test in Test)
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false) // pure java project
 

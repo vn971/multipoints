@@ -226,7 +226,7 @@ public class ServerPointsxt
 			// chat notify...
 			String notifyMessage =
 					"оставил(а) заявку на БЛИЦ. " +
-						"См. команду !mpstart для игры между PointsXT и MultiPoints";
+						"См. команду !mpstart для игры через PointsXT";
 			super.sendMessage(defaultChannel, "ACTION " + notifyMessage);
 			gui.chatReceived(
 				this,
