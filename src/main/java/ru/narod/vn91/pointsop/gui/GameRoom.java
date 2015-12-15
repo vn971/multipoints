@@ -33,7 +33,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	GuiForServerInterface centralGuiController;
 	final GameOuterInfo gameOuterInfo;
 	boolean redStopped = false, blueStopped = false;
-	ArrayList<MoveInfoAbstract> moveList = new ArrayList<MoveInfoAbstract>();
+	ArrayList<MoveInfoAbstract> moveList = new ArrayList<>();
 	int mousePosX, mousePosY, redScore, blueScore;
 	boolean isRedTurnNow = true;
 	Sgf.GameResult gameResult = Sgf.GameResult.UNFINISHED;
@@ -43,7 +43,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 	boolean timer1Freezed = true;
 	boolean timer2Freezed = true;
 	Object synchronizationMakeMoveWhereMouse = new Object();
-	final ObjectKeeper<TimedAction> timedAction = new ObjectKeeper<TimedAction>();
+	final ObjectKeeper<TimedAction> timedAction = new ObjectKeeper<>();
 //	long timeLastTurnHappend;
 
 	public JPanel getMainJPanel() {
@@ -193,9 +193,8 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 		new Thread() {
 			@Override
 			public void run() {
-				String eidokropkiLink = "";
 				if ((gameOuterInfo.isRated == true) && (wantToSave == true)) {
-					eidokropkiLink = BackupToServer.sendToEidokropki(
+					String eidokropkiLink = BackupToServer.sendToEidokropki(
 						gameOuterInfo.first.guiName, gameOuterInfo.second.guiName,
 						gameOuterInfo.first.rating, gameOuterInfo.second.rating,
 						gameOuterInfo.sizeX, gameOuterInfo.sizeY,
@@ -1003,8 +1002,7 @@ public class GameRoom extends javax.swing.JPanel implements RoomInterface {
 				int i = Integer.parseInt(result);
 				gameOuterInfo.server.addOpponentTime(gameOuterInfo.id, i);
 			}
-		} catch (NumberFormatException ex) {
-		} catch (HeadlessException ex) {
+		} catch (NumberFormatException | HeadlessException ex) {
 		}
 	}//GEN-LAST:event_jMenuItem_AddOpponentTimeActionPerformed
 

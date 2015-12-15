@@ -26,8 +26,7 @@ public class TabCloseable extends JPanel {
 
 	final CloseButton closeButton;
 	final JLabel label;
-	Set<Function<TabCloseable, Void>> closeListenerSet =
-			new LinkedHashSet<Function<TabCloseable, Void>>();
+	Set<Function<TabCloseable, Void>> closeListenerSet = new LinkedHashSet<>();
 
 	public TabCloseable(String title, boolean isCloseable) {
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));

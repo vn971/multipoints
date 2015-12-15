@@ -16,13 +16,6 @@ public class AiPanel extends javax.swing.JPanel {
 		}
 	};
 
-	/** Creates new form AiPanel */
-	public AiPanel() {
-		paper.initPaper(20, 20, false);
-		initComponents();
-		jToggleButton1.setSelected(true);
-	}
-
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is

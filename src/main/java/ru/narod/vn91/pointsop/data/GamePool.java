@@ -4,6 +4,7 @@ import ru.narod.vn91.pointsop.server.ServerInterface;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class GamePool {
 
@@ -34,37 +35,16 @@ public class GamePool {
 			this.id = id;
 		}
 		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-			result = prime * result
-					+ ((this.server == null) ? 0 : this.server.hashCode());
-			return result;
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			GameShort gameShort = (GameShort) o;
+			return Objects.equals(server, gameShort.server) &&
+				Objects.equals(id, gameShort.id);
 		}
 		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			GameShort other = (GameShort) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (this.id == null) {
-				if (other.id != null)
-					return false;
-			} else if (!this.id.equals(other.id))
-				return false;
-			if (this.server == null) {
-				if (other.server != null)
-					return false;
-			} else if (!this.server.equals(other.server))
-				return false;
-			return true;
+		public int hashCode() {
+			return Objects.hash(server, id);
 		}
 		private GamePool getOuterType() {
 			return GamePool.this;

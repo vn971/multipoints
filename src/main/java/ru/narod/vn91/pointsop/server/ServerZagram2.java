@@ -789,9 +789,7 @@ public class ServerZagram2 implements ServerInterface {
 				String[] dotSplitted = message.replaceFirst(".*?\\.", "").split("\\.");
 
 				final Set<String> newRooms = new LinkedHashSet<>();
-				for (String room : dotSplitted) {
-					newRooms.add(room);
-				}
+				Collections.addAll(newRooms, dotSplitted);
 
 				final Set<String> oldRooms = playerRooms.get(player);
 				if (oldRooms == null) {

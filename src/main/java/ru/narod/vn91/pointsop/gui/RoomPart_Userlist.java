@@ -19,7 +19,7 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 	final static int COLUMN_NAME = 0;
 	final static int COLUMN_RATING = 1;
 	final static int COLUMN_STATUS = 2;
-	ArrayList<Player> playerList = new ArrayList<Player>();
+	ArrayList<Player> playerList = new ArrayList<>();
 
 	synchronized private Player getSelectedUser() {
 		int index = jTable_UserList.getSelectedRow();
@@ -69,7 +69,7 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 		jTable_UserList.clearSelection(); // java seems to be buggy
 
 		final ObjectKeeper<Integer> playerRatingBeforeChange =
-			new ObjectKeeper<Integer>(playerNew.rating);
+			new ObjectKeeper<>(playerNew.rating);
 
 //		final int playerRatingBeforeChange = playerNew.rating;
 
@@ -77,7 +77,7 @@ public class RoomPart_Userlist extends javax.swing.JPanel {
 			playerNew.addChangeListener(new PlayerChangeListener() {
 				@Override
 				public void onChange(Player player) {
-					if ((int) player.rating != (int) playerRatingBeforeChange.value
+					if (player.rating != playerRatingBeforeChange.value
 //						&& playerRatingBeforeChange.value != 0
 						) {
 						playerRatingBeforeChange.value = player.rating;

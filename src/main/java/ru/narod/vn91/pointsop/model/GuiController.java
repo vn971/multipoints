@@ -782,8 +782,7 @@ class ServerRoom {
 			return false;
 			// avoid this stupid NetBeans hint...
 		}
-		if ((compareToObject == null)
-			|| (getClass().isInstance(compareToObject) == false)) {
+		if (getClass().isInstance(compareToObject) == false) {
 			return false;
 		}
 		ServerRoom compareTo = getClass().cast(compareToObject);

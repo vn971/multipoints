@@ -7,8 +7,8 @@ import javax.swing.JLabel;
 public class TimerLabel extends JLabel {
 
 	TimerThread thread = null;
-	Object synchronization_SetText = new Object();
-	Object synchronization_SetRemainingTime = new Object();
+	final Object synchronization_SetText = new Object();
+	final Object synchronization_SetRemainingTime = new Object();
 	Integer secondsLastTimeShown = -1;
 
 	public TimerLabel() {
@@ -49,7 +49,7 @@ public class TimerLabel extends JLabel {
 	private class TimerThread extends Thread {
 
 		Long goal;
-		Object synchronization_IsAlive = new Object();
+		final Object synchronization_IsAlive = new Object();
 		Boolean isTimerAlive = true;
 
 		public void stopTimerThread() {

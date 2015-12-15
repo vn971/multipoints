@@ -5,7 +5,6 @@ import javax.swing.SpinnerNumberModel;
 import ru.narod.vn91.pointsop.data.Player;
 import ru.narod.vn91.pointsop.data.TimeSettings;
 import ru.narod.vn91.pointsop.model.StartingPosition;
-import ru.narod.vn91.pointsop.server.MockServerForGui;
 import ru.narod.vn91.pointsop.server.ServerInterface;
 
 public class GameInvitePersonal extends javax.swing.JDialog {

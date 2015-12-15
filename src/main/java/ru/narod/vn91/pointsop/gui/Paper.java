@@ -114,9 +114,6 @@ public abstract class Paper extends JPanel {
 
 	/**
 	 * @param silent true if redrawing is needed
-	 * @param x
-	 * @param y
-	 * @param isRed
 	 * @return look SingleGameEngineInterface.makeMove()
 	 */
 	public MoveResult makeMove(
@@ -350,7 +347,7 @@ public abstract class Paper extends JPanel {
 			graphics.setColor(CustomColors.getContrastColor(colorBackground));
 		} else if (engine.getLastDotColor() == true) {
 			graphics.setColor(colorBluPoint);
-		} else if (engine.getLastDotColor() == false) {
+		} else {
 			graphics.setColor(colorRedPoint);
 		}
 

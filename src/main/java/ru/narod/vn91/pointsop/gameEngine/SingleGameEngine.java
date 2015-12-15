@@ -309,10 +309,7 @@ public class SingleGameEngine implements SingleGameEngineInterface {
 	}
 
 	public boolean getLastDotColor() {
-		if (lastMoveInfo == null) {
-			return true;
-		}
-		return lastMoveInfo.moveType == MoveType.RED;
+		return lastMoveInfo == null || lastMoveInfo.moveType == MoveType.RED;
 	}
 
 	public int getRedScore() {
