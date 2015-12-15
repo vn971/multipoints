@@ -1011,11 +1011,12 @@ public class ServerZagram2 implements ServerInterface {
 						server.rejectPersonalGameInvite(sender);
 						personalInvitesIncoming.remove(sender); // kind of a hack
 
+						ServerZagram2.this.sendPrivateMsg(sender, "Sorry, my game client does not support \"territory\" rules.");
 						gui.raw(server, String.format(
 							"Игрок '%s' вызвал(а) тебя на игру: " +
 								"К сожалению, принять заявку невозможно, " +
 								"т.к. польские правила с ручными обводами территории " +
-								"пока-что не поддерживаютяс программой. " +
+								"пока-что не поддерживаются программой. " +
 								"Отослан отказ от игры. ",
 							sender));
 					} else {
