@@ -70,25 +70,25 @@ public class Sgf {
 		{
 			switch (gameResult) {
 				case BLUE_WON_BY_RESIGN:
-					gameResultAsString = "RE[B+R]";
+					gameResultAsString = "RE[B+R]"; break;
 				case BLUE_WON_BY_TIME:
-					gameResultAsString = "RE[B+T]";
+					gameResultAsString = "RE[B+T]"; break;
 				case BLUE_WON_END_OF_GAME:
-					gameResultAsString = "RE[B+" + (-scoreRedMinusBlue) + "]";
+					gameResultAsString = "RE[B+" + (-scoreRedMinusBlue) + "]"; break;
 				case RED_WON_BY_RESIGN:
-					gameResultAsString = "RE[W+R]";
+					gameResultAsString = "RE[W+R]"; break;
 				case RED_WON_BY_TIME:
-					gameResultAsString = "RE[W+T]";
+					gameResultAsString = "RE[W+T]"; break;
 				case RED_WON_END_OF_GAME:
-					gameResultAsString = "RE[R+" + (-scoreRedMinusBlue) + "]";
+					gameResultAsString = "RE[R+" + (-scoreRedMinusBlue) + "]"; break;
 				case DRAW_BY_AGREEMENT:
-					gameResultAsString = "RE[0]";
+					gameResultAsString = "RE[0]"; break;
 				case DRAW_END_OF_GAME:
-					gameResultAsString = "RE[0]";
+					gameResultAsString = "RE[0]"; break;
 				case UNFINISHED:
-					gameResultAsString = "";
+					gameResultAsString = ""; break;
 				default:
-					gameResultAsString = "";
+					gameResultAsString = ""; break;
 			}
 		}
 
@@ -154,25 +154,25 @@ public class Sgf {
 		{
 			switch (gameResult) {
 				case BLUE_WON_BY_RESIGN:
-					gameResultAsString = "RE[B+R]";
+					gameResultAsString = "RE[B+R]"; break;
 				case BLUE_WON_BY_TIME:
-					gameResultAsString = "RE[B+T]";
+					gameResultAsString = "RE[B+T]"; break;
 				case BLUE_WON_END_OF_GAME:
-					gameResultAsString = "RE[B+" + (-scoreRedMinusBlue) + "]";
+					gameResultAsString = "RE[B+" + (-scoreRedMinusBlue) + "]"; break;
 				case RED_WON_BY_RESIGN:
-					gameResultAsString = "RE[W+R]";
+					gameResultAsString = "RE[W+R]"; break;
 				case RED_WON_BY_TIME:
-					gameResultAsString = "RE[W+T]";
+					gameResultAsString = "RE[W+T]"; break;
 				case RED_WON_END_OF_GAME:
-					gameResultAsString = "RE[R+" + (-scoreRedMinusBlue) + "]";
+					gameResultAsString = "RE[R+" + (-scoreRedMinusBlue) + "]"; break;
 				case DRAW_BY_AGREEMENT:
-					gameResultAsString = "RE[0]";
+					gameResultAsString = "RE[0]"; break;
 				case DRAW_END_OF_GAME:
-					gameResultAsString = "RE[0]";
+					gameResultAsString = "RE[0]"; break;
 				case UNFINISHED:
-					gameResultAsString = "";
+					gameResultAsString = ""; break;
 				default:
-					gameResultAsString = "";
+					gameResultAsString = ""; break;
 			}
 		}
 

@@ -94,7 +94,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		return outgoingCommandHistory.toString();
 	}
 
-	@Override
+	@Override @Deprecated
 	public void boardsize(int x, int y) {
 		writeToProcess((messageNumber += 1) + " boardsize " + x + " " + y);
 	}
@@ -104,11 +104,11 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		writeToProcess((messageNumber += 1) + " init " + x + " " + y + " " + randomSeed);
 	}
 
-	@Override
+	@Override @Deprecated
 	public void genmove(boolean color) {
 		writeToProcess((messageNumber += 1) + " genmove " + getColor(color));
 	}
-	@Override
+	@Override @Deprecated
 	public void reg_genmove(boolean color) {
 		writeToProcess((messageNumber += 1) + " reg_genmove " + getColor(color));
 	}
@@ -139,7 +139,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 		process.destroy();
 	}
 
-	@Override
+	@Override @Deprecated
 	public void reg_genmove_with_complexity(boolean color, Complexity complexity) {
 		writeToProcess((messageNumber += 1) + " reg_genmove_with_complexity "
 				+ getColor(color) + " " + complexity);
@@ -150,7 +150,7 @@ public class ConsoleAi6Implementation implements ConsoleAi6 {
 				+ getColor(color) + " " + complexity);
 	}
 
-	@Override
+	@Override @Deprecated
 	public void reg_genmove_with_time(boolean color, long milliseconds) {
 		writeToProcess((messageNumber += 1) + " reg_genmove_with_time "
 				+ getColor(color) + " " + (int) milliseconds);

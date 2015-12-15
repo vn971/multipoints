@@ -78,7 +78,7 @@ public class TimerLabel extends JLabel {
 				}
 
 				try {
-					super.sleep(goal - current - fullSecondsRemaining * 1000L + 50);
+					sleep(goal - current - fullSecondsRemaining * 1000L + 50);
 				} catch (Exception e) {
 				}
 			}
