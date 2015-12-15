@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.server.ServerPointsxt;
-import ru.narod.vn91.pointsop.server.ServerZagram2;
+import ru.narod.vn91.pointsop.server.ServerZagram;
 import ru.narod.vn91.pointsop.utils.Settings;
 
 public class WelcomePanel extends javax.swing.JPanel {
@@ -26,7 +26,7 @@ public class WelcomePanel extends javax.swing.JPanel {
 		// DISABLED until zagram bugs would be fixed
 		if (guiController.zagram_server == null) {
 			String password = String.copyValueOf(jPasswordField_Password.getPassword());
-			guiController.zagram_server = new ServerZagram2(guiController, nick, password, false);
+			guiController.zagram_server = new ServerZagram(guiController, nick, password, false);
 			guiController.zagram_server.connect();
 		}
 	}

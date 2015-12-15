@@ -22,7 +22,7 @@ import java.net.URLEncoder;
 import java.util.*;
 import java.util.List;
 
-public class ServerZagram2 implements ServerInterface {
+public class ServerZagram implements ServerInterface {
 
 	final String myNameOnServer;
 	final boolean isPassworded;
@@ -43,7 +43,7 @@ public class ServerZagram2 implements ServerInterface {
 	final Map<String, String> avatarUrls = new HashMap<>();
 	final Map<String, ImageIcon> avatarImages = new HashMap<>();
 
-	public ServerZagram2(GuiForServerInterface gui, String myNameOnServer, String password, boolean isInvisible) {
+	public ServerZagram(GuiForServerInterface gui, String myNameOnServer, String password, boolean isInvisible) {
 
 		if (myNameOnServer.matches(".*[a-zA-Z].*")) {
 			myNameOnServer = myNameOnServer.replaceAll("[^a-zA-Z0-9 ]", "");
@@ -190,7 +190,7 @@ public class ServerZagram2 implements ServerInterface {
 					threadMain = new ThreadMain();
 					threadMain.start();
 				} else {
-					gui.rawConnectionState(ServerZagram2.this, "Подключение...");
+					gui.rawConnectionState(ServerZagram.this, "Подключение...");
 
 					String authorizationURL;
 					if (isPassworded) {
@@ -208,14 +208,14 @@ public class ServerZagram2 implements ServerInterface {
 					String authorizationResult = getLinkContent(authorizationURL);
 					boolean isAuthorized;
 					if (authorizationResult.equals("")) {
-						gui.rawConnectionState(ServerZagram2.this, "Соединился. Подключаюсь к основной комнате...");
+						gui.rawConnectionState(ServerZagram.this, "Соединился. Подключаюсь к основной комнате...");
 						isAuthorized = true;
 					} else if (authorizationResult.startsWith("ok.zalogowanyNaSerwer.")) {
-						gui.rawConnectionState(ServerZagram2.this,
+						gui.rawConnectionState(ServerZagram.this,
 							"Авторизовался (" + myNameOnServer + "). Подключаюсь к основной комнате...");
 						isAuthorized = true;
 					} else {
-						gui.rawConnectionState(ServerZagram2.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
+						gui.rawConnectionState(ServerZagram.this, "Ошибка авторизации! Возможно, вы ввели неправильный пароль.");
 						isAuthorized = false;
 					}
 
@@ -622,7 +622,7 @@ public class ServerZagram2 implements ServerInterface {
 
 	private class ThreadMain extends Thread {
 
-		final ServerInterface server = ServerZagram2.this;
+		final ServerInterface server = ServerZagram.this;
 		Set<String> personalInvitesIncomingNew = new LinkedHashSet<>();
 		Set<String> personalInvitesOutgoingNew = new LinkedHashSet<>();
 		Set<String> modifiedSubscribedRooms = new HashSet<>();
@@ -732,7 +732,7 @@ public class ServerZagram2 implements ServerInterface {
 					try {
 						handleMessage(message);
 					} catch (Exception e) {
-						System.out.println(ServerZagram2.class.getName() +
+						System.out.println(ServerZagram.class.getName() +
 							" failed to parse the message " + message +
 							". Exception below...");
 						e.printStackTrace();
@@ -1011,7 +1011,7 @@ public class ServerZagram2 implements ServerInterface {
 						server.rejectPersonalGameInvite(sender);
 						personalInvitesIncoming.remove(sender); // kind of a hack
 
-						ServerZagram2.this.sendPrivateMsg(sender, "Sorry, my game client does not support \"territory\" rules.");
+						ServerZagram.this.sendPrivateMsg(sender, "Sorry, my game client does not support \"territory\" rules.");
 						gui.raw(server, String.format(
 							"Игрок '%s' вызвал(а) тебя на игру: " +
 								"К сожалению, принять заявку невозможно, " +
