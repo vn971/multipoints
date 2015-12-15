@@ -42,7 +42,7 @@ class QuestionIO {
 		}
 
 		int count = 0;
-		Iterator i = baseList.iterator();
+		Iterator<Question> i = baseList.iterator();
 		while (i.hasNext()) {
 			i.next();
 			count++;
@@ -51,7 +51,7 @@ class QuestionIO {
 		i = baseList.iterator();
 		count = 0;
 		while (i.hasNext()) {
-			base[count] = (Question) i.next();
+			base[count] = i.next();
 			count++;
 		}
 		return base;

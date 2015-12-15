@@ -97,7 +97,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
         jPanel_GameList = new javax.swing.JPanel();
         roomPart_GameList1 = new ru.narod.vn91.pointsop.gui.RoomPart_GameList();
         jPanel_Toolbar = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
+        jComboBox1 = new javax.swing.JComboBox<String>();
         jToggleButton_LeaveZayavka = new javax.swing.JToggleButton();
         jButton2 = new javax.swing.JButton();
         roomPart_Chat = new ru.narod.vn91.pointsop.gui.RoomPart_Chat();
@@ -128,7 +128,7 @@ public class LangRoom extends javax.swing.JPanel implements RoomInterface {
 
         jPanel_Toolbar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "свободен", "занят" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "свободен", "занят" }));
         jComboBox1.setToolTipText("<html>В случае статуса \"занят\" <br>приглашения на игру автоматически отклоняются.</html>");
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -270,7 +270,7 @@ private void jToggleButton_LeaveZayavkaActionPerformed(java.awt.event.ActionEven
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel_GameList;
     private javax.swing.JPanel jPanel_GameListAndChat;
     private javax.swing.JPanel jPanel_Toolbar;

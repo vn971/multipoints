@@ -56,7 +56,7 @@ class Question {
 		MakrosLevelMove[] getMoves() {
 			MakrosLevelMove[] base;
 			int count = 0;
-			Iterator i = moves.iterator();
+			Iterator<MakrosLevelMove> i = moves.iterator();
 			while (i.hasNext()) {
 				i.next();
 				count++;
@@ -65,7 +65,7 @@ class Question {
 			i = moves.iterator();
 			count = 0;
 			while (i.hasNext()) {
-				base[count] = (MakrosLevelMove) i.next();
+				base[count] = i.next();
 				count++;
 			}
 			return base;

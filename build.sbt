@@ -26,7 +26,7 @@ assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeSca
 
 val createSignedJar = TaskKey[Unit]("createSignedJar")
 createSignedJar := {
-	"jarsigner -keystore project/vasya.ks -storepass:env pass target/PointsOnPaper.jar mp".run()
+	"jarsigner -keystore project/vasya.ks -storepass:env multipoints_pass target/PointsOnPaper.jar mp".run()
 }
 createSignedJar <<= createSignedJar dependsOn assembly
 

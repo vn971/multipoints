@@ -20,7 +20,7 @@ public class MakrosIO implements Variables {
 		}
 
 		int count = 0;
-		Iterator i = baseList.iterator();
+		Iterator<Makros> i = baseList.iterator();
 		while (i.hasNext()) {
 			i.next();
 			count++;
@@ -29,7 +29,7 @@ public class MakrosIO implements Variables {
 		i = baseList.iterator();
 		count = 0;
 		while (i.hasNext()) {
-			base[count] = (Makros) i.next();
+			base[count] = i.next();
 			count++;
 		}
 

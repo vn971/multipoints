@@ -11,7 +11,7 @@ public class BlueSurroundSecurity implements Variables {
 
 	Point moveAI;
 	public int foundedNumber;
-	final List<Object> BSSbase = new ArrayList<>();
+	final List<Point[]> BSSbase = new ArrayList<>();
 	Point bss[];
 
 	public Point getAIcoordinatesFromBSSbase(PointsAI pointsAI) {
@@ -85,10 +85,10 @@ public class BlueSurroundSecurity implements Variables {
 	}
 
 	private void makeMove(SingleGameEngine e, List<Point> point, PointsAI pointsAI) {
-		Iterator it = point.iterator();
+		Iterator<Point> it = point.iterator();
 		int index = 1;
 		while (it.hasNext()) {
-			Point p = (Point) it.next();
+			Point p = it.next();
 			int moveX = p.x + pointsAI.game.getLastX() - 4;
 			int moveY = p.y + pointsAI.game.getLastY() - 4;
 			e.makeMove(moveX, moveY, false);
