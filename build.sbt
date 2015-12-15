@@ -4,7 +4,7 @@ version := "1.4.2"
 organization := "net.pointsgame"
 
 scalaVersion := "2.11.7"
-javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-g:none", "-Xlint:-serial")
+javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-Xlint", "-Xlint:-serial")
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 mainClass in Compile := Some("ru.narod.vn91.pointsop.gui.SelfishGuiStarter")
@@ -39,3 +39,5 @@ assemblyMergeStrategy in assembly := {
 }
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3" % Test
+
+lazy val root = project.in(file(".")).dependsOn(uri("git://github.com/vn971/pircbot-sbt"))
