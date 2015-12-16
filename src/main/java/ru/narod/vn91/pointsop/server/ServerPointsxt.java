@@ -55,7 +55,7 @@ public class ServerPointsxt
 	static final String commandIWantJoinGame = "I want to join this game.";
 	static final String commandAcceptOpponent = "I accept opponent ";
 	Date unsubscribeRoomLastAttempt = new Date(0);
-	final HashMap<String, String> spectrGameData = new HashMap<>();
+	final HashMap<String, String> spectrGameData = new HashMap<>(3);
 	final IrcNicknameManager nicknameManager = new IrcNicknameManager();
 	final MyGame myGame = new MyGame();
 
@@ -99,7 +99,7 @@ public class ServerPointsxt
 				// in reality, I just try out FP methods
 				// like "foreach" and others :)
 				// int[] portList = { Settings.getIrcPort(), 6667, 6029, 7029, 46175 };
-				Set<Integer> portSet = new LinkedHashSet<>();
+				Set<Integer> portSet = new LinkedHashSet<>(5);
 				portSet.add(Settings.getIrcPort());
 				portSet.add(6667);
 				portSet.add(6029);
@@ -790,7 +790,7 @@ public class ServerPointsxt
 		}
 	}
 
-	private Boolean isBlitz(String userIrcName) {
+	private boolean isBlitz(String userIrcName) {
 		String pxtGameInfo = userIrcName.substring(
 				userIrcName.length() - 5, userIrcName.length() - 1
 				);
@@ -799,7 +799,7 @@ public class ServerPointsxt
 		} else if (pxtGameInfo.startsWith("0", 3)) {
 			return false;
 		} else {
-			return null;
+			throw new IllegalArgumentException(userIrcName);
 		}
 	}
 
@@ -1054,12 +1054,10 @@ public class ServerPointsxt
 							long timeEnd = new Date().getTime() + myGame.getTimeLeftForMe() * 1000;
 							long estimatedTime = timeEnd - new Date().getTime();
 							while (estimatedTime > 0) {
-								Object o = new Object();
-								synchronized (o) {
-									try {
-										o.wait(estimatedTime + 10);
-									} catch (InterruptedException ignored) {
-									}
+								try {
+									Thread.sleep(estimatedTime + 10);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
 								}
 								estimatedTime = timeEnd - new Date().getTime();
 							}
@@ -1249,7 +1247,7 @@ public class ServerPointsxt
 	}
 
 	protected String getSpectr_MainPart() {
-		StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder(50);
 		for (SimpleMove simpleMove : myGame.moveList) {
 			int x = simpleMove.x - 1;
 			int y = 32 - simpleMove.y;
@@ -1282,7 +1280,7 @@ public class ServerPointsxt
 	}
 
 	protected String getSpectr_CommonPrefix() {
-		StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder(10);
 		result.append("/SpectrGame ");
 		String numberOfTurnsAsString =
 				myGame.moveList.isEmpty() ? "-001"
@@ -1444,7 +1442,7 @@ public class ServerPointsxt
 		String opponentName = "";
 		boolean amIRed;
 		SingleGameEngineInterface engine;
-		ArrayList<SimpleMove> moveList = new ArrayList<>();
+		ArrayList<SimpleMove> moveList = new ArrayList<>(0);
 		Thread lastTimeoutThread = null;
 		RandomMovesProvider randomMovesProvider = new RandomMovesProvider(39, 32);
 		final int timeAllowedPerTurn = 5;

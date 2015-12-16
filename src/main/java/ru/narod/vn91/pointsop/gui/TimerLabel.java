@@ -25,6 +25,7 @@ public class TimerLabel extends JLabel {
 				showSeconds(seconds);
 			} else {
 				thread = new TimerThread();
+				thread.setDaemon(true);
 				thread.init(seconds);
 			}
 		}

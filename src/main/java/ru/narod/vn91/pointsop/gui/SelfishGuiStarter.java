@@ -1,25 +1,16 @@
 package ru.narod.vn91.pointsop.gui;
 
-import java.awt.event.*;
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import ru.narod.vn91.pointsop.ai.KeijKvantttAi;
 import ru.narod.vn91.pointsop.ai.RandomAi;
 import ru.narod.vn91.pointsop.model.GuiController;
 import ru.narod.vn91.pointsop.server.AiVirtualServer;
 import ru.narod.vn91.pointsop.utils.Settings;
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
 
 public class SelfishGuiStarter {
 
@@ -298,7 +289,7 @@ public class SelfishGuiStarter {
 							}
 					);
 					jMenuItem_KeijkvantttaiExecute.setEnabled(
-							! Settings.getKeijKvantttAiPath().equals("")
+						!Settings.getKeijKvantttAiPath().equals("")
 					);
 				}
 
@@ -359,27 +350,22 @@ public class SelfishGuiStarter {
 				{
 					final JMenuItem jMenuItem = new JMenuItem("PointsAI - запуск 1.12");
 					jMenuItem.addActionListener(
-							new ActionListener() {
+						new ActionListener() {
 
-								public void actionPerformed(ActionEvent e) {
-									new Thread() {
-										@Override
-										public void run() {
-											AiVirtualServer aiWrapper =
-													new AiVirtualServer(
-															guiController
-													);
-											aiWrapper
-													.setAi(
-													new com.google.sites.priymakpoints.pointsai.pointsAI_1_10.PointsAIEngine(
-															aiWrapper, 39, 32
-													)
-													);
-											aiWrapper.init();
-										}
-									}.start();
-								}
+							public void actionPerformed(ActionEvent e) {
+								AiVirtualServer aiWrapper =
+									new AiVirtualServer(
+										guiController
+									);
+								aiWrapper
+									.setAi(
+										new com.google.sites.priymakpoints.pointsai.pointsAI_1_10.PointsAIEngine(
+											aiWrapper, 39, 32
+										)
+									);
+								aiWrapper.init();
 							}
+						}
 					);
 					jMenu_AI.add(jMenuItem);
 				}
@@ -436,8 +422,8 @@ public class SelfishGuiStarter {
 							"Обсуждение MultiPoints",
 						"http://vkontakte.ru/pointsgame"));
 				jMenu.add(new JMenuItemWithLink(
-							"Полезные ссылки",
-							"http://pointsgame.net/site/links"));
+					"Полезные ссылки",
+					"http://pointsgame.net/site/links"));
 				jMenuBar.add(jMenu);
 			}
 			frame.setJMenuBar(jMenuBar);
@@ -447,13 +433,13 @@ public class SelfishGuiStarter {
 		frame.setVisible(true);
 		roomWelcome.jTextField_Username.requestFocusInWindow();
 		frame.addWindowListener(
-				new WindowAdapter() {
+			new WindowAdapter() {
 
-					@Override
-					public void windowClosing(WindowEvent we) {
-						System.exit(0);
-					}
+				@Override
+				public void windowClosing(WindowEvent we) {
+					System.exit(0);
 				}
+			}
 		);
 	}
 }

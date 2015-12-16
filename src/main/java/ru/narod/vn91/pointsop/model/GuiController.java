@@ -573,7 +573,7 @@ public class GuiController implements GuiForServerInterface {
 			gameRooms.get(new ServerRoom(room, server)).gameLost(
 				isRedLooser,
 				wantToSave
-					);
+			);
 		}
 	}
 
@@ -724,16 +724,18 @@ public class GuiController implements GuiForServerInterface {
 	@Override
 	public synchronized void rawError(ServerInterface server, final String info) {
 		this.raw(server, info);
-		new Thread() {
+		Thread thread = new Thread() {
 			public void run() {
 				JOptionPane.showMessageDialog(
 					null,
 					info,
 					"Error: " + info,
 					JOptionPane.ERROR_MESSAGE
-						);
+				);
 			}
-		}.start();
+		};
+		thread.setDaemon(true);
+		thread.start();
 	}
 
 	@Override

@@ -40,4 +40,4 @@ assemblyMergeStrategy in assembly := {
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3" % Test
 
-lazy val root = project.in(file(".")).dependsOn(uri("git://github.com/vn971/pircbot-sbt"))
+lazy val root = project.in(file(".")).dependsOn(uri("git://github.com/vn971/pircbot-sbt#java-1.5-generics"))
