@@ -47,10 +47,6 @@ public class Settings {
 
 	public static void setRestoreSize(boolean isRestoreSize) {
 		memory.putBoolean("isRestoreSize", isRestoreSize);
-//		if (isRestoreSize == false) {
-//			memory.remove("frameWidth");
-//			memory.remove("frameHeight");
-//		}
 	}
 
 	public static boolean isRestorePosition() {
@@ -59,10 +55,6 @@ public class Settings {
 
 	public static void setRestorePosition(boolean isRestorePosition) {
 		memory.putBoolean("isRestorePosition", isRestorePosition);
-//		if (isRestorePosition == false) {
-//			memory.remove("frameX");
-//			memory.remove("frameY");
-//		}
 	}
 
 	public static int getVersion() {
@@ -75,12 +67,10 @@ public class Settings {
 
 	public static boolean isDebug() {
 		return isDebug;
-//		return memory.getBoolean("isDebug", false);
 	}
 
 	public static void setDebug(boolean isDebug) {
 		Settings.isDebug = isDebug;
-//		memory.putBoolean("isDebug", isDebug);
 	}
 
 //	public static boolean isZagramTest() {
@@ -142,10 +132,6 @@ public class Settings {
 
 	public static boolean getOtherSounds() {
 		return memory.getBoolean("OtherSounds", true);
-	}
-
-	public static void setClickAudibility(ClickAudibility clickAudibility) {
-		memory.put("ClickAudibility", clickAudibility.name());
 	}
 
 	public static void setOtherSounds(boolean otherSounds) {

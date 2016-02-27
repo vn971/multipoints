@@ -48,7 +48,7 @@ public class PrivateChat extends javax.swing.JPanel {
 	public void personalInviteCancelled() {
 		jButton_AcceptInvite.setEnabled(false);
 		jButton_RejectInvite.setEnabled(false);
-		this.addChat("server", "Собеседник отменил свою заявку на игру.", false);
+		this.addChat("server", "Заявка на игру закрыта.", false);
 	}
 
 	public void yourPersonalInviteCancelled() {
