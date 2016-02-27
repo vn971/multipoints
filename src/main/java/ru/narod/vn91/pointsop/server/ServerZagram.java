@@ -97,13 +97,19 @@ public class ServerZagram implements ServerInterface {
 
 	private static String getGameTypeString(
 			int fieldX, int fieldY, int startingTime, int periodAdditionalTime, boolean isRanked, StartingPosition startPos) {
-		return String.format("%s%s%s%s0.%s.%s",
+		return String.format("%s%s%s%s.%s.%s.%s.%s.%s.%s.%s.",
 			fieldX, fieldY,
-			(startPos == StartingPosition.CLEAN) ? "stan" :
-				(startPos == StartingPosition.ONE_CROSS) ? "noT1" : "noT4",
+			"n", // no territory
+			"0", // instant win disabled
+			(startPos == StartingPosition.CLEAN) ? "0" :
+				(startPos == StartingPosition.ONE_CROSS) ? "1" : "4",
+			"a", // who starts (you)
 			isRanked ? "R" : "F",
+			"a", // infinite time? (no)
 			startingTime,
-			periodAdditionalTime);
+			periodAdditionalTime,
+			"_SRATP_sratp" // capabilities (no undo, can add time, can pause time)
+		);
 	}
 
 	private ZagramGameType getZagramGameType(String str) {
