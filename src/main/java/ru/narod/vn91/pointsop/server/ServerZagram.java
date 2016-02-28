@@ -113,53 +113,28 @@ public class ServerZagram implements ServerInterface {
 	}
 
 	private ZagramGameType getZagramGameType(String str) {
-		// 2525noT4R0.180.15  or  "3932noT1r0.180.20_PWC 2012"
-		String[] dotSplitted = str.split("\\.");
-		try {
-		    if (str.charAt(5) == 't' || str.charAt(5) == 'e' || str.charAt(5) == 'o') {  // old type
-			int startingTime = Integer.parseInt(dotSplitted[1]);
-			int addTime = Integer.parseInt(dotSplitted[2].split("_")[0]);
-			String hellishString = dotSplitted[0];
-			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
-			int sizeY = Integer.parseInt(hellishString.substring(2, 4));
-			String rulesAsString = hellishString.substring(4, 8);
-			boolean isStopEnabled = rulesAsString.matches("noT4|noT1");
-			boolean isEmptyScored = rulesAsString.matches("terr|stan");
-			// boolean manualEnclosings = rulesAsString.matches("terr");
-			// boolean stopEnabled = rulesAsString.matches("noT4|noT1");
-			String startingPosition = rulesAsString.replaceAll("no|terr|stan", "");
-			boolean isRated = !(hellishString.substring(8, 9).equals("F"));
-			Integer instantWin = Integer.parseInt(hellishString.substring(9));
-			return new ZagramGameType(
-				sizeX, sizeY, isStopEnabled, isEmptyScored,
-				startingTime, addTime,
-				startingPosition,
-				isRated, instantWin);
-		    } else {
-			// new format: XXYYrI.(starting position).(who starts).(type).(time method).t0.t1.opt.tourn
-                        int startingTime = (dotSplitted[4].charAt(0) == 'a') ? Integer.parseInt(dotSplitted[5]) : 0;
-                        int addTime = (dotSplitted[4].charAt(0) == 'a') ? Integer.parseInt(dotSplitted[6]) : 0;
-                        String hellishString = dotSplitted[0];
-			int sizeX = Integer.parseInt(hellishString.substring(0, 2));
-                        int sizeY = Integer.parseInt(hellishString.substring(2, 4));
-                        String rulesAsString = hellishString.substring(4, 5);
-			boolean isStopEnabled = rulesAsString.matches("n");
-			boolean isEmptyScored = rulesAsString.matches("t|s");
-			String startingPosition = dotSplitted[1];
-                        // boolean manualEnclosings = rulesAsString.matches("t");
-			// boolean stopEnabled = rulesAsString.matches("n");
-			boolean isRated = (dotSplitted[3].charAt(0) == 'R');
-                        Integer instantWin = Integer.parseInt(hellishString.substring(5));
-                        return new ZagramGameType(
-						  sizeX, sizeY, isStopEnabled, isEmptyScored,
-						  startingTime, addTime,
-						  startingPosition,
-						  isRated, instantWin);
-		    }
-		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
-			return null;
-		}
+		// API version ~2011     : 2525noT4R0.180.15
+		// API version 2012-08-23: 3932noT1r0.180.20_PWC 2012
+		// API version 2016-02-28: 3030t0.2.s.R.a.60.30..
+		String[] split = str.split("\\.", -1);
+		String hellishString = split[0];
+		int sizeX = Integer.parseInt(hellishString.substring(0, 2));
+		int sizeY = Integer.parseInt(hellishString.substring(2, 4));
+		String rulesAsString = hellishString.substring(4, 5);
+		boolean isEmptyScored = rulesAsString.matches("t|s");
+		int startingTime = (split[4].charAt(0) == 'a') ? Integer.parseInt(split[5]) : 0;
+		int addTime = (split[4].charAt(0) == 'a') ? Integer.parseInt(split[6]) : 0;
+		boolean isStopEnabled = rulesAsString.matches("n");
+		String startingPosition = split[1];
+		// boolean manualEnclosings = rulesAsString.matches("t");
+		// boolean stopEnabled = rulesAsString.matches("n");
+		boolean isRated = (split[3].charAt(0) == 'R');
+		Integer instantWin = Integer.parseInt("0" + hellishString.substring(5)); // hack for empty string meaning 0
+		return new ZagramGameType(
+			sizeX, sizeY, isStopEnabled, isEmptyScored,
+			startingTime, addTime,
+			startingPosition,
+			isRated, instantWin);
 	}
 
 	private static String getBase64ZagramVersion(String input) {
@@ -680,7 +655,7 @@ public class ServerZagram implements ServerInterface {
 			String player = null, myStatus = null;
 			Integer rating = null, winCount = null, lossCount = null, drawCount = null;
 			try {
-				String[] dotSplitted = message.substring("i".length()).split("\\.");
+				String[] dotSplitted = message.substring("i".length()).split("\\.", -1);
 				player = nonEmpty(dotSplitted[0]);
 				String avatar = nonEmpty(dotSplitted[1]);
 				avatarUrls.put(player, avatar);
@@ -729,7 +704,7 @@ public class ServerZagram implements ServerInterface {
 			// if (text.startsWith("ok/") && text.endsWith("/end")) {
 			if ((text.startsWith("ok") && text.endsWith("end"))
 				|| (text.startsWith("sd") && text.endsWith("end") && isInvisible)) {
-				String[] split = text.split("/");
+				String[] split = text.split("/", -1);
 
 				personalInvitesIncomingNew = new LinkedHashSet<>();
 				personalInvitesOutgoingNew = new LinkedHashSet<>();
