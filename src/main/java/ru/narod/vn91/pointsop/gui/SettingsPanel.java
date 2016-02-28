@@ -87,8 +87,8 @@ public class SettingsPanel extends javax.swing.JPanel {
 		{
 			Enumeration<AbstractButton> pointClickButtons = buttonGroup_PointClick.getElements();
 			String userSetting = Settings.getClickAudibility().name();
-			for (Enumeration<AbstractButton> enumerator = pointClickButtons; enumerator.hasMoreElements();) {
-				AbstractButton abstractButton = enumerator.nextElement();
+			for (; pointClickButtons.hasMoreElements();) {
+				AbstractButton abstractButton = pointClickButtons.nextElement();
 				if (abstractButton.getActionCommand().equals(userSetting)) {
 					abstractButton.setSelected(true);
 				}

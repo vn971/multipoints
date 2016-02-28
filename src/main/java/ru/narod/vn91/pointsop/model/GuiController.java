@@ -98,9 +98,9 @@ public class GuiController implements GuiForServerInterface {
 	}
 
 	@Override
-	public synchronized void userJoinedRoom(ServerInterface server, String room, String id,
+	public synchronized void userJoinedRoom(ServerInterface server, String room, String userId,
 			boolean isStartup) {
-		Player player = playerPool.get(server, id);
+		Player player = playerPool.get(server, userId);
 		LangRoom langRoom = langRooms.get(new ServerRoom(room, server));
 		GameRoom gameRoom = gameRooms.get(new ServerRoom(room, server));
 		if (langRoom != null) {

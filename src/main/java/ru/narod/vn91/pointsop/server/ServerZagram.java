@@ -31,17 +31,17 @@ public class ServerZagram implements ServerInterface {
 	final String secretId;
 	volatile boolean isDisposed = false;
 	final MessageQueue queue = new MessageQueue(10);
-	final List<String> transiendQueue = new ArrayList<>();
+	final List<String> transiendQueue = new ArrayList<>(8);
 
 	volatile boolean isBusy = false;
-	Set<String> personalInvitesIncoming = new LinkedHashSet<>();
-	Set<String> personalInvitesOutgoing = new LinkedHashSet<>();
-	Set<String> subscribedRooms = new LinkedHashSet<>();
-	final Map<String, Set<String>> playerRooms = new HashMap<>();
+	Set<String> personalInvitesIncoming = new LinkedHashSet<>(8);
+	Set<String> personalInvitesOutgoing = new LinkedHashSet<>(8);
+	Set<String> subscribedRooms = new LinkedHashSet<>(8);
+	final Map<String, Set<String>> playerRooms = new HashMap<>(8);
 	ThreadMain threadMain;
 
-	final Map<String, String> avatarUrls = new HashMap<>();
-	final Map<String, ImageIcon> avatarImages = new HashMap<>();
+	final Map<String, String> avatarUrls = new HashMap<>(8);
+	final Map<String, ImageIcon> avatarImages = new HashMap<>(8);
 
 	public ServerZagram(GuiForServerInterface gui, String myNameOnServer, String password, boolean isInvisible) {
 
@@ -661,9 +661,11 @@ public class ServerZagram implements ServerInterface {
 					commands = commands.substring(0, commands.length() - 1);
 				}
 				String text = getLinkContent(
-						"http://zagram.org/a.kropki?playerId=" +
-							secretId + "&co=getBMsg&msgNo=" +
-							lastServerMessageNumber + "&msgFromClient=" + commands);
+						"http://zagram.org/a.kropki" +
+							"?playerId=" + secretId +
+							"&co=getBMsg" +
+							"&msgNo=" + lastServerMessageNumber + "." + lastServerMessageNumber +
+							"&msgFromClient=" + commands);
 				handleText(text);
 
 				Wait.waitExactly(1000L);
@@ -792,31 +794,30 @@ public class ServerZagram implements ServerInterface {
 			if (message.startsWith("b")) { // room subscriptions
 				// b*Вася.0.234.1234.1451.21
 				String player = message.replaceAll("\\..*", "").substring(1);
-				String[] dotSplitted = message.replaceFirst(".*?\\.", "").split("\\.");
+				String[] dotSplit = message.replaceFirst(".*?\\.", "").split("\\.");
 
-				final Set<String> newRooms = new LinkedHashSet<>();
-				Collections.addAll(newRooms, dotSplitted);
+				final Set<String> newRooms = new LinkedHashSet<>(10);
+				Collections.addAll(newRooms, dotSplit);
 
 				final Set<String> oldRooms = playerRooms.get(player);
+				playerRooms.put(player, newRooms);
+
 				if (oldRooms == null) {
-					// for (String room : newRooms) {
-					// gui.userJoinedRoom(server, room, player, true);
-					// }
-				}
-				else {
+					for (String room : newRooms) {
+						gui.userJoinedRoom(server, room, player, true);
+					}
+				} else {
 					for (String room : oldRooms) {
 						if (newRooms.contains(room) == false) {
-							// gui.userLeftRoom(server, room, player, "");
+							gui.userLeftRoom(server, room, player, "");
 						}
 					}
-
 					for (String room : newRooms) {
 						if (oldRooms.contains(room) == false) {
-							// gui.userJoinedRoom(server, room, player, false);
+							gui.userJoinedRoom(server, room, player, false);
 						}
 					}
 				}
-
 			}
 			else if (message.startsWith("ca") || message.startsWith("cr")) { // chat
 				String[] dotSplitted = message.substring("ca".length())
@@ -943,6 +944,13 @@ public class ServerZagram implements ServerInterface {
 						gui.subscribedLangRoom(currentRoom, server, "общий чат: zagram", true);
 					} else {
 						gui.subscribedGame(server, currentRoom);
+						for (Map.Entry<String, Set<String>> entry : playerRooms.entrySet()) {
+							// we need to send all users in this room because we knew them
+							// even before subscribing to the room (zagram specifics)
+							if (entry.getValue().contains(currentRoom)) {
+								gui.userJoinedRoom(server, currentRoom, entry.getKey(), true);
+							}
+						}
 					}
 				}
 			} else if (message.matches("sa.*|sr.*")) { // game actions
