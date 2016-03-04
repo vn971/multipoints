@@ -32,6 +32,7 @@ public class ServerZagram implements ServerInterface {
 	volatile boolean isDisposed = false;
 	final MessageQueue queue = new MessageQueue(10);
 	final List<String> transiendQueue = new ArrayList<>(8);
+	int lastServerMessageNumber = 0;
 
 	volatile boolean isBusy = false;
 	Set<String> personalInvitesIncoming = new LinkedHashSet<>(8);
@@ -176,14 +177,14 @@ public class ServerZagram implements ServerInterface {
 					String authorizationURL;
 					if (isPassworded) {
 						authorizationURL = "http://zagram.org/auth.py?co=loguj&opisGracza=" +
-							getServerEncoded(myNameOnServer) +
+							encode(myNameOnServer) +
 							"&idGracza=" +
 							secretId +
 							"&lang=ru";
 					} else {
 						authorizationURL = "http://zagram.org/a.kropki?co=guestLogin&idGracza=" +
 							secretId + "&opis=" +
-							getServerEncoded(myNameOnServer) + "&lang=ru";
+							encode(myNameOnServer) + "&lang=ru";
 					}
 
 					String authorizationResult = getLinkContent(authorizationURL);
@@ -266,7 +267,7 @@ public class ServerZagram implements ServerInterface {
 
 	@Override
 	public String getServerName() {
-		return "zagram.org";
+		return "zagram_org";
 	}
 
 	@Override
@@ -324,7 +325,7 @@ public class ServerZagram implements ServerInterface {
 	public void addPersonalGameInvite(String playerId, TimeSettings time, int fieldX, int fieldY, boolean isRanked, StartingPosition startingPosition) {
 		String msgToSend =
 				"v" + queue.sizePlusOne() + "." + "0"/* room# */+ "." +
-					"s." + getServerEncoded(playerId) + "." +
+					"s." + encode(playerId) + "." +
 					getGameTypeString(fieldX, fieldY, time.starting, time.periodAdditional, isRanked, startingPosition);
 		sendCommandToServer(msgToSend);
 		gui.updateGameInfo(this, playerId + "@outgoing", getMainRoom(), getMyName(), null,
@@ -340,13 +341,13 @@ public class ServerZagram implements ServerInterface {
 	@Override
 	public void sendChat(String room, String message) {
 		String msgToSend = "c" + queue.sizePlusOne() + "." + room + "."
-			+ getServerEncoded(message);
+			+ encode(message);
 		sendCommandToServer(msgToSend);
 	}
 
 	@Override
 	public void sendPrivateMsg(String target, String message) {
-		String msgToSend = "c" + queue.sizePlusOne() + "._" + getServerEncoded(target) + "." + getServerEncoded(message);
+		String msgToSend = "c" + queue.sizePlusOne() + "._" + encode(target) + "." + encode(message);
 		sendCommandToServer(msgToSend);
 	}
 
@@ -577,8 +578,8 @@ public class ServerZagram implements ServerInterface {
 		}
 	}
 
-	private static String getServerEncoded(String s) {
-		// the order of replacing matters
+	private static String encode(String s) {
+		// the order of replacements matters
 		s = s.replaceAll("@", "@A");
 		s = s.replaceAll("/", "@S");
 		try {
@@ -589,8 +590,8 @@ public class ServerZagram implements ServerInterface {
 		}
 	}
 
-	private static String getServerDecoded(String s) {
-		// the order of replacing matters
+	private static String decode(String s) {
+		// the order of replacements matters
 		return s
 				.replaceAll("@S", "/")
 				.replaceAll("@A", "@")
@@ -608,7 +609,6 @@ public class ServerZagram implements ServerInterface {
 		Set<String> personalInvitesOutgoingNew = new LinkedHashSet<>();
 		Set<String> modifiedSubscribedRooms = new HashSet<>();
 		int lastSentCommandNumber = 0;
-		int lastServerMessageNumber = 0;
 		String currentRoom = "";
 
 		@Override
@@ -801,28 +801,30 @@ public class ServerZagram implements ServerInterface {
 					String timeString = dotSplitted[0].replaceAll("[^0-9].*","");
 					long time = Long.parseLong(timeString) * 1000L;
 					String nick = dotSplitted[1];
-					String chatMessage = getServerDecoded(dotSplitted[3]);
+					String chatMessage = decode(dotSplitted[3]);
 					if (nick.contains("-")) {
 						// this is private message
 						String[] nicks = nick.split("-");
 						String nickType = dotSplitted[2];
 						// who may be 0,1,2
 						// or -, nochat, del (which would raise an exception)
-						Integer who = Integer.parseInt(nickType);
-						if (who == 0) {
-							nick = ""; // message from the server
-						}
-						else if (who == 1 || who == 2) {
-							nick = nicks[who - 1];
-						}
-						String withWhom = nicks[0].equals(myNameOnServer) ? nicks[1] : nicks[0];
-						// I talk 'withWhom', received a message from 'nick'
-						// there's a problem receiving messages from myself...
-						if (nick.equalsIgnoreCase(myNameOnServer)) {
-							gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
-						}
-						else {
-							gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
+						if (!nickType.equals("nochat")) {
+							Integer who = Integer.parseInt(nickType);
+							if (who == 0) {
+								nick = ""; // message from the server
+							}
+							else if (who == 1 || who == 2) {
+								nick = nicks[who - 1];
+							}
+							String withWhom = nicks[0].equals(myNameOnServer) ? nicks[1] : nicks[0];
+							// I talk 'withWhom', received a message from 'nick'
+							// there's a problem receiving messages from myself...
+							if (nick.equalsIgnoreCase(myNameOnServer)) {
+								gui.privateMessageReceived(server, withWhom, getMyName(), chatMessage);
+							}
+							else {
+								gui.privateMessageReceived(server, withWhom, withWhom, chatMessage);
+							}
 						}
 					}
 					else {
@@ -886,7 +888,7 @@ public class ServerZagram implements ServerInterface {
 				int i2 = Integer.parseInt(a2);
 				int i3 = Integer.parseInt(a3);
 				if (i1 > lastServerMessageNumber + 1) {
-					// don't thow exceptions -- we
+					// don't throw exceptions -- we
 					// want to stay alive in case of a server restart.
 				}
 				lastServerMessageNumber = i2;
@@ -1000,14 +1002,14 @@ public class ServerZagram implements ServerInterface {
 						server.rejectPersonalGameInvite(sender);
 						personalInvitesIncoming.remove(sender); // kind of a hack
 
+						gui.privateMessageReceived(server, sender, ServerZagram.this.getServerName(), String.format(
+								"Игрок '%s' вызвал тебя на игру. " +
+										"К сожалению, принять заявку невозможно, " +
+										"т.к. польские правила с ручными обводами территории " +
+										"пока-что не поддерживаются программой. " +
+										"Отослан отказ от игры. ",
+								sender));
 						ServerZagram.this.sendPrivateMsg(sender, "Sorry, my game client does not support \"territory\" rules.");
-						gui.raw(server, String.format(
-							"Игрок '%s' вызвал(а) тебя на игру: " +
-								"К сожалению, принять заявку невозможно, " +
-								"т.к. польские правила с ручными обводами территории " +
-								"пока-что не поддерживаются программой. " +
-								"Отослан отказ от игры. ",
-							sender));
 					} else {
 						gui.updateGameInfo(
 							server, sender + "@incoming", currentRoom,
@@ -1077,6 +1079,14 @@ public class ServerZagram implements ServerInterface {
 	}
 
 	public void getUserInfoText(String user) {
+		// commented out because breaks message numbers (client becomes out of sync)
+		// getLinkContent("http://zagram.org/a.kropki" +
+		// 		"?idGracza=" + secretId +
+		// 		"&co=dodajWpis" +
+		// 		"&stol=get" +
+		// 		"&wpis=_" + encode(user) +
+		// 		"&msgNo=" + lastServerMessageNumber
+		// );
 	}
 
 	public void getUserpic(String user) {
