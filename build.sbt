@@ -21,7 +21,6 @@ packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
 crossPaths := false // no Scala suffix for published jar-s
 
 assemblyJarName in assembly := "PointsOnPaper.jar"
-assembly <<= assembly dependsOn (test in Test)
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false) // pure java project
 
 val createSignedJar = TaskKey[Unit]("createSignedJar")
@@ -31,7 +30,6 @@ createSignedJar := {
 createSignedJar <<= createSignedJar dependsOn assembly
 
 assemblyExcludedJars in assembly += unmanagedBase.value / "javaws.jar"
-//assemblyExcludedJars in assembly ++= unmanagedBase.value.listFiles().toSeq
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3" % Test
 

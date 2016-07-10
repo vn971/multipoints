@@ -31,7 +31,7 @@ public class ServerZagram implements ServerInterface {
 	final String secretId;
 	volatile boolean isDisposed = false;
 	final MessageQueue queue = new MessageQueue(10);
-	final List<String> transiendQueue = new ArrayList<>(8);
+	final List<String> transientQueue = new ArrayList<>(8);
 	int lastServerMessageNumber = 0;
 
 	volatile boolean isBusy = false;
@@ -536,7 +536,7 @@ public class ServerZagram implements ServerInterface {
 	}
 
 	private void sendCommandToServerTransient(String message) {
-		transiendQueue.add(message);
+		transientQueue.add(message);
 	}
 
 	private static String get1SgfCoord(int i) {
@@ -619,10 +619,10 @@ public class ServerZagram implements ServerInterface {
 
 				String commands = "";
 
-				for (String message : transiendQueue) {
+				for (String message : transientQueue) {
 					commands = commands + message + "/";
 				}
-				transiendQueue.clear();
+				transientQueue.clear();
 
 				for (int i = lastSentCommandNumber + 1; i < queue.size() + 1; i++) {
 					// (non-standard interval. Here is: A < x <= B)
