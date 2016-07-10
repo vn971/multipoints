@@ -5,7 +5,9 @@ jdk:
   - openjdk7
 cache:
   directories:
-    - $HOME/.ivy2/cache
+    - $HOME/.ivy2
+    - $HOME/.sbt
+sudo: false
 notifications:
   irc:
     channels:
