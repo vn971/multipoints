@@ -30,13 +30,8 @@ createSignedJar := {
 }
 createSignedJar <<= createSignedJar dependsOn assembly
 
-assemblyMergeStrategy in assembly := {
-	case PathList("javax", "jnlp", _*) => MergeStrategy.discard
-	case PathList("com", "sun", _*) => MergeStrategy.discard
-	case PathList("build.id", _*) => MergeStrategy.discard
-	case PathList("META-INF", _*) => MergeStrategy.discard
-	case x => MergeStrategy.deduplicate
-}
+assemblyExcludedJars in assembly += unmanagedBase.value / "javaws.jar"
+//assemblyExcludedJars in assembly ++= unmanagedBase.value.listFiles().toSeq
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3" % Test
 
