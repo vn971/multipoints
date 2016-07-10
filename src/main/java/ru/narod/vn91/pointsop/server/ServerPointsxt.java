@@ -85,13 +85,18 @@ public class ServerPointsxt
 									"mpPasswordedLogin " + Sha1.getSha1PodbotPassword(myPassword)
 									);
 							}
-						} catch (NickAlreadyInUseException ignored) {
+							return true;
+						} catch (NickAlreadyInUseException ex) {
+							ex.printStackTrace();
 							gui.rawConnectionState(ServerPointsxt.this, "Данный ник уже используется. Пожалуйста, выберите себе другой ник.");
-						} catch (IrcException ignored) {
-						} catch (IOException ignored) {
+							return false;
+						} catch (IrcException ex) {
+							ex.printStackTrace();
+							return false;
+						} catch (IOException ex) {
+							ex.printStackTrace();
 							return false;
 						}
-						return true;
 					}
 				};
 

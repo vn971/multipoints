@@ -14,7 +14,7 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 
 	RoomInterface room;
 	GuiController guiController;
-	private final List<GameOuterInfo> gameList = new ArrayList<>();
+	private final List<GameOuterInfo> gameList = new ArrayList<>(10);
 
 	static Object[] createRow(GameOuterInfo gameOuterInfo) {
 		String row1, row2, row3;
@@ -63,10 +63,8 @@ public class RoomPart_GameList extends javax.swing.JPanel {
 	public void gameCreated(
 			GameOuterInfo gameOuterInfo) {
 		synchronized (gameList) {
-			for (GameOuterInfo info2 : gameList) {
-				if (info2 == gameOuterInfo) {
-					return;
-				}
+			if (gameList.contains(gameOuterInfo)) {
+				return;
 			}
 			if (gameOuterInfo.state == GameState.SearchingOpponent) {
 				gameList.add(0, gameOuterInfo);
