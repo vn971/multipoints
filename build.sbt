@@ -31,6 +31,6 @@ createSignedJar <<= createSignedJar dependsOn assembly
 
 assemblyExcludedJars in assembly += unmanagedBase.value / "javaws.jar"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3" % Test
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % Test
 
 lazy val root = project.in(file(".")).dependsOn(uri("git://github.com/vn971/pircbot-sbt#java-1.5-generics"))
