@@ -271,7 +271,6 @@ public class SelfishGuiStarter {
 					);
 					jMenuItem_KeijkvantttaiExecute.addActionListener(
 							new ActionListener() {
-
 								public void actionPerformed(ActionEvent e) {
 									AiVirtualServer aiWrapper =
 											new AiVirtualServer(

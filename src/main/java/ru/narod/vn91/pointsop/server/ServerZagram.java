@@ -1,5 +1,6 @@
 package ru.narod.vn91.pointsop.server;
 
+import java.text.SimpleDateFormat;
 import ru.narod.vn91.pointsop.data.GameOuterInfo.GameState;
 import ru.narod.vn91.pointsop.data.TimeLeft;
 import ru.narod.vn91.pointsop.data.TimeSettings;
@@ -503,7 +504,7 @@ public class ServerZagram implements ServerInterface {
 	}
 
 	private static synchronized String getLinkContent(String link) {
-		StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder(200);
 		try {
 			URL url;
 			URLConnection urlConn;
@@ -526,7 +527,8 @@ public class ServerZagram implements ServerInterface {
 			e.printStackTrace();
 		}
 		// if (Settings.isDebug()) {
-		System.out.println("GET " + link + "  -->  " + result.toString());
+		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+		System.out.println(time + " GET " + link + "  -->  " + result.toString());
 		// }
 		return result.toString();
 	}
@@ -551,13 +553,13 @@ public class ServerZagram implements ServerInterface {
 		return get1SgfCoord(x) + get1SgfCoord(y);
 	}
 
-	private static Integer charToCoordinate(char c) {
+	private static int charToCoordinate(char c) {
 		if (c >= 'a' && c <= 'z') {
-			return Integer.class.cast(c - 'a' + 1);
+			return c - 'a' + 1;
 		} else if (c >= 'A' && c <= 'Z') {
-			return Integer.class.cast(c - 'A' + 27);
+			return c - 'A' + 27;
 		} else {
-			return null;
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -569,7 +571,7 @@ public class ServerZagram implements ServerInterface {
 				return new Point(
 					charToCoordinate(xAsChar),
 					charToCoordinate(yAsChar));
-			} catch (NullPointerException e) {
+			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -927,6 +929,7 @@ public class ServerZagram implements ServerInterface {
 							if (entry.getValue().contains(currentRoom)) {
 								gui.userJoinedRoom(server, currentRoom, entry.getKey(), true);
 							}
+							gui.userJoinedRoom(server, currentRoom, myNameOnServer, true);
 						}
 					}
 				}
