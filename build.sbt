@@ -3,7 +3,7 @@ name := "MultiPoints"
 version := "1.4.2"
 organization := "net.pointsgame"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-Xlint", "-Xlint:-serial")
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
