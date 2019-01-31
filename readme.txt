@@ -1,3 +1,7 @@
+==== Building ====
+
+Build the project with `sbt createSignedJar`.
+
 ===== Исходники MultiPoints =====
 
 Исходники MultiPoints открыты и доступны по адресу https://github.com/vn971/multipoints
