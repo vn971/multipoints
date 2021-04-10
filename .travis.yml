@@ -1,14 +1,10 @@
 language: scala
 scala:
-   - 2.11.7
+   - 2.12.13
 jdk:
-  - openjdk7
+  - openjdk8
 cache:
   directories:
     - $HOME/.ivy2
     - $HOME/.sbt
 sudo: false
-notifications:
-  irc:
-    channels:
-      - "pointsgame.net#pointsxt"
